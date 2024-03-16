@@ -4,22 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7d0148c3-c33a-4c88-9a21-935c682a9122" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/telegramMe.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/model.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/telegram/models/body.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/telegram/parser.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/telegram/requests.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/telegram/telegram.py" afterDir="false" />
+    <list default="true" id="7d0148c3-c33a-4c88-9a21-935c682a9122" name="Changes" comment="First release">
+      <change afterPath="$PROJECT_DIR$/routes/body.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/routes/more.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/telegram/models/meta.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/telegram/models/more.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/telegram/models/post.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/telegram/models/body.py" beforeDir="false" afterPath="$PROJECT_DIR$/telegram/models/body.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/telegram/parser.py" beforeDir="false" afterPath="$PROJECT_DIR$/telegram/parser.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/telegram/requests.py" beforeDir="false" afterPath="$PROJECT_DIR$/telegram/requests.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/telegram/telegram.py" beforeDir="false" afterPath="$PROJECT_DIR$/telegram/telegram.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,9 +32,9 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 7
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 7
+}</component>
   <component name="ProjectId" id="2dVp3xrH8qVKMVV2COTamMeYCnW" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -54,7 +50,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "Shell Script.Run FastAPI Dev.executor": "Run",
     "git-widget-placeholder": "main",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
+    "settings.editor.selected.configurable": "preferences.pluginManager"
   }
 }]]></component>
   <component name="RunManager">
@@ -90,9 +86,20 @@
       <option name="presentableId" value="Default" />
       <updated>1710102905458</updated>
     </task>
+    <task id="LOCAL-00001" summary="First release">
+      <option name="closed" value="true" />
+      <created>1710326358458</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1710326358458</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+    <MESSAGE value="First release" />
+    <option name="LAST_COMMIT_MESSAGE" value="First release" />
   </component>
 </project>
