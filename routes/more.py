@@ -1,3 +1,7 @@
+"""
+Route handler for /more/{channel}/{direction}/{position}
+"""
+
 from typing import Union, Literal
 from pydantic import PositiveInt
 
@@ -23,7 +27,8 @@ async def more(
         channel: str = Path(description="Telegram channel username."),
         direction: Literal["after", "before"] = Path(description="History load direction"),
         position: Union[Literal[-1], PositiveInt] = Path(description="History position")
-):
+) -> dict | None:
+    """Request handler"""
     result = await Telegram().more(channel, position, direction)
     if not result:
         raise HTTPException(status_code=404, detail="Channel not found")

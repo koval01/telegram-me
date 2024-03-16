@@ -4,11 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7d0148c3-c33a-4c88-9a21-935c682a9122" name="Changes" comment="Update">
-      <change afterPath="$PROJECT_DIR$/version.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-    </list>
+    <list default="true" id="7d0148c3-c33a-4c88-9a21-935c682a9122" name="Changes" comment="Update code format" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -108,13 +104,71 @@
       <option name="project" value="LOCAL" />
       <updated>1710578388661</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Add Version">
+      <option name="closed" value="true" />
+      <created>1710579478136</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1710579478136</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Update code format">
+      <option name="closed" value="true" />
+      <created>1710580163549</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1710580163549</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Update code format">
+      <option name="closed" value="true" />
+      <created>1710581264259</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1710581264259</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Update code format">
+      <option name="closed" value="true" />
+      <created>1710581511918</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1710581511918</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Update code format">
+      <option name="closed" value="true" />
+      <created>1710581946301</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1710581946301</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Update code format">
+      <option name="closed" value="true" />
+      <created>1710582354950</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1710582354950</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Update code format">
+      <option name="closed" value="true" />
+      <created>1710616292096</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1710616292096</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="First release" />
     <MESSAGE value="Update" />
-    <option name="LAST_COMMIT_MESSAGE" value="Update" />
+    <MESSAGE value="Add Version" />
+    <MESSAGE value="Update code format" />
+    <option name="LAST_COMMIT_MESSAGE" value="Update code format" />
   </component>
 </project>

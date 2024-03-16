@@ -1,12 +1,17 @@
+"""
+Telegram main module
+"""
+
 from typing import Literal
 
-from telegram.requests import Requests
 from telegram.parser import Body, More
+from telegram.request import Request
 
 
 class Telegram:
     """
-    A class representing a simplified interface for interacting with the Telegram API.
+    A class representing a simplified interface for
+    interacting with the Telegram API.
 
     Methods:
         body: Retrieve message bodies from a Telegram channel.
@@ -23,16 +28,17 @@ class Telegram:
 
         Args:
             channel (str): The channel name or ID.
-            position (int): The position of the message in the channel's history. Defaults to 0 (most recent).
+            position (int): The position of the message in the channel's history.
+            Defaults to 0 (most recent).
 
         Returns:
             dict: A dictionary containing the message body.
         """
-        response = await Requests().body(channel, position)
+        response = await Request().body(channel, position)
         if not response:
             return {}
 
-        return await Body(response).get()
+        return Body(response).get()
 
     @staticmethod
     async def more(channel: str, position: int, direction: Literal["after", "before"]) -> dict:
@@ -42,14 +48,15 @@ class Telegram:
         Args:
             channel (str): The channel name or ID.
             position (int): The position of the message in the channel's history.
-            direction (Literal["after", "before"]): The direction of message retrieval relative to the
+            direction (Literal["after", "before"]):
+            The direction of message retrieval relative to the
             specified position.
 
         Returns:
             dict: A dictionary containing the additional messages.
         """
-        response = await Requests().more(channel, position, direction)
+        response = await Request().more(channel, position, direction)
         if not response:
             return {}
 
-        return await More(response).get()
+        return More(response).get()

@@ -1,3 +1,7 @@
+"""
+HTML body parser
+"""
+
 import logging
 import re
 from datetime import datetime
@@ -5,6 +9,43 @@ from typing import Literal, Union, List, Any, Dict
 from urllib.parse import urlparse, parse_qs
 
 from selectolax.lexbor import LexborHTMLParser, LexborNode
+
+
+class Misc:
+    """
+    Misc methods
+    """
+
+    @staticmethod
+    def safe_index(array: List[Any], index: int) -> Any:
+        """
+        Safely retrieves an item from a list by index.
+
+        Args:
+            array (List[Any]): The list to retrieve the item from.
+            index (int): The index of the item to retrieve.
+
+        Returns:
+            Any: The item at the specified index, or None if index is out of range.
+        """
+        try:
+            return array[index]
+        except IndexError as e:
+            logging.debug(e)
+            return None
+
+    @staticmethod
+    def set_int(value: str) -> Union[int, str]:
+        """
+        Converts a string to an integer if possible.
+
+        Args:
+            value (str): The string value to convert.
+
+        Returns:
+            Union[int, str]: The converted integer value or the original string if conversion fails.
+        """
+        return int(value) if value.isdigit() else value
 
 
 class Parser:
@@ -25,25 +66,7 @@ class Parser:
         self.soup = LexborHTMLParser(body)
 
     @staticmethod
-    def _safe_index(array: List[Any], index: int) -> Any:
-        """
-        Safely retrieves an item from a list by index.
-
-        Args:
-            array (List[Any]): The list to retrieve the item from.
-            index (int): The index of the item to retrieve.
-
-        Returns:
-            Any: The item at the specified index, or None if index is out of range.
-        """
-        try:
-            return array[index]
-        except Exception as e:
-            logging.debug(e)
-            return
-
-    @classmethod
-    def _query(cls, url: str) -> Dict[str, int]:
+    def query(url: str) -> Dict[str, int]:
         """
         Parses query parameters from a URL.
 
@@ -56,12 +79,12 @@ class Parser:
         parsed_url = urlparse(url)
         dictionary = parse_qs(parsed_url.query)
         updated_dict = [{
-            v[0]: cls._set_int(v[1][0])
+            v[0]: Misc.set_int(v[1][0])
         } for v in dictionary.items()]
         return updated_dict[0] if updated_dict else {}
 
     @staticmethod
-    def _get_counters(node: List[LexborNode]) -> List[Dict[str, str]]:
+    def get_counters(node: List[LexborNode]) -> List[Dict[str, str]]:
         """
         Extracts counter information from HTML nodes.
 
@@ -78,7 +101,7 @@ class Parser:
             for f in node
         ]
 
-    def _get_meta(self, selector: str, name: str) -> str:
+    def get_meta(self, selector: str, name: str) -> str:
         """
         Retrieves metadata content from HTML meta tags.
 
@@ -89,26 +112,13 @@ class Parser:
         Returns:
             str: The content of the meta tag, or an empty string if not found.
         """
-        return self._safe_index([
+        return Misc.safe_index([
             t.attributes["content"]
             for t in self.soup.css("meta")
             if t.attributes.get(selector) == name
         ], 0)
 
-    @staticmethod
-    def _set_int(value: str) -> Union[int, str]:
-        """
-        Converts a string to an integer if possible.
-
-        Args:
-            value (str): The string value to convert.
-
-        Returns:
-            Union[int, str]: The converted integer value or the original string if conversion fails.
-        """
-        return int(value) if value.isdigit() else value
-
-    def _get_offset(self, node: LexborNode) -> List[Dict[str, int]]:
+    def get_offset(self, node: LexborNode) -> List[Dict[str, int]]:
         """
         Parses offset values from HTML link tags.
 
@@ -120,7 +130,7 @@ class Parser:
         """
         links = node.css("link")
         return [
-            self._query(link.attributes.get("href"))
+            self.query(link.attributes.get("href"))
             for link in links
             if link.attributes.get("rel") in ("prev", "next",)
         ]
@@ -141,10 +151,12 @@ class Body(Parser):
         Args:
             body (str): The HTML body content.
         """
-        super().__init__(body)
+        Parser.__init__(self, body)
 
-    async def get(self) -> dict[
-            str, dict[str, str] | dict[str, list[dict[str, str]] | list[dict] | list] | dict[str, list[dict[str, int]]]
+    def get(self) -> dict[
+            str, dict[str, str]
+            | dict[str, list[dict[str, str]] | list[dict] | list]
+            | dict[str, list[dict[str, int]]]
     ]:
         """
         Extracts relevant information from the HTML body.
@@ -155,19 +167,26 @@ class Body(Parser):
         return {
             "channel": {
                 "username": self.soup.css_first(".tgme_channel_info_header_username>a").text(),
-                "title": self._get_meta("property", "og:title"),
-                "description": self._get_meta("property", "og:description"),
-                "avatar": self._get_meta("property", "og:image")
+                "title": self.get_meta("property", "og:title"),
+                "description": self.get_meta("property", "og:description"),
+                "avatar": self.get_meta("property", "og:image")
             },
             "content": {
-                "counters": self._get_counters(
+                "counters": self.get_counters(
                     self.soup.css(".tgme_channel_info_counters>.tgme_channel_info_counter")),
                 "posts": Post(self.soup.body.html).get()
             },
             "meta": {
-                "offset": self._get_offset(self.soup.head)
+                "offset": self.get_offset(self.soup.head)
             }
         }
+
+    def __str__(self) -> str:
+        """
+        Return representation for More object
+        :return:
+        """
+        return repr(self.get())
 
 
 class More(Parser):
@@ -185,9 +204,9 @@ class More(Parser):
         Args:
             body (str): The HTML body content.
         """
-        super().__init__(body)
+        Parser.__init__(self, body)
 
-    async def get(self) -> dict[str, list[dict] | list | dict[str, list[dict[str, int]]]]:
+    def get(self) -> dict[str, list[dict] | list | dict[str, list[dict[str, int]]]]:
         """
         Extracts additional content from the HTML body.
 
@@ -197,9 +216,15 @@ class More(Parser):
         return {
             "posts": Post(self.soup.body.html).get(),
             "meta": {
-                "offset": self._get_offset(self.soup.head)
+                "offset": self.get_offset(self.soup.head)
             }
         }
+
+    def __str__(self) -> str:
+        """
+        Return representation for More object
+        """
+        return repr(self.get())
 
 
 class Post:
@@ -256,7 +281,7 @@ class Post:
             int: The total duration in seconds.
         """
         if not duration:
-            return
+            return None
         minutes, seconds = map(int, duration.split(":"))
         return minutes * 60 + seconds
 
@@ -320,7 +345,8 @@ class Post:
                         media_array.append({
                             "url": video.attributes.get("src"),
                             "thumb": cls.__background(
-                                m.css_first(".tgme_widget_message_video_thumb").attributes.get("style")),
+                                m.css_first(".tgme_widget_message_video_thumb")
+                                .attributes.get("style")),
                             "duration": {
                                 "formatted": duration,
                                 "raw": cls.__duration(duration)
@@ -349,7 +375,8 @@ class Post:
                         media_array.append({
                             "url": roundvideo.attributes.get("src"),
                             "thumb": cls.__background(
-                                m.css_first(".tgme_widget_message_roundvideo_thumb").attributes.get("style")),
+                                m.css_first(".tgme_widget_message_roundvideo_thumb")
+                                .attributes.get("style")),
                             "duration": {
                                 "formatted": duration,
                                 "raw": cls.__duration(duration)
@@ -368,7 +395,8 @@ class Post:
             buble (LexborNode): The message bubble node.
 
         Returns:
-            Union[dict, None]: A dictionary containing poll information, or None if no poll found.
+            Union[dict, None]: A dictionary containing poll information,
+            or None if no poll found.
         """
         poll = buble.css_first(".tgme_widget_message_poll")
         if not poll:
@@ -382,10 +410,11 @@ class Post:
             "votes": buble.css_first(".tgme_widget_message_voters").text(),
             "options": [
                 {
-                    "name": option.css_first(".tgme_widget_message_poll_option_text").text(),
-                    "percent": int(option.css_first(".tgme_widget_message_poll_option_percent").text()[:-1])
+                    "name": o.css_first(".tgme_widget_message_poll_option_text").text(),
+                    "percent": int(o.css_first(".tgme_widget_message_poll_option_percent")
+                                   .text()[:-1])
                 }
-                for option in options
+                for o in options
             ]
         }
 
@@ -400,7 +429,8 @@ class Post:
         Returns:
             dict: A dictionary containing footer information.
         """
-        time = buble.css_first(".tgme_widget_message_date > time").attributes.get("datetime")
+        time = (buble.css_first(".tgme_widget_message_date > time")
+                .attributes.get("datetime"))
         views = buble.css_first(".tgme_widget_message_views")
 
         return {
@@ -461,7 +491,8 @@ class Post:
             message (LexborNode): The message node.
 
         Returns:
-            Union[dict, None]: A dictionary containing forwarded information, or None if not forwarded.
+            Union[dict, None]: A dictionary containing forwarded information,
+            or None if not forwarded.
         """
         forwarded = message.css_first(".tgme_widget_message_forwarded_from_name")
         if not forwarded:
@@ -510,3 +541,9 @@ class Post:
             posts.append(post)
 
         return posts
+
+    def __str__(self) -> str:
+        """
+        Return representation for Post object
+        """
+        return repr(self.get())

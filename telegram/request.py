@@ -1,8 +1,13 @@
-import aiohttp
+"""
+Requests module
+"""
+
 from typing import Literal, Union
 
+import aiohttp
 
-class Requests:
+
+class Request:
     """
     A class for handling asynchronous HTTP requests.
 
@@ -36,7 +41,8 @@ class Requests:
             params (dict): Additional parameters to be passed with the request. Defaults to None.
 
         Returns:
-            Union[str, dict, None]: The response content, either as a string, dictionary (if JSON), or None.
+            Union[str, dict, None]: The response content,
+            either as a string, dictionary (if JSON), or None.
         """
         async with aiohttp.ClientSession() as session:
             async with session.request(
@@ -45,15 +51,17 @@ class Requests:
                     allow_redirects=False,
                     params=params,
                     headers={
-                        "X-Requested-With": "XMLHttpRequest" if method == "POST" else ""
+                        "X-Requested-With": "XMLHttpRequest"
+                        if method == "POST" else ""
                     }
             ) as response:
                 if response.status != 200:
                     return None
+
                 if json:
                     return await response.json()
-                else:
-                    return await response.text()
+
+                return await response.text()
 
     async def body(self, channel: str, position: int = 0) -> Union[str, None]:
         """
@@ -66,10 +74,12 @@ class Requests:
         Returns:
             Union[str, None]: The response body content, or None if request fails.
         """
-        response = await self.__request("/s/%s/%d" % (channel, position))
+        response = await self.__request(f"/s/{channel}/{position}")
         return response if response else None
 
-    async def more(self, channel: str, position: int, direction: Literal["before", "after"]) -> Union[str, None]:
+    async def more(
+            self, channel: str, position: int, direction: Literal["before", "after"]
+    ) -> Union[str, None]:
         """
         Retrieves more content from a channel relative to a given position.
 
