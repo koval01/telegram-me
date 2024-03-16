@@ -4,18 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7d0148c3-c33a-4c88-9a21-935c682a9122" name="Changes" comment="First release">
-      <change afterPath="$PROJECT_DIR$/routes/body.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/routes/more.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/telegram/models/meta.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/telegram/models/more.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/telegram/models/post.py" afterDir="false" />
+    <list default="true" id="7d0148c3-c33a-4c88-9a21-935c682a9122" name="Changes" comment="Update">
+      <change afterPath="$PROJECT_DIR$/version.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/telegram/models/body.py" beforeDir="false" afterPath="$PROJECT_DIR$/telegram/models/body.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/telegram/parser.py" beforeDir="false" afterPath="$PROJECT_DIR$/telegram/parser.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/telegram/requests.py" beforeDir="false" afterPath="$PROJECT_DIR$/telegram/requests.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/telegram/telegram.py" beforeDir="false" afterPath="$PROJECT_DIR$/telegram/telegram.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,6 +23,20 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "koval01"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings">
+    <option name="selectedUrlAndAccountId">
+      <UrlAndAccount>
+        <option name="accountId" value="63703735-0362-498a-a5ba-12f685d25f6b" />
+        <option name="url" value="https://github.com/koval01/telegramMe.git" />
+      </UrlAndAccount>
+    </option>
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 7
@@ -94,12 +100,21 @@
       <option name="project" value="LOCAL" />
       <updated>1710326358458</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Update">
+      <option name="closed" value="true" />
+      <created>1710578388661</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1710578388661</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="First release" />
-    <option name="LAST_COMMIT_MESSAGE" value="First release" />
+    <MESSAGE value="Update" />
+    <option name="LAST_COMMIT_MESSAGE" value="Update" />
   </component>
 </project>
