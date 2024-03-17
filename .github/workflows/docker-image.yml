@@ -7,9 +7,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -28,8 +26,14 @@ jobs:
     - name: Build and Push the image
       if: startsWith(github.ref, 'refs/heads/main') && github.actor == 'koval01'
       run: |
+        # Enable qemu-user-static
         docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+
+        # Get the commit SHA
+        COMMIT_SHA=$(git rev-parse --short HEAD)
+
+        # Build and push the image with the commit SHA tag
         docker buildx ls
         docker buildx build --push \
-          --tag koval01/telegram-me:latest \
+          --tag koval01/telegram-me:$COMMIT_SHA \
           --platform linux/amd64,linux/arm/v7,linux/arm64 .
