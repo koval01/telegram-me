@@ -1,9 +1,10 @@
 """
 Requests module
 """
-
+import re
 from typing import Literal, Union
 
+import urllib.parse
 import aiohttp
 
 
@@ -44,10 +45,13 @@ class Request:
             Union[str, dict, None]: The response content,
             either as a string, dictionary (if JSON), or None.
         """
+
+        sanitized_path: str = urllib.parse.quote(path)
+
         async with aiohttp.ClientSession() as session:
             async with session.request(
                     method=method,
-                    url=f"https://{self.host}{path}",
+                    url=f"https://{self.host}/s/{sanitized_path}",
                     allow_redirects=False,
                     params=params,
                     headers={
@@ -63,6 +67,36 @@ class Request:
 
                 return await response.text()
 
+    @staticmethod
+    def valid_channel(channel: str) -> bool:
+        """
+        Validates if the provided channel string is a valid channel name.
+
+        Parameters:
+        - channel (str): The channel name to be validated.
+
+        Returns:
+        - bool: True if the channel name is valid, False otherwise.
+        """
+        return bool(re.match(r"^[a-zA-Z0-9_-]{3,32}$", channel))
+
+    @staticmethod
+    def valid_position(position: int) -> bool:
+        """
+        Validates if the provided position is within the allowed range.
+
+        Parameters:
+        - position (int): The position value to be validated.
+
+        Returns:
+        - bool: True if the position is valid, False otherwise.
+        """
+        pattern = re.compile(r'^[0-9]{1,6}$')
+        if re.match(pattern, str(position)) and 0 <= position <= 1000000:
+            return True
+
+        return False
+
     async def body(self, channel: str, position: int = 0) -> Union[str, None]:
         """
         Retrieves the body content of a channel at a given position.
@@ -74,7 +108,13 @@ class Request:
         Returns:
             Union[str, None]: The response body content, or None if request fails.
         """
-        response = await self.__request(f"/s/{channel}/{position}")
+        if not self.valid_channel(channel):
+            return None
+
+        if not self.valid_position(position):
+            return None
+
+        response = await self.__request(f"{channel}/{position}")
         return response if response else None
 
     async def more(
@@ -91,8 +131,11 @@ class Request:
         Returns:
             Union[dict, None]: Additional content in dictionary format, or None if request fails.
         """
+        if not self.valid_channel(channel):
+            return None
+
         response = await self.__request(
-            f"/s/{channel}",
+            channel,
             method="POST",
             json=True,
             params={direction: position}
