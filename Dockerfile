@@ -1,6 +1,6 @@
 FROM python:3.12.2
 
-ARG app_port=80
+ARG app_port=8080
 
 ENV EXPOSE_PORT=$app_port
 
