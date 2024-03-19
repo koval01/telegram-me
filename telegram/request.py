@@ -111,7 +111,7 @@ class Request:
         if not self.valid_channel(channel):
             return None
 
-        if not self.valid_position(position):
+        if position and not self.valid_position(position):
             return None
 
         response = await self.__request(f"{channel}/{position}")
