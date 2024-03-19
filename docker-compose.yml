@@ -16,4 +16,4 @@ services:
     environment:
       - TEST_VAR=0
     ports:
-      - "3000:3000"
+      - "80:80"
