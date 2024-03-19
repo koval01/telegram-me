@@ -84,7 +84,7 @@ class Parser:
         return updated_dict[0] if updated_dict else {}
 
     @staticmethod
-    def get_counters(node: List[LexborNode]) -> List[Dict[str, str]]:
+    def get_counters(node: List[LexborNode]) -> Dict[str, str]:
         """
         Extracts counter information from HTML nodes.
 
@@ -92,14 +92,12 @@ class Parser:
             node (List[LexborNode]): List of HTML nodes.
 
         Returns:
-            List[Dict[str, str]]: A list of dictionaries containing counter information.
+            Dict[str, str]: A dictionary containing counter information.
         """
-        return [
-            {
-                f.css_first(".counter_type").text(): f.css_first(".counter_value").text()
-            }
+        return {
+            f.css_first(".counter_type").text(): f.css_first(".counter_value").text()
             for f in node
-        ]
+        }
 
     def get_meta(self, selector: str, name: str) -> str:
         """
