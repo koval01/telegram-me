@@ -337,14 +337,15 @@ class Post:
 
                 case "video":
                     video = m.css_first("video.tgme_widget_message_video")
+                    thumb = m.css_first(".tgme_widget_message_video_thumb")
                     duration = m.css_first("time.message_video_duration")
                     duration = duration.text() if duration else None
                     if video:
                         media_array.append({
                             "url": video.attributes.get("src"),
                             "thumb": cls.__background(
-                                m.css_first(".tgme_widget_message_video_thumb")
-                                .attributes.get("style")),
+                                thumb.attributes.get("style")
+                            ) if thumb else None,
                             "duration": {
                                 "formatted": duration,
                                 "raw": cls.__duration(duration)
