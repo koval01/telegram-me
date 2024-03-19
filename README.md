@@ -61,7 +61,7 @@ To run the FastAPI app with Nginx as a balancer, follow these steps:
 3. Run Nginx in a Docker container using the created configuration file:
 
    ```bash
-   docker run -d -p 8080:8080 -v $(pwd)/nginx.conf:/etc/nginx/nginx.conf:ro --name nginx nginx
+   docker run -d -p 80:80 -v $(pwd)/nginx.conf:/etc/nginx/nginx.conf:ro --name nginx nginx
    ```
 
    This command will start Nginx in a Docker container, using the provided configuration file as the Nginx configuration.
