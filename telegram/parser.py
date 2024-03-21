@@ -116,7 +116,7 @@ class Parser:
             if t.attributes.get(selector) == name
         ], 0)
 
-    def get_offset(self, node: LexborNode) -> List[Dict[str, int]]:
+    def get_offset(self, node: LexborNode) -> dict[str, int]:
         """
         Parses offset values from HTML link tags.
 
@@ -124,14 +124,17 @@ class Parser:
             node (LexborNode): The HTML node to search for link tags.
 
         Returns:
-            List[Dict[str, int]]: A list of dictionaries containing parsed offset values.
+            dict[str, int]: A dictionary containing parsed offset values.
         """
         links = node.css("link")
-        return [
-            self.query(link.attributes.get("href"))
-            for link in links
-            if link.attributes.get("rel") in ("prev", "next",)
-        ]
+        keys = {}
+
+        for link in links:
+            if link.attributes.get("rel") in ("prev", "next",):
+                for k, v in self.query(link.attributes.get("href")).items():
+                    keys[k] = v
+
+        return keys
 
 
 class Body(Parser):
