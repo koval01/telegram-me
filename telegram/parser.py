@@ -132,7 +132,9 @@ class Parser:
 
         for link in links:
             body: bool = link.attributes.get("rel") in ("prev", "next",)
-            more: bool = any(key in link.attributes.keys() for key in ("data-before", "data-after",))
+            more: bool = any(
+                key in link.attributes.keys()
+                for key in ("data-before", "data-after",))
             if body or more:
                 for k, v in self.query(link.attributes.get("href")).items():
                     keys[k] = v
