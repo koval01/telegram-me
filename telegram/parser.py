@@ -116,21 +116,24 @@ class Parser:
             if t.attributes.get(selector) == name
         ], 0)
 
-    def get_offset(self, node: LexborNode) -> dict[str, int]:
+    def get_offset(self, node: LexborNode, more: bool = False) -> dict[str, int]:
         """
         Parses offset values from HTML link tags.
 
         Args:
             node (LexborNode): The HTML node to search for link tags.
+            more (bool): Is more response
 
         Returns:
             dict[str, int]: A dictionary containing parsed offset values.
         """
-        links = node.css("link")
+        links = node.css("a.tme_messages_more" if more else "link")
         keys = {}
 
         for link in links:
-            if link.attributes.get("rel") in ("prev", "next",):
+            body: bool = link.attributes.get("rel") in ("prev", "next",)
+            more: bool = any(key in link.attributes.keys() for key in ("data-before", "data-after",))
+            if body or more:
                 for k, v in self.query(link.attributes.get("href")).items():
                     keys[k] = v
 
@@ -217,7 +220,7 @@ class More(Parser):
         return {
             "posts": Post(self.soup.body.html).get(),
             "meta": {
-                "offset": self.get_offset(self.soup.head)
+                "offset": self.get_offset(self.soup.body, more=True)
             }
         }
 
