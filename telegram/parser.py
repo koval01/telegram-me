@@ -160,7 +160,7 @@ class Body(Parser):
         Parser.__init__(self, body)
 
     def get(self) -> dict[
-            str, dict[str, str]
+        str, dict[str, str]
             | dict[str, list[dict[str, str]] | list[dict] | list]
             | dict[str, list[dict[str, int]]]
     ]:
@@ -476,6 +476,33 @@ class Post:
         }
 
     @staticmethod
+    def __inline(message: LexborNode) -> Union[list, None]:
+        """
+        Extracts inline buttons from a Telegram message.
+
+        Args:
+            message (LexborNode): The message node containing inline buttons.
+
+        Returns:
+            Union[list, None]: A list of dictionaries representing each inline button,
+            where each dictionary contains 'title' as the button title and 'url' as the URL
+            associated with the button. Returns None if no inline buttons are found.
+        """
+
+        selector = message.css_first(".tgme_widget_message_inline_row")
+        if not selector:
+            return None
+
+        return [
+            {
+                "title": inline.css_first("span").text(),
+                "url": inline.attributes.get("href")
+            }
+            for inline in
+            selector.css(".tgme_widget_message_inline_button")
+        ]
+
+    @staticmethod
     def __post_id(message: LexborNode) -> int:
         """
         Extracts the post ID from a message node.
@@ -526,15 +553,15 @@ class Post:
             buble = self.buble(message)
 
             content = {}
-            text = self.__text(buble)
-            if text:
-                content["text"] = text
-            media = self.__media(buble)
-            if media:
-                content["media"] = media
-            poll = self.__poll(buble)
-            if poll:
-                content["poll"] = poll
+            content_fields = {
+                "text": self.__text(buble),
+                "media": self.__media(buble),
+                "poll": self.__poll(buble),
+                "inline": self.__inline(message)
+            }
+            for k, v in content_fields.items():
+                if v:
+                    content[k] = v
 
             post = {
                 "id": self.__post_id(message),

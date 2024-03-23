@@ -101,6 +101,18 @@ class Poll(BaseModel):
     options: List[PollOptions]
 
 
+class Inline(BaseModel):
+    """
+    Represents a inline block of post.
+
+    Attributes:
+        title (str): The title inline button.
+        url (str): Redirect link for button.
+    """
+    title: str
+    url: str
+
+
 class ContentPost(BaseModel):
     """
     Represents the content of a post.
@@ -113,6 +125,7 @@ class ContentPost(BaseModel):
     text: Optional[Text] = None
     media: Optional[List[MediaItem]] = None
     poll: Optional[Poll] = None
+    inline: Optional[Inline] = None
 
 
 class Date(BaseModel):

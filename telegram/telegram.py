@@ -19,7 +19,7 @@ class Telegram:
     """
 
     def __init__(self) -> None:
-        pass
+        ...
 
     @staticmethod
     async def body(channel: str, position: int = 0) -> dict:
