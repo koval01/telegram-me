@@ -1,12 +1,9 @@
-# fly.toml app configuration file generated for telegramme-red-feather-8533 on 2024-03-19T22:14:23+02:00
-#
-# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
-#
-
-app = 'telegramme-red-feather-8533'
-primary_region = 'lhr'
+primary_region = 'ams'
 
 [build]
+
+[env]
+  EXPOSE_PORT = 8080
 
 [http_service]
   internal_port = 8080
