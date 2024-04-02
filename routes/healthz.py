@@ -7,7 +7,7 @@ from fastapi import APIRouter, Response
 router = APIRouter()
 
 
-@router.head(
+@router.get(
     "/healthz",
     summary="Health status",
     responses={200: {}}
