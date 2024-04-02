@@ -66,11 +66,12 @@ class Text(BaseModel):
     Represents a text content within a post.
 
     Attributes:
-        text (str): The text string.
-        entities (List[TextEntities]): List of text entities within the text.
+        string (str): The text string.
+        entities (Optional[List[TextEntities]]):
+            List of text entities within the text.
     """
-    text: str
-    entities: List[TextEntities]
+    string: str
+    entities: Optional[List[TextEntities]]
 
 
 class PollOptions(BaseModel):

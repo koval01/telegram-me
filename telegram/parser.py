@@ -614,10 +614,14 @@ class Post:
         content_t = self.get_text_html(selector)
         text = re.sub(r"<br\s?/?>", "\n", content_t)
 
-        return {
-            "text": text,
-            "entities": EntitiesParser(content).parse_message()
+        entities = EntitiesParser(content).parse_message()
+        response = {
+            "string": text
         }
+        if entities:
+            response["entities"] = entities
+
+        return response
 
     @staticmethod
     def inline(message: LexborNode) -> Union[list, None]:
