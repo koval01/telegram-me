@@ -66,10 +66,10 @@ class Text(BaseModel):
     Represents a text content within a post.
 
     Attributes:
-        string (str): The text string.
+        text (str): The text string.
         entities (List[TextEntities]): List of text entities within the text.
     """
-    string: str
+    text: str
     entities: List[TextEntities]
 
 

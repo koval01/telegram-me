@@ -6,7 +6,7 @@ import logging
 import re
 import json
 from datetime import datetime
-from typing import Literal, Union, List, Any, Dict
+from typing import Literal, Union, List, Any, Dict, AnyStr
 from urllib.parse import urlparse, parse_qs
 
 from selectolax.lexbor import LexborHTMLParser, LexborNode
@@ -575,7 +575,25 @@ class Post:
         }
 
     @staticmethod
-    def text(buble: LexborNode) -> Union[dict, None]:
+    def get_text_html(selector: LexborNode) -> str | None:
+        """
+        Extracts and returns the inner HTML content of the first <div> element found in the HTML
+        represented by the LexborNode object.
+
+        Args:
+            selector (LexborNode): A LexborNode object containing the HTML content to be searched.
+
+        Returns:
+            Optional[str]: The inner HTML content of the first <div> element,
+                if found; otherwise, `None`.
+        """
+        match = re.match(r"<div.*?>(.*)</div>", selector.html, flags=re.M)
+        if match:
+            return match.group(1)
+
+        return None
+
+    def text(self, buble: LexborNode) -> Union[dict, None]:
         """
         Extracts text content from a message bubble.
 
@@ -589,16 +607,16 @@ class Post:
         if not selector:
             return None
 
-        t_selector = buble.css_first(".tgme_widget_message_text")
-        delete_tags = ["a", "i", "b", "pre", "code", "tg-emoji", "span"]
-        t_selector.unwrap_tags(delete_tags)
-        html = t_selector.html
-        content = re.match(r"<div.*?>(.*)</div>", html, flags=re.M).group(1)
-        text = re.sub(r"<br\s?/?>", "\n", content)
+        content = self.get_text_html(selector)
+
+        delete_tags = ["a", "i", "b", "s", "u", "pre", "code", "span", "tg-emoji", "tg-spoiler"]
+        selector.unwrap_tags(delete_tags)
+        content_t = self.get_text_html(selector)
+        text = re.sub(r"<br\s?/?>", "\n", content_t)
 
         return {
-            "string": text,
-            "entities": []
+            "text": text,
+            "entities": EntitiesParser(content).parse_message()
         }
 
     @staticmethod
@@ -707,3 +725,172 @@ class Post:
         Return representation for Post object
         """
         return json.dumps(self.get())
+
+
+class EntitiesParser:
+    """
+    A parser for extracting various entities from HTML text, including hashtags,
+    formatting tags (bold, italic, etc.), code snippets, strikethrough text,
+    spoilers, and links. The parser also supports extracting plain text from HTML
+    and identifies the type, offset, and length of each entity.
+
+    Attributes:
+        patterns (tuple): A tuple of regex patterns for matching HTML entities.
+        idx_map (tuple): A tuple mapping group indices in regex matches to entity types.
+        html_text (str): The HTML input text with line breaks normalized.
+        text_only (str): The plain text extracted from `html_text`,
+            with all HTML tags removed.
+
+    Args:
+        html_body (str): The HTML content to be parsed.
+    """
+
+    def __init__(self, html_body: str) -> None:
+        """Initialize the parser with HTML content."""
+        self.patterns: tuple = (
+            r'(#\w+)',  # hashtag
+            r'<b>(.+?)<\/b>',  # bold
+            r'<i>(.+?)<\/i>',  # italic
+            r'<u>(.+?)<\/u>',  # underline
+            r'<code>(.+?)<\/code>',  # code
+            r'<s>(.+?)<\/s>',  # strikethrough
+            r'<tg-spoiler>(.+?)<\/tg-spoiler>',  # spoiler
+
+            # link in text with onclick
+            r'<a\s+(?:[^>]*?\s+)?href=\"([^\"]*)\"[^>]*\s+onclick=\"[^\"]*\"[^>]*>(.*?)<\/a>',
+            r'<a\s+(?:[^>]*?\s+)?href=\"([^\"]*)\"[^>]*>(.*?)<\/a>',  # url
+        )
+        self.idx_map: tuple = (1, 3, 5, 7, 9, 11, 13, 15, 17,)
+
+        self.html_text: str = re.sub(r"<br\s?/?>", "\n", html_body)
+        self.text_only: str = re.sub(r"<[^>]+>", "", self.html_text)
+
+    @property
+    def combined_pattern(self) -> re.Pattern[AnyStr]:
+        """
+        Compiles and returns a single regex pattern that combines all entity patterns.
+
+        Returns:
+            re.Pattern[AnyStr]: The compiled regex pattern for matching all entities.
+        """
+        return re.compile(
+            "|".join([
+                f"({p})" for p in self.patterns
+            ]),
+            flags=re.DOTALL | re.M
+        )
+
+    @staticmethod
+    def length(match: re.Match[str]) -> int:
+        """
+        Calculates the length of the matched entity's text content.
+
+        Args:
+            match (re.Match[str]): A match object containing the entity.
+
+        Returns:
+            int: The length of the entity's text content.
+        """
+        return len(match.group().strip("<>").split(">")[-1].split("<")[0])
+
+    @staticmethod
+    def offset(text_start: int, match: re.Match[str]) -> int:
+        """
+        Calculates the end offset of the matched entity in the plain text.
+
+        Args:
+            text_start (int): The starting index of the entity in the plain text.
+            match (re.Match[str]): A match object containing the entity.
+
+        Returns:
+            int: The end offset of the entity in the plain text.
+        """
+        return text_start + len(
+            match.group().strip("<>").split(">")[-1].split("<")[0]
+        )
+
+    @staticmethod
+    def text_start(text: str, match: re.Match[str], offset: int) -> int:
+        """
+        Finds the starting index of the matched entity's text content in the plain text.
+
+        Args:
+            text (str): The plain text from which entities are extracted.
+            match (re.Match[str]): A match object containing the entity.
+            offset (int): The current offset in the plain text to start the search from.
+
+        Returns:
+            int: The starting index of the entity in the plain text.
+        """
+        return text.find(match.group().strip(
+            "<>").split(">")[-1].split("<")[0], offset)
+
+    @staticmethod
+    def message_type(idx: int) -> str:
+        """
+        Determines the entity type based on the index of a matched group.
+
+        Args:
+            idx (int): The index of the matched group in the regex pattern.
+
+        Returns:
+            str: The entity type as a string.
+        """
+        return (
+            "hashtag", "bold", "italic", "underline", "code",
+            "strikethrough", "spoiler", "text_link", "url",
+        )[idx // 2]
+
+    def parse_message(self) -> list[dict[str, int | str | None]]:
+        """
+        Parses the HTML text and extracts entities, returning a list of entities with details
+        about their type, offset, and length. Links include an additional URL attribute.
+
+        Returns:
+            List[Dict[str, int | str | None]]: A list of dictionaries,
+                each representing an entity with its
+                type, offset, length, and optionally, URL.
+        """
+        entities = []
+        offset = 0
+
+        matches = list(re.finditer(self.combined_pattern, self.html_text))
+        for match in matches:
+            # Find start position in text only by finding
+            # the index of the next occurrence of the match
+            text_start = self.text_start(self.text_only, match, offset)
+
+            # Update offset to the end of the current match in the text only
+            offset = self.offset(text_start, match)
+
+            entity_type = None
+            entity_url = None
+
+            for idx, group in enumerate(match.groups()):
+                if group and idx in self.idx_map:
+                    entity_type = self.message_type(idx)
+                    if entity_type == "text_link":
+                        entity_url = match.group(idx + 1)
+                    break
+
+            entity = {
+                "offset": text_start,
+                "length": self.length(match),
+                "type": entity_type
+            }
+
+            if entity_url:
+                entity["url"] = entity_url
+
+            entities.append(entity)
+
+        return entities
+
+    def __str__(self) -> str:
+        """
+        Returns a string representation of the parsed entities in JSON format.
+
+        Returns:
+            str: The JSON string representation of the parsed entities.
+        """
+        return json.dumps(self.parse_message())
