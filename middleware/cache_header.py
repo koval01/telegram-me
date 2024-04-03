@@ -21,7 +21,7 @@ async def proxy_cache_header_middleware(request: Request, call_next: Callable) -
     This middleware adds caching headers to the response, allowing proxy servers
     and clients to cache the response content.
     It sets the "Cache-Control" header to "public" to indicate that the response
-    can be cached by public caches, with a maximum age of 120 seconds (2 minutes).
+    can be cached by public caches, with a maximum age of 30 seconds.
     It also specifies a "stale-while-revalidate" directive with a value of 30 seconds,
     indicating that the response can still be served stale while
     it is being revalidated in the background.
@@ -32,5 +32,5 @@ async def proxy_cache_header_middleware(request: Request, call_next: Callable) -
     on the requirements and nature of the application's responses.
     """
     response = await call_next(request)
-    response.headers["Cache-Control"] = "public, max-age=120, stale-while-revalidate=30"
+    response.headers["Cache-Control"] = "public, max-age=30, stale-while-revalidate=30"
     return response
