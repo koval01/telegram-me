@@ -2,14 +2,18 @@
 
 This repository implements the Telegram channel viewer API in Python using FastAPI. The API provides endpoints to fetch basic information about a channel and retrieve more posts from the channel.
 
-### Prerequisites
+## Prerequisites
 
-- Docker installed on your machine ([Install Docker](https://docs.docker.com/get-docker/))
-- Basic knowledge of Docker, Python, FastAPI, and Nginx
+Before you begin, ensure you have the following installed on your machine:
+
+- [Docker](https://docs.docker.com/get-docker/): Docker is used to containerize the application.
+- Basic knowledge of Docker, Python, FastAPI, and Nginx.
+
+## Usage
 
 ### Running the Docker App
 
-To run the Docker app, follow these steps:
+To run the TelegramMe API using Docker, follow these steps:
 
 1. Clone this repository to your local machine:
 
@@ -70,13 +74,13 @@ To run the FastAPI app with Nginx as a balancer, follow these steps:
 
    Now, the FastAPI app will be accessible through Nginx at `http://<your_server_IP>/`.
 
-### Development
+## Development
 
 To develop this project further:
 
 1. Ensure you have Python installed on your machine ([Install Python](https://www.python.org/downloads/)).
 
-2. Create and activate Virtual ENV:
+2. Create and activate a virtual environment:
 
    ```bash
    python3 -m venv .venv
@@ -98,3 +102,5 @@ To develop this project further:
    This command will start the FastAPI app with automatic reloading enabled, allowing you to make changes and see them reflected immediately.
 
 5. You can now make changes to the codebase, add new features, or fix bugs as needed.
+
+For more detailed contribution guidelines, please refer to [CONTRIBUTING.md](CONTRIBUTING.md).

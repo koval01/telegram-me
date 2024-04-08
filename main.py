@@ -34,6 +34,8 @@ async def custom_swagger_ui_html() -> HTMLResponse:
         openapi_url=app.openapi_url,
         title=app.title,
         swagger_css_url="/static/swagger/css/swagger-ui.css",
+        swagger_js_url="/static/swagger/js/swagger-ui-bundle.js",
+        swagger_favicon_url="/static/swagger/icons/favicon.png"
     )
 
 
