@@ -56,7 +56,7 @@ class TextEntities(BaseModel):
     length: int
     type: Literal[
         "italic", "bold", "code", "spoiler", "strikethrough",
-        "underline", "text_link", "url", "pre"
+        "underline", "text_link", "url", "pre", "emoji"
     ]
     language: Optional[str]
 
@@ -67,10 +67,11 @@ class Text(BaseModel):
 
     Attributes:
         string (str): The text string.
-        entities (List[TextEntities]): List of text entities within the text.
+        entities (Optional[List[TextEntities]]):
+            List of text entities within the text.
     """
     string: str
-    entities: List[TextEntities]
+    entities: Optional[List[TextEntities]]
 
 
 class PollOptions(BaseModel):

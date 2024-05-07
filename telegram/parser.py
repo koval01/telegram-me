@@ -4,8 +4,9 @@ HTML body parser
 
 import logging
 import re
+import json
 from datetime import datetime
-from typing import Literal, Union, List, Any, Dict
+from typing import Literal, Union, List, Any, Dict, AnyStr
 from urllib.parse import urlparse, parse_qs
 
 from selectolax.lexbor import LexborHTMLParser, LexborNode
@@ -192,7 +193,7 @@ class Body(Parser):
         Return representation for More object
         :return:
         """
-        return repr(self.get())
+        return json.dumps(self.get())
 
 
 class More(Parser):
@@ -230,7 +231,250 @@ class More(Parser):
         """
         Return representation for More object
         """
-        return repr(self.get())
+        return json.dumps(self.get())
+
+
+class Media:
+    """
+    Represents a collection of media elements extracted from an HTML group.
+
+    Args:
+        group (LexborNode):
+            The HTML group containing media elements.
+
+    Attributes:
+        media (List[LexborNode]):
+            List of LexborNode objects representing media elements.
+
+    Methods:
+        image(match: LexborNode) -> Optional[Dict[str, str]]:
+            Extracts information about an image media element.
+        video(match: LexborNode) -> Optional[Dict[str, str]]:
+            Extracts information about a video media element.
+        voice(match: LexborNode) -> Optional[Dict[str, str]]:
+            Extracts information about a voice media element.
+        roundvideo(match: LexborNode) -> Optional[Dict[str, str]]:
+            Extracts information about a round video media element.
+        extract_media() -> List[Dict]:
+            Extracts and returns information about all media elements in the group.
+
+    Static Methods:
+        __duration(duration: str) -> Optional[int]:
+            Converts a duration string (MM:SS) to total seconds.
+        __background(style: str) -> Optional[str]:
+            Extracts the background image URL from a CSS style string.
+
+    """
+
+    def __init__(self, group: LexborNode) -> None:
+        """
+        Initializes a Media object with the provided HTML group.
+
+        Args:
+            group (LexborNode): The HTML group containing media elements.
+        """
+        self.media = group.css(",".join([
+            ".tgme_widget_message_photo_wrap",
+            ".tgme_widget_message_video_player",
+            ".tgme_widget_message_voice_player",
+            ".tgme_widget_message_roundvideo_player"
+        ]))
+
+    @classmethod
+    def image(cls, match: LexborNode) -> dict[str, str] | None:
+        """
+        Extracts information about an image media element.
+
+        Args:
+            match (LexborNode): The HTML node representing the image media element.
+
+        Returns:
+            Optional[Dict[str, str]]: A dictionary containing information
+            about the image, or None if no image found.
+        """
+        image: str | None = match.attributes.get("style")
+
+        if not image:
+            return None
+
+        return {
+            "url": cls.__background(image),
+            "type": "image"
+        }
+
+    @classmethod
+    def video(cls, match: LexborNode) -> dict[str, str] | None:
+        """
+        Extracts information about a video media element.
+
+        Args:
+            match (LexborNode): The HTML node representing the video media element.
+
+        Returns:
+            Optional[Dict[str, str]]: A dictionary containing information
+            about the video, or None if no video found.
+        """
+        video: LexborNode | None = match.css_first(
+            "video.tgme_widget_message_video")
+        thumb: LexborNode | None = match.css_first(
+            ".tgme_widget_message_video_thumb")
+        duration: LexborNode | None = match.css_first(
+            "time.message_video_duration")
+        duration: str | None = duration.text() if duration else None
+
+        if not video:
+            return None
+
+        return {
+            "url": video.attributes.get("src"),
+            "thumb": cls.__background(
+                thumb.attributes.get("style")
+            ) if thumb else None,
+            "duration": {
+                "formatted": duration,
+                "raw": cls.__duration(duration)
+            },
+            "type": "video"
+        }
+
+    @classmethod
+    def voice(cls, match: LexborNode) -> dict[str, str] | None:
+        """
+        Extracts information about a voice media element.
+
+        Args:
+            match (LexborNode): The HTML node representing the voice media element.
+
+        Returns:
+            Optional[Dict[str, str]]: A dictionary containing information
+            about the voice media, or None if no voice media found.
+        """
+        audio: LexborNode | None = match.css_first(
+            ".tgme_widget_message_voice")
+        duration: str | None = match.css_first(
+            "time.tgme_widget_message_voice_duration").text()
+
+        if not audio:
+            return None
+
+        return {
+            "url": audio.attributes.get("src"),
+            "waves": audio.attributes.get("data-waveform"),
+            "duration": {
+                "formatted": duration,
+                "raw": cls.__duration(duration)
+            },
+            "type": "voice"
+        }
+
+    @classmethod
+    def roundvideo(cls, match: LexborNode) -> dict[str, str] | None:
+        """
+        Extracts information about a round video media element.
+
+        Args:
+            match (LexborNode): The HTML node representing the round video media element.
+
+        Returns:
+            Optional[Dict[str, str]]: A dictionary containing information about
+            the round video media, or None if no round video found.
+        """
+        roundvideo: LexborNode | None = match.css_first(
+            "video.tgme_widget_message_roundvideo")
+        duration: str | None = match.css_first(
+            "time.tgme_widget_message_roundvideo_duration").text()
+
+        if not roundvideo:
+            return None
+
+        return {
+            "url": roundvideo.attributes.get("src"),
+            "thumb": cls.__background(
+                match.css_first(".tgme_widget_message_roundvideo_thumb")
+                .attributes.get("style")),
+            "duration": {
+                "formatted": duration,
+                "raw": cls.__duration(duration)
+            },
+            "type": "roundvideo"
+        }
+
+    def extract_media(self) -> List[dict]:
+        """
+        Extracts and returns information about all media elements in the group.
+
+        Returns:
+            List[Dict]: A list containing dictionaries, each
+            representing information about a media element.
+        """
+        media_array: list = []
+
+        for m in self.media:
+            content_type: Literal["image", "video", "voice", "roundvideo"] = {
+                "tgme_widget_message_photo_wrap": "image",
+                "tgme_widget_message_video_player": "video",
+                "tgme_widget_message_voice_player": "voice",
+                "tgme_widget_message_roundvideo_player": "roundvideo"
+            }[m.attributes.get("class").split()[0]]
+
+            match content_type:
+                case "image":
+                    media_array.append(self.image(m))
+
+                case "video":
+                    media_array.append(self.video(m))
+
+                case "voice":
+                    media_array.append(self.voice(m))
+
+                case "roundvideo":
+                    media_array.append(self.roundvideo(m))
+
+        media_array: list = [m for m in media_array if m]
+        return media_array
+
+    @staticmethod
+    def __duration(duration: str) -> int | None:
+        """
+        Converts a duration string (MM:SS) to total seconds.
+
+        Args:
+            duration (str): The duration string in the format "MM:SS".
+
+        Returns:
+            int: The total duration in seconds.
+        """
+        if not duration:
+            return None
+
+        minutes, seconds \
+            = map(int, duration.split(":"))
+        return minutes * 60 + seconds
+
+    @staticmethod
+    def __background(style: str) -> Union[str, None]:
+        """
+        Extracts the background image URL from a CSS style string.
+
+        Args:
+            style (str): The CSS style string.
+
+        Returns:
+            Union[str, None]: The background image URL, or None if not found.
+        """
+        match = re.search(
+            r"background-image:\s*?url\([',\"](.*)[',\"]\)",
+            style, flags=re.I | re.M)
+        return match.group(1) if match else None
+
+    def __str__(self) -> str:
+        """
+        Returns a JSON representation of the extracted media elements.
+
+        Returns:
+            str: A JSON string representing the extracted media elements.
+        """
+        return json.dumps(self.extract_media())
 
 
 class Post:
@@ -266,7 +510,7 @@ class Post:
         timestamp = datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%S%z")
         return int(timestamp.timestamp())
 
-    def __messages(self) -> List[LexborNode]:
+    def messages(self) -> List[LexborNode]:
         """
         Retrieves message nodes from the HTML content.
 
@@ -276,125 +520,7 @@ class Post:
         return self.soup.css(".tgme_widget_message_wrap > .tgme_widget_message")
 
     @staticmethod
-    def __duration(duration: str) -> int | None:
-        """
-        Converts a duration string (MM:SS) to total seconds.
-
-        Args:
-            duration (str): The duration string in the format "MM:SS".
-
-        Returns:
-            int: The total duration in seconds.
-        """
-        if not duration:
-            return None
-        minutes, seconds = map(int, duration.split(":"))
-        return minutes * 60 + seconds
-
-    @staticmethod
-    def __background(style: str) -> Union[str, None]:
-        """
-        Extracts the background image URL from a CSS style string.
-
-        Args:
-            style (str): The CSS style string.
-
-        Returns:
-            Union[str, None]: The background image URL, or None if not found.
-        """
-        match = re.search(
-            r"background-image:\s*?url\([',\"](.*)[',\"]\)",
-            style, flags=re.I | re.M)
-        return match.group(1) if match else None
-
-    @classmethod
-    def __media(cls, group: LexborNode) -> List[dict]:
-        """
-        Extracts media content from a message.
-
-        Args:
-            group (LexborNode): The message group node.
-
-        Returns:
-            List[dict]: A list of dictionaries containing media information.
-        """
-        media = group.css(",".join([
-            ".tgme_widget_message_photo_wrap",
-            ".tgme_widget_message_video_player",
-            ".tgme_widget_message_voice_player",
-            ".tgme_widget_message_roundvideo_player"
-        ]))
-        media_array = []
-
-        for m in media:
-            content_type: Literal["image", "video", "voice"] = {
-                "tgme_widget_message_photo_wrap": "image",
-                "tgme_widget_message_video_player": "video",
-                "tgme_widget_message_voice_player": "voice",
-                "tgme_widget_message_roundvideo_player": "roundvideo"
-            }[m.attributes.get("class").split()[0]]
-
-            match content_type:
-                case "image":
-                    image = m.attributes.get("style")
-                    if image:
-                        media_array.append({
-                            "url": cls.__background(image),
-                            "type": "image"
-                        })
-
-                case "video":
-                    video = m.css_first("video.tgme_widget_message_video")
-                    thumb = m.css_first(".tgme_widget_message_video_thumb")
-                    duration = m.css_first("time.message_video_duration")
-                    duration = duration.text() if duration else None
-                    if video:
-                        media_array.append({
-                            "url": video.attributes.get("src"),
-                            "thumb": cls.__background(
-                                thumb.attributes.get("style")
-                            ) if thumb else None,
-                            "duration": {
-                                "formatted": duration,
-                                "raw": cls.__duration(duration)
-                            },
-                            "type": "video"
-                        })
-
-                case "voice":
-                    audio = m.css_first(".tgme_widget_message_voice")
-                    duration = m.css_first("time.tgme_widget_message_voice_duration").text()
-                    if audio:
-                        media_array.append({
-                            "url": audio.attributes.get("src"),
-                            "waves": audio.attributes.get("data-waveform"),
-                            "duration": {
-                                "formatted": duration,
-                                "raw": cls.__duration(duration)
-                            },
-                            "type": "voice"
-                        })
-
-                case "roundvideo":
-                    roundvideo = m.css_first("video.tgme_widget_message_roundvideo")
-                    duration = m.css_first("time.tgme_widget_message_roundvideo_duration").text()
-                    if roundvideo:
-                        media_array.append({
-                            "url": roundvideo.attributes.get("src"),
-                            "thumb": cls.__background(
-                                m.css_first(".tgme_widget_message_roundvideo_thumb")
-                                .attributes.get("style")),
-                            "duration": {
-                                "formatted": duration,
-                                "raw": cls.__duration(duration)
-                            },
-                            "type": "roundvideo"
-                        })
-
-        return media_array
-
-    @staticmethod
-    def __poll(buble: LexborNode) -> Union[dict, None]:
+    def poll(buble: LexborNode) -> Union[dict, None]:
         """
         Extracts poll information from a message bubble.
 
@@ -426,7 +552,7 @@ class Post:
         }
 
     @classmethod
-    def __footer(cls, buble: LexborNode) -> dict:
+    def footer(cls, buble: LexborNode) -> dict:
         """
         Extracts footer information from a message bubble.
 
@@ -449,7 +575,25 @@ class Post:
         }
 
     @staticmethod
-    def __text(buble: LexborNode) -> Union[dict, None]:
+    def get_text_html(selector: LexborNode) -> str | None:
+        """
+        Extracts and returns the inner HTML content of the first <div> element found in the HTML
+        represented by the LexborNode object.
+
+        Args:
+            selector (LexborNode): A LexborNode object containing the HTML content to be searched.
+
+        Returns:
+            Optional[str]: The inner HTML content of the first <div> element,
+                if found; otherwise, `None`.
+        """
+        match = re.match(r"<div.*?>(.*)</div>", selector.html, flags=re.M)
+        if match:
+            return match.group(1)
+
+        return None
+
+    def text(self, buble: LexborNode) -> Union[dict, None]:
         """
         Extracts text content from a message bubble.
 
@@ -463,20 +607,24 @@ class Post:
         if not selector:
             return None
 
-        t_selector = buble.css_first(".tgme_widget_message_text")
-        delete_tags = ["a", "i", "b", "pre", "code", "tg-emoji", "span"]
-        t_selector.unwrap_tags(delete_tags)
-        html = t_selector.html
-        content = re.match(r"<div.*?>(.*)</div>", html, flags=re.M).group(1)
-        text = re.sub(r"<br\s?/?>", "\n", content)
+        content = self.get_text_html(selector)
 
-        return {
-            "string": text,
-            "entities": []
+        delete_tags = ["a", "i", "b", "s", "u", "pre", "code", "span", "tg-emoji", "tg-spoiler"]
+        selector.unwrap_tags(delete_tags)
+        content_t = self.get_text_html(selector)
+        text = re.sub(r"<br\s?/?>", "\n", content_t)
+
+        entities = EntitiesParser(content).parse_message()
+        response = {
+            "string": text
         }
+        if entities:
+            response["entities"] = entities
+
+        return response
 
     @staticmethod
-    def __inline(message: LexborNode) -> Union[list, None]:
+    def inline(message: LexborNode) -> Union[list, None]:
         """
         Extracts inline buttons from a Telegram message.
 
@@ -503,7 +651,7 @@ class Post:
         ]
 
     @staticmethod
-    def __post_id(message: LexborNode) -> int:
+    def post_id(message: LexborNode) -> int:
         """
         Extracts the post ID from a message node.
 
@@ -517,7 +665,7 @@ class Post:
         return int(selector.split("/")[1])
 
     @staticmethod
-    def __forwarded(message: LexborNode) -> Union[dict, None]:
+    def forwarded(message: LexborNode) -> Union[dict, None]:
         """
         Extracts forwarded information from a message node.
 
@@ -549,26 +697,30 @@ class Post:
             List[dict]: A list of dictionaries containing post information.
         """
         posts = []
-        for message in self.__messages():
+        for message in self.messages():
             buble = self.buble(message)
 
             content = {}
             content_fields = {
-                "text": self.__text(buble),
-                "media": self.__media(buble),
-                "poll": self.__poll(buble),
-                "inline": self.__inline(message)
+                "text": self.text(buble),
+                "media": Media(buble).extract_media(),
+                "poll": self.poll(buble),
+                "inline": self.inline(message)
             }
             for k, v in content_fields.items():
                 if v:
                     content[k] = v
 
+            if not content:
+                # skip if no content
+                continue
+
             post = {
-                "id": self.__post_id(message),
+                "id": self.post_id(message),
                 "content": content,
-                "footer": self.__footer(buble)
+                "footer": self.footer(buble)
             }
-            forwarded = self.__forwarded(message)
+            forwarded = self.forwarded(message)
             if forwarded:
                 post["forwarded"] = forwarded
 
@@ -580,4 +732,183 @@ class Post:
         """
         Return representation for Post object
         """
-        return repr(self.get())
+        return json.dumps(self.get())
+
+
+class EntitiesParser:
+    """
+    A parser for extracting various entities from HTML text, including hashtags,
+    formatting tags (bold, italic, etc.), code snippets, strikethrough text,
+    spoilers, and links. The parser also supports extracting plain text from HTML
+    and identifies the type, offset, and length of each entity.
+
+    Attributes:
+        patterns (tuple): A tuple of regex patterns for matching HTML entities.
+        idx_map (tuple): A tuple mapping group indices in regex matches to entity types.
+        html_text (str): The HTML input text with line breaks normalized.
+        text_only (str): The plain text extracted from `html_text`,
+            with all HTML tags removed.
+
+    Args:
+        html_body (str): The HTML content to be parsed.
+    """
+
+    def __init__(self, html_body: str) -> None:
+        """Initialize the parser with HTML content."""
+        self.patterns: tuple = (
+            r'(#\w+)',  # hashtag
+            r'<b>(.+?)<\/b>(?![^<]*<\/i>)',  # bold
+            r'<i>(.+?)<\/i>',  # italic
+            r'<u>(.+?)<\/u>',  # underline
+            r'<code>(.+?)<\/code>',  # code
+            r'<s>(.+?)<\/s>',  # strikethrough
+            r'<tg-spoiler>(.+?)<\/tg-spoiler>',  # spoiler
+
+            # emoji
+            r'<i\s+class="emoji"\s+style=".*?:url\(\'(.*?)\'\)">'
+            r'<b>(.*?)<\/b><\/i>(?![^<]*<\/tg-emoji>)',
+
+            # link in text with onclick
+            r'<a\s+(?:[^>]*?\s+)?href=\"([^\"]*)\"[^>]*\s+onclick=\"[^\"]*\"[^>]*>(.*?)<\/a>',
+            r'<a\s+(?:[^>]*?\s+)?href=\"(?!(?:.*#))(.*?)\"[^>]*>(.*?)<\/a>',  # url
+        )
+        self.idx_map: tuple = (1, 3, 5, 7, 9, 11, 13, 14, 17, 20,)
+
+        self.html_text: str = re.sub(r"<br\s?/?>", "\n", html_body)
+        self.text_only: str = re.sub(r"<[^>]+>", "", self.html_text)
+
+    @property
+    def combined_pattern(self) -> re.Pattern[AnyStr]:
+        """
+        Compiles and returns a single regex pattern that combines all entity patterns.
+
+        Returns:
+            re.Pattern[AnyStr]: The compiled regex pattern for matching all entities.
+        """
+        return re.compile(
+            "|".join([
+                f"({p})" for p in self.patterns
+            ]),
+            flags=re.DOTALL | re.M
+        )
+
+    @staticmethod
+    def length(match: re.Match[str]) -> int:
+        """
+        Calculates the length of the matched entity's text content.
+
+        Args:
+            match (re.Match[str]): A match object containing the entity.
+
+        Returns:
+            int: The length of the entity's text content.
+        """
+        return len(match.group().strip("<>").split(">")[-1].split("<")[0])
+
+    @staticmethod
+    def offset(text_start: int, match: re.Match[str]) -> int:
+        """
+        Calculates the end offset of the matched entity in the plain text.
+
+        Args:
+            text_start (int): The starting index of the entity in the plain text.
+            match (re.Match[str]): A match object containing the entity.
+
+        Returns:
+            int: The end offset of the entity in the plain text.
+        """
+        return text_start + len(
+            match.group().strip("<>").split(">")[-1].split("<")[0]
+        )
+
+    @staticmethod
+    def text_start(text: str, match: re.Match[str], offset: int) -> int:
+        """
+        Finds the starting index of the matched entity's text content in the plain text.
+
+        Args:
+            text (str): The plain text from which entities are extracted.
+            match (re.Match[str]): A match object containing the entity.
+            offset (int): The current offset in the plain text to start the search from.
+
+        Returns:
+            int: The starting index of the entity in the plain text.
+        """
+        return text.find(match.group().strip(
+            "<>").split(">")[-1].split("<")[0], offset)
+
+    @staticmethod
+    def message_type(idx: int) -> str | None:
+        """
+        Determines the entity type based on the index of a matched group.
+
+        Args:
+            idx (int): The index of the matched group in the regex pattern.
+
+        Returns:
+            str | None: The entity type as a string or Nothing.
+        """
+        try:
+            return (
+                "hashtag", "bold", "italic",
+                "underline", "code", "strikethrough",
+                "spoiler", "emoji",
+                "text_link", None, "url"
+            )[idx // 2]
+        except IndexError:
+            return None
+
+    def parse_message(self) -> list[dict[str, int | str | None]]:
+        """
+        Parses the HTML text and extracts entities, returning a list of entities with details
+        about their type, offset, and length. Links include an additional URL attribute.
+
+        Returns:
+            List[Dict[str, int | str | None]]: A list of dictionaries,
+                each representing an entity with its
+                type, offset, length, and optionally, URL.
+        """
+        entities = []
+        offset = 0
+
+        matches = list(re.finditer(self.combined_pattern, self.html_text))
+        for match in matches:
+            # Find start position in text only by finding
+            # the index of the next occurrence of the match
+            text_start = self.text_start(self.text_only, match, offset)
+
+            # Update offset to the end of the current match in the text only
+            offset = self.offset(text_start, match)
+
+            entity_type = None
+            entity_url = None
+
+            for idx, group in enumerate(match.groups()):
+                if group and idx in self.idx_map:
+                    entity_type = self.message_type(idx)
+                    if entity_type in ("text_link", "emoji",):
+                        entity_url = match.group(idx + 2)
+                    break
+
+            entity = {
+                "offset": text_start,
+                "length": self.length(match),
+                "type": entity_type
+            }
+
+            if entity_url:
+                entity["url"] = f"https:{entity_url}" \
+                    if entity_type == "emoji" else entity_url
+
+            entities.append(entity)
+
+        return entities
+
+    def __str__(self) -> str:
+        """
+        Returns a string representation of the parsed entities in JSON format.
+
+        Returns:
+            str: The JSON string representation of the parsed entities.
+        """
+        return json.dumps(self.parse_message())

@@ -2,15 +2,16 @@
 Route handler for /healthz
 """
 
-from fastapi import APIRouter, Response
+from fastapi import Response, APIRouter
 
 router = APIRouter()
 
 
-@router.head(
+@router.get(
     "/healthz",
     summary="Health status",
-    responses={200: {}}
+    responses={200: {}},
+    tags=["Service"]
 )
 async def healthz() -> Response:
     """Request handler"""

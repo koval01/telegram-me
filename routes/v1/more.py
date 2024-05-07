@@ -3,16 +3,14 @@ Route handler for /more/{channel}/{direction}/{position}
 """
 
 from typing import Union, Literal
+
+from fastapi import Path, HTTPException
 from pydantic import PositiveInt
 
-from fastapi import APIRouter, Path, HTTPException
 from model import HTTPError
-
+from routes.v1.router import router
 from telegram.models.more import More
-
 from telegram.telegram import Telegram
-
-router = APIRouter()
 
 
 @router.get(
@@ -21,7 +19,8 @@ router = APIRouter()
     responses={
         200: {"model": More},
         404: {"model": HTTPError}
-    }
+    },
+    tags=["Channel"]
 )
 async def more(
         channel: str = Path(description="Telegram channel username."),
@@ -31,6 +30,6 @@ async def more(
     """Request handler"""
     result = await Telegram().more(channel, position, direction)
     if not result:
-        raise HTTPException(status_code=404, detail="Channel not found")
+        raise HTTPException(status_code=404, detail="Channel or post not found")
 
     return result
