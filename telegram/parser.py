@@ -772,7 +772,9 @@ class EntitiesParser:
             r'<a\s+(?:[^>]*?\s+)?href=\"([^\"]*)\"[^>]*\s+onclick=\"[^\"]*\"[^>]*>(.*?)<\/a>',
             r'<a\s+(?:[^>]*?\s+)?href=\"(?!(?:.*#))(.*?)\"[^>]*>(.*?)<\/a>',  # url
 
-            r'<tg-emoji.*?><i\s+class="emoji"\s+style="background-image:url\(\'(.*?)\'\)"><b>(.*?)</b></i></tg-emoji>'
+            # TODO: The emoji processing is not quite correct, it will need to be reworked
+            r'<tg-emoji.*?><i\s+class="emoji"\s+style="background-image:url\(\'(.*?)\'\)">'
+            r'<b>(.*?)</b></i></tg-emoji>'
         )
         self.idx_map: tuple = (1, 3, 5, 7, 9, 11, 13, 14, 17, 20, 23)
 
