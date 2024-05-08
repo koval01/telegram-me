@@ -771,8 +771,10 @@ class EntitiesParser:
             # link in text with onclick
             r'<a\s+(?:[^>]*?\s+)?href=\"([^\"]*)\"[^>]*\s+onclick=\"[^\"]*\"[^>]*>(.*?)<\/a>',
             r'<a\s+(?:[^>]*?\s+)?href=\"(?!(?:.*#))(.*?)\"[^>]*>(.*?)<\/a>',  # url
+
+            r'<tg-emoji.*?><i\s+class="emoji"\s+style="background-image:url\(\'(.*?)\'\)"><b>(.*?)</b></i></tg-emoji>'
         )
-        self.idx_map: tuple = (1, 3, 5, 7, 9, 11, 13, 14, 17, 20,)
+        self.idx_map: tuple = (1, 3, 5, 7, 9, 11, 13, 14, 17, 20, 23)
 
         self.html_text: str = re.sub(r"<br\s?/?>", "\n", html_body)
         self.text_only: str = re.sub(r"<[^>]+>", "", self.html_text)
@@ -853,7 +855,8 @@ class EntitiesParser:
                 "hashtag", "bold", "italic",
                 "underline", "code", "strikethrough",
                 "spoiler", "emoji",
-                "text_link", None, "url"
+                "text_link", None, "url",
+                "animoji"
             )[idx // 2]
         except IndexError:
             return None
@@ -886,7 +889,7 @@ class EntitiesParser:
             for idx, group in enumerate(match.groups()):
                 if group and idx in self.idx_map:
                     entity_type = self.message_type(idx)
-                    if entity_type in ("text_link", "emoji",):
+                    if entity_type in ("text_link", "emoji", "animoji",):
                         entity_url = match.group(idx + 2)
                     break
 
@@ -898,7 +901,7 @@ class EntitiesParser:
 
             if entity_url:
                 entity["url"] = f"https:{entity_url}" \
-                    if entity_type == "emoji" else entity_url
+                    if entity_type in ("emoji", "animoji",) else entity_url
 
             entities.append(entity)
 
