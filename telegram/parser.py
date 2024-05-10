@@ -614,6 +614,12 @@ class Post:
         content_t = self.get_text_html(selector)
         text = re.sub(r"<br\s?/?>", "\n", content_t)
 
+        div = re.compile(
+            r'<div+\sclass="tgme_widget_message_text.*"+\sdir="auto">(.*?)</div>',
+            flags=re.DOTALL)
+        div_match = re.search(div, text)
+        text = div_match.group(1) if div_match else text
+
         entities = EntitiesParser(content).parse_message()
         response = {
             "string": text
