@@ -60,3 +60,29 @@ class Telegram:
             return {}
 
         return More(response).get()
+
+    @staticmethod
+    async def post(channel: str, position: int) -> dict:
+        """
+        Retrieve a specific post from a Telegram channel.
+
+        Args:
+            channel (str): The channel name or ID.
+            position (int): The ID of the post to retrieve.
+
+        Returns:
+            dict: A dictionary containing the requested post if found,
+            otherwise an empty dictionary.
+        """
+        response = await Request().body(channel, position)
+        if not response:
+            return {}
+
+        data: dict[str, any] = Body(response).get()
+        for post in data["content"]["posts"]:
+            if post["id"] == position:
+                data["content"]["post"] = post
+                data["content"].pop("posts", None)
+                return data
+
+        return {}

@@ -51,10 +51,10 @@ class Content(BaseModel):
 
     Attributes:
         counters (List[Counter]): List of counters associated with the channel.
-        posts (List[Post]): List of posts in the channel.
+        posts (List[Post] | Post): List of posts or selected post in the channel.
     """
     counters: List[Counter]
-    posts: List[Post]
+    posts: List[Post] | Post
 
 
 class ChannelBody(BaseModel):
