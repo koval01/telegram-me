@@ -254,6 +254,8 @@ class Media:
             Extracts information about a voice media element.
         roundvideo(match: LexborNode) -> Optional[Dict[str, str]]:
             Extracts information about a round video media element.
+        sticker(match: LexborNode) -> Optional[Dict[str, str]]:
+            Extracts information about a sticker media element.
         extract_media() -> List[Dict]:
             Extracts and returns information about all media elements in the group.
 
@@ -276,7 +278,8 @@ class Media:
             ".tgme_widget_message_photo_wrap",
             ".tgme_widget_message_video_player",
             ".tgme_widget_message_voice_player",
-            ".tgme_widget_message_roundvideo_player"
+            ".tgme_widget_message_roundvideo_player",
+            ".tgme_widget_message_sticker_wrap"
         ]))
 
     @classmethod
@@ -324,17 +327,22 @@ class Media:
         if not video:
             return None
 
-        return {
+        body = {
             "url": video.attributes.get("src"),
             "thumb": cls.__background(
                 thumb.attributes.get("style")
             ) if thumb else None,
-            "duration": {
-                "formatted": duration,
-                "raw": cls.__duration(duration)
-            },
             "type": "video"
         }
+        if duration:
+            body["duration"] = {
+                "formatted": duration,
+                "raw": cls.__duration(duration)
+            }
+        else:
+            body["type"] = "gif"
+
+        return body
 
     @classmethod
     def voice(cls, match: LexborNode) -> dict[str, str] | None:
@@ -398,6 +406,60 @@ class Media:
             "type": "roundvideo"
         }
 
+    @classmethod
+    def sticker(cls, match: LexborNode) -> dict[str, str] | None:
+        """
+        Extracts information about a sticker media element.
+
+        Args:
+            match (LexborNode): The HTML node representing the sticker media element.
+
+        Returns:
+            Optional[Dict[str, str]]: A dictionary containing information about
+            the sticker media, or None if no sticker is found.
+
+        The method checks for the presence of a sticker element within the provided
+        HTML node, iterating over a predefined set of class selectors. If a sticker
+        element is found, it extracts the relevant attributes to construct a dictionary
+        containing the sticker's URL and type. If a thumbnail image is associated with
+        the sticker, its URL is also included in the dictionary.
+        """
+        classes: tuple = (
+            "picture.tgme_widget_message_tgsticker",
+            "i.tgme_widget_message_sticker",
+            "div.tgme_widget_message_videosticker",)
+
+        key: tuple[tuple[str, ...], ...] | str = (
+            ("source", "srcset",),
+            ("i.tgme_widget_message_sticker", "data-webp",),
+            ("video.js-videosticker_video", "src",),)
+        sticker: LexborNode | None = None
+
+        for i, cl in enumerate(classes):
+            sticker = match.css_first(cl)
+            if sticker:
+                key = key[i]
+                break
+
+        if not sticker:
+            return None
+
+        source: LexborNode | None = sticker.css_first(key[0])
+
+        if not source:
+            return None
+
+        thumb: LexborNode | None = source.css_first("img")
+
+        body = {
+            "url": source.attributes.get(key[1]),
+            "type": "sticker"
+        }
+        if thumb:
+            body["thumb"] = thumb.attributes.get("src")
+
+        return body
+
     def extract_media(self) -> list[dict]:
         """
         Extracts and returns information about all media elements in the group.
@@ -409,11 +471,12 @@ class Media:
         media_array: list = []
 
         for m in self.media:
-            content_type: Literal["image", "video", "voice", "roundvideo"] = {
+            content_type: Literal["image", "video", "voice", "roundvideo", "sticker"] = {
                 "tgme_widget_message_photo_wrap": "image",
                 "tgme_widget_message_video_player": "video",
                 "tgme_widget_message_voice_player": "voice",
-                "tgme_widget_message_roundvideo_player": "roundvideo"
+                "tgme_widget_message_roundvideo_player": "roundvideo",
+                "tgme_widget_message_sticker_wrap": "sticker"
             }[m.attributes.get("class").split()[0]]
 
             match content_type:
@@ -428,6 +491,9 @@ class Media:
 
                 case "roundvideo":
                     media_array.append(self.roundvideo(m))
+
+                case "sticker":
+                    media_array.append(self.sticker(m))
 
         media_array: list = [m for m in media_array if m]
         return media_array

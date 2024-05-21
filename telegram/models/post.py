@@ -29,13 +29,14 @@ class MediaItem(BaseModel):
         thumb (Optional[str]): The URL of the thumbnail image (if applicable).
         waves (Optional[str]): The URL of the waveform image (if applicable).
         duration (Optional[Duration]): The duration of the media item (if applicable).
-        type (Literal["image", "video", "voice", "roundvideo"]): The type of the media item.
+        type (Literal["image", "video", "voice", "roundvideo", "sticker", "gif"]):
+        The type of the media item.
     """
     url: str
     thumb: Optional[str] = None
     waves: Optional[str] = None
     duration: Optional[Duration] = None
-    type: Literal["image", "video", "voice", "roundvideo"]
+    type: Literal["image", "video", "voice", "roundvideo", "sticker", "gif"]
 
 
 class TextEntities(BaseModel):
