@@ -6,7 +6,7 @@ import logging
 import re
 import json
 from datetime import datetime
-from typing import Literal, Union, List, Any, Dict, AnyStr
+from typing import Literal, Union, Any, AnyStr
 from urllib.parse import urlparse, parse_qs
 
 from selectolax.lexbor import LexborHTMLParser, LexborNode
@@ -18,7 +18,7 @@ class Misc:
     """
 
     @staticmethod
-    def safe_index(array: List[Any], index: int) -> Any:
+    def safe_index(array: list[Any], index: int) -> Any:
         """
         Safely retrieves an item from a list by index.
 
@@ -67,7 +67,7 @@ class Parser:
         self.soup = LexborHTMLParser(body)
 
     @staticmethod
-    def query(url: str) -> Dict[str, int]:
+    def query(url: str) -> dict[str, int]:
         """
         Parses query parameters from a URL.
 
@@ -85,7 +85,7 @@ class Parser:
         return updated_dict[0] if updated_dict else {}
 
     @staticmethod
-    def get_counters(node: List[LexborNode]) -> Dict[str, str]:
+    def get_counters(node: list[LexborNode]) -> dict[str, str]:
         """
         Extracts counter information from HTML nodes.
 
@@ -160,13 +160,12 @@ class Body(Parser):
         """
         Parser.__init__(self, body)
 
-    def get(self) -> dict[
-        str, dict[str, str]
-            | dict[str, list[dict[str, str]] | list[dict] | list]
-            | dict[str, list[dict[str, int]]]
-    ]:
+    def get(self, selector: int | None = None) -> dict[str, dict]:
         """
         Extracts relevant information from the HTML body.
+
+        Args:
+            selector (int | None): ID message for select one.
 
         Returns:
             Dict[str, Dict[str, Dict[str, str]]]: A dictionary containing extracted content.
@@ -181,7 +180,7 @@ class Body(Parser):
             "content": {
                 "counters": self.get_counters(
                     self.soup.css(".tgme_channel_info_counters>.tgme_channel_info_counter")),
-                "posts": Post(self.soup.body.html).get()
+                "posts": Post(self.soup.body.html).get(selector)
             },
             "meta": {
                 "offset": self.get_offset(self.soup.head)
@@ -399,7 +398,7 @@ class Media:
             "type": "roundvideo"
         }
 
-    def extract_media(self) -> List[dict]:
+    def extract_media(self) -> list[dict]:
         """
         Extracts and returns information about all media elements in the group.
 
@@ -510,7 +509,7 @@ class Post:
         timestamp = datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%S%z")
         return int(timestamp.timestamp())
 
-    def messages(self) -> List[LexborNode]:
+    def messages(self) -> list[LexborNode]:
         """
         Retrieves message nodes from the HTML content.
 
@@ -565,14 +564,20 @@ class Post:
         time = (buble.css_first(".tgme_widget_message_date > time")
                 .attributes.get("datetime"))
         views = buble.css_first(".tgme_widget_message_views")
+        author = cls.author(buble)
 
-        return {
+        footer = {
             "views": views.text() if views else None,
             "date": {
                 "string": time,
                 "unix": cls.__unix_timestamp(time)
             }
         }
+
+        if author:
+            footer["author"] = author
+
+        return footer
 
     @staticmethod
     def get_text_html(selector: LexborNode) -> str | None:
@@ -695,15 +700,40 @@ class Post:
 
         return forwarded
 
-    def get(self) -> List[dict]:
+    @staticmethod
+    def author(message: LexborNode) -> str | None:
+        """
+        Extracts the author's name from a message node.
+
+        Args:
+            message (LexborNode): The message node.
+
+        Returns:
+            str | None: The author's name as a string if present,
+            or None if the author information is not found.
+        """
+        auth = message.css_first(".tgme_widget_message_from_author")
+        if not auth:
+            return None
+
+        return auth.text()
+
+    def get(self, selector: int | None = None) -> list[dict]:
         """
         Extracts post information from the HTML content.
+
+        Args:
+            selector (int | None): ID message for select one message.
 
         Returns:
             List[dict]: A list of dictionaries containing post information.
         """
         posts = []
         for message in self.messages():
+            identifier = self.post_id(message)
+            if (identifier and selector) and selector != identifier:
+                continue
+
             buble = self.buble(message)
 
             content = {}
@@ -722,7 +752,7 @@ class Post:
                 continue
 
             post = {
-                "id": self.post_id(message),
+                "id": identifier,
                 "content": content,
                 "footer": self.footer(buble)
             }
@@ -778,7 +808,7 @@ class EntitiesParser:
             r'<a\s+(?:[^>]*?\s+)?href=\"([^\"]*)\"[^>]*\s+onclick=\"[^\"]*\"[^>]*>(.*?)<\/a>',
             r'<a\s+(?:[^>]*?\s+)?href=\"(?!(?:.*#))(.*?)\"[^>]*>(.*?)<\/a>',  # url
 
-            # TODO: The emoji processing is not quite correct, it will need to be reworked
+            # animoji
             r'<tg-emoji.*?><i\s+class="emoji"\s+style="background-image:url\(\'(.*?)\'\)">'
             r'<b>(.*?)</b></i></tg-emoji>'
         )
@@ -904,7 +934,7 @@ class EntitiesParser:
                     entity_type = self.message_type(idx)
                     if entity_type in ("text_link", "emoji", "animoji",):
                         entity_url = match.group(idx + 2)
-                        depth += 2 if entity_type == "animoji" else 1
+                        depth += {"text_link": 0, "emoji": 1, "animoji": 2}[entity_type]
                     break
 
             # Find start position in text only by finding

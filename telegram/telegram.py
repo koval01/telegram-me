@@ -78,11 +78,8 @@ class Telegram:
         if not response:
             return {}
 
-        data: dict[str, any] = Body(response).get()
-        for post in data["content"]["posts"]:
-            if post["id"] == position:
-                data["content"]["post"] = post
-                data["content"].pop("posts", None)
-                return data
+        response = Body(response).get(position)
+        if not response["content"]["posts"]:
+            return {}
 
-        return {}
+        return response

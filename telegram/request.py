@@ -129,7 +129,7 @@ class Request:
             direction (Literal["before", "after"]): The direction of content retrieval.
 
         Returns:
-            Union[dict, None]: Additional content in dictionary format, or None if request fails.
+            Union[str, None]: Additional content in dictionary format, or None if request fails.
         """
         if not self.valid_channel(channel):
             return None
