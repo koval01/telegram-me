@@ -4,6 +4,7 @@ Main application module for the TelegramMe API.
 
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
+from fastapi.middleware.cors import CORSMiddleware
 
 from routes.v1 import body, more, post
 from routes import healthz
@@ -18,6 +19,13 @@ app = FastAPI(
     docs_url="/"
 )
 app.mount("/static", StaticFiles(directory="static"), name="static")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 app.include_router(body.router)
