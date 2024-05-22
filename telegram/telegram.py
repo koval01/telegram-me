@@ -4,7 +4,8 @@ Telegram main module
 
 from typing import Literal
 
-from telegram.parser import Body, More
+from telegram.parser.methods.body import Body
+from telegram.parser.methods.more import More
 from telegram.request import Request
 
 
