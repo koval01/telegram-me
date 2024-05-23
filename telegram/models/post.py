@@ -68,10 +68,12 @@ class Text(BaseModel):
 
     Attributes:
         string (str): The text string.
+        html (str): Original html.
         entities (Optional[List[TextEntities]]):
             List of text entities within the text.
     """
     string: str
+    html: str
     entities: Optional[List[TextEntities]]
 
 

@@ -163,7 +163,8 @@ class Post:
 
         entities = EntitiesParser(content).parse_message()
         response = {
-            "string": text
+            "string": text,
+            "html": content
         }
         if entities:
             response["entities"] = entities
