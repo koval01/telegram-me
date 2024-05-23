@@ -20,11 +20,13 @@ class Channel(BaseModel):
         title (str): The title of the channel.
         description (str): The description of the channel.
         avatar (str): The URL of the channel's avatar.
+        counters (List[Counter]): List of counters associated with the channel.
     """
     username: str
     title: str
     description: str
     avatar: str
+    counters: List[Counter]
 
 
 class Counter(BaseModel):
@@ -50,10 +52,8 @@ class Content(BaseModel):
     Represents the content associated with a Telegram channel.
 
     Attributes:
-        counters (List[Counter]): List of counters associated with the channel.
         posts (List[Post] | Post): List of posts or selected post in the channel.
     """
-    counters: List[Counter]
     posts: List[Post] | Post
 
 
