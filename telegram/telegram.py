@@ -6,6 +6,8 @@ from typing import Literal
 
 from telegram.parser.methods.body import Body
 from telegram.parser.methods.more import More
+from telegram.parser.methods.preview import Preview
+
 from telegram.request import Request
 
 
@@ -84,3 +86,20 @@ class Telegram:
             return {}
 
         return response
+
+    @staticmethod
+    async def preview(channel: str) -> dict:
+        """
+        Retrieve preview information of channel.
+
+        Args:
+            channel (str): The channel name or ID.
+
+        Returns:
+            dict: A dictionary containing the main channel information.
+        """
+        response = await Request().preview(channel)
+        if not response:
+            return {}
+
+        return Preview(response).get()

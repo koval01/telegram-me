@@ -5,10 +5,42 @@ Model for body response container
 from __future__ import annotations
 from typing import List, Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 
 from telegram.models.post import Post
 from telegram.models.meta import Meta
+
+
+class Labels(BaseModel):
+    """
+    Represents a set of labels for a Telegram channel.
+
+    Attributes:
+        labels (List[str]): A list of labels assigned to the channel.
+    """
+    labels: List[str]
+
+    @classmethod
+    @field_validator('labels', mode='before')
+    def check_labels(cls, v: List[str]) -> List[str]:
+        """
+        Validates the labels to ensure only allowed labels are present.
+
+        Args:
+            v (List[str]): The list of labels to validate.
+
+        Returns:
+            List[str]: The validated list of labels.
+
+        Raises:
+            ValueError: If any label is not in the allowed list.
+        """
+        allowed_labels = ("verified",)
+        for label in v:
+            if label not in allowed_labels:
+                raise ValueError(
+                    f"Invalid label '{label}', only {allowed_labels} are allowed.")
+        return v
 
 
 class Channel(BaseModel):
@@ -21,12 +53,14 @@ class Channel(BaseModel):
         description (str): The description of the channel.
         avatar (str): The URL of the channel's avatar.
         counters (List[Counter]): List of counters associated with the channel.
+        labels (Optional[Labels]): Channel labels list.
     """
     username: str
     title: str
     description: str
     avatar: str
     counters: List[Counter]
+    labels: Optional[Labels]
 
 
 class Counter(BaseModel):

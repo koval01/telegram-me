@@ -75,6 +75,20 @@ class Parser:
             if t.attributes.get(selector) == name
         ], 0)
 
+    def get_labels(self) -> list[str]:
+        """
+        Extracts and returns a list of label classes
+        from the Telegram channel's HTML content.
+
+        Returns:
+            list[str]: A list of label class names present in the channel's header.
+        """
+        return [
+            label.attributes.get("class").split("-")[0]
+            for label in self.soup.css(".tgme_header_labels>i")
+            if label
+        ]
+
     def get_offset(self, node: LexborNode, more: bool = False) -> dict[str, int]:
         """
         Parses offset values from HTML link tags.

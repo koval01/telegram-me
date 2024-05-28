@@ -40,7 +40,8 @@ class Body(Parser):
                 "description": self.get_meta("property", "og:description"),
                 "avatar": self.get_meta("property", "og:image"),
                 "counters": self.get_counters(
-                    self.soup.css(".tgme_channel_info_counters>.tgme_channel_info_counter"))
+                    self.soup.css(".tgme_channel_info_counters>.tgme_channel_info_counter")),
+                "labels": self.get_labels()
             },
             "content": {
                 "posts": Post(self.soup.body.html).get(selector)

@@ -51,7 +51,7 @@ class Request:
         async with aiohttp.ClientSession() as session:
             async with session.request(
                     method=method,
-                    url=f"https://{self.host}/s/{sanitized_path}",
+                    url=f"https://{self.host}/{sanitized_path}",
                     allow_redirects=False,
                     params=params,
                     headers={
@@ -114,7 +114,7 @@ class Request:
         if position and not self.valid_position(position):
             return None
 
-        response = await self.__request(f"{channel}/{position}")
+        response = await self.__request(f"s/{channel}/{position}")
         return response if response else None
 
     async def more(
@@ -135,9 +135,25 @@ class Request:
             return None
 
         response = await self.__request(
-            channel,
+            f"s/{channel}",
             method="POST",
             json=True,
             params={direction: position}
         )
+        return response if response else None
+
+    async def preview(self, channel: str) -> Union[str, None]:
+        """
+        A method for obtaining preliminary information about a channel.
+
+        Args:
+            channel (str): The channel identifier.
+
+        Returns:
+            Union[str, None]: The response body content, or None if request fails.
+        """
+        if not self.valid_channel(channel):
+            return None
+
+        response = await self.__request(channel)
         return response if response else None
