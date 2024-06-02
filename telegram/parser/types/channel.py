@@ -1,8 +1,9 @@
 """Channel module"""
 
+import re
 import json
 
-from selectolax.lexbor import LexborHTMLParser
+from selectolax.lexbor import LexborHTMLParser, LexborNode
 
 
 class Channel:
@@ -41,6 +42,35 @@ class Channel:
 
         return True
 
+    @staticmethod
+    def description(description: LexborNode) -> str | None:
+        """
+        Extracts and formats the textual content from a given HTML description node.
+
+        Args:
+            description (LexborNode): An object representing a parsed
+            HTML node containing the description.
+
+        Returns:
+            str | None: The formatted description text if extraction is successful,
+                        otherwise None.
+        """
+        if not description:
+            return None
+
+        match_description = re.match(
+            r"<div.*?>(.*?)</div>", description.html, flags=re.DOTALL).group(1)
+        if not match_description:
+            return None
+
+        links_sub_description = re.sub(
+            r"<a.*?>(.*?)</a>", r"\g<1>", match_description)
+        if not links_sub_description:
+            return None
+
+        return links_sub_description.replace("<br>", "\n") \
+            if links_sub_description else None
+
     def get(self) -> dict | None:
         """
         Extracts and returns channel information if the HTML content represents a Telegram channel.
@@ -59,9 +89,9 @@ class Channel:
             "is_verified": self.page.css_first("i.verified-icon") is not None
         }
 
-        description = self.page.css_first(".tgme_page_description")
+        description = self.description(self.page.css_first(".tgme_page_description"))
         if description:
-            resp["description"] = description.text()
+            resp["description"] = description
 
         avatar = self.page.css_first("img.tgme_page_photo_image")
         if avatar:
