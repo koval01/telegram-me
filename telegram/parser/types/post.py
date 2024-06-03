@@ -160,6 +160,7 @@ class Post:
             flags=re.DOTALL)
         div_match = re.search(div, text)
         text = div_match.group(1) if div_match else text
+        text = text.replace("&nbsp;", " ")
 
         entities = EntitiesParser(content).parse_message()
         response = {
