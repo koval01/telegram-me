@@ -5,7 +5,7 @@ Model for body response container
 from __future__ import annotations
 from typing import List, Optional
 
-from pydantic import BaseModel, field_validator
+from pydantic import BaseModel, field_validator, HttpUrl
 
 from telegram.models.post import Post
 from telegram.models.meta import Meta
@@ -51,14 +51,14 @@ class Channel(BaseModel):
         username (str): The username of the channel.
         title (str): The title of the channel.
         description (str): The description of the channel.
-        avatar (str): The URL of the channel's avatar.
+        avatar (Optional[HttpUrl]): The URL of the channel's avatar.
         counters (List[Counter]): List of counters associated with the channel.
         labels (Optional[Labels]): Channel labels list.
     """
     username: str
     title: str
     description: str
-    avatar: str
+    avatar: Optional[HttpUrl]
     counters: List[Counter]
     labels: Optional[Labels]
 

@@ -6,8 +6,9 @@ from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 
-from routes.v1 import body, more, post, preview
-from routes import healthz
+from routes.v1.get import more, post, preview, body
+from routes.v1.post import previews
+from routes.get import healthz
 from middleware import proxy_cache_header_middleware, process_time_middleware
 
 from version import Version
@@ -32,6 +33,7 @@ app.include_router(body.router)
 app.include_router(more.router)
 app.include_router(post.router)
 app.include_router(preview.router)
+app.include_router(previews.router)
 app.include_router(healthz.router)
 
 app.middleware("http")(proxy_cache_header_middleware)

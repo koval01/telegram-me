@@ -5,7 +5,7 @@ Model for message (post) container
 from __future__ import annotations
 from typing import List, Optional, Literal
 
-from pydantic import BaseModel
+from pydantic import BaseModel, HttpUrl
 
 
 class Duration(BaseModel):
@@ -25,15 +25,15 @@ class MediaItem(BaseModel):
     Represents a media item within a post.
 
     Attributes:
-        url (str): The URL of the media item.
+        url (HttpUrl): The URL of the media item.
         thumb (Optional[str]): The URL of the thumbnail image (if applicable).
         waves (Optional[str]): The URL of the waveform image (if applicable).
         duration (Optional[Duration]): The duration of the media item (if applicable).
         type (Literal["image", "video", "voice", "roundvideo", "sticker", "gif"]):
         The type of the media item.
     """
-    url: str
-    thumb: Optional[str] = None
+    url: HttpUrl
+    thumb: Optional[HttpUrl] = None
     waves: Optional[str] = None
     duration: Optional[Duration] = None
     type: Literal["image", "video", "voice", "roundvideo", "sticker", "gif"]
@@ -111,10 +111,10 @@ class Inline(BaseModel):
 
     Attributes:
         title (str): The title inline button.
-        url (str): Redirect link for button.
+        url (HttpUrl): Redirect link for button.
     """
     title: str
-    url: str
+    url: HttpUrl
 
 
 class ContentPost(BaseModel):
@@ -164,10 +164,10 @@ class Forwarded(BaseModel):
 
     Attributes:
         name (str): The name of the source where the post was forwarded from.
-        url (str): The URL of the source where the post was forwarded from.
+        url (HttpUrl): The URL of the source where the post was forwarded from.
     """
     name: str
-    url: str
+    url: HttpUrl
 
 
 class Post(BaseModel):
