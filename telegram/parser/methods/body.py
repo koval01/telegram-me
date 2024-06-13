@@ -35,7 +35,7 @@ class Body(Parser):
         """
         return {
             "channel": {
-                "username": self.soup.css_first(".tgme_channel_info_header_username>a").text(),
+                "username": self.soup.css_first(".tgme_channel_info_header_username>a").text()[1:],
                 "title": self.get_meta("property", "og:title"),
                 "description": self.get_meta("property", "og:description"),
                 "avatar": self.get_meta("property", "og:image"),
