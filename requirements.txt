@@ -23,7 +23,7 @@ markdown-it-py==3.0.0
 MarkupSafe==2.1.5
 mdurl==0.1.2
 multidict==6.0.5
-orjson==3.9.15
+orjson==3.10.5
 pydantic==2.6.3
 pydantic-extra-types==2.8.0
 pydantic-settings==2.2.1
