@@ -24,7 +24,7 @@ MarkupSafe==2.1.5
 mdurl==0.1.2
 multidict==6.0.5
 orjson==3.9.15
-pydantic==2.6.3
+pydantic==2.8.0
 pydantic-extra-types==2.8.0
 pydantic-settings==2.2.1
 pydantic_core==2.16.3
