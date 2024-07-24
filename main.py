@@ -2,6 +2,8 @@
 Main application module for the TelegramMe API.
 """
 
+import os
+
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
@@ -17,7 +19,8 @@ app = FastAPI(
     title="TelegramMe API",
     description="API implementation of Telegram channel viewer in python",
     version=Version().hex,
-    docs_url="/"
+    docs_url="/",
+    openapi_url=None if os.getenv("DISABLE_DOCS") else "/openapi.json"
 )
 app.mount("/static", StaticFiles(directory="static"), name="static")
 app.add_middleware(
