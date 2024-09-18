@@ -1,4 +1,5 @@
 .env
+.env.local
 .venv/
 .DS_Store
 .idea/

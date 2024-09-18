@@ -1,5 +1,6 @@
 # flyctl launch added from .gitignore
 **/.env
+**/.env.local
 **/.venv
 **/.DS_Store
 **/.idea

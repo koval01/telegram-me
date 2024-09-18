@@ -1,1 +1,1 @@
-web: uvicorn main:app
+web: chmod +x start.sh && ./start.sh
