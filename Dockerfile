@@ -1,13 +1,10 @@
-FROM python:3.12.6
+FROM python:3.12.6-slim AS base
 
-ARG app_port=8080
-
-ENV PORT=$app_port
+RUN apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /code
 
 COPY ./requirements.txt /code/requirements.txt
-
 RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 
 COPY ./app /code/app
@@ -21,4 +18,4 @@ EXPOSE $PORT
 HEALTHCHECK --interval=30s --timeout=5s \
   CMD curl -fI http://localhost:${PORT}/healthz || exit 1
 
-CMD chmod +x start.sh && ./start.sh
+CMD ["bash", "start.sh"]
