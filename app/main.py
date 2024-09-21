@@ -12,13 +12,12 @@ from app.middleware.node import NodeMiddleware
 from app.middleware.process_time import ProcessTimeMiddleware
 from app.middleware.cache_header import ProxyCacheHeaderMiddleware
 
-from app.utils.version import Version
 from app.utils.config import settings
 
 app = FastAPI(
     title="TelegramMe API",
     description="API implementation of Telegram channel viewer in python",
-    version=Version().hex,
+    version="1.1",
     docs_url="/",
     openapi_url=None if bool(settings.DISABLE_DOCS) else "/openapi.json"
 )
