@@ -1,4 +1,4 @@
-fastapi[standard]==0.112.1
+fastapi[standard]==0.115.0
 
 selectolax~=0.3.21
 aiohttp~=3.10.5
