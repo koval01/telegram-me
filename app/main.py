@@ -17,7 +17,7 @@ from app.utils.config import settings
 app = FastAPI(
     title="TelegramMe API",
     description="API implementation of Telegram channel viewer in python",
-    version="1.1",
+    version=settings.VERSION,
     docs_url="/",
     openapi_url=None if bool(settings.DISABLE_DOCS) else "/openapi.json"
 )

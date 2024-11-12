@@ -7,6 +7,8 @@ from typing import Literal, Union
 import urllib.parse
 import aiohttp
 
+from app.utils.config import settings
+
 
 class Request:
     """
@@ -56,7 +58,8 @@ class Request:
                     params=params,
                     headers={
                         "X-Requested-With": "XMLHttpRequest"
-                        if method == "POST" else ""
+                        if method == "POST" else "",
+                        "User-Agent": f"TelegramMeAPI/{settings.VERSION} (https://github.com/koval01/telegram-me; yaroslav@koval.page)"  # pylint: disable=line-too-long
                     }
             ) as response:
                 if response.status != 200:
