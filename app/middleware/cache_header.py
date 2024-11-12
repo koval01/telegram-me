@@ -10,13 +10,13 @@ from starlette.types import ASGIApp
 
 class ProxyCacheHeaderMiddleware(BaseHTTPMiddleware):  # pylint: disable=R0903
     """
-    Middleware to add caching headers for proxy servers.
+    Middleware to add caching headers for proxy servers. (Only for Cloudflare)
 
     This middleware adds caching headers to the response, allowing proxy servers
     and clients to cache the response content.
     It sets the "Cache-Control" header to "public" to indicate that the response
-    can be cached by public caches, with a maximum age of 30 seconds.
-    It also specifies a "stale-while-revalidate" directive with a value of 30 seconds,
+    can be cached by public caches, with a maximum age of 10 seconds.
+    It also specifies a "stale-while-revalidate" directive with a value of 10 seconds,
     indicating that the response can still be served stale while
     it is being revalidated in the background.
 
@@ -41,6 +41,7 @@ class ProxyCacheHeaderMiddleware(BaseHTTPMiddleware):  # pylint: disable=R0903
         response = await call_next(request)
 
         # Add Cache-Control headers to the response
-        response.headers["Cache-Control"] = "public, max-age=30, stale-while-revalidate=30"
+        if request.headers.get("CF-RAY"):
+            response.headers["Cache-Control"] = "public, max-age=10, stale-while-revalidate=10"
 
         return response
