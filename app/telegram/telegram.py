@@ -62,7 +62,10 @@ class Telegram:
         if not response:
             return {}
 
-        return More(response).get()
+        # additional validation response
+        response = More(response).get()
+        response["posts"] = list(filter(lambda post: post["id"] != position, response["posts"]))
+        return response
 
     @staticmethod
     async def post(channel: str, position: int) -> dict:
