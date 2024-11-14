@@ -292,7 +292,8 @@ class Post:
             post = {
                 "id": identifier,
                 "content": content,
-                "footer": self.footer(buble)
+                "footer": self.footer(buble),
+                "view": message.attributes.get("data-view")
             }
             forwarded = self.forwarded(message)
             if forwarded:

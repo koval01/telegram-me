@@ -184,3 +184,4 @@ class Post(BaseModel):
     content: ContentPost
     footer: Footer
     forwarded: Optional[Forwarded] = None
+    view: str
