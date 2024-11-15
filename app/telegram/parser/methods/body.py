@@ -4,6 +4,7 @@ import json
 
 from app.telegram.parser.parser import Parser
 from app.telegram.parser.types.post import Post
+from app.telegram.parser.methods.utils import Utils
 
 
 class Body(Parser):
@@ -36,8 +37,16 @@ class Body(Parser):
         return {
             "channel": {
                 "username": self.soup.css_first(".tgme_channel_info_header_username>a").text()[1:],
-                "title": self.get_meta("property", "og:title"),
-                "description": self.get_meta("property", "og:description"),
+                "title": {
+                    "string": self.get_meta("property", "og:title"),
+                    "html": Utils.get_text_html(
+                        self.soup.css_first(".tgme_channel_info_header_title"))
+                },
+                "description": {
+                    "string": self.get_meta("property", "og:description"),
+                    "html": Utils.get_text_html(
+                        self.soup.css_first(".tgme_channel_info_description"))
+                },
                 "avatar": self.get_meta("property", "og:image"),
                 "counters": self.get_counters(
                     self.soup.css(".tgme_channel_info_counters>.tgme_channel_info_counter")),

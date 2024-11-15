@@ -10,6 +10,7 @@ from selectolax.lexbor import LexborHTMLParser, LexborNode
 
 from app.telegram.parser.types.entities import EntitiesParser
 from app.telegram.parser.types.media import Media
+from app.telegram.parser.methods.utils import Utils
 
 
 class Post:
@@ -116,25 +117,7 @@ class Post:
         return footer
 
     @staticmethod
-    def get_text_html(selector: LexborNode) -> str | None:
-        """
-        Extracts and returns the inner HTML content of the first <div> element found in the HTML
-        represented by the LexborNode object.
-
-        Args:
-            selector (LexborNode): A LexborNode object containing the HTML content to be searched.
-
-        Returns:
-            Optional[str]: The inner HTML content of the first <div> element,
-                if found; otherwise, `None`.
-        """
-        match = re.match(r"<div.*?>(.*)</div>", selector.html, flags=re.M)
-        if match:
-            return match.group(1)
-
-        return None
-
-    def text(self, buble: LexborNode) -> Union[dict, None]:
+    def text(buble: LexborNode) -> Union[dict, None]:
         """
         Extracts text content from a message bubble.
 
@@ -148,11 +131,11 @@ class Post:
         if not selector:
             return None
 
-        content = self.get_text_html(selector)
+        content = Utils.get_text_html(selector)
 
         delete_tags = ["a", "i", "b", "s", "u", "pre", "code", "span", "tg-emoji", "tg-spoiler"]
         selector.unwrap_tags(delete_tags)
-        content_t = self.get_text_html(selector)
+        content_t = Utils.get_text_html(selector)
         text = re.sub(r"<br\s?/?>", "\n", content_t)
 
         div = re.compile(

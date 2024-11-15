@@ -11,6 +11,14 @@ from app.telegram.models.post import Post
 from app.telegram.models.meta import Meta
 
 
+class ParsedAndRaw(BaseModel):
+    """
+    Model for parsed and raw data
+    """
+    string: str
+    html: str
+
+
 class Labels(BaseModel):
     """
     Represents a set of labels for a Telegram channel.
@@ -49,15 +57,15 @@ class Channel(BaseModel):
 
     Attributes:
         username (str): The username of the channel.
-        title (str): The title of the channel.
-        description (str): The description of the channel.
+        title (stParsedAndRawr): The title of the channel in text and html.
+        description (ParsedAndRaw): The description of the channel in text and html.
         avatar (Optional[HttpUrl]): The URL of the channel's avatar.
         counters (List[Counter]): List of counters associated with the channel.
         labels (Optional[Labels]): Channel labels list.
     """
     username: str
-    title: str
-    description: str
+    title: ParsedAndRaw
+    description: ParsedAndRaw
     avatar: Optional[HttpUrl]
     counters: List[Counter]
     labels: Optional[Labels]
