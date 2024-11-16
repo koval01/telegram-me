@@ -34,6 +34,7 @@ class Body(Parser):
         Returns:
             Dict[str, Dict[str, Dict[str, str]]]: A dictionary containing extracted content.
         """
+        description = self.get_meta("property", "og:description")
         return {
             "channel": {
                 "username": self.soup.css_first(".tgme_channel_info_header_username>a").text()[1:],
@@ -43,10 +44,10 @@ class Body(Parser):
                         self.soup.css_first(".tgme_channel_info_header_title"))
                 },
                 "description": {
-                    "string": self.get_meta("property", "og:description"),
+                    "string": description,
                     "html": Utils.get_text_html(
                         self.soup.css_first(".tgme_channel_info_description"))
-                },
+                } if description else None,
                 "avatar": self.get_meta("property", "og:image"),
                 "counters": self.get_counters(
                     self.soup.css(".tgme_channel_info_counters>.tgme_channel_info_counter")),

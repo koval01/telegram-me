@@ -58,14 +58,14 @@ class Channel(BaseModel):
     Attributes:
         username (str): The username of the channel.
         title (stParsedAndRawr): The title of the channel in text and html.
-        description (ParsedAndRaw): The description of the channel in text and html.
+        description (Optional[ParsedAndRaw]): The description of the channel in text and html.
         avatar (Optional[HttpUrl]): The URL of the channel's avatar.
         counters (List[Counter]): List of counters associated with the channel.
         labels (Optional[Labels]): Channel labels list.
     """
     username: str
     title: ParsedAndRaw
-    description: ParsedAndRaw
+    description: Optional[ParsedAndRaw]
     avatar: Optional[HttpUrl]
     counters: List[Counter]
     labels: Optional[Labels]
