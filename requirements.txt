@@ -1,5 +1,5 @@
 fastapi[standard]==0.115.4
 
 selectolax~=0.3.26
-aiohttp~=3.10.10
+aiohttp~=3.11.2
 pydantic-settings~=2.6.1
