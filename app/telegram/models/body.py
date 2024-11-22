@@ -9,14 +9,7 @@ from pydantic import BaseModel, field_validator, HttpUrl
 
 from app.telegram.models.post import Post
 from app.telegram.models.meta import Meta
-
-
-class ParsedAndRaw(BaseModel):
-    """
-    Model for parsed and raw data
-    """
-    string: str
-    html: str
+from app.telegram.models.utils import ParsedAndRaw
 
 
 class Labels(BaseModel):

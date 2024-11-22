@@ -214,7 +214,10 @@ class Post:
 
         url = forwarded.attributes.get("href")
         forwarded = {
-            "name": forwarded.text()
+            "name": {
+                "string": forwarded.text(),
+                "html": forwarded.css_first("span").html
+            }
         }
         if url:
             forwarded["url"] = url

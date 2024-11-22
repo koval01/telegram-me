@@ -7,6 +7,8 @@ from typing import List, Optional, Literal
 
 from pydantic import BaseModel, HttpUrl
 
+from app.telegram.models.utils import ParsedAndRaw
+
 
 class Duration(BaseModel):
     """
@@ -94,12 +96,12 @@ class Poll(BaseModel):
     Represents a poll within a post.
 
     Attributes:
-        name (str): The name of the poll.
+        question (str): The question of the poll.
         type (Optional[str]): The type of the poll.
         votes (str): The total number of votes in the poll.
         options (List[PollOptions]): List of options within the poll.
     """
-    name: str
+    question: str
     type: Optional[str] = None
     votes: str
     options: List[PollOptions]
@@ -163,10 +165,10 @@ class Forwarded(BaseModel):
     Represents forwarded information within a post.
 
     Attributes:
-        name (str): The name of the source where the post was forwarded from.
+        name (ParsedAndRaw): The name of the source where the post was forwarded from.
         url (HttpUrl): The URL of the source where the post was forwarded from.
     """
-    name: str
+    name: ParsedAndRaw
     url: HttpUrl
 
 
