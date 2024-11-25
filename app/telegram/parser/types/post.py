@@ -216,7 +216,7 @@ class Post:
         forwarded = {
             "name": {
                 "string": forwarded.text(),
-                "html": forwarded.css_first("span").html
+                "html": Utils.get_text_html(forwarded, "span")
             }
         }
         if url:
@@ -225,7 +225,7 @@ class Post:
         return forwarded
 
     @staticmethod
-    def author(message: LexborNode) -> str | None:
+    def author(message: LexborNode) -> dict | None:
         """
         Extracts the author's name from a message node.
 
@@ -233,14 +233,50 @@ class Post:
             message (LexborNode): The message node.
 
         Returns:
-            str | None: The author's name as a string if present,
-            or None if the author information is not found.
+            dict | None: The author's name as a string and html if present
         """
         auth = message.css_first(".tgme_widget_message_from_author")
         if not auth:
             return None
 
-        return auth.text()
+        return {
+            "string": auth.text(),
+            "html": Utils.get_text_html(auth, "span")
+        }
+
+    @staticmethod
+    def reply(message: LexborNode) -> dict | None:
+        """
+        Extracts reply information from a message node.
+
+        Args:
+            message (LexborNode): The message node containing the reply.
+
+        Returns:
+            dict | None: A dictionary containing reply information or None if no reply is found.
+        """
+        reply = message.css_first(".tgme_widget_message_reply")
+        if not reply:
+            return None
+
+        text = reply.css_first(".tgme_widget_message_metatext")
+        if not text:
+            return None
+
+        cover = reply.css_first(".tgme_widget_message_reply_thumb")
+        name = reply.css_first(".tgme_widget_message_author")
+        return {
+            "cover": Utils.background_extr(cover.attributes.get("style"))
+                if cover else None,
+            "name": {
+                "string": name.text().strip(),
+                "html": Utils.get_text_html(name, "span")
+            },
+            "text": {
+                "string": text.text(),
+                "html": Utils.get_text_html(text)
+            }
+        }
 
     def get(self, selector: int | None = None) -> list[dict]:
         """
@@ -265,7 +301,8 @@ class Post:
                 "text": self.text(buble),
                 "media": Media(buble).extract_media(),
                 "poll": self.poll(buble),
-                "inline": self.inline(message)
+                "inline": self.inline(message),
+                "reply": self.reply(message)
             }
             for k, v in content_fields.items():
                 if v:

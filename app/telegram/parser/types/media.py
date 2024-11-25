@@ -1,10 +1,10 @@
 """Media module"""
 
-import re
 import json
 
-from typing import Literal, Union
+from typing import Literal
 
+from app.telegram.parser.methods.utils import Utils
 from selectolax.lexbor import LexborNode
 
 
@@ -37,8 +37,6 @@ class Media:
     Static Methods:
         __duration(duration: str) -> Optional[int]:
             Converts a duration string (MM:SS) to total seconds.
-        __background(style: str) -> Optional[str]:
-            Extracts the background image URL from a CSS style string.
 
     """
 
@@ -75,7 +73,7 @@ class Media:
             return None
 
         return {
-            "url": cls.__background(image),
+            "url": Utils.background_extr(image),
             "type": "image"
         }
 
@@ -104,7 +102,7 @@ class Media:
 
         body = {
             "url": video.attributes.get("src"),
-            "thumb": cls.__background(
+            "thumb": Utils.background_extr(
                 thumb.attributes.get("style")
             ) if thumb else None,
             "type": "video"
@@ -171,7 +169,7 @@ class Media:
 
         return {
             "url": roundvideo.attributes.get("src"),
-            "thumb": cls.__background(
+            "thumb": Utils.background_extr(
                 match.css_first(".tgme_widget_message_roundvideo_thumb")
                 .attributes.get("style")),
             "duration": {
@@ -290,22 +288,6 @@ class Media:
         minutes, seconds \
             = map(int, duration.split(":"))
         return minutes * 60 + seconds
-
-    @staticmethod
-    def __background(style: str) -> Union[str, None]:
-        """
-        Extracts the background image URL from a CSS style string.
-
-        Args:
-            style (str): The CSS style string.
-
-        Returns:
-            Union[str, None]: The background image URL, or None if not found.
-        """
-        match = re.search(
-            r"background-image:\s*?url\([',\"](.*)[',\"]\)",
-            style, flags=re.I | re.M)
-        return match.group(1) if match else None
 
     def __str__(self) -> str:
         """

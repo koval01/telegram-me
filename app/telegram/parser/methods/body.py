@@ -41,7 +41,7 @@ class Body(Parser):
                 "title": {
                     "string": self.get_meta("property", "og:title"),
                     "html": Utils.get_text_html(
-                        self.soup.css_first(".tgme_channel_info_header_title"))
+                        self.soup.css_first(".tgme_channel_info_header_title>span"), "span")
                 },
                 "description": {
                     "string": description,

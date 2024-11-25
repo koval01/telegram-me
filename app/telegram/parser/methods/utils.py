@@ -6,6 +6,8 @@ processing HTML content in a structured and reusable way.
 """
 
 import re
+from typing import Union, Optional
+
 from selectolax.lexbor import LexborNode
 
 
@@ -19,19 +21,24 @@ class Utils:
     """
 
     @staticmethod
-    def get_text_html(selector: LexborNode) -> str | None:
+    def get_text_html(selector: LexborNode, tag_name: str = "div") -> Optional[str]:
         """
-        Extracts and returns the inner HTML content of the first <div> element found in the HTML
-        represented by the LexborNode object.
+        Extracts and returns the inner HTML content of the first element with the specified tag
+        name found in the HTML represented by the LexborNode object.
 
         Args:
             selector (LexborNode): A LexborNode object containing the HTML content to be searched.
+            tag_name (str): The name of the tag to search for (e.g., 'div', 'span').
 
         Returns:
-            Optional[str]: The inner HTML content of the first <div> element,
+            Optional[str]: The inner HTML content of the first matching element,
                 if found; otherwise, `None`.
         """
-        match = re.match(r"<div.*?>(.*)</div>", selector.html, flags=re.M)
+        # Escape the tag name to avoid special regex characters
+        escaped_tag_name = re.escape(tag_name)
+        # Construct regex to match the tag
+        pattern = fr"<{escaped_tag_name}.*?>(.*?)</{escaped_tag_name}>"
+        match = re.search(pattern, selector.html, flags=re.M | re.S)  # Allow multiline and dot-all
         if match:
             return match.group(1)
 
@@ -49,3 +56,19 @@ class Utils:
             str: The text content with all HTML tags removed.
         """
         return re.sub(r'<[^>]+>', '', html_content)
+
+    @staticmethod
+    def background_extr(style: str) -> Union[str, None]:
+        """
+        Extracts the background image URL from a CSS style string.
+
+        Args:
+            style (str): The CSS style string.
+
+        Returns:
+            Union[str, None]: The background image URL, or None if not found.
+        """
+        match = re.search(
+            r"background-image:\s*?url\([',\"](.*)[',\"]\)",
+            style, flags=re.I | re.M)
+        return match.group(1) if match else None

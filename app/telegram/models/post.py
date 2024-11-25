@@ -119,6 +119,22 @@ class Inline(BaseModel):
     url: HttpUrl
 
 
+class Reply(BaseModel):
+    """
+    Represents a reply to a post.
+
+    Attributes:
+        cover (Optional[HttpUrl]): The URL of the cover image for the reply (if applicable).
+        name (ParsedAndRaw): The name of the user or channel making the reply,
+            represented both in parsed and raw formats.
+        text (ParsedAndRaw): The text content of the reply, represented both in parsed
+            and raw formats.
+    """
+    cover: Optional[HttpUrl]
+    name: ParsedAndRaw
+    text: ParsedAndRaw
+
+
 class ContentPost(BaseModel):
     """
     Represents the content of a post.
@@ -132,6 +148,7 @@ class ContentPost(BaseModel):
     media: Optional[List[MediaItem]] = None
     poll: Optional[Poll] = None
     inline: Optional[Inline] = None
+    reply: Optional[Reply] = None
 
 
 class Date(BaseModel):
@@ -156,7 +173,7 @@ class Footer(BaseModel):
         date (Date): The date of the post.
     """
     views: Optional[str]
-    author: Optional[str]
+    author: Optional[ParsedAndRaw]
     date: Date
 
 
