@@ -129,11 +129,12 @@ class Reply(BaseModel):
             represented both in parsed and raw formats.
         text (ParsedAndRaw): The text content of the reply, represented both in parsed
             and raw formats.
+        to_message (int): ID replied message
     """
     cover: Optional[HttpUrl]
     name: ParsedAndRaw
     text: ParsedAndRaw
-
+    to_message: int
 
 class ContentPost(BaseModel):
     """

@@ -275,7 +275,10 @@ class Post:
             "text": {
                 "string": text.text(),
                 "html": Utils.get_text_html(text)
-            }
+            },
+            "to_message": int(re.search(
+                r'https://t\.me/[\w-]+/(\d+)',
+                reply.attributes.get("href")).group(1))
         }
 
     def get(self, selector: int | None = None) -> list[dict]:
