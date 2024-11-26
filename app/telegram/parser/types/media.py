@@ -4,8 +4,8 @@ import json
 
 from typing import Literal
 
-from app.telegram.parser.methods.utils import Utils
 from selectolax.lexbor import LexborNode
+from app.telegram.parser.methods.utils import Utils
 
 
 class Media:
