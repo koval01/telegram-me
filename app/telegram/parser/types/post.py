@@ -127,7 +127,7 @@ class Post:
         Returns:
             Union[dict, None]: A dictionary containing text content, or None if no text found.
         """
-        selector = buble.css_first(".tgme_widget_message_bubble>.tgme_widget_message_text")
+        selector = buble.css_first(".tgme_widget_message_text, .js-message_text")
         if not selector:
             return None
 
