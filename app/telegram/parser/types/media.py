@@ -48,6 +48,7 @@ class Media:
             group (LexborNode): The HTML group containing media elements.
         """
         self.media = group.css(",".join([
+            ".link_preview_image",
             ".tgme_widget_message_photo_wrap",
             ".tgme_widget_message_video_player",
             ".tgme_widget_message_voice_player",
@@ -245,6 +246,7 @@ class Media:
 
         for m in self.media:
             content_type: Literal["image", "video", "voice", "roundvideo", "sticker"] = {
+                "link_preview_image": "image",
                 "tgme_widget_message_photo_wrap": "image",
                 "tgme_widget_message_video_player": "video",
                 "tgme_widget_message_voice_player": "voice",
