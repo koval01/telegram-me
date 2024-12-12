@@ -143,12 +143,14 @@ class PreviewLink(BaseModel):
 
     Attributes:
         title (Optional[str]): The title of the linked content, if available
+        url (HttpUrl): This URL of preview page
         site_name (str): The name of the website or platform the link is from
         description (Optional[ParsedAndRaw]): The description of the linked content,
             containing both parsed text and raw HTML formats
         thumb (HttpUrl): The URL of the preview thumbnail image
     """
     title: Optional[str]
+    url: HttpUrl
     site_name: str
     description: Optional[ParsedAndRaw]
     thumb: HttpUrl

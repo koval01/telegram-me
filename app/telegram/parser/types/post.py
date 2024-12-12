@@ -89,6 +89,7 @@ class Post:
 
         return {
             "site_name": preview.css_first(".link_preview_site_name").text(strip=True),
+            "url": preview.attributes.get("href"),
             "title": title.text(strip=True) if title else None,
             "description": description,
             "thumb": Utils.background_extr(
