@@ -56,6 +56,47 @@ class Post:
         return self.soup.css(".tgme_widget_message_wrap > .tgme_widget_message")
 
     @staticmethod
+    def preview_link(buble: LexborNode) -> Union[dict, None]:
+        """
+        Extracts preview link information from a message bubble.
+
+        Args:
+            buble (LexborNode): The message bubble node containing the preview link.
+
+        Returns:
+            Union[dict, None]: A dictionary containing preview
+                link information with the following keys:
+                - site_name (str): Name of the linked site
+                - title (str|None): Title of the preview, if present
+                - description (dict|None): Description text with 'string'
+                    and 'html' formats, if present
+                - thumb (str|None): URL of the preview thumbnail image, if present
+                Returns None if no preview link is found.
+        """
+        preview = buble.css_first(".tgme_widget_message_link_preview")
+        if not preview:
+            return None
+
+        description = preview.css_first(".link_preview_description")
+        if description:
+            description = {
+                "string": description.text(),
+                "html": Utils.get_text_html(description)
+            }
+
+        title = preview.css_first(".link_preview_title")
+        thumb = preview.css_first(".tgme_widget_message_link_preview > .link_preview_right_image")
+
+        return {
+            "site_name": preview.css_first(".link_preview_site_name").text(strip=True),
+            "title": title.text(strip=True) if title else None,
+            "description": description,
+            "thumb": Utils.background_extr(
+                thumb.attributes.get("style")
+            ) if thumb else None,
+        }
+
+    @staticmethod
     def poll(buble: LexborNode) -> Union[dict, None]:
         """
         Extracts poll information from a message bubble.
@@ -307,7 +348,8 @@ class Post:
                 "media": Media(buble).extract_media(),
                 "poll": self.poll(buble),
                 "inline": self.inline(message),
-                "reply": self.reply(message)
+                "reply": self.reply(message),
+                "preview_link": self.preview_link(message),
             }
             for k, v in content_fields.items():
                 if v:

@@ -136,6 +136,24 @@ class Reply(BaseModel):
     text: ParsedAndRaw
     to_message: int
 
+
+class PreviewLink(BaseModel):
+    """
+    Represents a preview link block within a post.
+
+    Attributes:
+        title (Optional[str]): The title of the linked content, if available
+        site_name (str): The name of the website or platform the link is from
+        description (Optional[ParsedAndRaw]): The description of the linked content,
+            containing both parsed text and raw HTML formats
+        thumb (HttpUrl): The URL of the preview thumbnail image
+    """
+    title: Optional[str]
+    site_name: str
+    description: Optional[ParsedAndRaw]
+    thumb: HttpUrl
+
+
 class ContentPost(BaseModel):
     """
     Represents the content of a post.
@@ -150,6 +168,7 @@ class ContentPost(BaseModel):
     poll: Optional[Poll] = None
     inline: Optional[Inline] = None
     reply: Optional[Reply] = None
+    preview_link: Optional[PreviewLink] = None
 
 
 class Date(BaseModel):
