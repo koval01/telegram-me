@@ -84,11 +84,12 @@ class Post:
                 "html": Utils.get_text_html(description)
             }
 
+        site_name = preview.css_first(".link_preview_site_name")
         title = preview.css_first(".link_preview_title")
         thumb = preview.css_first(".tgme_widget_message_link_preview > .link_preview_right_image")
 
         return {
-            "site_name": preview.css_first(".link_preview_site_name").text(strip=True),
+            "site_name": site_name.text(strip=True) if site_name else None,
             "url": preview.attributes.get("href"),
             "title": title.text(strip=True) if title else None,
             "description": description,
