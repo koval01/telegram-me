@@ -191,10 +191,12 @@ class Footer(BaseModel):
 
     Attributes:
         views (Optional[str]): The number of views of the post.
+        edited (Optional[bool]): Edited post's status.
         author (Optional[str]): Post's auth name.
         date (Date): The date of the post.
     """
     views: Optional[str]
+    edited: Optional[bool]
     author: Optional[ParsedAndRaw]
     date: Date
 

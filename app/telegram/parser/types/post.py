@@ -144,10 +144,13 @@ class Post:
         time = (buble.css_first(".tgme_widget_message_date > time")
                 .attributes.get("datetime"))
         views = buble.css_first(".tgme_widget_message_views")
+        meta = buble.css_first(".tgme_widget_message_meta")
+        edited = meta.text().startswith("edited")
         author = cls.author(buble)
 
         footer = {
             "views": views.text() if views else None,
+            "edited": edited,
             "date": {
                 "string": time,
                 "unix": cls.__unix_timestamp(time)
