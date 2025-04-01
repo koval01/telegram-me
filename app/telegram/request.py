@@ -143,6 +143,9 @@ class Request:
             json=True,
             params={direction: position}
         )
+        if isinstance(response, str):
+            return response
+
         return response if response else None
 
     async def preview(self, channel: str) -> Union[str, None]:

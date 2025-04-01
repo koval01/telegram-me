@@ -29,7 +29,10 @@ async def more(
 ) -> dict | None:
     """Request handler"""
     result = await Telegram().more(channel, position, direction)
-    if not result or not result.get("posts"):
-        raise HTTPException(status_code=404, detail="Channel or post not found")
+
+    if not result:
+        raise HTTPException(status_code=404, detail="Channel not found")
+    if not result.get("posts"):
+        return result
 
     return result

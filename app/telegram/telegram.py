@@ -59,6 +59,10 @@ class Telegram:
             dict: A dictionary containing the additional messages.
         """
         response = await Request().more(channel, position, direction)
+
+        if isinstance(response, str) and not len(response):
+            return More(response).get()
+
         if not response:
             return {}
 
