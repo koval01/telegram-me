@@ -14,6 +14,6 @@ services:
     cap_drop:
       - ALL
     environment:
-      - PORT=8080
+      - PORT=8000
     ports:
-      - "8080:8080"
+      - "8000:8000"

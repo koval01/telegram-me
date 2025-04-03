@@ -10,6 +10,9 @@ COPY ./static /code/static
 
 COPY ./start.sh /code/start.sh
 
+RUN chmod +x /code/start.sh
+
+ENV PORT=8000
 EXPOSE $PORT
 
 HEALTHCHECK --interval=30s --timeout=5s \
