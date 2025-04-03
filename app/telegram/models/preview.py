@@ -18,6 +18,7 @@ class Channel(BaseModel):
         avatar (Optional[HttpUrl]): Avatar photo of channel.
         is_verified (bool): Indicates if the channel is verified.
     """
+
     title: str
     subscribers: str
     description: Optional[str]
@@ -32,4 +33,5 @@ class Preview(BaseModel):
     Attributes:
         channel (Channel): The channel information.
     """
+
     channel: Channel

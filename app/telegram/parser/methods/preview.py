@@ -35,9 +35,7 @@ class Preview(Parser):
         if not channel:
             return None
 
-        return {
-            "channel": channel
-        }
+        return {"channel": channel}
 
     def __str__(self) -> str:
         """

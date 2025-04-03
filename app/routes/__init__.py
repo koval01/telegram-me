@@ -1,6 +1,7 @@
 """
 Global router
 """
+
 from fastapi import APIRouter
 
 from app.routes import v1, healthz

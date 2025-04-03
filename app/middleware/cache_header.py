@@ -1,6 +1,7 @@
 """
 Middleware for adding cache control header
 """
+
 from typing import Callable
 
 from fastapi import Request, Response
@@ -26,7 +27,9 @@ class ProxyCacheHeaderMiddleware(BaseHTTPMiddleware):  # pylint: disable=R0903
     def __init__(self, app: ASGIApp) -> None:
         super().__init__(app)
 
-    async def dispatch(self, request: Request, call_next: Callable) -> Response:
+    async def dispatch(
+        self, request: Request, call_next: Callable
+    ) -> Response:
         """
         Processes the incoming request and adds cache headers to the response.
 
@@ -42,6 +45,8 @@ class ProxyCacheHeaderMiddleware(BaseHTTPMiddleware):  # pylint: disable=R0903
 
         # Add Cache-Control headers to the response
         if request.headers.get("CF-RAY"):
-            response.headers["Cache-Control"] = "public, max-age=10, stale-while-revalidate=10"
+            response.headers["Cache-Control"] = (
+                "public, max-age=10, stale-while-revalidate=10"
+            )
 
         return response

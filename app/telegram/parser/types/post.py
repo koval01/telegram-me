@@ -4,7 +4,7 @@ import re
 import json
 from datetime import datetime
 
-from typing import Union
+from typing import Union, Optional, Dict, List, Any, Tuple
 
 from selectolax.lexbor import LexborHTMLParser, LexborNode
 
@@ -53,7 +53,123 @@ class Post:
         Returns:
             List[LexborNode]: A list of message nodes.
         """
-        return self.soup.css(".tgme_widget_message_wrap > .tgme_widget_message")
+        return self.soup.css(
+            ".tgme_widget_message_wrap > .tgme_widget_message"
+        )
+
+    @staticmethod
+    def __extract_media_info(buble: LexborNode) -> Optional[List[Dict]]:
+        """
+        Extracts media information from a message bubble.
+
+        Args:
+            buble (LexborNode): The message bubble node.
+
+        Returns:
+            Optional[Dict[str, Any]]: Media information dictionary or None if no media.
+        """
+        return Media(buble).extract_media()
+
+    @staticmethod
+    def __parse_content_fields(
+        post_instance, buble: LexborNode, message: LexborNode
+    ) -> Dict[str, Any]:
+        """
+        Parses all content fields from a message.
+
+        Args:
+            post_instance: The Post instance.
+            buble (LexborNode): The message bubble node.
+            message (LexborNode): The message node.
+
+        Returns:
+            Dict[str, Any]: Dictionary of content fields that are not None.
+        """
+        content_fields = {
+            "text": post_instance.text(buble),
+            "media": Post.__extract_media_info(buble),
+            "poll": post_instance.poll(buble),
+            "inline": post_instance.inline(message),
+            "reply": post_instance.reply(message),
+            "preview_link": post_instance.preview_link(message),
+        }
+
+        return {k: v for k, v in content_fields.items() if v}
+
+    @staticmethod
+    def __clean_html_text(html_content: str) -> str:
+        """
+        Cleans HTML content to extract plain text.
+
+        Args:
+            html_content (str): The HTML content to clean.
+
+        Returns:
+            str: Cleaned text content.
+        """
+        # Replace <br> tags with newlines
+        text = re.sub(r"<br\s?/?>", "\n", html_content)
+
+        # Extract content from div if present
+        div = re.compile(
+            r'<div+\sclass="tgme_widget_message_text.*"+\sdir="auto">(.*?)</div>',
+            flags=re.DOTALL,
+        )
+        div_match = re.search(div, text)
+        text = div_match.group(1) if div_match else text
+
+        # Replace HTML entities
+        text = text.replace("&nbsp;", " ")
+
+        return text
+
+    @staticmethod
+    def __extract_reply_data(
+        reply: LexborNode,
+    ) -> Tuple[
+        Optional[LexborNode], Optional[LexborNode], Optional[LexborNode]
+    ]:
+        """
+        Extracts various components from a reply node.
+
+        Args:
+            reply (LexborNode): The reply node.
+
+        Returns:
+            Tuple[Optional[LexborNode], Optional[LexborNode], Optional[LexborNode]]:
+                Tuple of (cover, name, text) nodes.
+        """
+        cover = reply.css_first(".tgme_widget_message_reply_thumb")
+        name = reply.css_first(".tgme_widget_message_author")
+        text = reply.css_first(
+            ".tgme_widget_message_metatext, .tgme_widget_message_text"
+        )
+
+        return cover, name, text
+
+    @staticmethod
+    def __extract_preview_site_name(preview: LexborNode) -> Optional[str]:
+        """Extracts site name from preview node."""
+        site_name = preview.css_first(".link_preview_site_name")
+        return site_name.text(strip=True) if site_name else None
+
+    @staticmethod
+    def __extract_preview_title(preview: LexborNode) -> Optional[str]:
+        """Extracts title from preview node."""
+        title = preview.css_first(".link_preview_title")
+        return title.text(strip=True) if title else None
+
+    @staticmethod
+    def __extract_preview_thumb(preview: LexborNode) -> Optional[str]:
+        """Extracts thumb from preview node."""
+        thumb = preview.css_first(
+            ".tgme_widget_message_link_preview > .link_preview_right_image"
+        )
+        return (
+            Utils.background_extr(thumb.attributes.get("style"))
+            if thumb and thumb.attributes.get("style")
+            else None
+        )
 
     @staticmethod
     def preview_link(buble: LexborNode) -> Union[dict, None]:
@@ -64,39 +180,60 @@ class Post:
             buble (LexborNode): The message bubble node containing the preview link.
 
         Returns:
-            Union[dict, None]: A dictionary containing preview
-                link information with the following keys:
-                - site_name (str): Name of the linked site
-                - title (str|None): Title of the preview, if present
-                - description (dict|None): Description text with 'string'
-                    and 'html' formats, if present
-                - thumb (str|None): URL of the preview thumbnail image, if present
-                Returns None if no preview link is found.
+            Union[dict, None]: A dictionary containing preview link information
+                or None if not found.
         """
         preview = buble.css_first(".tgme_widget_message_link_preview")
         if not preview:
             return None
 
-        description = preview.css_first(".link_preview_description")
-        if description:
-            description = {
-                "string": description.text(),
-                "html": Utils.get_text_html(description)
-            }
+        return {
+            "site_name": Post.__extract_preview_site_name(preview),
+            "url": preview.attributes.get("href"),
+            "title": Post.__extract_preview_title(preview),
+            "description": Post.__extract_preview_description(preview),
+            "thumb": Post.__extract_preview_thumb(preview),
+        }
 
-        site_name = preview.css_first(".link_preview_site_name")
-        title = preview.css_first(".link_preview_title")
-        thumb = preview.css_first(".tgme_widget_message_link_preview > .link_preview_right_image")
+    @staticmethod
+    def __extract_preview_description(
+        preview: LexborNode,
+    ) -> Optional[Dict[str, str]]:
+        """Extracts and formats the description from the preview node."""
+        description = preview.css_first(".link_preview_description")
+        if not description:
+            return None
 
         return {
-            "site_name": site_name.text(strip=True) if site_name else None,
-            "url": preview.attributes.get("href"),
-            "title": title.text(strip=True) if title else None,
-            "description": description,
-            "thumb": Utils.background_extr(
-                thumb.attributes.get("style")
-            ) if thumb else None,
+            "string": description.text(),
+            "html": Utils.get_text_html(description),
         }
+
+    @staticmethod
+    def __extract_poll_question(poll: LexborNode) -> Optional[str]:
+        """Extracts poll question from poll node."""
+        question = poll.css_first(".tgme_widget_message_poll_question")
+        return question.text() if question else None
+
+    @staticmethod
+    def __extract_poll_options(poll: LexborNode) -> List[Dict[str, Any]]:
+        """Extracts poll options from poll node."""
+        options = poll.css(".tgme_widget_message_poll_option")
+        return [
+            {
+                "name": option.css_first(
+                    ".tgme_widget_message_poll_option_text"
+                ).text(),
+                "percent": int(
+                    option.css_first(
+                        ".tgme_widget_message_poll_option_percent"
+                    ).text()[:-1]
+                ),
+            }
+            for option in options
+            if option.css_first(".tgme_widget_message_poll_option_text")
+            and option.css_first(".tgme_widget_message_poll_option_percent")
+        ]
 
     @staticmethod
     def poll(buble: LexborNode) -> Union[dict, None]:
@@ -115,19 +252,11 @@ class Post:
             return None
 
         _type = poll.css_first(".tgme_widget_message_poll_type")
-        options = poll.css(".tgme_widget_message_poll_option")
         return {
-            "question": poll.css_first(".tgme_widget_message_poll_question").text(),
+            "question": Post.__extract_poll_question(poll),
             "type": _type.text() if _type else None,
             "votes": buble.css_first(".tgme_widget_message_voters").text(),
-            "options": [
-                {
-                    "name": o.css_first(".tgme_widget_message_poll_option_text").text(),
-                    "percent": int(o.css_first(".tgme_widget_message_poll_option_percent")
-                                   .text()[:-1])
-                }
-                for o in options
-            ]
+            "options": Post.__extract_poll_options(poll),
         }
 
     @classmethod
@@ -141,8 +270,9 @@ class Post:
         Returns:
             dict: A dictionary containing footer information.
         """
-        time = (buble.css_first(".tgme_widget_message_date > time")
-                .attributes.get("datetime"))
+        time = buble.css_first(
+            ".tgme_widget_message_date > time"
+        ).attributes.get("datetime")
         views = buble.css_first(".tgme_widget_message_views")
         meta = buble.css_first(".tgme_widget_message_meta")
         edited = meta.text().startswith("edited")
@@ -151,10 +281,7 @@ class Post:
         footer = {
             "views": views.text() if views else None,
             "edited": edited,
-            "date": {
-                "string": time,
-                "unix": cls.__unix_timestamp(time)
-            }
+            "date": {"string": time, "unix": cls.__unix_timestamp(time)},
         }
 
         if author:
@@ -173,29 +300,32 @@ class Post:
         Returns:
             Union[dict, None]: A dictionary containing text content, or None if no text found.
         """
-        selector = buble.css_first(".tgme_widget_message_text, .js-message_text")
+        selector = buble.css_first(
+            ".tgme_widget_message_text, .js-message_text"
+        )
         if not selector:
             return None
 
         content = Utils.get_text_html(selector)
 
-        delete_tags = ["a", "i", "b", "s", "u", "pre", "code", "span", "tg-emoji", "tg-spoiler"]
+        delete_tags = [
+            "a",
+            "i",
+            "b",
+            "s",
+            "u",
+            "pre",
+            "code",
+            "span",
+            "tg-emoji",
+            "tg-spoiler",
+        ]
         selector.unwrap_tags(delete_tags)
         content_t = Utils.get_text_html(selector)
-        text = re.sub(r"<br\s?/?>", "\n", content_t)
-
-        div = re.compile(
-            r'<div+\sclass="tgme_widget_message_text.*"+\sdir="auto">(.*?)</div>',
-            flags=re.DOTALL)
-        div_match = re.search(div, text)
-        text = div_match.group(1) if div_match else text
-        text = text.replace("&nbsp;", " ")
+        text = Post.__clean_html_text(content_t)
 
         entities = EntitiesParser(content).parse_message()
-        response = {
-            "string": text,
-            "html": content
-        }
+        response = {"string": text, "html": content}
         if entities:
             response["entities"] = entities
 
@@ -214,7 +344,6 @@ class Post:
             where each dictionary contains 'title' as the button title and 'url' as the URL
             associated with the button. Returns None if no inline buttons are found.
         """
-
         selector = message.css_first(".tgme_widget_message_inline_row")
         if not selector:
             return None
@@ -222,10 +351,9 @@ class Post:
         return [
             {
                 "title": inline.css_first("span").text(),
-                "url": inline.attributes.get("href")
+                "url": inline.attributes.get("href"),
             }
-            for inline in
-            selector.css(".tgme_widget_message_inline_button")
+            for inline in selector.css(".tgme_widget_message_inline_button")
         ]
 
     @staticmethod
@@ -239,7 +367,7 @@ class Post:
         Returns:
             int: The post ID.
         """
-        selector = message.attributes.get('data-post')
+        selector = message.attributes.get("data-post")
         return int(selector.split("/")[1])
 
     @staticmethod
@@ -254,7 +382,9 @@ class Post:
             Union[dict, None]: A dictionary containing forwarded information,
             or None if not forwarded.
         """
-        forwarded = message.css_first(".tgme_widget_message_forwarded_from_name")
+        forwarded = message.css_first(
+            ".tgme_widget_message_forwarded_from_name"
+        )
         if not forwarded:
             return None
 
@@ -262,7 +392,7 @@ class Post:
         forwarded = {
             "name": {
                 "string": forwarded.text(),
-                "html": Utils.get_text_html(forwarded, "span")
+                "html": Utils.get_text_html(forwarded, "span"),
             }
         }
         if url:
@@ -287,7 +417,7 @@ class Post:
 
         return {
             "string": auth.text(),
-            "html": Utils.get_text_html(auth, "span")
+            "html": Utils.get_text_html(auth, "span"),
         }
 
     @staticmethod
@@ -305,29 +435,72 @@ class Post:
         if not reply:
             return None
 
-        text = reply.css_first(
-            ".tgme_widget_message_metatext, .tgme_widget_message_text"
-        )
+        cover, name, text = Post.__extract_reply_data(reply)
         if not text:
             return None
 
-        cover = reply.css_first(".tgme_widget_message_reply_thumb")
-        name = reply.css_first(".tgme_widget_message_author")
         return {
-            "cover": Utils.background_extr(cover.attributes.get("style"))
-                if cover else None,
+            "cover": (
+                Utils.background_extr(cover.attributes.get("style"))
+                if cover
+                else None
+            ),
             "name": {
                 "string": name.text().strip(),
-                "html": Utils.get_text_html(name, "span")
+                "html": Utils.get_text_html(name, "span"),
             },
-            "text": {
-                "string": text.text(),
-                "html": Utils.get_text_html(text)
-            },
-            "to_message": int(re.search(
-                r'https://t\.me/[\w-]+/(\d+)',
-                reply.attributes.get("href")).group(1))
+            "text": {"string": text.text(), "html": Utils.get_text_html(text)},
+            "to_message": int(
+                re.search(
+                    r"https://t\.me/[\w-]+/(\d+)", reply.attributes.get("href")
+                ).group(1)
+            ),
         }
+
+    @staticmethod
+    def __build_post_object(
+        post_instance, message: LexborNode, content: Dict[str, Any]
+    ) -> Dict[str, Any]:
+        """
+        Builds a complete post object with all metadata.
+
+        Args:
+            post_instance: The Post instance.
+            message (LexborNode): The message node.
+            content (Dict[str, Any]): The parsed content dictionary.
+
+        Returns:
+            Dict[str, Any]: A complete post object.
+        """
+        buble = post_instance.buble(message)
+        post = {
+            "id": Post.post_id(message),
+            "content": content,
+            "footer": post_instance.footer(buble),
+            "view": message.attributes.get("data-view"),
+        }
+
+        forwarded = Post.forwarded(message)
+        if forwarded:
+            post["forwarded"] = forwarded
+
+        return post
+
+    @staticmethod
+    def __check_selector(identifier: int, selector: Optional[int]) -> bool:
+        """
+        Checks if a message should be processed based on selector.
+
+        Args:
+            identifier (int): The message ID.
+            selector (Optional[int]): Optional selector to filter messages.
+
+        Returns:
+            bool: True if the message should be processed, False otherwise.
+        """
+        if selector is None:
+            return True
+        return identifier == selector
 
     def get(self, selector: int | None = None) -> list[dict]:
         """
@@ -342,44 +515,19 @@ class Post:
         posts = []
         for message in self.messages():
             identifier = self.post_id(message)
-            if (identifier and selector) and selector != identifier:
+            if not self.__check_selector(identifier, selector):
                 continue
 
             buble = self.buble(message)
-
-            content = {}
-            content_fields = {
-                "text": self.text(buble),
-                "media": Media(buble).extract_media(),
-                "poll": self.poll(buble),
-                "inline": self.inline(message),
-                "reply": self.reply(message),
-                "preview_link": self.preview_link(message),
-            }
-            for k, v in content_fields.items():
-                if v:
-                    content[k] = v
+            content = self.__parse_content_fields(self, buble, message)
 
             if not content:
-                # skip if no content
                 continue
 
-            post = {
-                "id": identifier,
-                "content": content,
-                "footer": self.footer(buble),
-                "view": message.attributes.get("data-view")
-            }
-            forwarded = self.forwarded(message)
-            if forwarded:
-                post["forwarded"] = forwarded
-
-            posts.append(post)
+            posts.append(self.__build_post_object(self, message, content))
 
         return posts
 
     def __str__(self) -> str:
-        """
-        Return representation for Post object
-        """
+        """Return representation for Post object"""
         return json.dumps(self.get())

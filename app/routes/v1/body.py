@@ -13,23 +13,24 @@ from app.telegram.telegram import Telegram
 
 router = APIRouter()
 
+
 @router.get(
     "/body/{channel}",
     summary="Get basic information about the channel",
-    responses={
-        200: {"model": ChannelBody},
-        404: {"model": HTTPError}
-    },
-    tags=["Channel"]
+    responses={200: {"model": ChannelBody}, 404: {"model": HTTPError}},
+    tags=["Channel"],
 )
 async def body(
-        channel: str = Path(description="Telegram channel username."),
-        position: Optional[PositiveInt] = Query(
-            None, description="History position")
+    channel: str = Path(description="Telegram channel username."),
+    position: Optional[PositiveInt] = Query(
+        None, description="History position"
+    ),
 ) -> dict | None:
     """Request handler"""
     result = await Telegram().body(channel, position)
     if not result:
-        raise HTTPException(status_code=404, detail="Channel or post not found")
+        raise HTTPException(
+            status_code=404, detail="Channel or post not found"
+        )
 
     return result

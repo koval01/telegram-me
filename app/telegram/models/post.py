@@ -18,6 +18,7 @@ class Duration(BaseModel):
         formatted (str): The formatted duration string.
         raw (int): The duration in seconds.
     """
+
     formatted: str
     raw: int
 
@@ -34,6 +35,7 @@ class MediaItem(BaseModel):
         type (Literal["image", "video", "voice", "roundvideo", "sticker", "gif"]):
         The type of the media item.
     """
+
     url: HttpUrl
     thumb: Optional[HttpUrl] = None
     waves: Optional[str] = None
@@ -55,11 +57,20 @@ class TextEntities(BaseModel):
         The type of the entity.
         language (Optional[str]): The language of the entity (if applicable).
     """
+
     offset: int
     length: int
     type: Literal[
-        "italic", "bold", "code", "spoiler", "strikethrough",
-        "underline", "text_link", "url", "pre", "emoji"
+        "italic",
+        "bold",
+        "code",
+        "spoiler",
+        "strikethrough",
+        "underline",
+        "text_link",
+        "url",
+        "pre",
+        "emoji",
     ]
     language: Optional[str]
 
@@ -74,6 +85,7 @@ class Text(BaseModel):
         entities (Optional[List[TextEntities]]):
             List of text entities within the text.
     """
+
     string: str
     html: str
     entities: Optional[List[TextEntities]]
@@ -87,6 +99,7 @@ class PollOptions(BaseModel):
         name (str): The name of the option.
         percent (int): The percentage of votes for the option.
     """
+
     name: str
     percent: int
 
@@ -101,6 +114,7 @@ class Poll(BaseModel):
         votes (str): The total number of votes in the poll.
         options (List[PollOptions]): List of options within the poll.
     """
+
     question: str
     type: Optional[str] = None
     votes: str
@@ -115,6 +129,7 @@ class Inline(BaseModel):
         title (str): The title inline button.
         url (HttpUrl): Redirect link for button.
     """
+
     title: str
     url: HttpUrl
 
@@ -131,6 +146,7 @@ class Reply(BaseModel):
             and raw formats.
         to_message (int): ID replied message
     """
+
     cover: Optional[HttpUrl]
     name: ParsedAndRaw
     text: ParsedAndRaw
@@ -149,6 +165,7 @@ class PreviewLink(BaseModel):
             containing both parsed text and raw HTML formats
         thumb (Optional[HttpUrl]): The URL of the preview thumbnail image
     """
+
     title: Optional[str]
     url: HttpUrl
     site_name: Optional[str]
@@ -165,6 +182,7 @@ class ContentPost(BaseModel):
         media (Optional[List[MediaItem]]): List of media items within the post.
         poll (Optional[Poll]): The poll within the post.
     """
+
     text: Optional[Text] = None
     media: Optional[List[MediaItem]] = None
     poll: Optional[Poll] = None
@@ -181,6 +199,7 @@ class Date(BaseModel):
         string (str): The string representation of the date.
         unix (int): The Unix timestamp of the date.
     """
+
     string: str
     unix: int
 
@@ -195,6 +214,7 @@ class Footer(BaseModel):
         author (Optional[str]): Post's auth name.
         date (Date): The date of the post.
     """
+
     views: Optional[str]
     edited: Optional[bool]
     author: Optional[ParsedAndRaw]
@@ -209,6 +229,7 @@ class Forwarded(BaseModel):
         name (ParsedAndRaw): The name of the source where the post was forwarded from.
         url (HttpUrl): The URL of the source where the post was forwarded from.
     """
+
     name: ParsedAndRaw
     url: HttpUrl
 
@@ -223,6 +244,7 @@ class Post(BaseModel):
         footer (Footer): The footer of the post.
         forwarded (Optional[Forwarded]): Information about forwarded post (if applicable).
     """
+
     id: int
     content: ContentPost
     footer: Footer

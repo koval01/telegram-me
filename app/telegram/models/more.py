@@ -19,5 +19,6 @@ class More(BaseModel):
         posts (List[Post]): List of posts.
         meta (Meta): Metadata associated with the additional content.
     """
+
     posts: List[Post]
     meta: Meta

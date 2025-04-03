@@ -1,6 +1,7 @@
 """
 First version api router
 """
+
 from fastapi import APIRouter
 
 from app.routes.v1 import body, more, post, preview, previews

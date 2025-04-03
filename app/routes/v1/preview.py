@@ -10,17 +10,15 @@ from app.telegram.telegram import Telegram
 
 router = APIRouter()
 
+
 @router.get(
     "/preview/{channel}",
     summary="Get preview information of channel",
-    responses={
-        200: {"model": Preview},
-        404: {"model": HTTPError}
-    },
-    tags=["Channel"]
+    responses={200: {"model": Preview}, 404: {"model": HTTPError}},
+    tags=["Channel"],
 )
 async def preview(
-        channel: str = Path(description="Telegram channel username.")
+    channel: str = Path(description="Telegram channel username."),
 ) -> dict | None:
     """Request handler"""
     result = await Telegram().preview(channel)

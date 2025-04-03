@@ -59,17 +59,22 @@ class Channel:
             return None
 
         match_description = re.match(
-            r"<div.*?>(.*?)</div>", description.html, flags=re.DOTALL).group(1)
+            r"<div.*?>(.*?)</div>", description.html, flags=re.DOTALL
+        ).group(1)
         if not match_description:
             return None
 
         links_sub_description = re.sub(
-            r"<a.*?>(.*?)</a>", r"\g<1>", match_description)
+            r"<a.*?>(.*?)</a>", r"\g<1>", match_description
+        )
         if not links_sub_description:
             return None
 
-        return links_sub_description.replace("<br>", "\n") \
-            if links_sub_description else None
+        return (
+            links_sub_description.replace("<br>", "\n")
+            if links_sub_description
+            else None
+        )
 
     def get(self) -> dict | None:
         """
@@ -86,10 +91,12 @@ class Channel:
         resp = {
             "title": self.page.css_first(".tgme_page_title>span").text(),
             "subscribers": self.page.css_first(".tgme_page_extra").text(),
-            "is_verified": self.page.css_first("i.verified-icon") is not None
+            "is_verified": self.page.css_first("i.verified-icon") is not None,
         }
 
-        description = self.description(self.page.css_first(".tgme_page_description"))
+        description = self.description(
+            self.page.css_first(".tgme_page_description")
+        )
         if description:
             resp["description"] = description
 

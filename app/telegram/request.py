@@ -1,6 +1,7 @@
 """
 Requests module
 """
+
 import re
 from typing import Literal, Union
 
@@ -28,11 +29,11 @@ class Request:
         self.host = host
 
     async def __request(
-            self,
-            path: str,
-            method: Literal["GET", "POST"] = "GET",
-            json: bool = False,
-            params: dict = None
+        self,
+        path: str,
+        method: Literal["GET", "POST"] = "GET",
+        json: bool = False,
+        params: dict = None,
     ) -> Union[str, dict, None]:
         """
         Makes an asynchronous HTTP request.
@@ -52,15 +53,16 @@ class Request:
 
         async with aiohttp.ClientSession() as session:
             async with session.request(
-                    method=method,
-                    url=f"https://{self.host}/{sanitized_path}",
-                    allow_redirects=False,
-                    params=params,
-                    headers={
-                        "X-Requested-With": "XMLHttpRequest"
-                        if method == "POST" else "",
-                        "User-Agent": f"TelegramMeAPI/{settings.VERSION} (https://github.com/koval01/telegram-me; yaroslav@koval.page)"  # pylint: disable=line-too-long
-                    }
+                method=method,
+                url=f"https://{self.host}/{sanitized_path}",
+                allow_redirects=False,
+                params=params,
+                headers={
+                    "X-Requested-With": (
+                        "XMLHttpRequest" if method == "POST" else ""
+                    ),
+                    "User-Agent": f"TelegramMeAPI/{settings.VERSION} (https://github.com/koval01/telegram-me; yaroslav@koval.page)",  # pylint: disable=line-too-long
+                },
             ) as response:
                 if response.status != 200:
                     return None
@@ -94,7 +96,7 @@ class Request:
         Returns:
         - bool: True if the position is valid, False otherwise.
         """
-        pattern = re.compile(r'^[0-9]{1,6}$')
+        pattern = re.compile(r"^[0-9]{1,6}$")
         if re.match(pattern, str(position)) and 0 <= position <= 1000000:
             return True
 
@@ -121,7 +123,10 @@ class Request:
         return response if response else None
 
     async def more(
-            self, channel: str, position: int, direction: Literal["before", "after"]
+        self,
+        channel: str,
+        position: int,
+        direction: Literal["before", "after"],
     ) -> Union[str, None]:
         """
         Retrieves more content from a channel relative to a given position.
@@ -141,7 +146,7 @@ class Request:
             f"s/{channel}",
             method="POST",
             json=True,
-            params={direction: position}
+            params={direction: position},
         )
         if isinstance(response, str):
             return response

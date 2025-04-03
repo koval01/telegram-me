@@ -8,10 +8,7 @@ router = APIRouter()
 
 
 @router.get(
-    "/healthz",
-    summary="Health status",
-    responses={200: {}},
-    tags=["Service"]
+    "/healthz", summary="Health status", responses={200: {}}, tags=["Service"]
 )
 async def healthz() -> Response:
     """Request handler"""

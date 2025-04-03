@@ -19,11 +19,11 @@ app = FastAPI(
     description="API implementation of Telegram channel viewer in python",
     version=settings.VERSION,
     docs_url="/",
-    openapi_url=None if bool(settings.DISABLE_DOCS) else "/openapi.json"
+    openapi_url=None if bool(settings.DISABLE_DOCS) else "/openapi.json",
 )
 app.mount("/static", StaticFiles(directory="static"), name="static")
 app.add_middleware(
-    CORSMiddleware, # type: ignore[no-untyped-call]
+    CORSMiddleware,  # type: ignore[no-untyped-call]
     allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],

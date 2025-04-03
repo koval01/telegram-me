@@ -37,28 +37,40 @@ class Body(Parser):
         description = self.get_meta("property", "og:description")
         return {
             "channel": {
-                "username": self.soup.css_first(".tgme_channel_info_header_username>a").text()[1:],
+                "username": self.soup.css_first(
+                    ".tgme_channel_info_header_username>a"
+                ).text()[1:],
                 "title": {
                     "string": self.get_meta("property", "og:title"),
                     "html": Utils.get_text_html(
-                        self.soup.css_first(".tgme_channel_info_header_title>span"), "span")
+                        self.soup.css_first(
+                            ".tgme_channel_info_header_title>span"
+                        ),
+                        "span",
+                    ),
                 },
-                "description": {
-                    "string": description,
-                    "html": Utils.get_text_html(
-                        self.soup.css_first(".tgme_channel_info_description"))
-                } if description else None,
+                "description": (
+                    {
+                        "string": description,
+                        "html": Utils.get_text_html(
+                            self.soup.css_first(
+                                ".tgme_channel_info_description"
+                            )
+                        ),
+                    }
+                    if description
+                    else None
+                ),
                 "avatar": self.get_meta("property", "og:image"),
                 "counters": self.get_counters(
-                    self.soup.css(".tgme_channel_info_counters>.tgme_channel_info_counter")),
-                "labels": self.get_labels()
+                    self.soup.css(
+                        ".tgme_channel_info_counters>.tgme_channel_info_counter"
+                    )
+                ),
+                "labels": self.get_labels(),
             },
-            "content": {
-                "posts": Post(self.soup.body.html).get(selector)
-            },
-            "meta": {
-                "offset": self.get_offset(self.soup.head)
-            }
+            "content": {"posts": Post(self.soup.body.html).get(selector)},
+            "meta": {"offset": self.get_offset(self.soup.head)},
         }
 
     def __str__(self) -> str:

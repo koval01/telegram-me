@@ -37,9 +37,9 @@ class Parser:
         """
         parsed_url = urlparse(url)
         dictionary = parse_qs(parsed_url.query)
-        updated_dict = [{
-            v[0]: Misc.set_int(v[1][0])
-        } for v in dictionary.items()]
+        updated_dict = [
+            {v[0]: Misc.set_int(v[1][0])} for v in dictionary.items()
+        ]
         return updated_dict[0] if updated_dict else {}
 
     @staticmethod
@@ -54,7 +54,9 @@ class Parser:
             Dict[str, str]: A dictionary containing counter information.
         """
         return {
-            f.css_first(".counter_type").text(): f.css_first(".counter_value").text()
+            f.css_first(".counter_type")
+            .text(): f.css_first(".counter_value")
+            .text()
             for f in node
         }
 
@@ -69,11 +71,14 @@ class Parser:
         Returns:
             str: The content of the meta tag, or an empty string if not found.
         """
-        return Misc.safe_index([
-            t.attributes["content"]
-            for t in self.soup.css("meta")
-            if t.attributes.get(selector) == name
-        ], 0)
+        return Misc.safe_index(
+            [
+                t.attributes["content"]
+                for t in self.soup.css("meta")
+                if t.attributes.get(selector) == name
+            ],
+            0,
+        )
 
     def get_labels(self) -> list[str]:
         """
@@ -89,7 +94,9 @@ class Parser:
             if label
         ]
 
-    def get_offset(self, node: LexborNode, more: bool = False) -> dict[str, int]:
+    def get_offset(
+        self, node: LexborNode, more: bool = False
+    ) -> dict[str, int]:
         """
         Parses offset values from HTML link tags.
 
@@ -100,16 +107,67 @@ class Parser:
         Returns:
             dict[str, int]: A dictionary containing parsed offset values.
         """
-        links = node.css("a.tme_messages_more" if more else "link")
+        links = self._get_relevant_links(node, more)
+        return self._extract_offset_values(links)
+
+    @staticmethod
+    def _get_relevant_links(node: LexborNode, more: bool) -> list[LexborNode]:
+        """
+        Gets relevant links based on the more flag.
+
+        Args:
+            node (LexborNode): The HTML node to search for links
+            more (bool): Whether to get more messages links
+
+        Returns:
+            list[LexborNode]: List of relevant link nodes
+        """
+        return node.css("a.tme_messages_more" if more else "link")
+
+    def _extract_offset_values(
+        self, links: list[LexborNode]
+    ) -> dict[str, int]:
+        """
+        Extracts offset values from link nodes.
+
+        Args:
+            links (list[LexborNode]): List of link nodes to process
+
+        Returns:
+            dict[str, int]: Dictionary of extracted offset values
+        """
         keys = {}
-
         for link in links:
-            body: bool = link.attributes.get("rel") in ("prev", "next",)
-            more: bool = any(
-                key in link.attributes.keys()
-                for key in ("data-before", "data-after",))
-            if body or more:
-                for k, v in self.query(link.attributes.get("href")).items():
-                    keys[k] = v
-
+            if self._is_relevant_link(link):
+                self._process_link(link, keys)
         return keys
+
+    @staticmethod
+    def _is_relevant_link(link: LexborNode) -> bool:
+        """
+        Checks if a link node is relevant for offset extraction.
+
+        Args:
+            link (LexborNode): Link node to check
+
+        Returns:
+            bool: True if link is relevant, False otherwise
+        """
+        body = link.attributes.get("rel") in ("prev", "next")
+        more = any(
+            key in link.attributes.keys()
+            for key in ("data-before", "data-after")
+        )
+        return body or more
+
+    def _process_link(self, link: LexborNode, keys: dict[str, int]) -> None:
+        """
+        Processes a single link and updates the keys dictionary with offset values.
+
+        Args:
+            link (LexborNode): Link node to process
+            keys (dict[str, int]): Dictionary to update with offset values
+        """
+        query_params = self.query(link.attributes.get("href"))
+        for k, v in query_params.items():
+            keys[k] = v

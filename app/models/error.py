@@ -12,4 +12,5 @@ class HTTPError(BaseModel):
     Attributes:
         detail (str): A human-readable description of the error.
     """
+
     detail: str

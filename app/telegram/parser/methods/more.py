@@ -23,7 +23,9 @@ class More(Parser):
         """
         Parser.__init__(self, body)
 
-    def get(self) -> dict[str, list[dict] | list | dict[str, list[dict[str, int]]]]:
+    def get(
+        self,
+    ) -> dict[str, list[dict] | list | dict[str, list[dict[str, int]]]]:
         """
         Extracts additional content from the HTML body.
 
@@ -32,9 +34,7 @@ class More(Parser):
         """
         return {
             "posts": Post(self.soup.body.html).get(),
-            "meta": {
-                "offset": self.get_offset(self.soup.body, more=True)
-            }
+            "meta": {"offset": self.get_offset(self.soup.body, more=True)},
         }
 
     def __str__(self) -> str:

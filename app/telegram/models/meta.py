@@ -16,6 +16,7 @@ class OffsetItem(BaseModel):
         before (Optional[int]): The offset before.
         after (Optional[int]): The offset after.
     """
+
     before: Optional[int] = None
     after: Optional[int] = None
 
@@ -27,4 +28,5 @@ class Meta(BaseModel):
     Attributes:
         offset (List[OffsetItem]): List of offset items.
     """
+
     offset: List[OffsetItem]

@@ -21,7 +21,9 @@ class Utils:
     """
 
     @staticmethod
-    def get_text_html(selector: LexborNode, tag_name: str = "div") -> Optional[str]:
+    def get_text_html(
+        selector: LexborNode, tag_name: str = "div"
+    ) -> Optional[str]:
         """
         Extracts and returns the inner HTML content of the first element with the specified tag
         name found in the HTML represented by the LexborNode object.
@@ -37,8 +39,10 @@ class Utils:
         # Escape the tag name to avoid special regex characters
         escaped_tag_name = re.escape(tag_name)
         # Construct regex to match the tag
-        pattern = fr"<{escaped_tag_name}.*?>(.*?)</{escaped_tag_name}>"
-        match = re.search(pattern, selector.html, flags=re.M | re.S)  # Allow multiline and dot-all
+        pattern = rf"<{escaped_tag_name}.*?>(.*?)</{escaped_tag_name}>"
+        match = re.search(
+            pattern, selector.html, flags=re.M | re.S
+        )  # Allow multiline and dot-all
         if match:
             return match.group(1)
 
@@ -55,7 +59,7 @@ class Utils:
         Returns:
             str: The text content with all HTML tags removed.
         """
-        return re.sub(r'<[^>]+>', '', html_content)
+        return re.sub(r"<[^>]+>", "", html_content)
 
     @staticmethod
     def background_extr(style: str) -> Union[str, None]:
@@ -70,5 +74,7 @@ class Utils:
         """
         match = re.search(
             r"background-image:\s*?url\([',\"](.*)[',\"]\)",
-            style, flags=re.I | re.M)
+            style,
+            flags=re.I | re.M,
+        )
         return match.group(1) if match else None

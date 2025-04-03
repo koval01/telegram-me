@@ -1,6 +1,7 @@
 """
 Middleware for add to response headers execution node identifier
 """
+
 import platform
 from typing import Callable
 
@@ -18,7 +19,9 @@ class NodeMiddleware(BaseHTTPMiddleware):  # pylint: disable=R0903
     def __init__(self, app: ASGIApp) -> None:
         super().__init__(app)
 
-    async def dispatch(self, request: Request, call_next: Callable) -> Response:
+    async def dispatch(
+        self, request: Request, call_next: Callable
+    ) -> Response:
         """
         Processes the incoming request and adds a custom header to the response.
 

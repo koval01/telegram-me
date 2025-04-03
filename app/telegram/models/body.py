@@ -19,10 +19,11 @@ class Labels(BaseModel):
     Attributes:
         labels (List[str]): A list of labels assigned to the channel.
     """
+
     labels: List[str]
 
     @classmethod
-    @field_validator('labels', mode='before')
+    @field_validator("labels", mode="before")
     def check_labels(cls, v: List[str]) -> List[str]:
         """
         Validates the labels to ensure only allowed labels are present.
@@ -40,7 +41,8 @@ class Labels(BaseModel):
         for label in v:
             if label not in allowed_labels:
                 raise ValueError(
-                    f"Invalid label '{label}', only {allowed_labels} are allowed.")
+                    f"Invalid label '{label}', only {allowed_labels} are allowed."
+                )
         return v
 
 
@@ -56,6 +58,7 @@ class Channel(BaseModel):
         counters (List[Counter]): List of counters associated with the channel.
         labels (Optional[Labels]): Channel labels list.
     """
+
     username: str
     title: ParsedAndRaw
     description: Optional[ParsedAndRaw]
@@ -75,6 +78,7 @@ class Counter(BaseModel):
         files (Optional[str]): The number of files (if available).
         links (Optional[str]): The number of links (if available).
     """
+
     subscribers: str
     photos: Optional[str] = None
     videos: Optional[str] = None
@@ -89,6 +93,7 @@ class Content(BaseModel):
     Attributes:
         posts (List[Post] | Post): List of posts or selected post in the channel.
     """
+
     posts: List[Post] | Post
 
 
@@ -101,6 +106,7 @@ class ChannelBody(BaseModel):
         content (Content): Content associated with the channel.
         meta (Meta): Metadata associated with the channel content.
     """
+
     channel: Channel
     content: Content
     meta: Meta

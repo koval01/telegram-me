@@ -1,6 +1,7 @@
 """
 Middleware for add to response headers time execution this request
 """
+
 import time
 from typing import Callable
 
@@ -17,7 +18,9 @@ class ProcessTimeMiddleware(BaseHTTPMiddleware):  # pylint: disable=R0903
     def __init__(self, app: ASGIApp) -> None:
         super().__init__(app)
 
-    async def dispatch(self, request: Request, call_next: Callable) -> Response:
+    async def dispatch(
+        self, request: Request, call_next: Callable
+    ) -> Response:
         """
         Measures the time taken to process the request and adds it to the response headers.
 

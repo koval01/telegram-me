@@ -3,7 +3,7 @@
 import re
 import json
 
-from typing import AnyStr
+from typing import AnyStr, Dict, List, Optional, Tuple, Union, Any
 
 
 class EntitiesParser:
@@ -27,27 +27,47 @@ class EntitiesParser:
     def __init__(self, html_body: str) -> None:
         """Initialize the parser with HTML content."""
         self.patterns: tuple = (
-            r'(#\w+)',  # hashtag
-            r'<b>(.+?)<\/b>(?![^<]*<\/i>)',  # bold
-            r'<i>(.+?)<\/i>',  # italic
-            r'<u>(.+?)<\/u>',  # underline
-            r'<code>(.+?)<\/code>',  # code
-            r'<s>(.+?)<\/s>',  # strikethrough
-            r'<tg-spoiler>(.+?)<\/tg-spoiler>',  # spoiler
-
+            r"(#\w+)",  # hashtag
+            r"<b>(.+?)<\/b>(?![^<]*<\/i>)",  # bold
+            r"<i>(.+?)<\/i>",  # italic
+            r"<u>(.+?)<\/u>",  # underline
+            r"<code>(.+?)<\/code>",  # code
+            r"<s>(.+?)<\/s>",  # strikethrough
+            r"<tg-spoiler>(.+?)<\/tg-spoiler>",  # spoiler
             # emoji
             r'<i\s+class="emoji"\s+style=".*?:url\(\'(.*?)\'\)">'
-            r'<b>(.*?)<\/b><\/i>(?![^<]*<\/tg-emoji>)',
-
+            r"<b>(.*?)<\/b><\/i>(?![^<]*<\/tg-emoji>)",
             # link in text with onclick
-            r'<a\s+(?:[^>]*?\s+)?href=\"([^\"]*)\"[^>]*\s+onclick=\"[^\"]*\"[^>]*>(.*?)<\/a>',
-            r'<a\s+(?:[^>]*?\s+)?href=\"(?!(?:.*#))(.*?)\"[^>]*>(.*?)<\/a>',  # url
-
+            r"<a\s+(?:[^>]*?\s+)?href=\"([^\"]*)\"[^>]*\s+onclick=\"[^\"]*\"[^>]*>(.*?)<\/a>",
+            r"<a\s+(?:[^>]*?\s+)?href=\"(?!(?:.*#))(.*?)\"[^>]*>(.*?)<\/a>",  # url
             # animoji
             r'<tg-emoji.*?><i\s+class="emoji"\s+style="background-image:url\(\'(.*?)\'\)">'
-            r'<b>(.*?)</b></i></tg-emoji>'
+            r"<b>(.*?)</b></i></tg-emoji>",
         )
         self.idx_map: tuple = (1, 3, 5, 7, 9, 11, 13, 14, 17, 20, 23)
+
+        # Map entity types to their depth offsets
+        self.entity_depth_map: Dict[str, int] = {
+            "text_link": 0,
+            "emoji": 1,
+            "animoji": 2,
+        }
+
+        # Map indices to entity types
+        self.entity_types: Tuple[Optional[str], ...] = (
+            "hashtag",
+            "bold",
+            "italic",
+            "underline",
+            "code",
+            "strikethrough",
+            "spoiler",
+            "emoji",
+            "text_link",
+            None,
+            "url",
+            "animoji",
+        )
 
         self.html_text: str = re.sub(r"<br\s?/?>", "\n", html_body)
         self.text_only: str = re.sub(r"<[^>]+>", "", self.html_text)
@@ -61,10 +81,7 @@ class EntitiesParser:
             re.Pattern[AnyStr]: The compiled regex pattern for matching all entities.
         """
         return re.compile(
-            "|".join([
-                f"({p})" for p in self.patterns
-            ]),
-            flags=re.DOTALL | re.M
+            "|".join([f"({p})" for p in self.patterns]), flags=re.DOTALL | re.M
         )
 
     @staticmethod
@@ -94,7 +111,9 @@ class EntitiesParser:
         """
         return len(self.extract_content(match, depth))
 
-    def offset(self, text_start: int, match: re.Match[str], depth: int = 1) -> int:
+    def offset(
+        self, text_start: int, match: re.Match[str], depth: int = 1
+    ) -> int:
         """
         Calculates the end offset of the matched entity in the plain text.
 
@@ -108,7 +127,9 @@ class EntitiesParser:
         """
         return text_start + len(self.extract_content(match, depth))
 
-    def text_start(self, text: str, match: re.Match[str], offset: int, depth: int = 1) -> int:
+    def text_start(
+        self, text: str, match: re.Match[str], offset: int, depth: int = 1
+    ) -> int:
         """
         Finds the starting index of the matched entity's text content in the plain text.
 
@@ -123,8 +144,7 @@ class EntitiesParser:
         """
         return text.find(self.extract_content(match, depth), offset)
 
-    @staticmethod
-    def message_type(idx: int) -> str | None:
+    def message_type(self, idx: int) -> Optional[str]:
         """
         Determines the entity type based on the index of a matched group.
 
@@ -135,17 +155,134 @@ class EntitiesParser:
             str | None: The entity type as a string or Nothing.
         """
         try:
-            return (
-                "hashtag", "bold", "italic",
-                "underline", "code", "strikethrough",
-                "spoiler", "emoji",
-                "text_link", None, "url",
-                "animoji"
-            )[idx // 2]
+            return self.entity_types[idx // 2]
         except IndexError:
             return None
 
-    def parse_message(self) -> list[dict[str, int | str | None]]:
+    def _identify_entity_type(
+        self, match: re.Match[str]
+    ) -> Tuple[Optional[str], Optional[str], int]:
+        """
+        Identifies the entity type, URL, and depth from a regex match.
+
+        Args:
+            match (re.Match[str]): A match object containing the entity.
+
+        Returns:
+            Tuple[Optional[str], Optional[str], int]: A tuple containing the entity type,
+                                                     URL (if applicable), and depth.
+        """
+        entity_type = None
+        entity_url = None
+        depth = 1
+
+        # Find matching group and entity type
+        for idx, group in enumerate(match.groups()):
+            if group and idx in self.idx_map:
+                entity_type = self.message_type(idx)
+                if entity_type in self.entity_depth_map:
+                    entity_url = match.group(idx + 2)
+                    depth += self.entity_depth_map[entity_type]
+                break
+
+        return entity_type, entity_url, depth
+
+    def _calculate_positions(
+        self, match: re.Match[str], offset: int, depth: int
+    ) -> Tuple[int, int]:
+        """
+        Calculates the start position and new offset for an entity in the text.
+
+        Args:
+            match (re.Match[str]): A match object containing the entity.
+            offset (int): The current offset in the plain text.
+            depth (int): Tag immersion depth.
+
+        Returns:
+            Tuple[int, int]: The start position and new offset.
+        """
+        # Find start position in text only
+        text_start = self.text_start(self.text_only, match, offset, depth)
+
+        # Update offset to the end of the current match in the text only
+        new_offset = self.offset(text_start, match, depth)
+
+        return text_start, new_offset
+
+    def _create_entity_dict(
+        self,
+        entity_info: Dict[str, Any],
+        match: re.Match[str],
+    ) -> Dict[str, Union[int, str]]:
+        """
+        Creates a dictionary representation of an entity.
+
+        Args:
+            entity_info: Dictionary containing:
+                - type: The type of the entity
+                - text_start: The starting index in plain text
+                - url: Optional URL associated with the entity
+                - depth: Tag immersion depth
+            match: A match object containing the entity
+
+        Returns:
+            Dictionary representing the entity
+        """
+        entity = {
+            "offset": entity_info["text_start"],
+            "length": self.length(match, entity_info.get("depth", 1)),
+            "type": entity_info["type"],
+        }
+
+        if "url" in entity_info:
+            url = entity_info["url"]
+            if entity_info["type"] in ("emoji", "animoji"):
+                entity["url"] = f"https:{url}"
+            else:
+                entity["url"] = url
+
+        return entity
+
+    def _process_entity_match(
+        self, match: re.Match[str], offset: int
+    ) -> Tuple[Optional[Dict], int]:
+        """
+        Process a single regex match and create an entity dict if valid.
+
+        Args:
+            match (re.Match[str]): A match object containing the entity.
+            offset (int): The current offset in the plain text.
+
+        Returns:
+            Tuple[Optional[Dict], int]: A tuple containing the entity dict (or None if invalid)
+                                        and the updated offset.
+        """
+        # Identify entity type, URL, and depth
+        entity_type, entity_url, depth = self._identify_entity_type(match)
+
+        if not entity_type:
+            return None, offset
+
+        # Calculate positions
+        text_start, new_offset = self._calculate_positions(
+            match, offset, depth
+        )
+
+        # Create entity dictionary
+        entity_info = {
+            "type": entity_type,
+            "text_start": text_start,
+            "depth": depth,
+        }
+
+        if entity_url:
+            entity_info["url"] = entity_url
+
+        entity = self._create_entity_dict(entity_info, match)
+
+        return entity, new_offset
+
+    def parse_message(self) -> List[Dict[str, Union[int, str, None]]]:
         """
         Parses the HTML text and extracts entities, returning a list of entities with details
         about their type, offset, and length. Links include an additional URL attribute.
@@ -160,36 +297,10 @@ class EntitiesParser:
 
         matches = list(re.finditer(self.combined_pattern, self.html_text))
         for match in matches:
-            entity_type = None
-            entity_url = None
-            depth = 1
-
-            for idx, group in enumerate(match.groups()):
-                if group and idx in self.idx_map:
-                    entity_type = self.message_type(idx)
-                    if entity_type in ("text_link", "emoji", "animoji",):
-                        entity_url = match.group(idx + 2)
-                        depth += {"text_link": 0, "emoji": 1, "animoji": 2}[entity_type]
-                    break
-
-            # Find start position in text only by finding
-            # the index of the next occurrence of the match
-            text_start = self.text_start(self.text_only, match, offset, depth)
-
-            # Update offset to the end of the current match in the text only
-            offset = self.offset(text_start, match, depth)
-
-            entity = {
-                "offset": text_start,
-                "length": self.length(match, depth),
-                "type": entity_type
-            }
-
-            if entity_url:
-                entity["url"] = f"https:{entity_url}" \
-                    if entity_type in ("emoji", "animoji",) else entity_url
-
-            entities.append(entity)
+            entity, new_offset = self._process_entity_match(match, offset)
+            if entity:
+                entities.append(entity)
+                offset = new_offset
 
         return entities
 

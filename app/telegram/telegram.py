@@ -21,8 +21,7 @@ class Telegram:
         more: Retrieve additional messages from a Telegram channel.
     """
 
-    def __init__(self) -> None:
-        ...
+    def __init__(self) -> None: ...
 
     @staticmethod
     async def body(channel: str, position: int = 0) -> dict:
@@ -44,7 +43,9 @@ class Telegram:
         return Body(response).get()
 
     @staticmethod
-    async def more(channel: str, position: int, direction: Literal["after", "before"]) -> dict:
+    async def more(
+        channel: str, position: int, direction: Literal["after", "before"]
+    ) -> dict:
         """
         Retrieve additional messages from a Telegram channel.
 
@@ -60,7 +61,7 @@ class Telegram:
         """
         response = await Request().more(channel, position, direction)
 
-        if isinstance(response, str) and not len(response):
+        if isinstance(response, str) and response == "":
             return More(response).get()
 
         if not response:
@@ -68,7 +69,9 @@ class Telegram:
 
         # additional validation response
         response = More(response).get()
-        response["posts"] = list(filter(lambda post: post["id"] != position, response["posts"]))
+        response["posts"] = list(
+            filter(lambda post: post["id"] != position, response["posts"])
+        )
         return response
 
     @staticmethod
