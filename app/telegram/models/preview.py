@@ -26,7 +26,7 @@ class Channel(BaseModel):
     is_verified: bool
 
     @field_validator('avatar', mode='before')
-    def convert_empty_list_to_none(cls, v: object) -> Optional[object]:
+    def convert_empty_list_to_none(cls, v: object) -> Optional[object]:  # pylint: disable=C0116, E0213
         if isinstance(v, str) and v.startswith("data:"):
             return None
         return v

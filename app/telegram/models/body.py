@@ -67,13 +67,13 @@ class Channel(BaseModel):
     labels: Optional[Labels] = None
 
     @field_validator('avatar', mode='before')
-    def convert_empty_string_to_none(cls, v: Optional[str]) -> Optional[str]:
+    def convert_empty_string_to_none(cls, v: Optional[str]) -> Optional[str]:  # pylint: disable=C0116, E0213
         if v == "":
             return None
         return v
 
     @field_validator('labels', mode='before')
-    def convert_empty_list_to_none(cls, v: Optional[List[str]]) -> Optional[Labels]:
+    def convert_empty_list_to_none(cls, v: Optional[List[str]]) -> Optional[Labels]:  # pylint: disable=C0116, E0213
         if v == []:
             return None
         return Labels(labels=v)
@@ -98,7 +98,7 @@ class Counter(BaseModel):
     links: Optional[str] = None
 
     @model_validator(mode='before')
-    def rewrite_subscriber_key(cls, values):
+    def rewrite_subscriber_key(cls, values):  # pylint: disable=C0116, E0213
         if 'subscriber' in values:
             values['subscribers'] = values.pop('subscriber')
         return values
