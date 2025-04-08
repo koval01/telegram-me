@@ -5,7 +5,7 @@ Model for body response container
 from __future__ import annotations
 from typing import List, Optional
 
-from pydantic import BaseModel, field_validator, HttpUrl
+from pydantic import BaseModel, field_validator, HttpUrl, model_validator
 
 from app.telegram.models.post import Post
 from app.telegram.models.meta import Meta
@@ -55,16 +55,28 @@ class Channel(BaseModel):
         title (stParsedAndRawr): The title of the channel in text and html.
         description (Optional[ParsedAndRaw]): The description of the channel in text and html.
         avatar (Optional[HttpUrl]): The URL of the channel's avatar.
-        counters (List[Counter]): List of counters associated with the channel.
+        counters (Counter): List of counters associated with the channel.
         labels (Optional[Labels]): Channel labels list.
     """
 
     username: str
     title: ParsedAndRaw
     description: Optional[ParsedAndRaw]
-    avatar: Optional[HttpUrl]
-    counters: List[Counter]
-    labels: Optional[Labels]
+    avatar: Optional[HttpUrl] = None
+    counters: Counter
+    labels: Optional[Labels] = None
+
+    @field_validator('avatar', mode='before')
+    def convert_empty_string_to_none(cls, v: Optional[str]) -> Optional[str]:
+        if v == "":
+            return None
+        return v
+
+    @field_validator('labels', mode='before')
+    def convert_empty_list_to_none(cls, v: Optional[List[str]]) -> Optional[Labels]:
+        if v == []:
+            return None
+        return Labels(labels=v)
 
 
 class Counter(BaseModel):
@@ -84,6 +96,12 @@ class Counter(BaseModel):
     videos: Optional[str] = None
     files: Optional[str] = None
     links: Optional[str] = None
+
+    @model_validator(mode='before')
+    def rewrite_subscriber_key(cls, values):
+        if 'subscriber' in values:
+            values['subscribers'] = values.pop('subscriber')
+        return values
 
 
 class Content(BaseModel):

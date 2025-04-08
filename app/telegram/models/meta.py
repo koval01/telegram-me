@@ -3,7 +3,7 @@ Model for meta-data of message
 """
 
 from __future__ import annotations
-from typing import List, Optional
+from typing import Optional
 
 from pydantic import BaseModel
 
@@ -26,7 +26,7 @@ class Meta(BaseModel):
     Represents metadata associated with content.
 
     Attributes:
-        offset (List[OffsetItem]): List of offset items.
+        offset (OffsetItem): Dict of offset items.
     """
 
-    offset: List[OffsetItem]
+    offset: OffsetItem

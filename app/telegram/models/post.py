@@ -71,8 +71,9 @@ class TextEntities(BaseModel):
         "url",
         "pre",
         "emoji",
+        "animoji"
     ]
-    language: Optional[str]
+    language: Optional[str] = None
 
 
 class Text(BaseModel):
@@ -88,7 +89,7 @@ class Text(BaseModel):
 
     string: str
     html: str
-    entities: Optional[List[TextEntities]]
+    entities: Optional[List[TextEntities]] = None
 
 
 class PollOptions(BaseModel):
@@ -217,7 +218,7 @@ class Footer(BaseModel):
 
     views: Optional[str]
     edited: Optional[bool]
-    author: Optional[ParsedAndRaw]
+    author: Optional[ParsedAndRaw] = None
     date: Date
 
 
@@ -227,11 +228,11 @@ class Forwarded(BaseModel):
 
     Attributes:
         name (ParsedAndRaw): The name of the source where the post was forwarded from.
-        url (HttpUrl): The URL of the source where the post was forwarded from.
+        url (Optional[HttpUrl]): The URL of the source where the post was forwarded from.
     """
 
     name: ParsedAndRaw
-    url: HttpUrl
+    url: Optional[HttpUrl] = None
 
 
 class Post(BaseModel):
