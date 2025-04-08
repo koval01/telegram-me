@@ -4,7 +4,7 @@ Model for channel preview data
 
 from typing import Optional
 
-from pydantic import BaseModel, HttpUrl
+from pydantic import BaseModel, HttpUrl, field_validator
 
 
 class Channel(BaseModel):
@@ -21,9 +21,15 @@ class Channel(BaseModel):
 
     title: str
     subscribers: str
-    description: Optional[str]
-    avatar: Optional[HttpUrl]
+    description: Optional[str] = None
+    avatar: Optional[HttpUrl] = None
     is_verified: bool
+
+    @field_validator('avatar', mode='before')
+    def convert_empty_list_to_none(cls, v: object) -> Optional[object]:
+        if isinstance(v, str) and v.startswith("data:"):
+            return None
+        return v
 
 
 class Preview(BaseModel):
