@@ -33,4 +33,11 @@ async def body(
             status_code=404, detail="Channel or post not found"
         )
 
-    return result
+    try:
+        channel_data = ChannelBody.model_validate(result)
+    except Exception as e:
+        raise HTTPException(
+            status_code=400, detail=str(e)
+        )
+
+    return channel_data.model_dump(exclude_none=True, exclude_unset=True)

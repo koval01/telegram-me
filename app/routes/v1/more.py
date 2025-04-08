@@ -32,7 +32,12 @@ async def more(
 
     if not result:
         raise HTTPException(status_code=404, detail="Channel not found")
-    if not result.get("posts"):
-        return result
 
-    return result
+    try:
+        posts_data = More.model_validate(result)
+    except Exception as e:
+        raise HTTPException(
+            status_code=400, detail=str(e)
+        )
+
+    return posts_data.model_dump(exclude_none=True, exclude_unset=True)

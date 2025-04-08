@@ -25,4 +25,11 @@ async def preview(
     if not result:
         raise HTTPException(status_code=404, detail="Channel not found")
 
-    return result
+    try:
+        preview_data = Preview.model_validate(result)
+    except Exception as e:
+        raise HTTPException(
+            status_code=400, detail=str(e)
+        )
+
+    return preview_data.model_dump(exclude_none=True, exclude_unset=True)

@@ -66,7 +66,14 @@ async def fetch_previews(channels: List[str]) -> Dict[str, Any]:
     for channel in channels:
         result[channel] = await telegram.preview(channel)
 
-    return result
+    try:
+        previews_data = Previews.model_validate(result)
+    except Exception as e:
+        raise HTTPException(
+            status_code=400, detail=str(e)
+        )
+
+    return previews_data.model_dump(exclude_none=True, exclude_unset=True)
 
 
 @router.post(
