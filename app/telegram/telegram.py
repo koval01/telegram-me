@@ -113,3 +113,21 @@ class Telegram:
             return {}
 
         return Preview(response).get()
+
+    @classmethod
+    async def previews(cls, channels: list[str]) -> dict:
+        """
+        Obtaining a group of channel previews
+
+        Args:
+            channels (list[str]): List of channels requested
+
+        Returns:
+            dict: A dictionary that contains a list of requested channels,
+                their usernames are used as keys
+        """
+        result = {}
+        for channel in channels:
+            result[channel] = await cls.preview(channel)
+
+        return result
