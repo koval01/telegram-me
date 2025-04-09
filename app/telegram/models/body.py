@@ -64,7 +64,7 @@ class Channel(BaseModel):
     description: Optional[ParsedAndRaw]
     avatar: Optional[HttpUrl] = None
     counters: Counter
-    labels: Optional[Labels] = None
+    labels: Optional[List[str]] = None
 
     @field_validator('avatar', mode='before')
     def convert_empty_string_to_none(cls, v: Optional[str]) -> Optional[str]:  # pylint: disable=C0116, E0213
@@ -73,10 +73,18 @@ class Channel(BaseModel):
         return v
 
     @field_validator('labels', mode='before')
-    def convert_empty_list_to_none(cls, v: Optional[List[str]]) -> Optional[Labels]:  # pylint: disable=C0116, E0213
-        if v == []:
+    def validate_labels(cls, v: Optional[List[str]]) -> Optional[List[str]]:  # pylint: disable=C0116, E0213
+        if not v:  # Handles both empty list and None
             return None
-        return Labels(labels=v)
+
+        # Validate the labels
+        allowed_labels = ("verified",)
+        for label in v:
+            if label not in allowed_labels:
+                raise ValueError(
+                    f"Invalid label '{label}', only {allowed_labels} are allowed."
+                )
+        return v
 
 
 class Counter(BaseModel):
