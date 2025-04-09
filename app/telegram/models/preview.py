@@ -37,7 +37,7 @@ class Preview(BaseModel):
     Represents a preview of a Telegram channel.
 
     Attributes:
-        channel (Channel): The channel information.
+        channel (Optional[Channel]): The channel information (optional).
     """
 
-    channel: Channel
+    channel: Optional[Channel] = None
