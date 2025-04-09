@@ -145,7 +145,7 @@ async def fetch_previews(channels: List[str]) -> Dict[str, Any]:
     except Exception as e:
         raise HTTPException(
             status_code=400, detail=str(e)
-        )
+        ) from e
 
     return previews_data.model_dump(exclude_none=True, exclude_unset=True)
 

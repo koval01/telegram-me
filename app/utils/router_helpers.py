@@ -39,6 +39,6 @@ async def handle_telegram_request(
     except Exception as e:
         raise HTTPException(
             status_code=400, detail=str(e)
-        )
+        ) from e
 
     return model_data.model_dump(exclude_none=True, exclude_unset=True)
