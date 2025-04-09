@@ -12,7 +12,7 @@ class Settings(BaseSettings):  # pylint: disable=R0903
     """
 
     DISABLE_DOCS: int = 0
-    VERSION: str = "1.3"
+    VERSION: str = "1.4"
 
     class Config:  # pylint: disable=R0903
         """
