@@ -183,12 +183,15 @@ class ContentPost(BaseModel):
         text (Optional[Text]): The text content of the post.
         media (Optional[List[MediaItem]]): List of media items within the post.
         poll (Optional[Poll]): The poll within the post.
+        inline (Optional[List[Inline]]): List of inline buttons.
+        reply (Optional[Reply]): Reply information.
+        preview_link (Optional[PreviewLink]): Preview link information.
     """
 
     text: Optional[Text] = None
     media: Optional[List[MediaItem]] = None
     poll: Optional[Poll] = None
-    inline: Optional[Inline] = None
+    inline: Optional[List[Inline]] = None
     reply: Optional[Reply] = None
     preview_link: Optional[PreviewLink] = None
 
