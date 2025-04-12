@@ -71,7 +71,8 @@ class TextEntities(BaseModel):
         "url",
         "pre",
         "emoji",
-        "animoji"
+        "animoji",
+        "hashtag"
     ]
     language: Optional[str] = None
 
