@@ -112,7 +112,7 @@ class Post:
 
         # Extract content from div if present
         div = re.compile(
-            r'<div+\sclass="tgme_widget_message_text.*"+\sdir="auto">(.*?)</div>',
+            r'<div\s+class="tgme_widget_message_text(?:[^"]*)"(?:\s+[^>]*?)?>(.*?)(?:</div>|$)',
             flags=re.DOTALL,
         )
         div_match = re.search(div, text)
