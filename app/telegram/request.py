@@ -97,7 +97,7 @@ class Request:
         - bool: True if the position is valid, False otherwise.
         """
         pattern = re.compile(r"^[0-9]{1,6}$")
-        if re.match(pattern, str(position)) and 0 <= position <= 1000000:
+        if re.match(pattern, str(position)) and 0 <= position <= 10_000_000:
             return True
 
         return False
