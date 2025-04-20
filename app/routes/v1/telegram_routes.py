@@ -10,6 +10,7 @@ from app.models.error import HTTPError
 
 from app.telegram.models.body import ChannelBody
 from app.telegram.models.more import More
+from app.telegram.models.post import Post
 from app.telegram.models.preview import Preview
 from app.telegram.models.previews import Previews
 from app.telegram.telegram import Telegram
@@ -63,7 +64,7 @@ async def more(
 @router.get(
     "/post/{channel}/{identifier}",
     summary="Get one post from the channel",
-    responses={200: {"model": ChannelBody}, 404: {"model": HTTPError}, 400: {"model": HTTPError}},
+    responses={200: {"model": Post}, 404: {"model": HTTPError}, 400: {"model": HTTPError}},
 )
 async def post(
     channel: str = channel_param(),
@@ -71,7 +72,7 @@ async def post(
 ) -> Dict[str, Any]:
     """Request handler for getting a specific post"""
     return await handle_telegram_request(
-        telegram.post, ChannelBody, channel, identifier
+        telegram.post, Post, channel, identifier
     )
 
 

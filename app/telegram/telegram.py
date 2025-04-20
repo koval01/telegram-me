@@ -94,6 +94,7 @@ class Telegram:
         response = Body(response).get(position)
         if not response["content"]["posts"]:
             return {}
+        response = response["content"]["posts"][0]
 
         return response
 
