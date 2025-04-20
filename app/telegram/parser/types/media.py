@@ -99,7 +99,10 @@ class Media:
     @classmethod
     def video(cls, match: LexborNode) -> Optional[Dict[str, Any]]:
         """
-        Extracts information about a video media element.
+        Extracts information about a video media element, handling various cases:
+        - Normal available videos
+        - Too big videos (only placeholder available)
+        - GIFs (videos without duration)
 
         Args:
             match (LexborNode): The HTML node representing the video media element.
@@ -108,21 +111,17 @@ class Media:
             Optional[Dict[str, Any]]: A dictionary containing information
             about the video, or None if no video found.
         """
-        video: Optional[LexborNode] = match.css_first(
-            "video.tgme_widget_message_video"
-        )
-        if not video:
-            return None
-
         selectors = {
             "thumb": ".tgme_widget_message_video_thumb",
             "duration": "time.message_video_duration",
+            "video": "video.tgme_widget_message_video",
         }
-
         attrs = cls._get_media_attributes(match, selectors)
 
+        video_available = bool(attrs["video"] and attrs["video"].attributes.get("src"))
+
         body = {
-            "url": video.attributes.get("src"),
+            "url": attrs["video"].attributes.get("src") if video_available else None,
             "thumb": (
                 Utils.background_extr(attrs["thumb"].attributes.get("style"))
                 if attrs["thumb"]
@@ -130,6 +129,8 @@ class Media:
             ),
             "type": "video",
         }
+        if not video_available:
+            body["available"] = video_available
 
         if attrs["duration"]:
             duration_text = attrs["duration"].text()

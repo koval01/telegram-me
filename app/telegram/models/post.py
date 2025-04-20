@@ -28,20 +28,21 @@ class MediaItem(BaseModel):
     Represents a media item within a post.
 
     Attributes:
-        url (HttpUrl): The URL of the media item.
+        url (Optional[HttpUrl]): The URL of the media item.
         thumb (Optional[str]): The URL of the thumbnail image (if applicable).
         waves (Optional[str]): The URL of the waveform image (if applicable).
         duration (Optional[Duration]): The duration of the media item (if applicable).
         type (Literal["image", "video", "voice", "roundvideo", "sticker", "gif"]):
         The type of the media item.
+        available (Optional[bool]): Availability status of the media file itself
     """
 
-    url: HttpUrl
+    url: Optional[HttpUrl] = None
     thumb: Optional[HttpUrl] = None
     waves: Optional[str] = None
     duration: Optional[Duration] = None
     type: Literal["image", "video", "voice", "roundvideo", "sticker", "gif"]
-
+    available: Optional[bool] = None
 
 class TextEntities(BaseModel):
     """
