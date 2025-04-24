@@ -1,7 +1,3 @@
-"""
-Error models
-"""
-
 from pydantic import BaseModel
 
 

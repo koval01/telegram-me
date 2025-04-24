@@ -1,5 +1,3 @@
-"""Media module"""
-
 import json
 from typing import Optional, Dict, List, Tuple, Any
 

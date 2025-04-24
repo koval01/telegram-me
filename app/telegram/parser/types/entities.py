@@ -1,5 +1,3 @@
-"""Entities module"""
-
 import re
 import json
 

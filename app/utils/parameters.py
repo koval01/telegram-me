@@ -1,7 +1,3 @@
-"""
-Reusable parameter definitions for FastAPI route handlers
-"""
-
 from fastapi import Path, Query
 
 
