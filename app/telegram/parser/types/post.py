@@ -519,8 +519,9 @@ class Post:
             buble = self.buble(message)
             content = self.__parse_content_fields(self, buble, message)
 
-            if not content:
-                continue
+            # skip not supported posts
+            # if not content:
+            #     continue
 
             posts.append(self.__build_post_object(self, message, content))
 
