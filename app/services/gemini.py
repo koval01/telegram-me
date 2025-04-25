@@ -24,7 +24,7 @@ system_instructions = {
 class GeminiService:
     def __init__(self):
         self.client = genai.Client(api_key=settings.GOOGLE_GEMINI_API_KEY)
-        self.model = "gemini-2.0-flash-lite"
+        self.model = "gemini-2.0-flash"
 
         self.safety_settings = [
             SafetySetting(
