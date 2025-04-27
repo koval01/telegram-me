@@ -224,7 +224,8 @@ class GenerateResponse:
                 "content": self.prompt,
                 "server_time": datetime.now(timezone.utc).strftime('%a, %d %b %Y %H:%M:%S GMT'),
                 "system_instructions": self.gemini_service.system_instructions.get(self.lang),
-                "lang": self.lang
+                "lang": self.lang,
+                "model": self.gemini_service.model,
             }
         except Exception as e:
             logger.error(f"Failed to generate response: {str(e)}")
