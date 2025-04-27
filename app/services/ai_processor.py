@@ -13,6 +13,7 @@ from google.genai.types import Part
 from app.services.gemini import GeminiService
 from app.utils.json import clean_json_of_post
 from app.utils.mime import MIMEExtractor
+from app.utils.string import parse_abbreviated_number
 
 logger = logging.getLogger(__name__)
 
@@ -38,6 +39,57 @@ class GenerateResponse:
         self.data = clean_json_of_post(post, media_meta=True)
         self.gemini_service = gemini_service
         self.lang = lang
+
+    def check_availability(self) -> tuple[bool, str]:
+        """
+        Checks if the post contains available content for processing.
+
+        A post is considered available if:
+        1. It contains at least one of:
+           - Text content
+           - A poll
+           - Supported media (image, gif, video, voice, or roundvideo)
+        2. The channel has more than 1000 subscribers
+
+        Returns:
+            tuple[bool, str]:
+                - True if available with empty string,
+                - False with a reason message otherwise
+
+        Note:
+            Checks the first post in the 'posts' list from the data dictionary.
+        """
+        # Check post content availability
+        post = self.data["content"]["posts"][0]
+        content = post.get('content', {})
+
+        has_text = bool(content.get('text', {}).get('string', ''))
+        has_poll = 'poll' in content
+
+        supported_media = {'image', 'gif', 'video', 'voice', 'roundvideo'}
+        media_list = content.get('media', [])
+        has_media = any(media.get('type') in supported_media for media in media_list)
+
+        post_available = has_text or has_poll or has_media
+
+        # Check channel subscribers
+        subscribers_str = self.data["channel"]["counters"]["subscribers"]
+        channel_eligible = parse_abbreviated_number(subscribers_str) > 1000
+
+        # Determine return values
+        if post_available and channel_eligible:
+            return True, ""
+
+        if not post_available and not channel_eligible:
+            return False, (
+                "This post is not supported, also this channel does not have "
+                "enough subscribers for this feature"
+            )
+
+        return False, (
+            "This post is not supported" if not post_available
+            else "This channel doesn't have enough subscribers"
+        )
 
     @staticmethod
     def _process_dict_for_media_urls(data: Dict[str, Any]) -> Tuple[List[str], Dict[str, Any]]:

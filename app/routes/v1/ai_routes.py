@@ -46,6 +46,9 @@ async def generate(
         request.channel, request.identifier, False
     )
     ai = GenerateResponse(post, gemini_service, lang=request.lang)
+    availability, reason = ai.check_availability()
+    if not availability:
+        raise HTTPException(status_code=400, detail=reason)
     response = await ai.generate()
     if not response:
         raise HTTPException(status_code=400, detail="AI error")
