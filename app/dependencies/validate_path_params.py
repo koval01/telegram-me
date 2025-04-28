@@ -1,5 +1,5 @@
-from fastapi import Path, Query, Depends, HTTPException
-from typing import Optional, Literal
+from fastapi import Path, Query, HTTPException
+from typing import Optional, Literal, Annotated
 
 from starlette import status
 
@@ -58,8 +58,7 @@ async def validate_previews_params(
 ) -> BaseRequestWithChannels:
     try:
         return BaseRequestWithChannels(channels=channels)
-    except ValueError as e:
+    except ValueError as _:
         raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail=str(e),
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY
         )
