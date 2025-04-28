@@ -63,7 +63,7 @@ class GenerateResponse:
         post = self.data["content"]["posts"][0]
         content = post.get('content', {})
 
-        has_text = bool(content.get('text', {}).get('string', ''))
+        has_text = bool(content.get('text', {}))
         has_poll = 'poll' in content
 
         supported_media = {'image', 'gif', 'video', 'voice', 'roundvideo'}
