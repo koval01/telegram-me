@@ -1,7 +1,3 @@
-"""
-Route handler for /healthz
-"""
-
 from fastapi import Response, APIRouter
 
 router = APIRouter()

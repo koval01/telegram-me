@@ -1,7 +1,3 @@
-"""
-Common models
-"""
-
 from pydantic import BaseModel
 
 

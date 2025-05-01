@@ -1,7 +1,3 @@
-"""
-Model for more response container
-"""
-
 from __future__ import annotations
 from typing import List
 

@@ -1,11 +1,7 @@
-"""
-Model for message (post) container
-"""
-
 from __future__ import annotations
 from typing import List, Optional, Literal
 
-from pydantic import BaseModel, HttpUrl
+from pydantic import BaseModel, HttpUrl, AnyUrl
 
 from app.telegram.models.utils import ParsedAndRaw
 
@@ -150,7 +146,7 @@ class Reply(BaseModel):
         to_message (int): ID replied message
     """
 
-    cover: Optional[HttpUrl]
+    cover: Optional[AnyUrl]
     name: ParsedAndRaw
     text: ParsedAndRaw
     to_message: int

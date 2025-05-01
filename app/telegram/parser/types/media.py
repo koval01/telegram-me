@@ -1,5 +1,3 @@
-"""Media module"""
-
 import json
 from typing import Optional, Dict, List, Tuple, Any
 
@@ -294,10 +292,10 @@ class Media:
     @staticmethod
     def __duration(duration: str) -> Optional[int]:
         """
-        Converts a duration string (MM:SS) to total seconds.
+        Converts a duration string (HH:MM:SS or MM:SS) to total seconds.
 
         Args:
-            duration (str): The duration string in the format "MM:SS".
+            duration (str): The duration string in either "HH:MM:SS" or "MM:SS" format.
 
         Returns:
             Optional[int]: The total duration in seconds, or None if the input is invalid.
@@ -306,9 +304,19 @@ class Media:
             return None
 
         try:
-            minutes, seconds = map(int, duration.split(":"))
-            return minutes * 60 + seconds
-        except (ValueError, TypeError):
+            parts = list(map(int, duration.split(":")))
+
+            if len(parts) == 2:
+                # MM:SS format
+                minutes, seconds = parts
+                return minutes * 60 + seconds
+            if len(parts) == 3:
+                # HH:MM:SS format
+                hours, minutes, seconds = parts
+                return hours * 3600 + minutes * 60 + seconds
+
+            return None
+        except (ValueError, TypeError) as _:
             return None
 
     def __str__(self) -> str:
