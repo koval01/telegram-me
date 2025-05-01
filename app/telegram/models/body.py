@@ -1,7 +1,3 @@
-"""
-Model for body response container
-"""
-
 from __future__ import annotations
 from typing import List, Optional
 
@@ -24,7 +20,7 @@ class Labels(BaseModel):
 
     @classmethod
     @field_validator("labels", mode="before")
-    def check_labels(cls, v: List[str]) -> List[str]:
+    def check_labels(cls, v: List[str]) -> List[str]:  # pylint: disable=C0116, E0213
         """
         Validates the labels to ensure only allowed labels are present.
 

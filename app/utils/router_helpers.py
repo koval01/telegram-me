@@ -1,6 +1,3 @@
-"""
-API router helpers
-"""
 from typing import Type, Callable, Awaitable, TypeVar, Dict, Optional
 from fastapi import HTTPException
 from pydantic import BaseModel

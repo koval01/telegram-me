@@ -1,7 +1,3 @@
-"""
-Model for channel previews data
-"""
-
 from typing import Dict, Optional
 
 from pydantic import RootModel

@@ -75,13 +75,14 @@ class Telegram:
         return response
 
     @staticmethod
-    async def post(channel: str, position: int) -> dict:
+    async def post(channel: str, position: int, only_post: bool = True) -> dict:
         """
         Retrieve a specific post from a Telegram channel.
 
         Args:
             channel (str): The channel name or ID.
             position (int): The ID of the post to retrieve.
+            only_post (bool): Get only a Post object
 
         Returns:
             dict: A dictionary containing the requested post if found,
@@ -94,7 +95,8 @@ class Telegram:
         response = Body(response).get(position)
         if not response["content"]["posts"]:
             return {}
-        response = response["content"]["posts"][0]
+        if only_post:
+            response = response["content"]["posts"][0]
 
         return response
 
