@@ -3,5 +3,5 @@ fastapi[standard]==0.115.12
 selectolax~=0.3.30
 aiohttp~=3.12.13
 pydantic-settings~=2.8.1
-google-genai==1.20.0
+google-genai==1.21.1
 pillow~=11.2.1
