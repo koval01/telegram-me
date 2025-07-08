@@ -8,9 +8,7 @@ class Settings(BaseSettings):  # pylint: disable=R0903
     """
 
     DISABLE_DOCS: int = 0
-    VERSION: str = "1.5"
-    GOOGLE_GEMINI_API_KEY: str = None
-    GOOGLE_RECAPTCHA_SECRET: str = None
+    VERSION: str = "1.6"
 
     class Config:  # pylint: disable=R0903
         """

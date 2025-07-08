@@ -1,2 +1,2 @@
-runtime: python312
+runtime: python313
 entrypoint: chmod +x start.sh && ./start.sh
