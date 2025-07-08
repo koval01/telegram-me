@@ -7,32 +7,28 @@ from app.telegram.models.utils import ParsedAndRaw
 
 
 class Duration(BaseModel):
-    """
-    Represents the duration of a media item.
+    """Represents the duration of a media item with both human-readable and raw formats.
 
     Attributes:
-        formatted (str): The formatted duration string.
-        raw (int): The duration in seconds.
+        formatted (str): Human-readable duration string (e.g., "2:30" for 150 seconds).
+        raw (int): Duration in seconds as an integer value.
     """
-
     formatted: str
     raw: int
 
 
 class MediaItem(BaseModel):
-    """
-    Represents a media item within a post.
+    """Represents a media item that can be included in a Telegram post.
 
     Attributes:
-        url (Optional[HttpUrl]): The URL of the media item.
-        thumb (Optional[str]): The URL of the thumbnail image (if applicable).
-        waves (Optional[str]): The URL of the waveform image (if applicable).
-        duration (Optional[Duration]): The duration of the media item (if applicable).
+        url (Optional[HttpUrl]): Direct URL to access the media file.
+        thumb (Optional[HttpUrl]): URL of the thumbnail image for the media (if available).
+        waves (Optional[str]): URL of the waveform visualization for audio files.
+        duration (Optional[Duration]): Duration object for time-based media (videos/audio).
         type (Literal["image", "video", "voice", "roundvideo", "sticker", "gif"]):
-        The type of the media item.
-        available (Optional[bool]): Availability status of the media file itself
+            The media type classification.
+        available (Optional[bool]): Indicates if the media file is currently accessible.
     """
-
     url: Optional[HttpUrl] = None
     thumb: Optional[HttpUrl] = None
     waves: Optional[str] = None
@@ -40,80 +36,59 @@ class MediaItem(BaseModel):
     type: Literal["image", "video", "voice", "roundvideo", "sticker", "gif"]
     available: Optional[bool] = None
 
+
 class TextEntities(BaseModel):
-    """
-    Represents text entities within a text.
+    """Represents formatted text entities within message content.
 
     Attributes:
-        offset (int): The offset of the entity in the text.
-        length (int): The length of the entity.
-        type (Literal[
-            "italic", "bold", "code", "spoiler", "strikethrough",
-            "underline", "text_link", "url", "pre"
-        ]):
-        The type of the entity.
-        language (Optional[str]): The language of the entity (if applicable).
+        offset (int): Starting character position of the entity (0-based index).
+        length (int): Number of characters included in the entity.
+        type (Literal[...]): Formatting type of the text entity.
+        language (Optional[str]): Programming language for 'pre' entities (code blocks).
     """
-
     offset: int
     length: int
     type: Literal[
-        "italic",
-        "bold",
-        "code",
-        "spoiler",
-        "strikethrough",
-        "underline",
-        "text_link",
-        "url",
-        "pre",
-        "emoji",
-        "animoji",
-        "hashtag"
+        "italic", "bold", "code", "spoiler", "strikethrough",
+        "underline", "text_link", "url", "pre", "emoji",
+        "animoji", "hashtag"
     ]
     language: Optional[str] = None
 
 
 class Text(BaseModel):
-    """
-    Represents a text content within a post.
+    """Contains the textual content of a post with formatting information.
 
     Attributes:
-        string (str): The text string.
-        html (str): Original html.
-        entities (Optional[List[TextEntities]]):
-            List of text entities within the text.
+        string (str): Plain text content without formatting.
+        html (str): Original HTML-formatted text with all markup.
+        entities (Optional[List[TextEntities]]): Detailed formatting entities for rich text.
     """
-
     string: str
     html: str
     entities: Optional[List[TextEntities]] = None
 
 
 class PollOptions(BaseModel):
-    """
-    Represents options within a poll.
+    """Represents an individual option within a poll.
 
     Attributes:
-        name (str): The name of the option.
-        percent (int): The percentage of votes for the option.
+        name (str): Text content of the poll option.
+        percent (int): Percentage of total votes this option has received.
     """
-
     name: str
     percent: int
 
 
 class Poll(BaseModel):
-    """
-    Represents a poll within a post.
+    """Contains all data related to a poll included in a post.
 
     Attributes:
-        question (str): The question of the poll.
-        type (Optional[str]): The type of the poll.
-        votes (str): The total number of votes in the poll.
-        options (List[PollOptions]): List of options within the poll.
+        question (str): The main question being asked in the poll.
+        type (Optional[str]): Special poll type (e.g., quiz, multiple choice).
+        votes (str): Total vote count displayed as a formatted string.
+        options (List[PollOptions]): Available choices and their vote percentages.
     """
-
     question: str
     type: Optional[str] = None
     votes: str
@@ -121,31 +96,25 @@ class Poll(BaseModel):
 
 
 class Inline(BaseModel):
-    """
-    Represents a inline block of post.
+    """Represents an inline button attached to a post.
 
     Attributes:
-        title (str): The title inline button.
-        url (HttpUrl): Redirect link for button.
+        title (str): Display text on the button.
+        url (HttpUrl): Destination URL when the button is clicked.
     """
-
     title: str
     url: HttpUrl
 
 
 class Reply(BaseModel):
-    """
-    Represents a reply to a post.
+    """Contains information about a post that this message is replying to.
 
     Attributes:
-        cover (Optional[HttpUrl]): The URL of the cover image for the reply (if applicable).
-        name (ParsedAndRaw): The name of the user or channel making the reply,
-            represented both in parsed and raw formats.
-        text (ParsedAndRaw): The text content of the reply, represented both in parsed
-            and raw formats.
-        to_message (int): ID replied message
+        cover (Optional[AnyUrl]): URL of the preview image for the replied message.
+        name (ParsedAndRaw): Author information of the original message.
+        text (ParsedAndRaw): Content preview of the original message.
+        to_message (int): Unique identifier of the message being replied to.
     """
-
     cover: Optional[AnyUrl]
     name: ParsedAndRaw
     text: ParsedAndRaw
@@ -153,18 +122,15 @@ class Reply(BaseModel):
 
 
 class PreviewLink(BaseModel):
-    """
-    Represents a preview link block within a post.
+    """Metadata for URL previews generated by Telegram.
 
     Attributes:
-        title (Optional[str]): The title of the linked content, if available
-        url (HttpUrl): This URL of preview page
-        site_name (Optional[str]): The name of the website or platform the link is from
-        description (Optional[ParsedAndRaw]): The description of the linked content,
-            containing both parsed text and raw HTML formats
-        thumb (Optional[HttpUrl]): The URL of the preview thumbnail image
+        title (Optional[str]): Title extracted from the linked page.
+        url (HttpUrl): Original URL that was previewed.
+        site_name (Optional[str]): Name of the website/domain.
+        description (Optional[ParsedAndRaw]): Summary text from the linked page.
+        thumb (Optional[HttpUrl]): Preview image URL from the linked content.
     """
-
     title: Optional[str]
     url: HttpUrl
     site_name: Optional[str]
@@ -172,81 +138,90 @@ class PreviewLink(BaseModel):
     thumb: Optional[HttpUrl]
 
 
-class ContentPost(BaseModel):
-    """
-    Represents the content of a post.
+class Reacts(BaseModel):
+    """Represents reaction counts and types on a post.
 
     Attributes:
-        text (Optional[Text]): The text content of the post.
-        media (Optional[List[MediaItem]]): List of media items within the post.
-        poll (Optional[Poll]): The poll within the post.
-        inline (Optional[List[Inline]]): List of inline buttons.
-        reply (Optional[Reply]): Reply information.
-        preview_link (Optional[PreviewLink]): Preview link information.
+        count (str): Total reaction count as a formatted string.
+        type (Literal["telegram_stars", "emoji", "custom_emoji"]):
+            Classification of reaction system being used.
+        emoji (Optional[str]): Unicode emoji character (for standard emoji reactions).
+        emoji_id (Optional[str]): Custom emoji identifier (for custom emoji reactions).
     """
+    count: str
+    type: Literal["telegram_stars", "emoji", "custom_emoji"]
+    emoji: Optional[str] = None
+    emoji_id: Optional[str] = None
 
+
+class ContentPost(BaseModel):
+    """Aggregates all possible content types that a Telegram post can contain.
+
+    Attributes:
+        text (Optional[Text]): Primary text content with formatting.
+        media (Optional[List[MediaItem]]): Attached media files.
+        poll (Optional[Poll]): Embedded poll data.
+        inline (Optional[List[Inline]]): Interactive buttons.
+        reply (Optional[Reply]): Reply context information.
+        preview_link (Optional[PreviewLink]): URL preview data.
+        reacts (Optional[List[Reacts]]): Reaction summary for the post.
+    """
     text: Optional[Text] = None
     media: Optional[List[MediaItem]] = None
     poll: Optional[Poll] = None
     inline: Optional[List[Inline]] = None
     reply: Optional[Reply] = None
     preview_link: Optional[PreviewLink] = None
+    reacts: Optional[List[Reacts]] = None
 
 
 class Date(BaseModel):
-    """
-    Represents a date.
+    """Timestamp information with multiple representations.
 
     Attributes:
-        string (str): The string representation of the date.
-        unix (int): The Unix timestamp of the date.
+        string (str): Human-readable date/time string.
+        unix (int): POSIX timestamp (seconds since epoch).
     """
-
     string: str
     unix: int
 
 
 class Footer(BaseModel):
-    """
-    Represents the footer of a post.
+    """Metadata displayed at the bottom of a post.
 
     Attributes:
-        views (Optional[str]): The number of views of the post.
-        edited (Optional[bool]): Edited post's status.
-        author (Optional[str]): Post's auth name.
-        date (Date): The date of the post.
+        views (Optional[str]): View count as formatted string.
+        edited (Optional[bool]): Indicates if post has been modified.
+        author (Optional[ParsedAndRaw]): Post author information.
+        date (Date): Publication timestamp details.
     """
-
-    views: Optional[str]
-    edited: Optional[bool]
+    views: Optional[str] = None
+    edited: Optional[bool] = False
     author: Optional[ParsedAndRaw] = None
     date: Date
 
 
 class Forwarded(BaseModel):
-    """
-    Represents forwarded information within a post.
+    """Information about the original source of a forwarded message.
 
     Attributes:
-        name (ParsedAndRaw): The name of the source where the post was forwarded from.
-        url (Optional[HttpUrl]): The URL of the source where the post was forwarded from.
+        name (ParsedAndRaw): Source channel/user name with original formatting.
+        url (Optional[HttpUrl]): Link to the original message source.
     """
-
     name: ParsedAndRaw
     url: Optional[HttpUrl] = None
 
 
 class Post(BaseModel):
-    """
-    Represents a post in a telegram channel.
+    """Complete representation of a Telegram channel post with all components.
 
     Attributes:
-        id (int): The unique identifier of the post.
-        content (ContentPost): The content of the post.
-        footer (Footer): The footer of the post.
-        forwarded (Optional[Forwarded]): Information about forwarded post (if applicable).
+        id (int): Unique message identifier within the channel.
+        content (ContentPost): All message content components.
+        footer (Footer): Post metadata and statistics.
+        forwarded (Optional[Forwarded]): Forwarding information if applicable.
+        view (str): Current view count or visibility status.
     """
-
     id: int
     content: ContentPost
     footer: Footer

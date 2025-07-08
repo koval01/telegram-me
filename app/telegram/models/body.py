@@ -9,29 +9,30 @@ from app.telegram.models.utils import ParsedAndRaw
 
 
 class Labels(BaseModel):
-    """
-    Represents a set of labels for a Telegram channel.
+    """Represents a collection of validation labels for Telegram channels.
 
     Attributes:
-        labels (List[str]): A list of labels assigned to the channel.
-    """
+        labels (List[str]): List of channel verification labels.
+            Currently only accepts "verified" as a valid label.
 
+    Raises:
+        ValueError: If any label in the list is not in the allowed set.
+    """
     labels: List[str]
 
     @classmethod
     @field_validator("labels", mode="before")
-    def check_labels(cls, v: List[str]) -> List[str]:  # pylint: disable=C0116, E0213
-        """
-        Validates the labels to ensure only allowed labels are present.
+    def check_labels(cls, v: List[str]) -> List[str]:
+        """Validates channel labels against allowed values.
 
         Args:
-            v (List[str]): The list of labels to validate.
+            v: Input list of labels to validate
 
         Returns:
-            List[str]: The validated list of labels.
+            Validated list of labels
 
         Raises:
-            ValueError: If any label is not in the allowed list.
+            ValueError: When encountering any non-allowed label
         """
         allowed_labels = ("verified",)
         for label in v:
@@ -43,18 +44,19 @@ class Labels(BaseModel):
 
 
 class Channel(BaseModel):
-    """
-    Represents a Telegram channel.
+    """Comprehensive representation of a Telegram channel's profile information.
 
     Attributes:
-        username (str): The username of the channel.
-        title (stParsedAndRawr): The title of the channel in text and html.
-        description (Optional[ParsedAndRaw]): The description of the channel in text and html.
-        avatar (Optional[HttpUrl]): The URL of the channel's avatar.
-        counters (Counter): List of counters associated with the channel.
-        labels (Optional[Labels]): Channel labels list.
-    """
+        username: Unique @username identifier of the channel
+        title: Channel display name with original HTML and parsed text
+        description: Channel bio/description with HTML and parsed text (optional)
+        avatar: URL of the channel's profile picture (optional)
+        counters: Statistics about channel content and subscribers
+        labels: Special verification labels (optional)
 
+    Notes:
+        Empty avatar URLs are automatically converted to None
+    """
     username: str
     title: ParsedAndRaw
     description: Optional[ParsedAndRaw]
@@ -64,16 +66,17 @@ class Channel(BaseModel):
 
     @field_validator('avatar', mode='before')
     def convert_empty_string_to_none(cls, v: Optional[str]) -> Optional[str]:  # pylint: disable=C0116, E0213
+        """Converts empty avatar URLs to None values."""
         if v == "":
             return None
         return v
 
     @field_validator('labels', mode='before')
     def validate_labels(cls, v: Optional[List[str]]) -> Optional[List[str]]:  # pylint: disable=C0116, E0213
-        if not v:  # Handles both empty list and None
+        """Ensures labels only contain allowed values or None."""
+        if not v:
             return None
 
-        # Validate the labels
         allowed_labels = ("verified",)
         for label in v:
             if label not in allowed_labels:
@@ -84,17 +87,15 @@ class Channel(BaseModel):
 
 
 class Counter(BaseModel):
-    """
-    Represents counters associated with a Telegram channel.
+    """Container for various channel statistics and metrics.
 
     Attributes:
-        subscribers (str): The number of subscribers.
-        photos (Optional[str]): The number of photos (if available).
-        videos (Optional[str]): The number of videos (if available).
-        files (Optional[str]): The number of files (if available).
-        links (Optional[str]): The number of links (if available).
+        subscribers: Total subscriber count as formatted string
+        photos: Count of photo posts (optional)
+        videos: Count of video posts (optional)
+        files: Count of file attachments (optional)
+        links: Count of shared links (optional)
     """
-
     subscribers: str
     photos: Optional[str] = None
     videos: Optional[str] = None
@@ -103,32 +104,30 @@ class Counter(BaseModel):
 
     @model_validator(mode='before')
     def rewrite_subscriber_key(cls, values):  # pylint: disable=C0116, E0213
+        """Normalizes subscriber count field name from 'subscriber' to 'subscribers'."""
         if 'subscriber' in values:
             values['subscribers'] = values.pop('subscriber')
         return values
 
 
 class Content(BaseModel):
-    """
-    Represents the content associated with a Telegram channel.
+    """Container for a channel's post content.
 
     Attributes:
-        posts (List[Post] | Post): List of posts or selected post in the channel.
+        posts: Either a single Post object or list of Post objects
+               representing the channel's content
     """
-
     posts: List[Post] | Post
 
 
 class ChannelBody(BaseModel):
-    """
-    Represents the body of a Telegram channel.
+    """Complete channel representation including profile, content and metadata.
 
     Attributes:
-        channel (Channel): Information about the channel.
-        content (Content): Content associated with the channel.
-        meta (Meta): Metadata associated with the channel content.
+        channel: Detailed channel profile information
+        content: The channel's posts/content
+        meta: Pagination and API metadata
     """
-
     channel: Channel
     content: Content
     meta: Meta

@@ -90,6 +90,7 @@ class Post:
             "inline": post_instance.inline(message),
             "reply": post_instance.reply(message),
             "preview_link": post_instance.preview_link(message),
+            "reacts": post_instance.reactions(message)
         }
 
         return {k: v for k, v in content_fields.items() if v}
@@ -398,6 +399,95 @@ class Post:
 
         return forwarded
 
+    @classmethod
+    def reactions(cls, message: LexborNode) -> Optional[List[Dict[str, Any]]]:
+        """Parse reaction information from a message."""
+        reactions_node = message.css_first(".tgme_widget_message_reactions")
+        if not reactions_node:
+            return None
+
+        reactions = []
+        for reaction_node in reactions_node.css(".tgme_reaction"):
+            reaction = cls.__extract_single_reaction(reaction_node)
+            if reaction:
+                reactions.append(reaction)
+
+        return reactions or None
+
+    @classmethod
+    def __extract_single_reaction(cls, reaction_node: LexborNode) -> Optional[Dict[str, Any]]:
+        """Parse a single reaction node into a structured dictionary."""
+        reaction = {"count": reaction_node.last_child.text()}
+
+        if "tgme_reaction_paid" in reaction_node.attributes.get("class", ""):
+            return cls.__extract_paid_reaction(reaction)
+        if reaction_node.css_first("i.emoji"):
+            return cls.__extract_emoji_reaction(reaction_node, reaction)
+        if reaction_node.css_first("tg-emoji"):
+            return cls._parse_custom_emoji_reaction(reaction_node, reaction)
+
+        return None
+
+    @staticmethod
+    def __extract_paid_reaction(reaction_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Parse a paid (stars) reaction."""
+        reaction_data.update({
+            "type": "telegram_stars",
+            "emoji": "⭐"
+        })
+        return reaction_data
+
+    @staticmethod
+    def __extract_emoji_reaction(reaction_node: LexborNode, reaction_data: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+        """Parse a standard emoji reaction."""
+        emoji_img = reaction_node.css_first("i.emoji")
+        if not emoji_img:
+            return None
+
+        emoji_tag = emoji_img.css_first("b")
+        if emoji_tag:
+            reaction_data["emoji"] = emoji_tag.text()
+        else:
+            emoji = Post._extract_emoji_from_style(emoji_img)
+            if not emoji:
+                return None
+            reaction_data["emoji"] = emoji
+
+        reaction_data["type"] = "emoji"
+        return reaction_data
+
+    @staticmethod
+    def _extract_emoji_from_style(emoji_node: LexborNode) -> Optional[str]:
+        """Extract emoji from background-image style property."""
+        style = emoji_node.attributes.get("style", "")
+        if "background-image" not in style:
+            return None
+
+        match = re.search(r'/([^/]+)\.png', style)
+        if not match:
+            return None
+
+        hex_code = match.group(1).upper()
+        clean_hex = ''.join(c for c in hex_code if c in '0123456789ABCDEF')
+
+        if len(clean_hex) % 2 != 0:
+            clean_hex = clean_hex[:-1]
+
+        try:
+            return bytes.fromhex(clean_hex).decode('utf-8')
+        except (ValueError, UnicodeDecodeError):
+            return None
+
+    @staticmethod
+    def _parse_custom_emoji_reaction(reaction_node: LexborNode, reaction_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Parse a custom emoji reaction."""
+        emoji_id = reaction_node.css_first("tg-emoji").attributes.get("emoji-id")
+        reaction_data.update({
+            "type": "custom_emoji",
+            "emoji_id": emoji_id
+        })
+        return reaction_data
+
     @staticmethod
     def author(message: LexborNode) -> dict | None:
         """
@@ -518,10 +608,6 @@ class Post:
 
             buble = self.buble(message)
             content = self.__parse_content_fields(self, buble, message)
-
-            # skip not supported posts
-            # if not content:
-            #     continue
 
             posts.append(self.__build_post_object(self, message, content))
 
