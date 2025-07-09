@@ -1,6 +1,7 @@
 import re
 import json
 from datetime import datetime
+from urllib.parse import urlparse
 
 from typing import Union, Optional, Dict, List, Any, Tuple
 
@@ -447,11 +448,12 @@ class Post:
         emoji_tag = emoji_img.css_first("b")
         if emoji_tag:
             reaction_data["emoji"] = emoji_tag.text()
-        else:
-            emoji = Post._extract_emoji_from_style(emoji_img)
-            if not emoji:
-                return None
-            reaction_data["emoji"] = emoji
+
+        emoji = Post._extract_emoji_from_style(emoji_img)
+        if not emoji:
+            return None
+
+        reaction_data["emoji_image"] = emoji
 
         reaction_data["type"] = "emoji"
         return reaction_data
@@ -463,20 +465,18 @@ class Post:
         if "background-image" not in style:
             return None
 
-        match = re.search(r'/([^/]+)\.png', style)
+        match = re.search(r"url\(['\"]?(//[^'\")]+)['\"]?\)", style)
         if not match:
             return None
 
-        hex_code = match.group(1).upper()
-        clean_hex = ''.join(c for c in hex_code if c in '0123456789ABCDEF')
-
-        if len(clean_hex) % 2 != 0:
-            clean_hex = clean_hex[:-1]
-
-        try:
-            return bytes.fromhex(clean_hex).decode('utf-8')
-        except (ValueError, UnicodeDecodeError):
+        url = "https:" + match.group(1)
+        parsed = urlparse(url)
+        if parsed.scheme not in ("http", "https"):
             return None
+        if not parsed.netloc:
+            return None
+
+        return url
 
     @staticmethod
     def _parse_custom_emoji_reaction(reaction_node: LexborNode, reaction_data: Dict[str, Any]) -> Dict[str, Any]:

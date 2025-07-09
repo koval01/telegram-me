@@ -147,11 +147,13 @@ class Reacts(BaseModel):
             Classification of reaction system being used.
         emoji (Optional[str]): Unicode emoji character (for standard emoji reactions).
         emoji_id (Optional[str]): Custom emoji identifier (for custom emoji reactions).
+        emoji_image (Optional[HttpUrl]): Telegram hosted emoji image
     """
     count: str
     type: Literal["telegram_stars", "emoji", "custom_emoji"]
     emoji: Optional[str] = None
     emoji_id: Optional[str] = None
+    emoji_image: Optional[HttpUrl] = None
 
 
 class ContentPost(BaseModel):
