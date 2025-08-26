@@ -15,26 +15,19 @@ Before you begin, ensure you have the following installed on your machine:
 
 To run the TelegramMe API using Docker, follow these steps:
 
-1. Clone this repository to your local machine:
+Clone this repository to your local machine and build Docker image:
 
    ```bash
-   git clone https://github.com/koval01/telegram-me
-   cd telegram-me/
+   git clone https://github.com/koval01/telegram-me; cd telegram-me/; docker build -t telegramme-api . && docker run -d -p 8000:8000 telegramme-api
    ```
 
-2. Build the Docker image:
+You can download the ready-made image from Docker Hub instead of building it yourself from the GitHub repository:
 
    ```bash
-   docker build -t telegramme-api .
+   docker pull koval01/telegram-me:163b3fe && docker run -d -p 8000:8000 --name telegramme-api koval01/telegram-me:163b3fe
    ```
 
-3. Run the Docker container:
-
-   ```bash
-   docker run -d -p 8080:8080 telegramme-api
-   ```
-
-   This command will start the FastAPI app inside a Docker container, and it will be accessible at `http://localhost:8080`.
+   This command will start the FastAPI app inside a Docker container, and it will be accessible at `http://localhost:8000`.
 
 ### Running with Nginx as a Balancer
 
@@ -46,7 +39,7 @@ To run the FastAPI app with Nginx as a balancer, follow these steps:
 
    ```nginx
    upstream fastapi {
-       server app:8080;
+       server app:8000;
    }
 
    server {
