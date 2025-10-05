@@ -17,18 +17,18 @@ jobs:
       matrix:
         python-version: ["3.10", "3.11", "3.12", "3.13"]
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v3
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install dependencies
-      run: |
-        python -m pip install -U -r requirements.txt
-        pip install pylint
-    - name: Analysing the code with pylint
-      run: |
-        pylint $(git ls-files '*.py')
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          python -m pip install -U -r requirements.txt
+          pip install pylint
+      - name: Analysing the code with pylint
+        run: |
+          pylint $(git ls-files '*.py')
 
   radon:
     runs-on: ubuntu-latest
@@ -36,62 +36,116 @@ jobs:
       matrix:
         python-version: ["3.13"]
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v3
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install Radon
-      run: |
-        python -m pip install -U radon
-    - name: Run Radon analysis
-      run: |
-        echo "## Cyclomatic Complexity (CC)"
-        radon cc $(git ls-files '*.py') -nc
-        echo ""
-        echo "## Maintainability Index (MI)"
-        radon mi $(git ls-files '*.py') -s
-        echo ""
-        echo "## Halstead Metrics"
-        radon hal $(git ls-files '*.py')
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install Radon
+        run: |
+          python -m pip install -U radon
+      - name: Run Radon analysis
+        run: |
+          echo "## Cyclomatic Complexity (CC)"
+          radon cc $(git ls-files '*.py') -nc
+          echo ""
+          echo "## Maintainability Index (MI)"
+          radon mi $(git ls-files '*.py') -s
+          echo ""
+          echo "## Halstead Metrics"
+          radon hal $(git ls-files '*.py')
+
+  test:
+    runs-on: ubuntu-latest
+    needs: [pylint, radon]
+    strategy:
+      matrix:
+        python-version: ["3.13"]
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install -U -r requirements.txt
+          pip install uvicorn
+
+      - name: Run FastAPI app in background
+        run: |
+          nohup uvicorn app.main:app --host 0.0.0.0 --port 8000 > server.log 2>&1 &
+          sleep 5
+          echo "Server started"
+
+      - name: Test API endpoints
+        run: |
+          echo "Testing API..."
+          echo "GET /"
+          curl -s -w "\nHTTP Code: %{http_code}\n" http://127.0.0.1:8000/
+
+          echo "GET /healthz"
+          curl -s -w "\nHTTP Code: %{http_code}\n" http://127.0.0.1:8000/healthz
+
+          echo "GET /v1/previews?q=telegram&q=durov"
+          curl -s -w "\nHTTP Code: %{http_code}\n" "http://127.0.0.1:8000/v1/previews?q=telegram&q=durov"
+
+          echo "GET /v1/preview/durov"
+          curl -s -w "\nHTTP Code: %{http_code}\n" http://127.0.0.1:8000/v1/preview/durov
+
+          echo "GET /v1/post/durov/440"
+          curl -s -w "\nHTTP Code: %{http_code}\n" http://127.0.0.1:8000/v1/post/durov/440
+
+          echo "GET /v1/more/durov/after/300"
+          curl -s -w "\nHTTP Code: %{http_code}\n" http://127.0.0.1:8000/v1/more/durov/after/300
+
+          echo "GET /v1/more/durov/before/300"
+          curl -s -w "\nHTTP Code: %{http_code}\n" http://127.0.0.1:8000/v1/more/durov/before/300
+
+          echo "GET /v1/body/durov"
+          curl -s -w "\nHTTP Code: %{http_code}\n" http://127.0.0.1:8000/v1/body/durov
+
+          echo "GET /v1/body/durov?position=350"
+          curl -s -w "\nHTTP Code: %{http_code}\n" "http://127.0.0.1:8000/v1/body/durov?position=350"
+
+      - name: Show server logs (if failed)
+        if: failure()
+        run: cat server.log
 
   build:
     runs-on: ubuntu-latest
-    needs: [pylint, radon]
+    needs: [test]
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-    - name: Install BuildX
-      id: buildx
-      uses: crazy-max/ghaction-docker-buildx@v1
-      with:
-        version: latest
-    - name: Login to Docker Hub
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
-    - name: Login to ghcr.io
-      uses: docker/login-action@v1
-      with:
-        registry: ghcr.io
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
-    - name: Build and Push the image
-      if: startsWith(github.ref, 'refs/heads/main') && github.actor == 'koval01'
-      run: |
-        # Enable qemu-user-static
-        docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
-
-        # Get the commit SHA
-        COMMIT_SHA=$(git rev-parse --short HEAD)
-
-        # Build and push the image with the commit SHA tag
-        docker buildx ls
-        docker buildx build --push \
-          --tag koval01/telegram-me:$COMMIT_SHA \
-          --platform linux/amd64,linux/arm64 .
-        docker buildx build --push \
-          --tag ghcr.io/koval01/telegram-me:$COMMIT_SHA \
-          --platform linux/amd64,linux/arm64 .
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Install BuildX
+        id: buildx
+        uses: crazy-max/ghaction-docker-buildx@v1
+        with:
+          version: latest
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Login to ghcr.io
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and Push the image
+        if: startsWith(github.ref, 'refs/heads/main') && github.actor == 'koval01'
+        run: |
+          docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+          COMMIT_SHA=$(git rev-parse --short HEAD)
+          docker buildx ls
+          docker buildx build --push \
+            --tag koval01/telegram-me:$COMMIT_SHA \
+            --platform linux/amd64,linux/arm64 .
+          docker buildx build --push \
+            --tag ghcr.io/koval01/telegram-me:$COMMIT_SHA \
+            --platform linux/amd64,linux/arm64 .
