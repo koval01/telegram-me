@@ -1,19 +1,33 @@
 version: "2.4"
 
 services:
-  telegram-me:
-    image: ${TELEGRAMME_IMAGE:-koval01/telegram-me}
-    container_name: telegram-me
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:3000"
+    environment:
+      - PORT=3000
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
     restart: unless-stopped
-    pids_limit: 50
-    mem_limit: 256mb
-    memswap_limit: 256mb
-    user: telegram.me
+    networks:
+      - app-network
     security_opt:
       - no-new-privileges
     cap_drop:
       - ALL
-    environment:
-      - PORT=8000
-    ports:
-      - "8000:8000"
+    mem_limit: 256mb
+    memswap_limit: 256mb
+    pids_limit: 50
+    user: appuser
+    container_name: telegram-me
+
+networks:
+  app-network:
+    driver: bridge
