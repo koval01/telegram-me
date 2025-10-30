@@ -2,6 +2,7 @@ import asyncio
 import aiohttp
 from datetime import datetime, timezone
 import re
+import math
 from typing import List, Dict, Any, Optional
 import logging
 
@@ -23,7 +24,8 @@ class PostDataPreparer:
             logger.error(f"Unexpected error fetching data for {username}: {e}")
             return None
 
-    def parse_subscribers(self, subscribers_str: Optional[str]) -> int:
+    @staticmethod
+    def parse_subscribers(subscribers_str: Optional[str]) -> int:
         """Convert subscriber string to number"""
         if not subscribers_str:
             return 1
@@ -36,13 +38,20 @@ class PostDataPreparer:
                 return int(float(num_str) * 1000)
             except (ValueError, TypeError):
                 return 1
+        elif 'm' in subscribers_str:
+            num_str = subscribers_str.replace('m', '')
+            try:
+                return int(float(num_str) * 1000000)
+            except (ValueError, TypeError):
+                return 1
         else:
             try:
                 return int(subscribers_str)
             except (ValueError, TypeError):
                 return 1
 
-    def parse_views(self, views_str: Optional[str]) -> int:
+    @staticmethod
+    def parse_views(views_str: Optional[str]) -> int:
         """Convert views string to number"""
         if not views_str:
             return 0
@@ -55,13 +64,20 @@ class PostDataPreparer:
                 return int(float(num_str) * 1000)
             except (ValueError, TypeError):
                 return 0
+        elif 'm' in views_str:
+            num_str = views_str.replace('m', '')
+            try:
+                return int(float(num_str) * 1000000)
+            except (ValueError, TypeError):
+                return 0
         else:
             try:
                 return int(views_str)
             except (ValueError, TypeError):
                 return 0
 
-    def parse_reactions(self, reacts_data: Optional[List[Dict]]) -> Dict[str, int]:
+    @staticmethod
+    def parse_reactions(reacts_data: Optional[List[Dict]]) -> Dict[str, int]:
         """Convert reactions to dictionary"""
         reactions = {}
         if not reacts_data:
@@ -71,11 +87,16 @@ class PostDataPreparer:
             emoji = react.get('emoji', '')
             count_str = str(react.get('count', '0'))
 
-            count = 0
             if 'k' in count_str.lower():
                 try:
                     count = int(float(count_str.replace(
                         'K', '').replace('k', '')) * 1000)
+                except (ValueError, TypeError):
+                    count = 0
+            elif 'm' in count_str.lower():
+                try:
+                    count = int(float(count_str.replace(
+                        'M', '').replace('m', '')) * 1000000)
                 except (ValueError, TypeError):
                     count = 0
             else:
@@ -89,7 +110,8 @@ class PostDataPreparer:
 
         return reactions
 
-    def parse_content_type(self, post_content: Dict[str, Any]) -> Dict[str, Any]:
+    @staticmethod
+    def parse_content_type(post_content: Dict[str, Any]) -> Dict[str, Any]:
         """Determine content type in post"""
         content = {
             'text': '',
@@ -118,7 +140,8 @@ class PostDataPreparer:
 
         return content
 
-    def parse_datetime(self, date_str: str) -> datetime:
+    @staticmethod
+    def parse_datetime(date_str: str) -> datetime:
         """Convert date string to datetime object"""
         try:
             dt = datetime.fromisoformat(date_str.replace('Z', '+00:00'))
@@ -128,12 +151,13 @@ class PostDataPreparer:
         except (ValueError, AttributeError):
             return datetime.now(timezone.utc)
 
-    async def fetch_comments_count(self, username: str, post_id: int, session: aiohttp.ClientSession) -> int:
+    @staticmethod
+    async def fetch_comments_count(username: str, post_id: int, session: aiohttp.ClientSession) -> int:
         """Fetch comments count asynchronously"""
         try:
             async with session.get(
-                f"https://t.me/{username}/{post_id}",
-                params={"embed": 1, "discussion": 1, "comments_limit": 3}
+                    f"https://t.me/{username}/{post_id}",
+                    params={"embed": 1, "discussion": 1, "comments_limit": 3}
             ) as response:
                 text = await response.text()
                 _match = re.search(
@@ -171,7 +195,7 @@ class PostDataPreparer:
             comments = await comments_task
 
             post_obj = Post(
-                id=post_id,
+                _id=post_id,
                 channel=channel_info.get('title', {}).get('string', username),
                 username=username,
                 published_at=published_at,
@@ -245,11 +269,11 @@ class PostDataPreparer:
 
 
 class Post:
-    def __init__(self, id: int, channel: str, username: str, published_at: datetime,
+    def __init__(self, _id: int, channel: str, username: str, published_at: datetime,
                  views: int, content: Dict[str, Any], edited: bool = False,
                  reactions: Optional[Dict[str, int]] = None, subscribers: int = 1,
                  comments: int = 0):
-        self.id = id
+        self.id = _id
         self.channel = channel
         self.username = username
         self.published_at = published_at
@@ -257,7 +281,7 @@ class Post:
         self.content = content
         self.edited = edited
         self.reactions = reactions or {}
-        self.subscribers = subscribers
+        self.subscribers = max(subscribers, 1)  # Ensure at least 1
         self.comments = comments
 
     def engagement_score(self) -> float:
@@ -265,52 +289,89 @@ class Post:
         positive = ['👍', '❤', '❤️', '😂', '🔥', '💯', '👏', '🎉', '🥰']
         negative = ['👎', '😡', '😢', '🤬', '🤡']
 
-        reaction_score = sum(self.reactions.get(r, 0) for r in positive) - \
-            sum(self.reactions.get(r, 0) for r in negative)
+        # Calculate raw reaction counts
+        positive_reactions = sum(self.reactions.get(r, 0) for r in positive)
+        negative_reactions = sum(self.reactions.get(r, 0) for r in negative)
 
-        reaction_score /= max(self.subscribers, 1)
-        comments_score = self.comments / max(self.subscribers, 1)
-        views_score = self.views / max(self.subscribers, 1)
+        # Use percentages instead of raw counts to avoid huge numbers
+        reaction_percentage = (positive_reactions - negative_reactions) / max(self.subscribers, 1)
+        comments_percentage = self.comments / max(self.subscribers, 1)
+        views_percentage = self.views / max(self.subscribers, 1)
 
-        return views_score + reaction_score + comments_score
+        # Normalize to reasonable ranges
+        engagement_score = (
+                min(views_percentage, 10.0) +  # Cap views at 1000% of subscribers
+                min(reaction_percentage, 1.0) +  # Cap reactions at 100% of subscribers
+                min(comments_percentage, 0.5)  # Cap comments at 50% of subscribers
+        )
+
+        return engagement_score / 3.0  # Normalize to roughly 0-4 range
 
     def content_score(self) -> float:
         """Calculate content score based on media types and text length"""
         weights = {'photos': 0.3, 'videos': 0.5, 'gifs': 0.2, 'poll': 0.3}
-        score = 0.0
-        for key, weight in weights.items():
-            score += self.content.get(key, 0) * weight
 
+        # Cap media counts to prevent excessive scoring
+        media_bonus = 0
+        for key, weight in weights.items():
+            media_count = min(self.content.get(key, 0), 10)  # Cap at 10 per type
+            media_bonus += media_count * weight
+
+        # Text length bonus (capped)
         text_len = len(self.content.get('text', ''))
-        score += min(text_len / 500, 1.0) * 0.1
-        return score
+        text_bonus = min(text_len / 500, 2.0) * 0.1  # Cap at 2.0
+
+        return min(media_bonus + text_bonus, 3.0)  # Cap total content score
 
     def freshness_score(self, current_time: Optional[datetime] = None) -> float:
-        """Calculate freshness score based on time since publication"""
+        """Extremely aggressive exponential decay to heavily penalize old posts"""
         if current_time is None:
             current_time = datetime.now(timezone.utc)
-        elif current_time.tzinfo is None:
-            current_time = current_time.replace(tzinfo=timezone.utc)
 
         published_at = self.published_at
         if published_at.tzinfo is None:
             published_at = published_at.replace(tzinfo=timezone.utc)
 
         hours_since_post = (current_time - published_at).total_seconds() / 3600
-        return 1 / (1 + hours_since_post / 24)
+
+        # Ultra-aggressive decay - posts older than 2 weeks get nearly zero score
+        if hours_since_post <= 24:
+            # First 24 hours: linear decay from 1.0 to 0.8
+            return 1.0 - (0.2 * (hours_since_post / 24))
+        elif hours_since_post <= 168:  # 1 week
+            # Week 1: exponential decay from 0.8 to 0.1
+            days = hours_since_post / 24
+            return 0.8 * math.exp(-0.8 * (days - 1))
+        else:
+            # After 1 week: extremely aggressive decay
+            weeks = hours_since_post / 168
+            return max(0.001, 0.1 * math.exp(-2.0 * (weeks - 1)))
 
     def score(self, current_time: Optional[datetime] = None,
               weights: Optional[Dict[str, float]] = None) -> float:
-        """Calculate overall post score"""
+        """Calculate overall post score with extreme time sensitivity"""
         weights = weights or {
-            'engagement': 1.0,
-            'content': 0.5,
-            'freshness': 0.3,
-            'edited': 0.1
+            'engagement': 0.4,  # Reduced
+            'content': 0.2,  # Reduced
+            'freshness': 0.4,  # Increased significantly - now the most important factor
+            'edited': 0.02  # Minimal impact
         }
 
-        score = (weights['engagement'] * self.engagement_score() +
-                 weights['content'] * self.content_score() +
-                 weights['freshness'] * self.freshness_score(current_time) +
-                 (weights['edited'] if self.edited else 0))
-        return score
+        # Calculate component scores
+        engagement = self.engagement_score()
+        content = self.content_score()
+        freshness = self.freshness_score(current_time)
+        edited_bonus = weights['edited'] if self.edited else 0
+
+        # Apply freshness as a multiplier to heavily penalize old content
+        base_score = (
+                weights['engagement'] * engagement +
+                weights['content'] * content +
+                edited_bonus
+        )
+
+        # Use freshness as multiplier for extreme time sensitivity
+        raw_score = base_score * (freshness + 0.1)  # +0.1 to avoid zero multiplication
+
+        # Apply final cap
+        return min(raw_score, 10.0)
