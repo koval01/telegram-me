@@ -1,18 +1,21 @@
+import re
 from typing import List
+
 from fastapi import APIRouter
 from pydantic import BaseModel, field_validator
-import re
 
 from app.utils.feed import PostDataPreparer
 
 router = APIRouter(tags=["Feed"])
 
 class FeedRequest(BaseModel):
+    """Request model for feed channels."""
     channels: List[str]
 
     @field_validator("channels")
-    def validate_channels(cls, v: List[str]) -> List[str]:
-        if not (1 <= len(v) <= 100):
+    def validate_channels(cls, v: List[str]) -> List[str]:  # pylint: disable=C0116, E0213
+        """Validate channel names: length, characters, underscore rules."""
+        if not 1 <= len(v) <= 100:
             raise ValueError("The number of channels must be between 1 and 100")
 
         cleaned = []
@@ -31,6 +34,7 @@ class FeedRequest(BaseModel):
 
 @router.post("/feed")
 async def create_feed(item: FeedRequest) -> dict:
+    """Create feed for given channels and return sorted posts."""
     preparer = PostDataPreparer()
     all_posts = await preparer.prepare_multiple_channels(item.channels)
     all_posts.sort(key=lambda post: post.get("_score", 0), reverse=True)

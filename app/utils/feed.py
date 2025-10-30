@@ -1,10 +1,15 @@
+"""
+Module for preparing and scoring Telegram channel posts for feed generation.
+"""
+
 import asyncio
-import aiohttp
-from datetime import datetime, timezone
-import re
-import math
-from typing import List, Dict, Any, Optional
 import logging
+import math
+import re
+from datetime import datetime, timezone
+from typing import List, Dict, Any, Optional
+
+import aiohttp
 
 from app.telegram.telegram import Telegram
 
@@ -12,21 +17,22 @@ logger = logging.getLogger(__name__)
 
 
 class PostDataPreparer:
+    """Prepares and processes Telegram channel posts for feed generation."""
+
     def __init__(self) -> None:
         self.telegram = Telegram()
 
     async def fetch_channel_data(self, username: str) -> Optional[Dict[str, Any]]:
-        """Get channel data by username asynchronously"""
+        """Get channel data by username asynchronously."""
         try:
             return await self.telegram.body(username)
-
-        except Exception as e:
-            logger.error(f"Unexpected error fetching data for {username}: {e}")
+        except Exception as e:  # pylint: disable=broad-except
+            logger.error("Unexpected error fetching data for %s: %s", username, e)
             return None
 
     @staticmethod
-    def parse_subscribers(subscribers_str: Optional[str]) -> int:
-        """Convert subscriber string to number"""
+    def parse_subscribers(subscribers_str: Optional[str]) -> int:  # pylint: disable=R0911
+        """Convert subscriber string to number."""
         if not subscribers_str:
             return 1
 
@@ -51,8 +57,8 @@ class PostDataPreparer:
                 return 1
 
     @staticmethod
-    def parse_views(views_str: Optional[str]) -> int:
-        """Convert views string to number"""
+    def parse_views(views_str: Optional[str]) -> int:  # pylint: disable=R0911
+        """Convert views string to number."""
         if not views_str:
             return 0
 
@@ -78,7 +84,7 @@ class PostDataPreparer:
 
     @staticmethod
     def parse_reactions(reacts_data: Optional[List[Dict]]) -> Dict[str, int]:
-        """Convert reactions to dictionary"""
+        """Convert reactions to dictionary."""
         reactions = {}
         if not reacts_data:
             return reactions
@@ -112,7 +118,7 @@ class PostDataPreparer:
 
     @staticmethod
     def parse_content_type(post_content: Dict[str, Any]) -> Dict[str, Any]:
-        """Determine content type in post"""
+        """Determine content type in post."""
         content = {
             'text': '',
             'photos': 0,
@@ -142,7 +148,7 @@ class PostDataPreparer:
 
     @staticmethod
     def parse_datetime(date_str: str) -> datetime:
-        """Convert date string to datetime object"""
+        """Convert date string to datetime object."""
         try:
             dt = datetime.fromisoformat(date_str.replace('Z', '+00:00'))
             if dt.tzinfo is None:
@@ -153,7 +159,7 @@ class PostDataPreparer:
 
     @staticmethod
     async def fetch_comments_count(username: str, post_id: int, session: aiohttp.ClientSession) -> int:
-        """Fetch comments count asynchronously"""
+        """Fetch comments count asynchronously."""
         try:
             async with session.get(
                     f"https://t.me/{username}/{post_id}",
@@ -165,12 +171,12 @@ class PostDataPreparer:
                 return int(_match.group(1)) if _match else 0
         except (aiohttp.ClientError, asyncio.TimeoutError, ValueError) as e:
             logger.warning(
-                f"Error fetching comments for {username}/{post_id}: {e}")
+                "Error fetching comments for %s/%s: %s", username, post_id, e)
             return 0
 
-    async def process_single_post(self, post_data: Dict[str, Any], channel_info: Dict[str, Any],
+    async def process_single_post(self, post_data: Dict[str, Any], channel_info: Dict[str, Any],  # pylint: disable=R0914
                                   username: str, session: aiohttp.ClientSession) -> Optional[Dict[str, Any]]:
-        """Process a single post asynchronously"""
+        """Process a single post asynchronously."""
         try:
             counters = channel_info.get('counters', {})
             subscribers = self.parse_subscribers(
@@ -195,8 +201,8 @@ class PostDataPreparer:
             comments = await comments_task
 
             post_obj = Post(
-                _id=post_id,
-                channel=channel_info.get('title', {}).get('string', username),
+                post_id=post_id,
+                channel_name=channel_info.get('title', {}).get('string', username),
                 username=username,
                 published_at=published_at,
                 views=views,
@@ -213,13 +219,13 @@ class PostDataPreparer:
 
             return post_with_channel
 
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-except
             logger.error(
-                f"Error processing post {post_data.get('id', 'unknown')}: {e}")
+                "Error processing post %s: %s", post_data.get('id', 'unknown'), e)
             return None
 
     async def prepare_posts_from_channel(self, username: str, session: aiohttp.ClientSession) -> List[Dict[str, Any]]:
-        """Prepare posts from channel asynchronously"""
+        """Prepare posts from the channel asynchronously."""
         channel_data = await self.fetch_channel_data(username)
         if not channel_data or 'content' not in channel_data or 'posts' not in channel_data['content']:
             return []
@@ -238,14 +244,14 @@ class PostDataPreparer:
         valid_posts = []
         for result in results:
             if isinstance(result, Exception):
-                logger.error(f"Task failed with exception: {result}")
+                logger.error("Task failed with exception: %s", result)
             elif result is not None:
                 valid_posts.append(result)
 
         return valid_posts
 
     async def prepare_multiple_channels(self, usernames: List[str]) -> List[Dict[str, Any]]:
-        """Prepare posts from multiple channels asynchronously"""
+        """Prepare posts from multiple channels asynchronously."""
         all_posts = []
 
         async with aiohttp.ClientSession() as session:
@@ -260,21 +266,33 @@ class PostDataPreparer:
                 username = usernames[i]
                 if isinstance(result, Exception):
                     logger.error(
-                        f"Failed to process channel {username}: {result}")
+                        "Failed to process channel %s: %s", username, result)
                 else:
                     all_posts.extend(result)
-                    logger.info(f"Loaded {len(result)} posts from {username}")
+                    logger.info("Loaded %s posts from %s", len(result), username)
 
         return all_posts
 
 
-class Post:
-    def __init__(self, _id: int, channel: str, username: str, published_at: datetime,
-                 views: int, content: Dict[str, Any], edited: bool = False,
-                 reactions: Optional[Dict[str, int]] = None, subscribers: int = 1,
-                 comments: int = 0):
-        self.id = _id
-        self.channel = channel
+class Post:  # pylint: disable=R0902
+    """Represents a Telegram post with scoring capabilities."""
+
+    def __init__(  # pylint: disable=R0917, R0913
+            self,
+            post_id: int,
+            channel_name: str,
+            username: str,
+            published_at: datetime,
+            views: int,
+            content: Dict[str, Any],
+            edited: bool = False,
+            reactions: Optional[Dict[str, int]] = None,
+            subscribers: int = 1,
+            comments: int = 0
+    ) -> None:
+        """Initialize Post instance."""
+        self.post_id = post_id
+        self.channel_name = channel_name
         self.username = username
         self.published_at = published_at
         self.views = views
@@ -285,7 +303,7 @@ class Post:
         self.comments = comments
 
     def engagement_score(self) -> float:
-        """Calculate engagement score based on reactions, comments, and views"""
+        """Calculate engagement score based on reactions, comments, and views."""
         positive = ['👍', '❤', '❤️', '😂', '🔥', '💯', '👏', '🎉', '🥰']
         negative = ['👎', '😡', '😢', '🤬', '🤡']
 
@@ -308,7 +326,7 @@ class Post:
         return engagement_score / 3.0  # Normalize to roughly 0-4 range
 
     def content_score(self) -> float:
-        """Calculate content score based on media types and text length"""
+        """Calculate content score based on media types and text length."""
         weights = {'photos': 0.3, 'videos': 0.5, 'gifs': 0.2, 'poll': 0.3}
 
         # Cap media counts to prevent excessive scoring
@@ -324,7 +342,7 @@ class Post:
         return min(media_bonus + text_bonus, 3.0)  # Cap total content score
 
     def freshness_score(self, current_time: Optional[datetime] = None) -> float:
-        """Extremely aggressive exponential decay to heavily penalize old posts"""
+        """Extremely aggressive exponential decay to heavily penalize old posts."""
         if current_time is None:
             current_time = datetime.now(timezone.utc)
 
@@ -338,18 +356,18 @@ class Post:
         if hours_since_post <= 24:
             # First 24 hours: linear decay from 1.0 to 0.8
             return 1.0 - (0.2 * (hours_since_post / 24))
-        elif hours_since_post <= 168:  # 1 week
+        if hours_since_post <= 168:  # 1 week
             # Week 1: exponential decay from 0.8 to 0.1
             days = hours_since_post / 24
             return 0.8 * math.exp(-0.8 * (days - 1))
-        else:
-            # After 1 week: extremely aggressive decay
-            weeks = hours_since_post / 168
-            return max(0.001, 0.1 * math.exp(-2.0 * (weeks - 1)))
+
+        # After 1 week: extremely aggressive decay
+        weeks = hours_since_post / 168
+        return max(0.001, 0.1 * math.exp(-2.0 * (weeks - 1)))
 
     def score(self, current_time: Optional[datetime] = None,
               weights: Optional[Dict[str, float]] = None) -> float:
-        """Calculate overall post score with extreme time sensitivity"""
+        """Calculate overall post score with extreme time sensitivity."""
         weights = weights or {
             'engagement': 0.4,  # Reduced
             'content': 0.2,  # Reduced
