@@ -30,6 +30,10 @@ class Channel:
         Returns:
             bool: True if the HTML content represents a Telegram channel, False otherwise.
         """
+        title = self.page.css_first(".tgme_page_title>span")
+        if not title:
+            return False
+
         context_link = self.page.css_first(".tgme_page_context_link")
         if not context_link:
             return False

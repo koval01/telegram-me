@@ -109,7 +109,7 @@ async def preview(
     )
 
 
-@router.get(
+@router.post(
     "/previews",
     summary="Get preview data about the channel group",
     responses={200: {"model": Previews}, 400: {"model": HTTPError}},

@@ -1,7 +1,7 @@
 """
 Telegram main module
 """
-
+import asyncio
 from typing import Literal
 
 from app.telegram.parser.methods.body import Body
@@ -129,8 +129,6 @@ class Telegram:
             dict: A dictionary that contains a list of requested channels,
                 their usernames are used as keys
         """
-        result = {}
-        for channel in channels:
-            result[channel] = await cls.preview(channel)
-
-        return result
+        tasks = [cls.preview(channel) for channel in channels]
+        results = await asyncio.gather(*tasks)
+        return dict(zip(channels, results))

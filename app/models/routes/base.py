@@ -4,7 +4,7 @@ from typing import Optional, Literal
 from pydantic import BaseModel, Field, field_validator
 
 MAX_POST_ID = 10 ** 7
-MAX_CHANNELS_IN_PREVIEW = 10
+MAX_CHANNELS_IN_PREVIEW = 100
 CHANNEL_REGEX = re.compile(r"^[a-zA-Z][a-zA-Z0-9_]{3,31}$")
 
 

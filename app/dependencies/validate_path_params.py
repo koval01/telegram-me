@@ -1,6 +1,6 @@
 from typing import Optional, Literal
 
-from fastapi import Path, Query, HTTPException
+from fastapi import Path, Query, Body, HTTPException
 from starlette import status
 
 from app.models.routes.base import (
@@ -80,7 +80,7 @@ async def validate_more_params(
     position: int = Path(..., gt=0, le=MAX_POST_ID)
 ) -> BaseRequestWithDirection:
     """
-    Validate and return a request with a channel, direction and position.
+    Validate and return a request with a channel, direction, and position.
 
     Args:
         channel: Telegram channel username (must match CHANNEL_REGEX pattern)
@@ -101,12 +101,11 @@ async def validate_more_params(
 
 
 async def validate_previews_params(
-    channels: list[str] = Query(
+    channels: list[str] = Body(
         ["telegram"],
         description="List of channel identifiers",
-        alias="q",
         min_length=1,
-        max_length=10
+        max_length=100
     )
 ) -> BaseRequestWithChannels:
     """
@@ -114,7 +113,7 @@ async def validate_previews_params(
 
     Args:
         channels: List of channel identifiers (default: ["telegram"])
-                 Must contain 1-10 items when provided
+                 Must contain 1-100 items when provided
 
     Returns:
         BaseRequestWithChannels: A request object containing the list of channels
