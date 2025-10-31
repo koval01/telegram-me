@@ -1,5 +1,5 @@
 """
-Module for preparing and scoring Telegram channel posts for feed generation.
+ULTRA-optimized module for Telegram channel posts preparation.
 """
 
 import asyncio
@@ -7,277 +7,448 @@ import logging
 import math
 import re
 from datetime import datetime, timezone
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any, Optional, Tuple
 
 import aiohttp
+from aiohttp import TCPConnector
+import uvloop
 
 from app.telegram.telegram import Telegram
 
+try:
+    asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
+except ImportError:
+    pass
+
 logger = logging.getLogger(__name__)
+
+# Extreme connection pooling
+CONNECTOR_SETTINGS = {
+    "limit": 200,
+    "limit_per_host": 50,
+    "keepalive_timeout": 60,
+    "use_dns_cache": True,
+    "ttl_dns_cache": 300,
+}
+
+# Global session to avoid recreation
+_global_session = None
+
+def get_global_session():
+    global _global_session
+    if _global_session is None:
+        connector = TCPConnector(**CONNECTOR_SETTINGS)
+        timeout = aiohttp.ClientTimeout(total=15, connect=5, sock_read=10)
+        _global_session = aiohttp.ClientSession(connector=connector, timeout=timeout)
+    return _global_session
 
 
 class PostDataPreparer:
-    """Prepares and processes Telegram channel posts for feed generation."""
+    """ULTRA-optimized post preparer with radical performance improvements."""
 
     def __init__(self) -> None:
         self.telegram = Telegram()
+        # Pre-compile ALL regex patterns
+        self._comments_pattern = re.compile(r'js-header[^>]*>(\d+)\s*comment', re.IGNORECASE)
+        self._number_clean_pattern = re.compile(r'[^\dkkm.]', re.IGNORECASE)
 
-    async def fetch_channel_data(self, username: str) -> Optional[Dict[str, Any]]:
-        """Get channel data by username asynchronously."""
+        # Cache with TTL
+        self._channel_cache = {}
+        self._comment_cache = {}
+        self._cache_ttl = 60  # 1 minute
+
+    async def fetch_channel_data_batch(self, usernames: List[str]) -> Dict[str, Any]:
+        """Fetch multiple channels in parallel with aggressive timeout."""
+        tasks = {}
+        for username in usernames:
+            cache_key = username.lower()
+            if cache_key in self._channel_cache:
+                data, timestamp = self._channel_cache[cache_key]
+                if asyncio.get_event_loop().time() - timestamp < self._cache_ttl:
+                    continue
+
+            # Use asyncio.wait_for with aggressive timeout
+            task = asyncio.wait_for(
+                self.telegram.body(username),
+                timeout=8.0  # Aggressive timeout
+            )
+            tasks[username] = task
+
+        # Execute all remaining fetches in parallel
+        if tasks:
+            results = await asyncio.gather(
+                *tasks.values(),
+                return_exceptions=True
+            )
+
+            # Update cache
+            current_time = asyncio.get_event_loop().time()
+            for username, result in zip(tasks.keys(), results):
+                if not isinstance(result, Exception) and result:
+                    self._channel_cache[username.lower()] = (result, current_time)
+
+        # Return all data (cached + fresh)
+        channel_data = {}
+        for username in usernames:
+            cache_key = username.lower()
+            if cache_key in self._channel_cache:
+                channel_data[username] = self._channel_cache[cache_key][0]
+
+        return channel_data
+
+    async def fetch_comments_count_ultra_batch(
+        self,
+        post_infos: List[Tuple[str, int]],
+        session: aiohttp.ClientSession
+    ) -> Dict[Tuple[str, int], int]:
+        """ULTRA-optimized batch comment fetching."""
+        if not post_infos:
+            return {}
+
+        # Check cache first
+        current_time = asyncio.get_event_loop().time()
+        results = {}
+        remaining_posts = []
+
+        for post_info in post_infos:
+            cache_key = f"{post_info[0]}/{post_info[1]}"
+            if cache_key in self._comment_cache:
+                data, timestamp = self._comment_cache[cache_key]
+                if current_time - timestamp < self._cache_ttl:
+                    results[post_info] = data
+                    continue
+            remaining_posts.append(post_info)
+
+        if not remaining_posts:
+            return results
+
+        # Fetch remaining posts with extreme batching
+        BATCH_SIZE = 20  # Larger batches
+        all_batch_results = {}
+
+        for i in range(0, len(remaining_posts), BATCH_SIZE):
+            batch = remaining_posts[i:i + BATCH_SIZE]
+            batch_results = await self._fetch_comment_batch_with_fallback(batch, session)
+            all_batch_results.update(batch_results)
+
+            # Small delay to avoid rate limiting, but much smaller
+            if i + BATCH_SIZE < len(remaining_posts):
+                await asyncio.sleep(0.05)  # 50ms instead of longer
+
+        # Update cache and results
+        for post_info, count in all_batch_results.items():
+            cache_key = f"{post_info[0]}/{post_info[1]}"
+            self._comment_cache[cache_key] = (count, current_time)
+            results[post_info] = count
+
+        return results
+
+    async def _fetch_comment_batch_with_fallback(
+        self,
+        post_infos: List[Tuple[str, int]],
+        session: aiohttp.ClientSession
+    ) -> Dict[Tuple[str, int], int]:
+        """Fetch batch with fallback to individual requests if batch fails."""
         try:
-            return await self.telegram.body(username)
-        except Exception as e:  # pylint: disable=broad-except
-            logger.error("Unexpected error fetching data for %s: %s", username, e)
-            return None
+            # Try ultra-fast parallel fetching
+            tasks = []
+            for username, post_id in post_infos:
+                url = f"https://t.me/{username}/{post_id}?embed=1&discussion=1&comments_limit=1"
+                task = asyncio.wait_for(
+                    self._fetch_single_comment_fast(url, session),
+                    timeout=6.0
+                )
+                tasks.append(task)
 
-    @staticmethod
-    def parse_subscribers(subscribers_str: Optional[str]) -> int:  # pylint: disable=R0911
-        """Convert subscriber string to number."""
-        if not subscribers_str:
-            return 1
+            counts = await asyncio.gather(*tasks, return_exceptions=True)
 
-        subscribers_str = subscribers_str.replace(" ", "").lower()
+            # Process results
+            results = {}
+            for i, (post_info, count) in enumerate(zip(post_infos, counts)):
+                if isinstance(count, Exception):
+                    results[post_info] = 0
+                else:
+                    results[post_info] = count
 
-        if 'k' in subscribers_str:
-            num_str = subscribers_str.replace('k', '')
-            try:
-                return int(float(num_str) * 1000)
-            except (ValueError, TypeError):
-                return 1
-        elif 'm' in subscribers_str:
-            num_str = subscribers_str.replace('m', '')
-            try:
-                return int(float(num_str) * 1000000)
-            except (ValueError, TypeError):
-                return 1
-        else:
-            try:
-                return int(subscribers_str)
-            except (ValueError, TypeError):
-                return 1
+            return results
 
-    @staticmethod
-    def parse_views(views_str: Optional[str]) -> int:  # pylint: disable=R0911
-        """Convert views string to number."""
-        if not views_str:
+        except Exception as e:
+            logger.warning("Batch comment fetch failed, using zeros: %s", e)
+            return {post_info: 0 for post_info in post_infos}
+
+    async def _fetch_single_comment_fast(self, url: str, session: aiohttp.ClientSession) -> int:
+        """Ultra-optimized single comment fetch."""
+        try:
+            async with session.get(url, headers={
+                'User-Agent': 'Mozilla/5.0 (compatible; Telegram-Fetcher/1.0)',
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                'Accept-Language': 'en-US,en;q=0.5',
+                'Accept-Encoding': 'gzip, deflate, br',
+                'Connection': 'keep-alive',
+            }) as response:
+                # Only read the first 10KB (comments count is usually in the first few KB)
+                text = await response.text()#[:10240]  # Commented out to avoid partial HTML issues
+                match = self._comments_pattern.search(text)
+                return int(match.group(1)) if match else 0
+
+        except asyncio.TimeoutError:
+            return 0
+        except Exception:
             return 0
 
-        views_str = views_str.replace(" ", "").lower()
+    @staticmethod
+    def parse_content_type_batch(posts_content: List[Dict]) -> List[Dict]:
+        """Batch process content types for better performance."""
+        results = []
+        for content in posts_content:
+            processed = {
+                'text': '',
+                'photos': 0,
+                'videos': 0,
+                'gifs': 0,
+                'poll': 0
+            }
 
-        if 'k' in views_str:
-            num_str = views_str.replace('k', '')
+            text_data = content.get('text')
+            if text_data:
+                if isinstance(text_data, dict):
+                    processed['text'] = text_data.get('string', '')
+                else:
+                    processed['text'] = str(text_data)
+
+            media_list = content.get('media', [])
+            for media in media_list:
+                media_type = media.get('type', '')
+                if media_type == 'image':
+                    processed['photos'] += 1
+                elif media_type == 'video':
+                    processed['videos'] += 1
+                elif media_type == 'sticker':
+                    processed['gifs'] += 1
+
+            results.append(processed)
+
+        return results
+
+    async def prepare_multiple_channels(
+        self,
+        usernames: List[str],
+        max_concurrent: int = 8
+    ) -> List[Dict[str, Any]]:
+        """ULTRA-fast multiple channel processing."""
+        if not usernames:
+            return []
+
+        session = get_global_session()
+
+        # Step 1: Fetch ALL channel data in parallel
+        logger.info("Fetching %d channels in parallel", len(usernames))
+        channel_data_map = await self.fetch_channel_data_batch(usernames)
+
+        # Step 2: Prepare ALL posts from ALL channels in parallel
+        all_tasks = []
+        semaphore = asyncio.Semaphore(max_concurrent)
+
+        for username in usernames:
+            if username in channel_data_map:
+                task = self._process_channel_posts_ultra_fast(
+                    username, channel_data_map[username], session, semaphore
+                )
+                all_tasks.append(task)
+
+        # Wait for ALL channels
+        channel_results = await asyncio.gather(*all_tasks, return_exceptions=True)
+
+        # Combine results
+        all_posts = []
+        for result in channel_results:
+            if isinstance(result, Exception):
+                logger.error("Channel processing failed: %s", result)
+            elif result:
+                all_posts.extend(result)
+
+        logger.info("ULTRA-fast processing completed: %d total posts", len(all_posts))
+        return all_posts
+
+    async def _process_channel_posts_ultra_fast(
+        self,
+        username: str,
+        channel_data: Dict[str, Any],
+        session: aiohttp.ClientSession,
+        semaphore: asyncio.Semaphore
+    ) -> List[Dict[str, Any]]:
+        """ULTRA-fast single channel processing."""
+        async with semaphore:
             try:
-                return int(float(num_str) * 1000)
-            except (ValueError, TypeError):
-                return 0
-        elif 'm' in views_str:
-            num_str = views_str.replace('m', '')
-            try:
-                return int(float(num_str) * 1000000)
-            except (ValueError, TypeError):
-                return 0
-        else:
-            try:
-                return int(views_str)
-            except (ValueError, TypeError):
-                return 0
+                if 'content' not in channel_data or 'posts' not in channel_data['content']:
+                    return []
+
+                channel_info = channel_data.get('channel', {})
+                posts_data = channel_data['content']['posts']
+
+                if not posts_data:
+                    return []
+
+                # Pre-calculate shared values
+                counters = channel_info.get('counters', {})
+                subscribers = self.parse_numeric_value(counters.get('subscribers', '1'), 1)
+                channel_title = channel_info.get('title', {}).get('string', username)
+
+                # Prepare comment fetching
+                post_infos = [(username, post.get('id', 0)) for post in posts_data]
+                comments_task = asyncio.create_task(
+                    self.fetch_comments_count_ultra_batch(post_infos, session)
+                )
+
+                # Process ALL posts locally (extremely fast)
+                processed_posts = []
+                for i, post_data in enumerate(posts_data):
+                    post_obj = await self._process_post_instant(
+                        post_data, channel_title, username, subscribers
+                    )
+                    processed_posts.append((i, post_obj))
+
+                # Get comments and combine
+                comments_map = await comments_task
+
+                # Finalize posts
+                final_posts = []
+                for i, post_obj in processed_posts:
+                    post_id = posts_data[i].get('id', 0)
+                    comments = comments_map.get((username, post_id), 0)
+                    post_obj.comments = comments
+
+                    post_with_channel = posts_data[i].copy()
+                    post_with_channel['channel'] = channel_info
+                    post_with_channel['_score'] = post_obj.score(use_cache=True)
+
+                    final_posts.append(post_with_channel)
+
+                return final_posts
+
+            except Exception as e:
+                logger.error("ULTRA-fast processing failed for %s: %s", username, e)
+                return []
+
+    async def _process_post_instant(
+        self,
+        post_data: Dict[str, Any],
+        channel_title: str,
+        username: str,
+        subscribers: int
+    ) -> 'Post':
+        """Instant post processing (no I/O)."""
+        post_id = post_data.get('id', 0)
+        footer = post_data.get('footer', {})
+        post_content = post_data.get('content', {})
+
+        # Fast content parsing
+        content_dict = self.parse_content_type_single(post_content)
+        reactions = self.parse_reactions_single(post_content.get('reacts', []))
+        views = self.parse_numeric_value(footer.get('views', '0'), 0)
+
+        # Fast datetime parsing
+        date_info = footer.get('date', {})
+        published_at = self.parse_datetime_fast(date_info.get('string', ''))
+        edited = footer.get('edited', False)
+
+        return Post(
+            post_id=post_id,
+            channel_name=channel_title,
+            username=username,
+            published_at=published_at,
+            views=views,
+            content=content_dict,
+            edited=edited,
+            reactions=reactions,
+            subscribers=subscribers,
+            comments=0  # Filled later
+        )
 
     @staticmethod
-    def parse_reactions(reacts_data: Optional[List[Dict]]) -> Dict[str, int]:
-        """Convert reactions to dictionary."""
-        reactions = {}
-        if not reacts_data:
-            return reactions
+    def parse_content_type_single(post_content: Dict) -> Dict:
+        """Single post content parsing optimized."""
+        processed = {'text': '', 'photos': 0, 'videos': 0, 'gifs': 0, 'poll': 0}
 
+        text_data = post_content.get('text')
+        if text_data:
+            processed['text'] = str(text_data.get('string', '')) if isinstance(text_data, dict) else str(text_data)
+
+        media_list = post_content.get('media', [])
+        for media in media_list:
+            media_type = media.get('type', '')
+            if media_type == 'image':
+                processed['photos'] += 1
+            elif media_type == 'video':
+                processed['videos'] += 1
+            elif media_type == 'sticker':
+                processed['gifs'] += 1
+
+        return processed
+
+    def parse_reactions_single(self, reacts_data: Optional[List]) -> Dict:
+        """Single post reactions parsing optimized."""
+        if not reacts_data:
+            return {}
+
+        reactions = {}
         for react in reacts_data:
             emoji = react.get('emoji', '')
-            count_str = str(react.get('count', '0'))
-
-            if 'k' in count_str.lower():
-                try:
-                    count = int(float(count_str.replace(
-                        'K', '').replace('k', '')) * 1000)
-                except (ValueError, TypeError):
-                    count = 0
-            elif 'm' in count_str.lower():
-                try:
-                    count = int(float(count_str.replace(
-                        'M', '').replace('m', '')) * 1000000)
-                except (ValueError, TypeError):
-                    count = 0
-            else:
-                try:
-                    count = int(count_str)
-                except (ValueError, TypeError):
-                    count = 0
-
-            if emoji and count > 0:
-                reactions[emoji] = count
+            if emoji:
+                count_str = str(react.get('count', '0'))
+                count = self.parse_numeric_value(count_str, 0)
+                if count > 0:
+                    reactions[emoji] = count
 
         return reactions
 
     @staticmethod
-    def parse_content_type(post_content: Dict[str, Any]) -> Dict[str, Any]:
-        """Determine content type in post."""
-        content = {
-            'text': '',
-            'photos': 0,
-            'videos': 0,
-            'gifs': 0,
-            'poll': 0
-        }
-
-        if 'text' in post_content and post_content['text']:
-            text_data = post_content['text']
-            if isinstance(text_data, dict) and 'string' in text_data:
-                content['text'] = text_data['string']
-            elif isinstance(text_data, str):
-                content['text'] = text_data
-
-        if 'media' in post_content and post_content['media']:
-            for media in post_content['media']:
-                media_type = media.get('type', '')
-                if media_type == 'image':
-                    content['photos'] += 1
-                elif media_type == 'video':
-                    content['videos'] += 1
-                elif media_type == 'sticker':
-                    content['gifs'] += 1
-
-        return content
-
-    @staticmethod
-    def parse_datetime(date_str: str) -> datetime:
-        """Convert date string to datetime object."""
+    def parse_datetime_fast(date_str: str) -> datetime:
+        """Ultra-fast datetime parsing."""
         try:
-            dt = datetime.fromisoformat(date_str.replace('Z', '+00:00'))
-            if dt.tzinfo is None:
-                dt = dt.replace(tzinfo=timezone.utc)
-            return dt
+            if 'Z' in date_str:
+                date_str = date_str.replace('Z', '+00:00')
+            dt = datetime.fromisoformat(date_str)
+            return dt if dt.tzinfo else dt.replace(tzinfo=timezone.utc)
         except (ValueError, AttributeError):
             return datetime.now(timezone.utc)
 
     @staticmethod
-    async def fetch_comments_count(username: str, post_id: int, session: aiohttp.ClientSession) -> int:
-        """Fetch comments count asynchronously."""
+    def parse_numeric_value(value_str: Optional[str], default: int = 0) -> int:
+        """Ultra-fast numeric parser."""
+        if not value_str:
+            return default
+
+        cleaned = value_str.replace(' ', '').lower()
+
+        if cleaned.isdigit():
+            return int(cleaned)
+
         try:
-            async with session.get(
-                    f"https://t.me/{username}/{post_id}",
-                    params={"embed": 1, "discussion": 1, "comments_limit": 3}
-            ) as response:
-                text = await response.text()
-                _match = re.search(
-                    r'<span class="js-header">(\d+)\s+comments?</span>', text)
-                return int(_match.group(1)) if _match else 0
-        except (aiohttp.ClientError, asyncio.TimeoutError, ValueError) as e:
-            logger.warning(
-                "Error fetching comments for %s/%s: %s", username, post_id, e)
-            return 0
-
-    async def process_single_post(self, post_data: Dict[str, Any], channel_info: Dict[str, Any],  # pylint: disable=R0914
-                                  username: str, session: aiohttp.ClientSession) -> Optional[Dict[str, Any]]:
-        """Process a single post asynchronously."""
-        try:
-            counters = channel_info.get('counters', {})
-            subscribers = self.parse_subscribers(
-                counters.get('subscribers', '1'))
-
-            post_id = post_data.get('id', 0)
-            footer = post_data.get('footer', {})
-            post_content = post_data.get('content', {})
-
-            comments_task = asyncio.create_task(
-                self.fetch_comments_count(username, post_id, session)
-            )
-
-            content_dict = self.parse_content_type(post_content)
-            reactions = self.parse_reactions(post_content.get('reacts', []))
-            views = self.parse_views(footer.get('views', '0'))
-
-            date_info = footer.get('date', {})
-            published_at = self.parse_datetime(date_info.get('string', ''))
-            edited = footer.get('edited', False)
-
-            comments = await comments_task
-
-            post_obj = Post(
-                post_id=post_id,
-                channel_name=channel_info.get('title', {}).get('string', username),
-                username=username,
-                published_at=published_at,
-                views=views,
-                content=content_dict,
-                edited=edited,
-                reactions=reactions,
-                subscribers=subscribers,
-                comments=comments
-            )
-
-            post_with_channel = post_data.copy()
-            post_with_channel['channel'] = channel_info
-            post_with_channel['_score'] = post_obj.score()
-
-            return post_with_channel
-
-        except Exception as e:  # pylint: disable=broad-except
-            logger.error(
-                "Error processing post %s: %s", post_data.get('id', 'unknown'), e)
-            return None
-
-    async def prepare_posts_from_channel(self, username: str, session: aiohttp.ClientSession) -> List[Dict[str, Any]]:
-        """Prepare posts from the channel asynchronously."""
-        channel_data = await self.fetch_channel_data(username)
-        if not channel_data or 'content' not in channel_data or 'posts' not in channel_data['content']:
-            return []
-
-        channel_info = channel_data.get('channel', {})
-        posts_data = channel_data['content']['posts']
-
-        tasks = [
-            self.process_single_post(
-                post_data, channel_info, username, session)
-            for post_data in posts_data
-        ]
-
-        results = await asyncio.gather(*tasks, return_exceptions=True)
-
-        valid_posts = []
-        for result in results:
-            if isinstance(result, Exception):
-                logger.error("Task failed with exception: %s", result)
-            elif result is not None:
-                valid_posts.append(result)
-
-        return valid_posts
-
-    async def prepare_multiple_channels(self, usernames: List[str]) -> List[Dict[str, Any]]:
-        """Prepare posts from multiple channels asynchronously."""
-        all_posts = []
-
-        async with aiohttp.ClientSession() as session:
-            tasks = [
-                self.prepare_posts_from_channel(username, session)
-                for username in usernames
-            ]
-
-            channel_results = await asyncio.gather(*tasks, return_exceptions=True)
-
-            for i, result in enumerate(channel_results):
-                username = usernames[i]
-                if isinstance(result, Exception):
-                    logger.error(
-                        "Failed to process channel %s: %s", username, result)
-                else:
-                    all_posts.extend(result)
-                    logger.info("Loaded %s posts from %s", len(result), username)
-
-        return all_posts
+            if 'k' in cleaned:
+                return int(float(cleaned.replace('k', '')) * 1000)
+            elif 'm' in cleaned:
+                return int(float(cleaned.replace('m', '')) * 1000000)
+            else:
+                return int(cleaned)
+        except (ValueError, TypeError):
+            return default
 
 
-class Post:  # pylint: disable=R0902
-    """Represents a Telegram post with scoring capabilities."""
+class Post:
+    """Optimized Post class with cached scoring."""
 
-    def __init__(  # pylint: disable=R0917, R0913
+    __slots__ = (
+        'post_id', 'channel_name', 'username', 'published_at',
+        'views', 'content', 'edited', 'reactions', 'subscribers', 'comments',
+        '_cached_score', '_score_timestamp'
+    )
+
+    # Pre-defined reaction categories for faster engagement calculation
+    POSITIVE_REACTIONS = {'👍', '❤', '❤️', '😂', '🔥', '💯', '👏', '🎉', '🥰'}
+    NEGATIVE_REACTIONS = {'👎', '😡', '😢', '🤬', '🤡'}
+
+    def __init__(
             self,
             post_id: int,
             channel_name: str,
@@ -290,7 +461,7 @@ class Post:  # pylint: disable=R0902
             subscribers: int = 1,
             comments: int = 0
     ) -> None:
-        """Initialize Post instance."""
+        """Initialize optimized Post instance."""
         self.post_id = post_id
         self.channel_name = channel_name
         self.username = username
@@ -299,97 +470,108 @@ class Post:  # pylint: disable=R0902
         self.content = content
         self.edited = edited
         self.reactions = reactions or {}
-        self.subscribers = max(subscribers, 1)  # Ensure at least 1
+        self.subscribers = max(subscribers, 1)
         self.comments = comments
+        self._cached_score: Optional[float] = None
+        self._score_timestamp: Optional[float] = None
 
     def engagement_score(self) -> float:
-        """Calculate engagement score based on reactions, comments, and views."""
-        positive = ['👍', '❤', '❤️', '😂', '🔥', '💯', '👏', '🎉', '🥰']
-        negative = ['👎', '😡', '😢', '🤬', '🤡']
+        """Optimized engagement score calculation."""
+        subscribers = self.subscribers
 
-        # Calculate raw reaction counts
-        positive_reactions = sum(self.reactions.get(r, 0) for r in positive)
-        negative_reactions = sum(self.reactions.get(r, 0) for r in negative)
+        # Fast reaction counting using set lookups
+        positive = sum(self.reactions.get(r, 0) for r in self.POSITIVE_REACTIONS)
+        negative = sum(self.reactions.get(r, 0) for r in self.NEGATIVE_REACTIONS)
 
-        # Use percentages instead of raw counts to avoid huge numbers
-        reaction_percentage = (positive_reactions - negative_reactions) / max(self.subscribers, 1)
-        comments_percentage = self.comments / max(self.subscribers, 1)
-        views_percentage = self.views / max(self.subscribers, 1)
+        # Calculate percentages with bounds checking
+        reaction_pct = (positive - negative) / subscribers
+        comments_pct = self.comments / subscribers
+        views_pct = self.views / subscribers
 
-        # Normalize to reasonable ranges
+        # Use min() for bounds checking (faster than if statements)
         engagement_score = (
-                min(views_percentage, 10.0) +  # Cap views at 1000% of subscribers
-                min(reaction_percentage, 1.0) +  # Cap reactions at 100% of subscribers
-                min(comments_percentage, 0.5)  # Cap comments at 50% of subscribers
+                min(views_pct, 10.0) +
+                min(reaction_pct, 1.0) +
+                min(comments_pct, 0.5)
         )
 
-        return engagement_score / 3.0  # Normalize to roughly 0-4 range
+        return engagement_score / 3.0
 
     def content_score(self) -> float:
-        """Calculate content score based on media types and text length."""
+        """Optimized content score calculation."""
         weights = {'photos': 0.3, 'videos': 0.5, 'gifs': 0.2, 'poll': 0.3}
 
-        # Cap media counts to prevent excessive scoring
         media_bonus = 0
         for key, weight in weights.items():
-            media_count = min(self.content.get(key, 0), 10)  # Cap at 10 per type
+            media_count = min(self.content.get(key, 0), 10)
             media_bonus += media_count * weight
 
-        # Text length bonus (capped)
+        # Fast text length calculation with bounds
         text_len = len(self.content.get('text', ''))
-        text_bonus = min(text_len / 500, 2.0) * 0.1  # Cap at 2.0
+        text_bonus = min(text_len / 500, 2.0) * 0.1
 
-        return min(media_bonus + text_bonus, 3.0)  # Cap total content score
+        return min(media_bonus + text_bonus, 3.0)
 
     def freshness_score(self, current_time: Optional[datetime] = None) -> float:
-        """Extremely aggressive exponential decay to heavily penalize old posts."""
+        """Optimized freshness score with caching."""
         if current_time is None:
             current_time = datetime.now(timezone.utc)
 
+        # Ensure both times are timezone-aware
         published_at = self.published_at
         if published_at.tzinfo is None:
             published_at = published_at.replace(tzinfo=timezone.utc)
 
         hours_since_post = (current_time - published_at).total_seconds() / 3600
 
-        # Ultra-aggressive decay - posts older than 2 weeks get nearly zero score
+        # Optimized decay calculation
         if hours_since_post <= 24:
-            # First 24 hours: linear decay from 1.0 to 0.8
             return 1.0 - (0.2 * (hours_since_post / 24))
-        if hours_since_post <= 168:  # 1 week
-            # Week 1: exponential decay from 0.8 to 0.1
+        elif hours_since_post <= 168:
             days = hours_since_post / 24
             return 0.8 * math.exp(-0.8 * (days - 1))
+        else:
+            weeks = hours_since_post / 168
+            return max(0.001, 0.1 * math.exp(-2.0 * (weeks - 1)))
 
-        # After 1 week: extremely aggressive decay
-        weeks = hours_since_post / 168
-        return max(0.001, 0.1 * math.exp(-2.0 * (weeks - 1)))
+    def score(
+            self,
+            current_time: Optional[datetime] = None,
+            weights: Optional[Dict[str, float]] = None,
+            use_cache: bool = True
+    ) -> float:
+        """Optimized scoring with optional caching."""
+        # Use cached score if available and recent
+        if use_cache and self._cached_score is not None:
+            cache_time = getattr(self, '_score_timestamp', 0)
+            if asyncio.get_event_loop().time() - cache_time < 60:  # Cache for 60 seconds
+                return self._cached_score
 
-    def score(self, current_time: Optional[datetime] = None,
-              weights: Optional[Dict[str, float]] = None) -> float:
-        """Calculate overall post score with extreme time sensitivity."""
         weights = weights or {
-            'engagement': 0.4,  # Reduced
-            'content': 0.2,  # Reduced
-            'freshness': 0.4,  # Increased significantly - now the most important factor
-            'edited': 0.02  # Minimal impact
+            'engagement': 0.4,
+            'content': 0.2,
+            'freshness': 0.4,
+            'edited': 0.02
         }
 
-        # Calculate component scores
+        # Calculate scores
         engagement = self.engagement_score()
         content = self.content_score()
         freshness = self.freshness_score(current_time)
         edited_bonus = weights['edited'] if self.edited else 0
 
-        # Apply freshness as a multiplier to heavily penalize old content
         base_score = (
                 weights['engagement'] * engagement +
                 weights['content'] * content +
                 edited_bonus
         )
 
-        # Use freshness as multiplier for extreme time sensitivity
-        raw_score = base_score * (freshness + 0.1)  # +0.1 to avoid zero multiplication
+        raw_score = base_score * (freshness + 0.1)
+        final_score = min(raw_score, 10.0)
 
-        # Apply final cap
-        return min(raw_score, 10.0)
+        # Cache the result
+        if use_cache:
+            self._cached_score = final_score
+            self._score_timestamp = asyncio.get_event_loop().time()
+
+        return final_score
