@@ -37,5 +37,16 @@ async def create_feed(item: FeedRequest) -> dict:
     """Create feed for given channels and return sorted posts."""
     preparer = PostDataPreparer()
     all_posts = await preparer.prepare_multiple_channels(item.channels)
-    all_posts.sort(key=lambda post: post.get("_score", 0), reverse=True)
-    return {"result": all_posts}
+    all_posts.sort(key=lambda p: p.get("_score", 0), reverse=True)
+
+    seen = set()
+    unique_posts = []
+
+    for post in all_posts:
+        key = (post["channel"]["username"], post["id"])
+        if key not in seen:
+            seen.add(key)
+            unique_posts.append(post)
+
+    return {"result": unique_posts}
+
