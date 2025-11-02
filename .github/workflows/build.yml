@@ -73,6 +73,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Create .env.local for testing
+        run: |
+          echo "REDIS_URL=${{ secrets.REDIS_URL }}" > .env.local
+          echo "Created .env.local file with REDIS_URL"
+
       - name: Set up Python ${{ env.PYTHON_VERSION }}
         uses: actions/setup-python@v4
         with:
@@ -151,6 +156,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Create .env.local for Docker build
+        run: |
+          echo "REDIS_URL=${{ secrets.REDIS_URL }}" > .env.local
+          echo "Created .env.local file with REDIS_URL"
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
@@ -169,11 +179,13 @@ jobs:
           tags: ${{ env.DOCKER_IMAGE }}:test-${{ steps.vars.outputs.short_sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          build-args: |
+            REDIS_URL=${{ secrets.REDIS_URL }}
 
       - name: Test Docker image
         run: |
           echo "Starting Docker container for testing..."
-          docker run -d -p 8000:3000 --name fastapi-test ${{ env.DOCKER_IMAGE }}:test-${{ steps.vars.outputs.short_sha }}
+          docker run -d -p 8000:3000 --env-file .env.local --name fastapi-test ${{ env.DOCKER_IMAGE }}:test-${{ steps.vars.outputs.short_sha }}
           
           echo "Waiting for container to be ready..."
           for i in {1..30}; do
@@ -207,6 +219,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: Create .env.local for production build
+        run: |
+          echo "REDIS_URL=${{ secrets.REDIS_URL }}" > .env.local
+          echo "Created .env.local file with REDIS_URL"
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -246,6 +263,8 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          build-args: |
+            REDIS_URL=${{ secrets.REDIS_URL }}
 
   create-release:
     name: Create GitHub Release
@@ -280,6 +299,11 @@ jobs:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 
     steps:
+      - name: Create .env.local for deployment
+        run: |
+          echo "REDIS_URL=${{ secrets.REDIS_URL }}" > .env.local
+          echo "Created .env.local file with REDIS_URL"
+
       - name: Deploy to servers
         run: |
           # Save SSH private key to file
@@ -289,16 +313,20 @@ jobs:
           # Split servers IPs into array
           SERVERS=(${{ secrets.SERVERS_IPS }})
           
+          # Copy .env.local to servers and deploy
           DEPLOY_COMMAND="docker pull ${{ env.DOCKER_IMAGE }}:latest && \
                          docker stop telegram-me || true && \
                          docker rm telegram-me || true && \
-                         docker run -d --name telegram-me -p 8000:3000 ${{ env.DOCKER_IMAGE }}:latest"
+                         docker run -d --name telegram-me -p 8000:3000 --env-file env.app ${{ env.DOCKER_IMAGE }}:latest"
           
           HEALTH_CHECK="sleep 30 && curl -f http://localhost:8000/healthz && echo '✓ Health check passed'"
           
           # Loop through each server and execute command
           for SERVER_IP in "${SERVERS[@]}"; do
             echo "Deploying to server: $SERVER_IP"
+            
+            # Copy .env.local to server
+            scp -o StrictHostKeyChecking=no -i private_key .env.local ubuntu@$SERVER_IP:~/env.app || echo "⚠️ Failed to copy .env.local to $SERVER_IP"
             
             # Deploy
             ssh -o StrictHostKeyChecking=no -i private_key ubuntu@$SERVER_IP "$DEPLOY_COMMAND" || echo "⚠️ Deployment failed on $SERVER_IP"
@@ -314,5 +342,5 @@ jobs:
           echo "Testing external health check..."
           curl -s -f 'https://telegram-me.ignorelist.com/healthz' && echo "✓ External health check passed" || echo "⚠️ External health check failed"
           
-          # Cleanup private key
-          rm -f private_key
+          # Cleanup
+          rm -f private_key .env.local

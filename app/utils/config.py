@@ -9,6 +9,7 @@ class Settings(BaseSettings):  # pylint: disable=R0903
 
     DISABLE_DOCS: int = 0
     VERSION: str = "1.7"
+    REDIS_URL: str = 'redis://localhost:6379/0'
 
     class Config:  # pylint: disable=R0903
         """
