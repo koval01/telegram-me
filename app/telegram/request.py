@@ -6,9 +6,7 @@ import re
 from typing import Literal, Union
 
 import urllib.parse
-import aiohttp
-
-from app.utils.config import settings
+import httpx
 
 
 class Request:
@@ -51,11 +49,11 @@ class Request:
 
         sanitized_path: str = urllib.parse.quote(path)
 
-        async with aiohttp.ClientSession() as session:
-            async with session.request(
+        async with httpx.AsyncClient(http2=True) as client:
+            response = await client.request(
                 method=method,
                 url=f"https://{self.host}/{sanitized_path}",
-                allow_redirects=False,
+                follow_redirects=False,
                 params=params,
                 headers={
                     "x-requested-with": (
@@ -78,14 +76,15 @@ class Request:
                     "upgrade-insecure-requests": "1",
                     "user-agent": "Mozilla/5.0 (Linux; Android 10) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Mobile Safari/537.36",  # pylint: disable=line-too-long
                 },
-            ) as response:
-                if response.status != 200:
-                    return None
+            )
 
-                if json:
-                    return await response.json()
+            if response.status_code != 200:
+                return None
 
-                return await response.text()
+            if json:
+                return response.json()
+
+            return response.text
 
     @staticmethod
     def valid_channel(channel: str) -> bool:

@@ -1,5 +1,5 @@
 """
-ULTRA-optimized module for Telegram channel posts preparation.
+ULTRA-optimized module for Telegram channel posts preparation with HTTP/2.
 """
 
 import asyncio
@@ -9,9 +9,9 @@ import re
 from datetime import datetime, timezone
 from typing import List, Dict, Any, Optional, Tuple
 
-import aiohttp
-from aiohttp import TCPConnector
+import httpx
 import uvloop
+from httpx import AsyncClient
 
 from app.telegram.telegram import Telegram
 
@@ -22,29 +22,50 @@ except ImportError:
 
 logger = logging.getLogger(__name__)
 
-# Extreme connection pooling
-CONNECTOR_SETTINGS = {
-    "limit": 200,
-    "limit_per_host": 50,
-    "keepalive_timeout": 60,
-    "use_dns_cache": True,
-    "ttl_dns_cache": 300,
+# HTTP/2 client settings
+HTTP2_CLIENT_SETTINGS = {
+    "http2": True,
+    "timeout": 15.0,
+    "limits": httpx.Limits(max_connections=200, max_keepalive_connections=50),
+    "headers": {
+        "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+        "accept-encoding": "gzip, deflate, br",
+        "accept-language": "ru",
+        "cache-control": "max-age=0",
+        "connection": "keep-alive",
+        "dnt": "1",
+        "priority": "u=0, i",
+        "sec-ch-ua": '"Google Chrome";v="141", "Not?A_Brand";v="8", "Chromium";v="141"',
+        "sec-ch-ua-mobile": "?1",
+        "sec-ch-ua-platform": "Android",
+        "sec-fetch-dest": "document",
+        "sec-fetch-mode": "navigate",
+        "sec-fetch-site": "none",
+        "sec-fetch-user": "?1",
+        "upgrade-insecure-requests": "1",
+        "user-agent": "Mozilla/5.0 (Linux; Android 10) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Mobile Safari/537.36",
+    }
 }
 
-# Global session to avoid recreation
-_global_session = None
+# Global client to avoid recreation
+_global_client: AsyncClient | None = None
 
-def get_global_session():
-    global _global_session
-    if _global_session is None:
-        connector = TCPConnector(**CONNECTOR_SETTINGS)
-        timeout = aiohttp.ClientTimeout(total=15, connect=5, sock_read=10)
-        _global_session = aiohttp.ClientSession(connector=connector, timeout=timeout)
-    return _global_session
+def get_global_client():
+    global _global_client
+    if _global_client is None:
+        _global_client = httpx.AsyncClient(**HTTP2_CLIENT_SETTINGS)
+    return _global_client
+
+
+async def close_global_client():
+    global _global_client
+    if _global_client is not None:
+        await _global_client.aclose()
+        _global_client = None
 
 
 class PostDataPreparer:
-    """ULTRA-optimized post preparer with radical performance improvements."""
+    """ULTRA-optimized post preparer with HTTP/2 and radical performance improvements."""
 
     def __init__(self) -> None:
         self.telegram = Telegram()
@@ -99,9 +120,9 @@ class PostDataPreparer:
     async def fetch_comments_count_ultra_batch(
         self,
         post_infos: List[Tuple[str, int]],
-        session: aiohttp.ClientSession
+        client: httpx.AsyncClient
     ) -> Dict[Tuple[str, int], int]:
-        """ULTRA-optimized batch comment fetching."""
+        """ULTRA-optimized batch comment fetching with HTTP/2."""
         if not post_infos:
             return {}
 
@@ -122,13 +143,13 @@ class PostDataPreparer:
         if not remaining_posts:
             return results
 
-        # Fetch remaining posts with extreme batching
+        # Fetch remaining posts with extreme batching using HTTP/2
         BATCH_SIZE = 20  # Larger batches
         all_batch_results = {}
 
         for i in range(0, len(remaining_posts), BATCH_SIZE):
             batch = remaining_posts[i:i + BATCH_SIZE]
-            batch_results = await self._fetch_comment_batch_with_fallback(batch, session)
+            batch_results = await self._fetch_comment_batch_with_fallback(batch, client)
             all_batch_results.update(batch_results)
 
             # Small delay to avoid rate limiting, but much smaller
@@ -146,16 +167,16 @@ class PostDataPreparer:
     async def _fetch_comment_batch_with_fallback(
         self,
         post_infos: List[Tuple[str, int]],
-        session: aiohttp.ClientSession
+        client: httpx.AsyncClient
     ) -> Dict[Tuple[str, int], int]:
         """Fetch batch with fallback to individual requests if batch fails."""
         try:
-            # Try ultra-fast parallel fetching
+            # Try ultra-fast parallel fetching with HTTP/2
             tasks = []
             for username, post_id in post_infos:
                 url = f"https://t.me/{username}/{post_id}?embed=1&discussion=1&comments_limit=1"
                 task = asyncio.wait_for(
-                    self._fetch_single_comment_fast(url, session),
+                    self._fetch_single_comment_fast(url, client),
                     timeout=6.0
                 )
                 tasks.append(task)
@@ -176,35 +197,21 @@ class PostDataPreparer:
             logger.warning("Batch comment fetch failed, using zeros: %s", e)
             return {post_info: 0 for post_info in post_infos}
 
-    async def _fetch_single_comment_fast(self, url: str, session: aiohttp.ClientSession) -> int:
-        """Ultra-optimized single comment fetch."""
+    async def _fetch_single_comment_fast(self, url: str, client: httpx.AsyncClient) -> int:
+        """Ultra-optimized single comment fetch with HTTP/2."""
         try:
-            async with session.get(url, headers={
-                "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",  # pylint: disable=line-too-long
-                "accept-encoding": "gzip, deflate, br",
-                "accept-language": "ru",
-                "cache-control": "max-age=0",
-                "connection": "keep-alive",
-                "dnt": "1",
-                "priority": "u=0, i",
-                "sec-ch-ua": '"Google Chrome";v="141", "Not?A_Brand";v="8", "Chromium";v="141"',
-                "sec-ch-ua-mobile": "?1",
-                "sec-ch-ua-platform": "Android",
-                "sec-fetch-dest": "document",
-                "sec-fetch-mode": "navigate",
-                "sec-fetch-site": "none",
-                "sec-fetch-user": "?1",
-                "upgrade-insecure-requests": "1",
-                "user-agent": "Mozilla/5.0 (Linux; Android 10) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Mobile Safari/537.36",  # pylint: disable=line-too-long
-            }) as response:
-                # Only read the first 10KB (comments count is usually in the first few KB)
-                text = await response.text()#[:10240]  # Commented out to avoid partial HTML issues
-                match = self._comments_pattern.search(text)
-                return int(match.group(1)) if match else 0
+            response = await client.get(url)
+            # HTTP/2 will automatically be used when available
+            logger.debug("HTTP version: %s", response.http_version)
+
+            text = response.text
+            match = self._comments_pattern.search(text)
+            return int(match.group(1)) if match else 0
 
         except asyncio.TimeoutError:
             return 0
-        except Exception:
+        except Exception as e:
+            logging.warning(e)
             return 0
 
     @staticmethod
@@ -246,11 +253,11 @@ class PostDataPreparer:
         usernames: List[str],
         max_concurrent: int = 8
     ) -> List[Dict[str, Any]]:
-        """ULTRA-fast multiple channel processing."""
+        """ULTRA-fast multiple channel processing with HTTP/2."""
         if not usernames:
             return []
 
-        session = get_global_session()
+        client = get_global_client()
 
         # Step 1: Fetch ALL channel data in parallel
         logger.info("Fetching %d channels in parallel", len(usernames))
@@ -263,7 +270,7 @@ class PostDataPreparer:
         for username in usernames:
             if username in channel_data_map:
                 task = self._process_channel_posts_ultra_fast(
-                    username, channel_data_map[username], session, semaphore
+                    username, channel_data_map[username], client, semaphore
                 )
                 all_tasks.append(task)
 
@@ -285,10 +292,10 @@ class PostDataPreparer:
         self,
         username: str,
         channel_data: Dict[str, Any],
-        session: aiohttp.ClientSession,
+        client: httpx.AsyncClient,
         semaphore: asyncio.Semaphore
     ) -> List[Dict[str, Any]]:
-        """ULTRA-fast single channel processing."""
+        """ULTRA-fast single channel processing with HTTP/2."""
         async with semaphore:
             try:
                 if 'content' not in channel_data or 'posts' not in channel_data['content']:
@@ -305,10 +312,10 @@ class PostDataPreparer:
                 subscribers = self.parse_numeric_value(counters.get('subscribers', '1'), 1)
                 channel_title = channel_info.get('title', {}).get('string', username)
 
-                # Prepare comment fetching
+                # Prepare comment fetching with HTTP/2
                 post_infos = [(username, post.get('id', 0)) for post in posts_data]
                 comments_task = asyncio.create_task(
-                    self.fetch_comments_count_ultra_batch(post_infos, session)
+                    self.fetch_comments_count_ultra_batch(post_infos, client)
                 )
 
                 # Process ALL posts locally (extremely fast)

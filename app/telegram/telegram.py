@@ -2,6 +2,7 @@
 Telegram main module
 """
 import asyncio
+import logging
 from typing import Literal
 import json
 import redis.asyncio as redis
@@ -134,7 +135,7 @@ class Telegram:
                 return json.loads(cached_data)
         except Exception as e:
             # Log cache error but continue to fetch from API
-            print(f"Cache error: {e}")
+            logging.error(f"Cache error: {e}")
 
         # Fetch from API if not in cache
         response = await Request().preview(channel)
@@ -144,6 +145,9 @@ class Telegram:
         preview_data = Preview(response).get()
 
         # Cache the result
+        if not preview_data:
+            return preview_data
+
         try:
             await redis_client.setex(
                 cache_key,
@@ -152,7 +156,7 @@ class Telegram:
             )
         except Exception as e:
             # Log cache error but return the data
-            print(f"Cache set error: {e}")
+            logging.error(f"Cache set error: {e}")
 
         return preview_data
 
@@ -195,7 +199,7 @@ class Telegram:
                 if keys:
                     await redis_client.delete(*keys)
         except Exception as e:
-            print(f"Cache clear error: {e}")
+            logging.error(f"Cache clear error: {e}")
 
     async def close(self) -> None:
         """Close Redis connection"""
