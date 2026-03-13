@@ -6,11 +6,11 @@ import logging
 from typing import Literal
 import json
 import redis.asyncio as redis
+from redis.exceptions import RedisError
 
 from app.telegram.exceptions import (
     TelegramNotFoundError,
     TelegramParseError,
-    TelegramUpstreamError,
 )
 from app.telegram.parser.methods.body import Body
 from app.telegram.parser.methods.more import More
@@ -137,9 +137,9 @@ class Telegram:
             cached_data = await redis_client.get(cache_key)
             if cached_data:
                 return json.loads(cached_data)
-        except Exception as e:
+        except (RedisError, json.JSONDecodeError, TypeError, ValueError) as e:
             # Log cache error but continue to fetch from API
-            logging.error(f"Cache error: {e}")
+            logging.error("Cache error: %s", e)
 
         # Fetch from API if not in cache
         response = await Request().preview(channel)
@@ -158,9 +158,9 @@ class Telegram:
                 cache_ttl,
                 json.dumps(preview_data)
             )
-        except Exception as e:
+        except RedisError as e:
             # Log cache error but return the data
-            logging.error(f"Cache set error: {e}")
+            logging.error("Cache set error: %s", e)
 
         return preview_data
 
@@ -202,8 +202,8 @@ class Telegram:
                 keys = await redis_client.keys("telegram:preview:*")
                 if keys:
                     await redis_client.delete(*keys)
-        except Exception as e:
-            logging.error(f"Cache clear error: {e}")
+        except RedisError as e:
+            logging.error("Cache clear error: %s", e)
 
     async def close(self) -> None:
         """Close Redis connection"""

@@ -1,4 +1,4 @@
-import pytest
+# pylint: disable=missing-function-docstring,duplicate-code
 
 from app.utils.validation import is_valid_channel, validate_channel_or_raise
 
@@ -19,5 +19,8 @@ def test_validate_channel_or_raise_strips_value() -> None:
 
 
 def test_validate_channel_or_raise_raises_value_error() -> None:
-    with pytest.raises(ValueError):
+    try:
         validate_channel_or_raise("___")
+    except ValueError:
+        return
+    raise AssertionError("Expected ValueError for invalid channel")

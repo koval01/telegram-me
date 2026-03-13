@@ -1,3 +1,5 @@
+# pylint: disable=duplicate-code
+
 import re
 import json
 
@@ -94,7 +96,7 @@ class Post:
         Returns:
             Dict[str, Any]: Dictionary of content fields that are not None.
         """
-        if post_instance._simplified_parser_enabled():
+        if Post._simplified_parser_enabled():
             content_fields = {
                 "text": post_instance.text(buble),
                 "media": Post.__extract_media_info(buble),
@@ -145,30 +147,6 @@ class Post:
         return extract_reply_data(reply)
 
     @staticmethod
-    def __extract_preview_site_name(preview: LexborNode) -> Optional[str]:
-        """Extracts site name from preview node."""
-        site_name = preview.css_first(".link_preview_site_name")
-        return site_name.text(strip=True) if site_name else None
-
-    @staticmethod
-    def __extract_preview_title(preview: LexborNode) -> Optional[str]:
-        """Extracts title from preview node."""
-        title = preview.css_first(".link_preview_title")
-        return title.text(strip=True) if title else None
-
-    @staticmethod
-    def __extract_preview_thumb(preview: LexborNode) -> Optional[str]:
-        """Extracts thumb from preview node."""
-        thumb = preview.css_first(
-            ".tgme_widget_message_link_preview > .link_preview_right_image"
-        )
-        return (
-            Utils.background_extr(thumb.attributes.get("style"))
-            if thumb and thumb.attributes.get("style")
-            else None
-        )
-
-    @staticmethod
     def preview_link(buble: LexborNode) -> Union[dict, None]:
         """
         Extracts preview link information from a message bubble.
@@ -181,46 +159,6 @@ class Post:
                 or None if not found.
         """
         return extract_preview_link(buble)
-
-    @staticmethod
-    def __extract_preview_description(
-        preview: LexborNode,
-    ) -> Optional[Dict[str, str]]:
-        """Extracts and formats the description from the preview node."""
-        description = preview.css_first(".link_preview_description")
-        if not description:
-            return None
-
-        return {
-            "string": description.text(),
-            "html": Utils.get_text_html(description),
-        }
-
-    @staticmethod
-    def __extract_poll_question(poll: LexborNode) -> Optional[str]:
-        """Extracts poll question from poll node."""
-        question = poll.css_first(".tgme_widget_message_poll_question")
-        return question.text() if question else None
-
-    @staticmethod
-    def __extract_poll_options(poll: LexborNode) -> List[Dict[str, Any]]:
-        """Extracts poll options from poll node."""
-        options = poll.css(".tgme_widget_message_poll_option")
-        return [
-            {
-                "name": option.css_first(
-                    ".tgme_widget_message_poll_option_text"
-                ).text(),
-                "percent": int(
-                    option.css_first(
-                        ".tgme_widget_message_poll_option_percent"
-                    ).text()[:-1]
-                ),
-            }
-            for option in options
-            if option.css_first(".tgme_widget_message_poll_option_text")
-            and option.css_first(".tgme_widget_message_poll_option_percent")
-        ]
 
     @staticmethod
     def poll(buble: LexborNode) -> Union[dict, None]:
@@ -384,79 +322,6 @@ class Post:
         if cls._simplified_parser_enabled():
             return None
         return parse_reactions(message)
-
-    @classmethod
-    def __extract_single_reaction(cls, reaction_node: LexborNode) -> Optional[Dict[str, Any]]:
-        """Parse a single reaction node into a structured dictionary."""
-        reaction = {"count": reaction_node.last_child.text()}
-
-        if "tgme_reaction_paid" in reaction_node.attributes.get("class", ""):
-            return cls.__extract_paid_reaction(reaction)
-        if reaction_node.css_first("i.emoji"):
-            return cls.__extract_emoji_reaction(reaction_node, reaction)
-        if reaction_node.css_first("tg-emoji"):
-            return cls._parse_custom_emoji_reaction(reaction_node, reaction)
-
-        return None
-
-    @staticmethod
-    def __extract_paid_reaction(reaction_data: Dict[str, Any]) -> Dict[str, Any]:
-        """Parse a paid (stars) reaction."""
-        reaction_data.update({
-            "type": "telegram_stars",
-            "emoji": "⭐"
-        })
-        return reaction_data
-
-    @staticmethod
-    def __extract_emoji_reaction(reaction_node: LexborNode, reaction_data: Dict[str, Any]) -> Optional[Dict[str, Any]]:
-        """Parse a standard emoji reaction."""
-        emoji_img = reaction_node.css_first("i.emoji")
-        if not emoji_img:
-            return None
-
-        emoji_tag = emoji_img.css_first("b")
-        if emoji_tag:
-            reaction_data["emoji"] = emoji_tag.text()
-
-        emoji = Post._extract_emoji_from_style(emoji_img)
-        if not emoji:
-            return None
-
-        reaction_data["emoji_image"] = emoji
-
-        reaction_data["type"] = "emoji"
-        return reaction_data
-
-    @staticmethod
-    def _extract_emoji_from_style(emoji_node: LexborNode) -> Optional[str]:
-        """Extract emoji from background-image style property."""
-        style = emoji_node.attributes.get("style", "")
-        if "background-image" not in style:
-            return None
-
-        match = re.search(r"url\(['\"]?(//[^'\")]+)['\"]?\)", style)
-        if not match:
-            return None
-
-        url = "https:" + match.group(1)
-        parsed = urlparse(url)
-        if parsed.scheme not in ("http", "https"):
-            return None
-        if not parsed.netloc:
-            return None
-
-        return url
-
-    @staticmethod
-    def _parse_custom_emoji_reaction(reaction_node: LexborNode, reaction_data: Dict[str, Any]) -> Dict[str, Any]:
-        """Parse a custom emoji reaction."""
-        emoji_id = reaction_node.css_first("tg-emoji").attributes.get("emoji-id")
-        reaction_data.update({
-            "type": "custom_emoji",
-            "emoji_id": emoji_id
-        })
-        return reaction_data
 
     @staticmethod
     def author(message: LexborNode) -> dict | None:

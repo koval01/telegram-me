@@ -4,7 +4,7 @@ from datetime import datetime, timezone
 from typing import Dict, Any, Optional
 
 
-class ScoredPost:
+class ScoredPost:  # pylint: disable=too-many-instance-attributes
     """Post scoring model with cached result."""
 
     __slots__ = (
@@ -25,6 +25,7 @@ class ScoredPost:
     POSITIVE_REACTIONS = {"👍", "❤", "❤️", "😂", "🔥", "💯", "👏", "🎉", "🥰"}
     NEGATIVE_REACTIONS = {"👎", "😡", "😢", "🤬", "🤡"}
 
+    # pylint: disable=too-many-arguments,too-many-positional-arguments
     def __init__(
         self,
         post_id: int,
@@ -38,6 +39,7 @@ class ScoredPost:
         subscribers: int = 1,
         comments: int = 0,
     ) -> None:
+        """Initialize score model values."""
         self.post_id = post_id
         self.channel_name = channel_name
         self.username = username
@@ -52,6 +54,7 @@ class ScoredPost:
         self._score_timestamp: Optional[float] = None
 
     def engagement_score(self) -> float:
+        """Compute engagement component."""
         subscribers = self.subscribers
         positive = sum(self.reactions.get(r, 0) for r in self.POSITIVE_REACTIONS)
         negative = sum(self.reactions.get(r, 0) for r in self.NEGATIVE_REACTIONS)
@@ -63,6 +66,7 @@ class ScoredPost:
         return engagement_score / 3.0
 
     def content_score(self) -> float:
+        """Compute content quality component."""
         weights = {"photos": 0.3, "videos": 0.5, "gifs": 0.2, "poll": 0.3}
 
         media_bonus = 0
@@ -75,6 +79,7 @@ class ScoredPost:
         return min(media_bonus + text_bonus, 3.0)
 
     def freshness_score(self, current_time: Optional[datetime] = None) -> float:
+        """Compute freshness decay component."""
         if current_time is None:
             current_time = datetime.now(timezone.utc)
 
@@ -97,6 +102,7 @@ class ScoredPost:
         weights: Optional[Dict[str, float]] = None,
         use_cache: bool = True,
     ) -> float:
+        """Compute final weighted score."""
         if use_cache and self._cached_score is not None:
             cache_time = getattr(self, "_score_timestamp", 0)
             if asyncio.get_event_loop().time() - cache_time < 60:

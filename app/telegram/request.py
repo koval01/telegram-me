@@ -1,6 +1,7 @@
 """
 Requests module
 """
+# pylint: disable=duplicate-code
 
 import re
 from typing import Literal, Union

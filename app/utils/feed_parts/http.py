@@ -1,3 +1,5 @@
+# pylint: disable=duplicate-code
+
 import httpx
 from httpx import AsyncClient
 
@@ -25,20 +27,8 @@ HTTP2_CLIENT_SETTINGS = {
     },
 }
 
-_global_client: AsyncClient | None = None
-
-
 def get_global_client() -> AsyncClient:
     """Return shared HTTP2 client."""
-    global _global_client
-    if _global_client is None:
-        _global_client = httpx.AsyncClient(**HTTP2_CLIENT_SETTINGS)
-    return _global_client
-
-
-async def close_global_client() -> None:
-    """Close shared HTTP2 client."""
-    global _global_client
-    if _global_client is not None:
-        await _global_client.aclose()
-        _global_client = None
+    if not hasattr(get_global_client, "_client"):
+        get_global_client._client = httpx.AsyncClient(**HTTP2_CLIENT_SETTINGS)  # type: ignore[attr-defined]
+    return get_global_client._client  # type: ignore[attr-defined]

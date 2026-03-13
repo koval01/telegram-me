@@ -165,6 +165,10 @@ jobs:
             test "$docs_code" = "200"
           fi
 
+      - name: Run extended smoke matrix
+        run: |
+          python3 scripts/smoke_matrix.py --base-url http://127.0.0.1:8000 --preset ${{ matrix.preset }}
+
       - name: Show server logs (if failed)
         if: failure()
         run: |
@@ -253,6 +257,10 @@ jobs:
           fi
 
           echo "✓ All Docker tests passed"
+
+      - name: Run extended smoke matrix against Docker
+        run: |
+          python3 scripts/smoke_matrix.py --base-url http://localhost:8000 --preset ${{ matrix.preset }}
 
           # Cleanup
           docker stop fastapi-test-${{ matrix.preset }}

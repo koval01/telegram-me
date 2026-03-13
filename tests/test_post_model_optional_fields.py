@@ -1,3 +1,5 @@
+# pylint: disable=missing-function-docstring
+
 from app.telegram.models.post import Post
 
 

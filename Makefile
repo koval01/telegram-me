@@ -1,7 +1,7 @@
 COMPOSE_LOCAL=docker compose -f docker-compose.yml
 COMPOSE_GHCR=docker compose -f docker-compose.ghcr.yml
 
-.PHONY: up-full up-minimal up-ghcr-full up-ghcr-minimal down logs pull-ghcr
+.PHONY: up-full up-minimal up-ghcr-full up-ghcr-minimal down logs pull-ghcr smoke-matrix
 
 up-full:
 	$(COMPOSE_LOCAL) --profile full up -d --build
@@ -24,3 +24,6 @@ down:
 
 logs:
 	$(COMPOSE_LOCAL) --profile full --profile minimal logs -f
+
+smoke-matrix:
+	python3 scripts/smoke_matrix.py --base-url http://127.0.0.1:8000 --preset auto

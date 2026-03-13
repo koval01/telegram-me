@@ -1,3 +1,5 @@
+# pylint: disable=missing-function-docstring
+
 from fastapi.testclient import TestClient
 
 from app.main import app

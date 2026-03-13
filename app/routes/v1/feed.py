@@ -29,4 +29,3 @@ async def create_feed(item: FeedRequest) -> FeedResponse:
             unique_posts.append(post)
 
     return FeedResponse(result=unique_posts)
-

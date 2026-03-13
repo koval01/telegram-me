@@ -1,3 +1,5 @@
+# pylint: disable=duplicate-code
+
 import re
 from urllib.parse import urlparse
 from typing import Any, Optional

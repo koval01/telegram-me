@@ -3,13 +3,13 @@
 import asyncio
 import logging
 import re
-from typing import List, Dict, Any, Optional, Tuple
+from typing import List, Dict, Any, Tuple
 
 import httpx
 from httpx import AsyncClient
 
 from app.telegram.telegram import Telegram
-from app.utils.feed_parts.http import get_global_client, close_global_client
+from app.utils.feed_parts.http import get_global_client
 from app.utils.features import cache_mode, parser_mode
 from app.utils.feed_parts.parsers import (
     parse_content_type_single,
@@ -45,7 +45,7 @@ class PostDataPreparer:
         for username in usernames:
             cache_key = username.lower()
             if cache_key in self._channel_cache:
-                data, timestamp = self._channel_cache[cache_key]
+                _, timestamp = self._channel_cache[cache_key]
                 if asyncio.get_event_loop().time() - timestamp < self._cache_ttl:
                     continue
 
@@ -66,6 +66,7 @@ class PostDataPreparer:
 
         return channel_data
 
+    # pylint: disable=too-many-locals
     async def fetch_comments_count_ultra_batch(
         self,
         post_infos: List[Tuple[str, int]],
@@ -124,7 +125,7 @@ class PostDataPreparer:
                 post_info: 0 if isinstance(count, Exception) else count
                 for post_info, count in zip(post_infos, counts)
             }
-        except Exception as exc:
+        except Exception as exc:  # pylint: disable=broad-exception-caught
             logger.warning("Batch comment fetch failed, using zeros: %s", exc)
             return {post_info: 0 for post_info in post_infos}
 
@@ -171,6 +172,7 @@ class PostDataPreparer:
                 all_posts.extend(result)
         return all_posts
 
+    # pylint: disable=too-many-locals
     async def _process_channel_posts(
         self,
         username: str,
@@ -211,10 +213,11 @@ class PostDataPreparer:
                     final_posts.append(post_with_channel)
 
                 return final_posts
-            except Exception as exc:
+            except Exception as exc:  # pylint: disable=broad-exception-caught
                 logger.error("Channel processing failed for %s: %s", username, exc)
                 return []
 
+    # pylint: disable=too-many-arguments,too-many-positional-arguments
     def _build_scored_post(
         self,
         post_data: dict[str, Any],
@@ -245,5 +248,3 @@ class PostDataPreparer:
             comments=comments,
         )
 
-
-__all__ = ["PostDataPreparer", "close_global_client"]

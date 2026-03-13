@@ -90,6 +90,14 @@ Stop any running profile:
 make down
 ```
 
+Run extended API smoke matrix against a running local server:
+
+```bash
+python3 scripts/smoke_matrix.py --base-url http://127.0.0.1:8000 --preset auto
+# or
+make smoke-matrix
+```
+
 ## ⚙️ Feature Flags and Performance Modes
 
 All options are environment-driven. Copy `.env.example` to `.env.local` and edit values.
