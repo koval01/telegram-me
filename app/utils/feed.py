@@ -247,4 +247,3 @@ class PostDataPreparer:
             subscribers=subscribers,
             comments=comments,
         )
-

@@ -3,6 +3,8 @@
 import httpx
 from httpx import AsyncClient
 
+CLIENT_ATTR = "client_instance"
+
 HTTP2_CLIENT_SETTINGS = {
     "http2": True,
     "timeout": 15.0,
@@ -29,6 +31,6 @@ HTTP2_CLIENT_SETTINGS = {
 
 def get_global_client() -> AsyncClient:
     """Return shared HTTP2 client."""
-    if not hasattr(get_global_client, "_client"):
-        get_global_client._client = httpx.AsyncClient(**HTTP2_CLIENT_SETTINGS)  # type: ignore[attr-defined]
-    return get_global_client._client  # type: ignore[attr-defined]
+    if not hasattr(get_global_client, CLIENT_ATTR):
+        setattr(get_global_client, CLIENT_ATTR, httpx.AsyncClient(**HTTP2_CLIENT_SETTINGS))
+    return getattr(get_global_client, CLIENT_ATTR)

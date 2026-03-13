@@ -36,6 +36,7 @@ class ScenarioResult:
 
     @property
     def ok(self) -> bool:
+        """Return True when status matches expected contract."""
         return isinstance(self.status, int) and self.status in self.scenario.expected_statuses
 
 
