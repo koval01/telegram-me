@@ -130,7 +130,12 @@ def build_scenarios(feed_enabled: bool, previews_enabled: bool, exploratory_chan
         Scenario("post_invalid_nonint", "GET", "/v1/post/stranaua/notint", {422}),
         Scenario("post_invalid_too_big", "GET", "/v1/post/stranaua/10000001", {422}),
         Scenario("preview_invalid_channel", "GET", "/v1/preview/bad-name", {422}),
-        Scenario("preview_not_found_like", "GET", "/v1/preview/zzzzzznotexistingchannelzzzz", {404}),
+        Scenario(
+            "preview_not_found_like",
+            "GET",
+            "/v1/preview/zzzzzznotexistingchannelzzzz",
+            {404} if previews_enabled else {503},
+        ),
         Scenario("previews_invalid_array_legacy", "POST", "/v1/previews", {422}, payload=["durov", "stranaua"]),
         Scenario("previews_invalid_empty", "POST", "/v1/previews", {422}, payload={"channels": []}),
         Scenario("previews_invalid_item", "POST", "/v1/previews", {422}, payload={"channels": ["durov", "bad-name"]}),
@@ -223,14 +228,21 @@ def main() -> int:
     base_url = args.base_url.rstrip("/")
     exploratory_channels = [c.strip() for c in args.exploratory_channels.split(",") if c.strip()]
 
-    if args.preset == "auto":
-        feed_enabled, previews_enabled = detect_feature_state(base_url, args.timeout)
-    elif args.preset == "full":
-        feed_enabled, previews_enabled = True, True
-    else:
-        feed_enabled, previews_enabled = False, False
+    detected_feed_enabled, detected_previews_enabled = detect_feature_state(base_url, args.timeout)
 
-    scenarios = build_scenarios(feed_enabled, previews_enabled, exploratory_channels)
+    if args.preset == "auto":
+        expected_feed_enabled, expected_previews_enabled = detected_feed_enabled, detected_previews_enabled
+    elif args.preset == "full":
+        expected_feed_enabled, expected_previews_enabled = True, True
+    else:
+        expected_feed_enabled, expected_previews_enabled = False, False
+
+    # Contract checks should follow real runtime behavior.
+    scenarios = build_scenarios(
+        detected_feed_enabled,
+        detected_previews_enabled,
+        exploratory_channels,
+    )
     results = [call(base_url, scenario, args.timeout) for scenario in scenarios]
     print_results(results)
 
@@ -242,8 +254,30 @@ def main() -> int:
     print(f"  strict_failures={len(strict_failures)}")
     print(f"  exploratory_total={len([r for r in results if not r.scenario.strict])}")
     print(f"  exploratory_failures={len(exploratory_failures)}")
-    print(f"  detected_feed_enabled={feed_enabled}")
-    print(f"  detected_previews_enabled={previews_enabled}")
+    print(f"  detected_feed_enabled={detected_feed_enabled}")
+    print(f"  detected_previews_enabled={detected_previews_enabled}")
+    print(f"  expected_feed_enabled={expected_feed_enabled}")
+    print(f"  expected_previews_enabled={expected_previews_enabled}")
+
+    preset_mismatch = (
+        args.preset != "auto"
+        and (
+            detected_feed_enabled != expected_feed_enabled
+            or detected_previews_enabled != expected_previews_enabled
+        )
+    )
+    if preset_mismatch:
+        print("\nPRESET MISMATCH")
+        print(
+            "  Runtime feature state does not match selected preset. "
+            "Check ENV flags used to start the server."
+        )
+        print(
+            f"  expected: feed={expected_feed_enabled}, previews={expected_previews_enabled}"
+        )
+        print(
+            f"  detected: feed={detected_feed_enabled}, previews={detected_previews_enabled}"
+        )
 
     if strict_failures:
         print("\nSTRICT FAILURES")
@@ -252,6 +286,9 @@ def main() -> int:
                 f"- {result.scenario.name}: status={result.status}, "
                 f"expected={sorted(result.scenario.expected_statuses)}, path={result.scenario.path}"
             )
+        return 1
+
+    if preset_mismatch:
         return 1
 
     return 0
