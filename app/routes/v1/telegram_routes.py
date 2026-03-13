@@ -1,4 +1,4 @@
-from typing import Dict, Any
+from typing import Any
 
 from fastapi import APIRouter, Depends
 
@@ -19,6 +19,7 @@ from app.models.routes.base import (
 )
 from app.telegram.models import ChannelBody, More, Post, Preview, Previews
 from app.telegram.telegram import Telegram
+from app.utils.features import is_previews_enabled, require_feature_enabled
 from app.utils.router_helpers import handle_telegram_request
 
 router = APIRouter(tags=["Channel"])
@@ -28,11 +29,12 @@ telegram = Telegram()
 @router.get(
     "/body/{channel}",
     summary="Get basic information about the channel",
+    response_model=ChannelBody,
     responses={200: {"model": ChannelBody}, 404: {"model": HTTPError}, 400: {"model": HTTPError}},
 )
 async def body(
         params: BaseRequestWithPosition = Depends(get_channel_body_params),
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Retrieve basic information about a Telegram channel.
 
     Args:
@@ -49,11 +51,12 @@ async def body(
 @router.get(
     "/more/{channel}/{direction}/{position}",
     summary="Get more posts from the channel",
+    response_model=More,
     responses={200: {"model": More}, 404: {"model": HTTPError}, 400: {"model": HTTPError}},
 )
 async def more(
         params: BaseRequestWithDirection = Depends(validate_more_params),
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Fetch additional posts from a Telegram channel in specified direction.
 
     Args:
@@ -70,11 +73,12 @@ async def more(
 @router.get(
     "/post/{channel}/{identifier}",
     summary="Get one post from the channel",
+    response_model=Post,
     responses={200: {"model": Post}, 404: {"model": HTTPError}, 400: {"model": HTTPError}},
 )
 async def post(
         params: BaseRequestWithId = Depends(validate_channel_and_id),
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Retrieve a specific post from a Telegram channel.
 
     Args:
@@ -91,11 +95,12 @@ async def post(
 @router.get(
     "/preview/{channel}",
     summary="Get preview information of channel",
-    responses={200: {"model": Preview}, 404: {"model": HTTPError}, 400: {"model": HTTPError}},
+    response_model=Preview,
+    responses={200: {"model": Preview}, 404: {"model": HTTPError}, 400: {"model": HTTPError}, 503: {"model": HTTPError}},
 )
 async def preview(
         params: BaseRequest = Depends(validate_channel),
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Get preview information about a Telegram channel.
 
     Args:
@@ -104,6 +109,7 @@ async def preview(
     Returns:
         Dictionary containing channel preview information or error details
     """
+    require_feature_enabled(is_previews_enabled(), "previews")
     return await handle_telegram_request(
         telegram.preview, Preview, params.channel
     )
@@ -112,11 +118,12 @@ async def preview(
 @router.post(
     "/previews",
     summary="Get preview data about the channel group",
-    responses={200: {"model": Previews}, 400: {"model": HTTPError}},
+    response_model=Previews,
+    responses={200: {"model": Previews}, 400: {"model": HTTPError}, 503: {"model": HTTPError}},
 )
 async def previews(
         params: BaseRequestWithChannels = Depends(validate_previews_params),
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Retrieve preview information for multiple Telegram channels.
 
     Args:
@@ -125,6 +132,7 @@ async def previews(
     Returns:
         Dictionary containing previews for all requested channels or error details
     """
+    require_feature_enabled(is_previews_enabled(), "previews")
     return await handle_telegram_request(
         telegram.previews, Previews, params.channels
     )

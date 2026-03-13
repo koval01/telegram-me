@@ -8,6 +8,8 @@ from fastapi import Request, Response
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.types import ASGIApp
 
+from app.utils.features import cache_mode
+
 
 class ProxyCacheHeaderMiddleware(BaseHTTPMiddleware):  # pylint: disable=R0903
     """
@@ -43,10 +45,16 @@ class ProxyCacheHeaderMiddleware(BaseHTTPMiddleware):  # pylint: disable=R0903
         # Call the next middleware or route handler
         response = await call_next(request)
 
-        # Add Cache-Control headers to the response
+        # Add Cache-Control headers to the response only for Cloudflare edge requests.
         if request.headers.get("CF-RAY"):
-            response.headers["Cache-Control"] = (
-                "public, max-age=10, stale-while-revalidate=10"
-            )
+            selected_cache_mode = cache_mode()
+            if selected_cache_mode == "normal":
+                response.headers["Cache-Control"] = (
+                    "public, max-age=10, stale-while-revalidate=10"
+                )
+            elif selected_cache_mode == "aggressive":
+                response.headers["Cache-Control"] = (
+                    "public, max-age=120, stale-while-revalidate=240"
+                )
 
         return response

@@ -1,17 +1,19 @@
-import re
 from typing import Optional, Literal
 
 from pydantic import BaseModel, Field, field_validator
 
-MAX_POST_ID = 10 ** 7
-MAX_CHANNELS_IN_PREVIEW = 100
-CHANNEL_REGEX = re.compile(r"^[a-zA-Z][a-zA-Z0-9_]{3,31}$")
+from app.utils.validation import (
+    MAX_POST_ID,
+    MAX_CHANNELS_IN_PREVIEW,
+    CHANNEL_PATTERN,
+    validate_channel_or_raise,
+)
 
 
 class BaseRequest(BaseModel):
     """Base request model containing channel validation."""
 
-    channel: str = Field(min_length=4, max_length=32)
+    channel: str = Field(min_length=4, max_length=32, pattern=CHANNEL_PATTERN)
 
     @field_validator("channel")
     def validate_channel(cls, v: str) -> str:  # pylint: disable=C0116, E0213
@@ -26,9 +28,7 @@ class BaseRequest(BaseModel):
         Raises:
             ValueError: If channel name doesn't match the required format
         """
-        if not re.match(CHANNEL_REGEX, v):
-            raise ValueError("Invalid Telegram username format")
-        return v
+        return validate_channel_or_raise(v)
 
 
 class BaseRequestWithId(BaseRequest):
@@ -88,6 +88,5 @@ class BaseRequestWithChannels(BaseModel):
             ValueError: If any channel name doesn't match the required format
         """
         for channel in v:
-            if not re.match(CHANNEL_REGEX, channel):
-                raise ValueError("Invalid Telegram username format")
-        return v
+            validate_channel_or_raise(channel)
+        return [channel.strip() for channel in v]

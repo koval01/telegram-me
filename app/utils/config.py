@@ -1,4 +1,6 @@
-from pydantic_settings import BaseSettings
+from typing import Literal
+
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):  # pylint: disable=R0903
@@ -9,15 +11,19 @@ class Settings(BaseSettings):  # pylint: disable=R0903
 
     DISABLE_DOCS: int = 0
     VERSION: str = "1.7"
-    REDIS_URL: str = 'redis://localhost:6379/0'
+    REDIS_URL: str = "redis://localhost:6379/0"
 
-    class Config:  # pylint: disable=R0903
-        """
-        Configuration class that specifies the location of
-        the .env file to be used for loading environment variables.
-        """
+    # Feature flags
+    ENABLE_FEED: bool = True
+    ENABLE_PREVIEWS: bool = True
+    ENABLE_RATE_LIMIT: bool = False
+    RATE_LIMIT_RPM: int = 120
 
-        env_file = "./.env.local"
+    # Performance modes
+    CACHE_MODE: Literal["off", "normal", "aggressive"] = "normal"
+    PARSER_MODE: Literal["full", "simplified"] = "full"
+
+    model_config = SettingsConfigDict(env_file="./.env.local")
 
 
 # Load the settings from the .env file

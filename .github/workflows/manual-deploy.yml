@@ -1,0 +1,86 @@
+name: Manual Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      target_environment:
+        description: "Target deployment environment"
+        required: true
+        default: "production"
+        type: choice
+        options:
+          - production
+          - staging
+      feature_preset:
+        description: "Feature preset for deployment"
+        required: true
+        default: "full"
+        type: choice
+        options:
+          - full
+          - minimal
+          - custom
+      image_tag:
+        description: "Docker image tag to deploy"
+        required: true
+        default: "latest"
+        type: string
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Prepare deploy env file
+        run: |
+          echo "DISABLE_DOCS=0" > .env.deploy
+          echo "REDIS_URL=${{ secrets.REDIS_URL }}" >> .env.deploy
+
+          case "${{ github.event.inputs.feature_preset }}" in
+            minimal)
+              echo "ENABLE_FEED=0" >> .env.deploy
+              echo "ENABLE_PREVIEWS=0" >> .env.deploy
+              echo "ENABLE_RATE_LIMIT=1" >> .env.deploy
+              echo "RATE_LIMIT_RPM=90" >> .env.deploy
+              echo "CACHE_MODE=aggressive" >> .env.deploy
+              echo "PARSER_MODE=simplified" >> .env.deploy
+              ;;
+            full)
+              echo "ENABLE_FEED=1" >> .env.deploy
+              echo "ENABLE_PREVIEWS=1" >> .env.deploy
+              echo "ENABLE_RATE_LIMIT=0" >> .env.deploy
+              echo "RATE_LIMIT_RPM=120" >> .env.deploy
+              echo "CACHE_MODE=normal" >> .env.deploy
+              echo "PARSER_MODE=full" >> .env.deploy
+              ;;
+            custom)
+              echo "ENABLE_FEED=${{ vars.ENABLE_FEED || 1 }}" >> .env.deploy
+              echo "ENABLE_PREVIEWS=${{ vars.ENABLE_PREVIEWS || 1 }}" >> .env.deploy
+              echo "ENABLE_RATE_LIMIT=${{ vars.ENABLE_RATE_LIMIT || 0 }}" >> .env.deploy
+              echo "RATE_LIMIT_RPM=${{ vars.RATE_LIMIT_RPM || 120 }}" >> .env.deploy
+              echo "CACHE_MODE=${{ vars.CACHE_MODE || 'normal' }}" >> .env.deploy
+              echo "PARSER_MODE=${{ vars.PARSER_MODE || 'full' }}" >> .env.deploy
+              ;;
+          esac
+
+      - name: Deploy to servers
+        run: |
+          echo "${{ secrets.SSH_KEY }}" > private_key
+          chmod 600 private_key
+          SERVERS=(${{ secrets.SERVERS_IPS }})
+          IMAGE="ghcr.io/${{ github.repository }}:${{ github.event.inputs.image_tag }}"
+
+          DEPLOY_COMMAND="docker pull $IMAGE && \
+                         docker stop telegram-me || true && \
+                         docker rm telegram-me || true && \
+                         docker run -d --name telegram-me -p 8000:3000 --env-file env.app $IMAGE"
+
+          for SERVER_IP in "${SERVERS[@]}"; do
+            scp -o StrictHostKeyChecking=no -i private_key .env.deploy ubuntu@$SERVER_IP:~/env.app
+            ssh -o StrictHostKeyChecking=no -i private_key ubuntu@$SERVER_IP "$DEPLOY_COMMAND"
+            ssh -o StrictHostKeyChecking=no -i private_key ubuntu@$SERVER_IP "sleep 20 && curl -f http://localhost:8000/healthz"
+          done
+
+      - name: Cleanup
+        if: always()
+        run: |
+          rm -f private_key .env.deploy

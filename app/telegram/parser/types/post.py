@@ -1,7 +1,5 @@
 import re
 import json
-from datetime import datetime
-from urllib.parse import urlparse
 
 from typing import Union, Optional, Dict, List, Any, Tuple
 
@@ -10,6 +8,15 @@ from selectolax.lexbor import LexborHTMLParser, LexborNode
 from app.telegram.parser.types.entities import EntitiesParser
 from app.telegram.parser.types.media import Media
 from app.telegram.parser.methods.utils import Utils
+from app.telegram.parser.types.post_extractors import (
+    clean_html_text,
+    extract_poll,
+    extract_preview_link,
+    extract_reply_data,
+    unix_timestamp,
+)
+from app.telegram.parser.types.post_reactions import parse_reactions
+from app.utils.config import settings
 
 
 class Post:
@@ -32,6 +39,10 @@ class Post:
         self.buble = lambda m: m.css_first(".tgme_widget_message_bubble")
 
     @staticmethod
+    def _simplified_parser_enabled() -> bool:
+        return settings.PARSER_MODE == "simplified"
+
+    @staticmethod
     def __unix_timestamp(timestamp: str) -> int:
         """
         Converts a timestamp string to UNIX timestamp format.
@@ -42,8 +53,7 @@ class Post:
         Returns:
             int: The UNIX timestamp.
         """
-        timestamp = datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%S%z")
-        return int(timestamp.timestamp())
+        return unix_timestamp(timestamp)
 
     def messages(self) -> list[LexborNode]:
         """
@@ -84,15 +94,22 @@ class Post:
         Returns:
             Dict[str, Any]: Dictionary of content fields that are not None.
         """
-        content_fields = {
-            "text": post_instance.text(buble),
-            "media": Post.__extract_media_info(buble),
-            "poll": post_instance.poll(buble),
-            "inline": post_instance.inline(message),
-            "reply": post_instance.reply(message),
-            "preview_link": post_instance.preview_link(message),
-            "reacts": post_instance.reactions(message)
-        }
+        if post_instance._simplified_parser_enabled():
+            content_fields = {
+                "text": post_instance.text(buble),
+                "media": Post.__extract_media_info(buble),
+                "inline": post_instance.inline(message),
+            }
+        else:
+            content_fields = {
+                "text": post_instance.text(buble),
+                "media": Post.__extract_media_info(buble),
+                "poll": post_instance.poll(buble),
+                "inline": post_instance.inline(message),
+                "reply": post_instance.reply(message),
+                "preview_link": post_instance.preview_link(message),
+                "reacts": post_instance.reactions(message),
+            }
 
         return {k: v for k, v in content_fields.items() if v}
 
@@ -107,21 +124,7 @@ class Post:
         Returns:
             str: Cleaned text content.
         """
-        # Replace <br> tags with newlines
-        text = re.sub(r"<br\s?/?>", "\n", html_content)
-
-        # Extract content from div if present
-        div = re.compile(
-            r'<div\s+class="tgme_widget_message_text(?:[^"]*)"(?:\s+[^>]*?)?>(.*?)(?:</div>|$)',
-            flags=re.DOTALL,
-        )
-        div_match = re.search(div, text)
-        text = div_match.group(1) if div_match else text
-
-        # Replace HTML entities
-        text = text.replace("&nbsp;", " ")
-
-        return text
+        return clean_html_text(html_content)
 
     @staticmethod
     def __extract_reply_data(
@@ -139,13 +142,7 @@ class Post:
             Tuple[Optional[LexborNode], Optional[LexborNode], Optional[LexborNode]]:
                 Tuple of (cover, name, text) nodes.
         """
-        cover = reply.css_first(".tgme_widget_message_reply_thumb")
-        name = reply.css_first(".tgme_widget_message_author")
-        text = reply.css_first(
-            ".tgme_widget_message_metatext, .tgme_widget_message_text"
-        )
-
-        return cover, name, text
+        return extract_reply_data(reply)
 
     @staticmethod
     def __extract_preview_site_name(preview: LexborNode) -> Optional[str]:
@@ -183,17 +180,7 @@ class Post:
             Union[dict, None]: A dictionary containing preview link information
                 or None if not found.
         """
-        preview = buble.css_first(".tgme_widget_message_link_preview")
-        if not preview:
-            return None
-
-        return {
-            "site_name": Post.__extract_preview_site_name(preview),
-            "url": preview.attributes.get("href"),
-            "title": Post.__extract_preview_title(preview),
-            "description": Post.__extract_preview_description(preview),
-            "thumb": Post.__extract_preview_thumb(preview),
-        }
+        return extract_preview_link(buble)
 
     @staticmethod
     def __extract_preview_description(
@@ -247,17 +234,7 @@ class Post:
             Union[dict, None]: A dictionary containing poll information,
             or None if no poll found.
         """
-        poll = buble.css_first(".tgme_widget_message_poll")
-        if not poll:
-            return None
-
-        _type = poll.css_first(".tgme_widget_message_poll_type")
-        return {
-            "question": Post.__extract_poll_question(poll),
-            "type": _type.text() if _type else None,
-            "votes": buble.css_first(".tgme_widget_message_voters").text(),
-            "options": Post.__extract_poll_options(poll),
-        }
+        return extract_poll(buble)
 
     @classmethod
     def footer(cls, buble: LexborNode) -> dict:
@@ -324,10 +301,11 @@ class Post:
         content_t = Utils.get_text_html(selector)
         text = Post.__clean_html_text(content_t)
 
-        entities = EntitiesParser(content).parse_message()
         response = {"string": text, "html": content}
-        if entities:
-            response["entities"] = entities
+        if not Post._simplified_parser_enabled():
+            entities = EntitiesParser(content).parse_message()
+            if entities:
+                response["entities"] = entities
 
         return response
 
@@ -403,17 +381,9 @@ class Post:
     @classmethod
     def reactions(cls, message: LexborNode) -> Optional[List[Dict[str, Any]]]:
         """Parse reaction information from a message."""
-        reactions_node = message.css_first(".tgme_widget_message_reactions")
-        if not reactions_node:
+        if cls._simplified_parser_enabled():
             return None
-
-        reactions = []
-        for reaction_node in reactions_node.css(".tgme_reaction"):
-            reaction = cls.__extract_single_reaction(reaction_node)
-            if reaction:
-                reactions.append(reaction)
-
-        return reactions or None
+        return parse_reactions(message)
 
     @classmethod
     def __extract_single_reaction(cls, reaction_node: LexborNode) -> Optional[Dict[str, Any]]:

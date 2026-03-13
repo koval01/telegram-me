@@ -7,6 +7,11 @@ from typing import Literal
 import json
 import redis.asyncio as redis
 
+from app.telegram.exceptions import (
+    TelegramNotFoundError,
+    TelegramParseError,
+    TelegramUpstreamError,
+)
 from app.telegram.parser.methods.body import Body
 from app.telegram.parser.methods.more import More
 from app.telegram.parser.methods.preview import Preview
@@ -51,10 +56,12 @@ class Telegram:
             dict: A dictionary containing the message body.
         """
         response = await Request().body(channel, position)
-        if not response:
-            return {}
-
-        return Body(response).get()
+        try:
+            return Body(response).get()
+        except TelegramNotFoundError:
+            raise
+        except Exception as exc:  # pragma: no cover - parser-specific failures
+            raise TelegramParseError("Failed to parse Telegram channel body") from exc
 
     @staticmethod
     async def more(
@@ -74,19 +81,16 @@ class Telegram:
             dict: A dictionary containing the additional messages.
         """
         response = await Request().more(channel, position, direction)
+        response_body = response.get("html", "") if isinstance(response, dict) else response
+        try:
+            parsed = More(response_body).get()
+        except Exception as exc:  # pragma: no cover - parser-specific failures
+            raise TelegramParseError("Failed to parse Telegram more response") from exc
 
-        if isinstance(response, str) and response == "":
-            return More(response).get()
-
-        if not response:
-            return {}
-
-        # additional validation response
-        response = More(response).get()
-        response["posts"] = list(
-            filter(lambda post: post["id"] != position, response["posts"])
+        parsed["posts"] = list(
+            filter(lambda post: post["id"] != position, parsed["posts"])
         )
-        return response
+        return parsed
 
     @staticmethod
     async def post(channel: str, position: int, only_post: bool = True) -> dict:
@@ -103,12 +107,12 @@ class Telegram:
             otherwise an empty dictionary.
         """
         response = await Request().body(channel, position)
-        if not response:
-            return {}
-
-        response = Body(response).get(position)
+        try:
+            response = Body(response).get(position)
+        except Exception as exc:  # pragma: no cover - parser-specific failures
+            raise TelegramParseError("Failed to parse Telegram post response") from exc
         if not response["content"]["posts"]:
-            return {}
+            raise TelegramNotFoundError("Requested post was not found")
         if only_post:
             response = response["content"]["posts"][0]
 
@@ -139,14 +143,14 @@ class Telegram:
 
         # Fetch from API if not in cache
         response = await Request().preview(channel)
-        if not response:
-            return {}
-
-        preview_data = Preview(response).get()
+        try:
+            preview_data = Preview(response).get()
+        except Exception as exc:  # pragma: no cover - parser-specific failures
+            raise TelegramParseError("Failed to parse Telegram preview response") from exc
 
         # Cache the result
         if not preview_data:
-            return preview_data
+            raise TelegramNotFoundError("Requested Telegram resource was not found")
 
         try:
             await redis_client.setex(

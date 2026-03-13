@@ -1,7 +1,6 @@
 x-app-common: &app-common
-  build:
-    context: .
-    dockerfile: Dockerfile
+  image: ${APP_IMAGE:-ghcr.io/koval01/telegram-me:latest}
+  pull_policy: always
   ports:
     - "${APP_PORT:-8000}:3000"
   environment:

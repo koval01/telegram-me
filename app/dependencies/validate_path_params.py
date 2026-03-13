@@ -9,12 +9,13 @@ from app.models.routes.base import (
     BaseRequestWithPosition,
     BaseRequestWithDirection,
     BaseRequestWithChannels,
-    MAX_POST_ID, CHANNEL_REGEX
+    MAX_POST_ID,
 )
+from app.utils.validation import CHANNEL_PATTERN
 
 
 async def validate_channel(
-    channel: str = Path(..., pattern=CHANNEL_REGEX,
+    channel: str = Path(..., pattern=CHANNEL_PATTERN,
         description="Telegram channel username"),
 ) -> BaseRequest:
     """
@@ -33,7 +34,7 @@ async def validate_channel(
 
 
 async def validate_channel_and_id(
-    channel: str = Path(..., pattern=CHANNEL_REGEX,
+    channel: str = Path(..., pattern=CHANNEL_PATTERN,
                         description="Telegram channel username"),
     identifier: int = Path(..., gt=0, le=MAX_POST_ID, description="Post ID"),
 ) -> BaseRequestWithId:
@@ -54,7 +55,7 @@ async def validate_channel_and_id(
 
 
 async def get_channel_body_params(
-    channel: str = Path(..., pattern=CHANNEL_REGEX),
+    channel: str = Path(..., pattern=CHANNEL_PATTERN),
     position: Optional[int] = Query(None, gt=0, le=MAX_POST_ID)
 ) -> BaseRequestWithPosition:
     """
@@ -75,7 +76,7 @@ async def get_channel_body_params(
 
 
 async def validate_more_params(
-    channel: str = Path(..., pattern=CHANNEL_REGEX),
+    channel: str = Path(..., pattern=CHANNEL_PATTERN),
     direction: Literal["after", "before"] = Path(...),
     position: int = Path(..., gt=0, le=MAX_POST_ID)
 ) -> BaseRequestWithDirection:
@@ -101,11 +102,9 @@ async def validate_more_params(
 
 
 async def validate_previews_params(
-    channels: list[str] = Body(
-        ["telegram"],
-        description="List of channel identifiers",
-        min_length=1,
-        max_length=100
+    payload: BaseRequestWithChannels = Body(
+        ...,
+        description="Payload with list of channel identifiers",
     )
 ) -> BaseRequestWithChannels:
     """
@@ -122,7 +121,7 @@ async def validate_previews_params(
         HTTPException: 422 status if channel validation fails
     """
     try:
-        return BaseRequestWithChannels(channels=channels)
+        return payload
     except ValueError as e:
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY

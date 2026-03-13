@@ -8,6 +8,15 @@ from typing import Literal, Union
 import urllib.parse
 import httpx
 
+from app.telegram.exceptions import (
+    TelegramNotFoundError,
+    TelegramUpstreamError,
+    TelegramValidationError,
+)
+from app.utils.validation import (
+    MAX_POST_ID,
+    is_valid_channel,
+)
 
 class Request:
     """
@@ -32,7 +41,7 @@ class Request:
         method: Literal["GET", "POST"] = "GET",
         json: bool = False,
         params: dict = None,
-    ) -> Union[str, dict, None]:
+    ) -> Union[str, dict]:
         """
         Makes an asynchronous HTTP request.
 
@@ -49,42 +58,49 @@ class Request:
 
         sanitized_path: str = urllib.parse.quote(path)
 
-        async with httpx.AsyncClient(http2=True) as client:
-            response = await client.request(
-                method=method,
-                url=f"https://{self.host}/{sanitized_path}",
-                follow_redirects=False,
-                params=params,
-                headers={
-                    "x-requested-with": (
-                        "XMLHttpRequest" if method == "POST" else ""
-                    ),
-                    "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",  # pylint: disable=line-too-long
-                    "accept-encoding": "gzip, deflate, br",
-                    "accept-language": "ru",
-                    "cache-control": "max-age=0",
-                    "connection": "keep-alive",
-                    "dnt": "1",
-                    "priority": "u=0, i",
-                    "sec-ch-ua": '"Google Chrome";v="141", "Not?A_Brand";v="8", "Chromium";v="141"',
-                    "sec-ch-ua-mobile": "?1",
-                    "sec-ch-ua-platform": "Android",
-                    "sec-fetch-dest": "document",
-                    "sec-fetch-mode": "navigate",
-                    "sec-fetch-site": "none",
-                    "sec-fetch-user": "?1",
-                    "upgrade-insecure-requests": "1",
-                    "user-agent": "Mozilla/5.0 (Linux; Android 10) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Mobile Safari/537.36",  # pylint: disable=line-too-long
-                },
+        try:
+            async with httpx.AsyncClient(http2=True) as client:
+                response = await client.request(
+                    method=method,
+                    url=f"https://{self.host}/{sanitized_path}",
+                    follow_redirects=False,
+                    params=params,
+                    headers={
+                        "x-requested-with": (
+                            "XMLHttpRequest" if method == "POST" else ""
+                        ),
+                        "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",  # pylint: disable=line-too-long
+                        "accept-encoding": "gzip, deflate, br",
+                        "accept-language": "ru",
+                        "cache-control": "max-age=0",
+                        "connection": "keep-alive",
+                        "dnt": "1",
+                        "priority": "u=0, i",
+                        "sec-ch-ua": '"Google Chrome";v="141", "Not?A_Brand";v="8", "Chromium";v="141"',
+                        "sec-ch-ua-mobile": "?1",
+                        "sec-ch-ua-platform": "Android",
+                        "sec-fetch-dest": "document",
+                        "sec-fetch-mode": "navigate",
+                        "sec-fetch-site": "none",
+                        "sec-fetch-user": "?1",
+                        "upgrade-insecure-requests": "1",
+                        "user-agent": "Mozilla/5.0 (Linux; Android 10) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Mobile Safari/537.36",  # pylint: disable=line-too-long
+                    },
+                )
+        except httpx.HTTPError as exc:
+            raise TelegramUpstreamError("Failed to fetch Telegram upstream resource") from exc
+
+        if response.status_code == 404:
+            raise TelegramNotFoundError("Requested Telegram resource was not found")
+        if response.status_code >= 400:
+            raise TelegramUpstreamError(
+                f"Telegram upstream returned status {response.status_code}"
             )
 
-            if response.status_code != 200:
-                return None
+        if json:
+            return response.json()
 
-            if json:
-                return response.json()
-
-            return response.text
+        return response.text
 
     @staticmethod
     def valid_channel(channel: str) -> bool:
@@ -97,7 +113,7 @@ class Request:
         Returns:
         - bool: True if the channel name is valid, False otherwise.
         """
-        return bool(re.match(r"^[a-zA-Z0-9_-]{3,32}$", channel))
+        return is_valid_channel(channel)
 
     @staticmethod
     def valid_position(position: int) -> bool:
@@ -111,12 +127,12 @@ class Request:
         - bool: True if the position is valid, False otherwise.
         """
         pattern = re.compile(r"^[0-9]{1,6}$")
-        if re.match(pattern, str(position)) and 0 <= position <= 10_000_000:
+        if re.match(pattern, str(position)) and 0 <= position <= MAX_POST_ID:
             return True
 
         return False
 
-    async def body(self, channel: str, position: int = 0) -> Union[str, None]:
+    async def body(self, channel: str, position: int = 0) -> str:
         """
         Retrieves the body content of a channel at a given position.
 
@@ -128,20 +144,22 @@ class Request:
             Union[str, None]: The response body content, or None if request fails.
         """
         if not self.valid_channel(channel):
-            return None
+            raise TelegramValidationError("Invalid Telegram username format")
 
         if position and not self.valid_position(position):
-            return None
+            raise TelegramValidationError("Invalid post position")
 
         response = await self.__request(f"s/{channel}/{position}")
-        return response if response else None
+        if not isinstance(response, str):
+            raise TelegramUpstreamError("Unexpected Telegram body response format")
+        return response
 
     async def more(
         self,
         channel: str,
         position: int,
         direction: Literal["before", "after"],
-    ) -> Union[str, None]:
+    ) -> Union[str, dict]:
         """
         Retrieves more content from a channel relative to a given position.
 
@@ -154,20 +172,16 @@ class Request:
             Union[str, None]: Additional content in dictionary format, or None if request fails.
         """
         if not self.valid_channel(channel):
-            return None
+            raise TelegramValidationError("Invalid Telegram username format")
 
-        response = await self.__request(
+        return await self.__request(
             f"s/{channel}",
             method="POST",
             json=True,
             params={direction: position},
         )
-        if isinstance(response, str):
-            return response
 
-        return response if response else None
-
-    async def preview(self, channel: str) -> Union[str, None]:
+    async def preview(self, channel: str) -> str:
         """
         A method for obtaining preliminary information about a channel.
 
@@ -178,7 +192,9 @@ class Request:
             Union[str, None]: The response body content, or None if request fails.
         """
         if not self.valid_channel(channel):
-            return None
+            raise TelegramValidationError("Invalid Telegram username format")
 
         response = await self.__request(channel)
-        return response if response else None
+        if not isinstance(response, str):
+            raise TelegramUpstreamError("Unexpected Telegram preview response format")
+        return response

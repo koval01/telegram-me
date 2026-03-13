@@ -1,11 +1,22 @@
-from fastapi import Response, APIRouter
+from fastapi import APIRouter
+from pydantic import BaseModel
 
 router = APIRouter()
 
 
+class HealthzResponse(BaseModel):
+    """Health endpoint response payload."""
+
+    status: str
+
+
 @router.get(
-    "/healthz", summary="Health status", responses={200: {}}, tags=["Service"]
+    "/healthz",
+    summary="Health status",
+    response_model=HealthzResponse,
+    responses={200: {"model": HealthzResponse}},
+    tags=["Service"],
 )
-async def healthz() -> Response:
+async def healthz() -> HealthzResponse:
     """Request handler"""
-    return Response(None)
+    return HealthzResponse(status="ok")

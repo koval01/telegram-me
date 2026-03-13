@@ -7,6 +7,7 @@ from app.routes import router
 from app.middleware.node import NodeMiddleware
 from app.middleware.process_time import ProcessTimeMiddleware
 from app.middleware.cache_header import ProxyCacheHeaderMiddleware
+from app.middleware.rate_limit import RateLimitMiddleware
 
 from app.utils.config import settings
 
@@ -29,5 +30,7 @@ app.add_middleware(
 app.add_middleware(NodeMiddleware)  # type: ignore[no-untyped-call]
 app.add_middleware(ProcessTimeMiddleware)  # type: ignore[no-untyped-call]
 app.add_middleware(ProxyCacheHeaderMiddleware)  # type: ignore[no-untyped-call]
+if settings.ENABLE_RATE_LIMIT:
+    app.add_middleware(RateLimitMiddleware)  # type: ignore[no-untyped-call]
 
 app.include_router(router)

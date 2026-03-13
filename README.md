@@ -68,6 +68,52 @@ docker run -d --name telegram-me -p 8000:3000 koval01/telegram-me:latest
 
 Your API will be available at `http://localhost:8000`
 
+### Method 3: One-Click Profiles (recommended)
+
+Use predefined profiles via `make`:
+
+```bash
+# Build and run full feature set from local sources
+make up-full
+
+# Build and run minimal preset (feed/previews disabled)
+make up-minimal
+
+# Run from GHCR image (no local build)
+make up-ghcr-full
+make up-ghcr-minimal
+```
+
+Stop any running profile:
+
+```bash
+make down
+```
+
+## ⚙️ Feature Flags and Performance Modes
+
+All options are environment-driven. Copy `.env.example` to `.env.local` and edit values.
+
+### Core Feature Flags
+- `ENABLE_FEED=1|0` - enable/disable `/v1/feed`
+- `ENABLE_PREVIEWS=1|0` - enable/disable `/v1/preview` and `/v1/previews`
+- `ENABLE_RATE_LIMIT=1|0` - toggle in-app rate limiting middleware
+- `RATE_LIMIT_RPM=120` - requests per minute per client IP
+
+### Performance Modes
+- `CACHE_MODE=off|normal|aggressive`
+  - `off`: disables cache header strategy
+  - `normal`: conservative cache control
+  - `aggressive`: longer cache TTL headers
+- `PARSER_MODE=full|simplified`
+  - `full`: complete parsing (entities, reactions, preview link, etc.)
+  - `simplified`: lightweight parsing for lower runtime cost
+
+### Preset Behavior
+- **Full preset**: all primary API features enabled.
+- **Minimal preset**: feed/previews disabled, parser simplified, aggressive cache defaults, tighter rate-limit default.
+- Disabled features return predictable `503` with structured error payload.
+
 ## 🛠 Production Setup Guide
 
 ### Step 1: Server Preparation and Firewall Configuration
@@ -421,13 +467,39 @@ Internet → Load Balancer (Nginx) → Backend Servers (Docker)
 
 Once deployed, access the interactive API documentation:
 
-- **Development**: `http://localhost:8000/docs`
-- **Production**: `https://your-domain.com/docs`
+- **Development**: `http://localhost:8000/`
+- **Production**: `https://your-domain.com/`
 
 The API provides endpoints for:
 - Fetching basic channel information
 - Retrieving channel posts
 - Pagination support for large channels
+
+## 🐳 GHCR Deployment
+
+To run latest published image from GHCR:
+
+```bash
+cp .env.example .env.local
+# optional: edit .env.local values
+APP_IMAGE=ghcr.io/koval01/telegram-me:latest make up-ghcr-full
+```
+
+For minimal mode:
+
+```bash
+APP_IMAGE=ghcr.io/koval01/telegram-me:latest make up-ghcr-minimal
+```
+
+## 🧪 CI Validation Matrix
+
+GitHub Actions now validates:
+- `full` preset and `minimal` preset
+- unit/integration tests
+- OpenAPI contract checks (`/openapi.json`)
+- Docker smoke tests for both presets
+
+This reduces the chance of shipping broken config combinations.
 
 ## 🔒 Security Considerations
 

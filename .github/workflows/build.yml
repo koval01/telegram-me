@@ -51,7 +51,7 @@ jobs:
 
       - name: Analysing the code with pylint
         run: |
-          pylint $(git ls-files '*.py') --exit-zero
+          pylint $(git ls-files '*.py')
 
       - name: Run Radon analysis
         if: matrix.python-version == '3.13'
@@ -69,6 +69,9 @@ jobs:
     name: Run Tests
     runs-on: ubuntu-latest
     needs: [code-quality]
+    strategy:
+      matrix:
+        preset: [full, minimal]
 
     steps:
       - uses: actions/checkout@v4
@@ -76,6 +79,21 @@ jobs:
       - name: Create .env.local for testing
         run: |
           echo "REDIS_URL=${{ secrets.REDIS_URL }}" > .env.local
+          if [ "${{ matrix.preset }}" = "minimal" ]; then
+            echo "ENABLE_FEED=0" >> .env.local
+            echo "ENABLE_PREVIEWS=0" >> .env.local
+            echo "ENABLE_RATE_LIMIT=1" >> .env.local
+            echo "RATE_LIMIT_RPM=90" >> .env.local
+            echo "CACHE_MODE=aggressive" >> .env.local
+            echo "PARSER_MODE=simplified" >> .env.local
+          else
+            echo "ENABLE_FEED=1" >> .env.local
+            echo "ENABLE_PREVIEWS=1" >> .env.local
+            echo "ENABLE_RATE_LIMIT=0" >> .env.local
+            echo "RATE_LIMIT_RPM=120" >> .env.local
+            echo "CACHE_MODE=normal" >> .env.local
+            echo "PARSER_MODE=full" >> .env.local
+          fi
           echo "Created .env.local file with REDIS_URL"
 
       - name: Set up Python ${{ env.PYTHON_VERSION }}
@@ -104,47 +122,48 @@ jobs:
         run: |
           export 'REDIS_URL=${{ secrets.REDIS_URL }}'
 
+      - name: Run unit and integration tests
+        run: |
+          pytest -q
+
       - name: Run FastAPI app in background
         run: |
           nohup uvicorn app.main:app --host 0.0.0.0 --port 8000 > server.log 2>&1 &
           echo "Waiting for server to start..."
           sleep 10
 
-      - name: Test API endpoints
+      - name: Validate OpenAPI contract
         run: |
-          echo "Testing API endpoints..."
-          
-          # Health check first
-          echo "GET /healthz"
-          if curl -s -f http://127.0.0.1:8000/healthz; then
-            echo "✓ Health check passed"
+          curl -s -f http://127.0.0.1:8000/healthz > /dev/null
+          curl -s -f http://127.0.0.1:8000/openapi.json > openapi.json
+          python - <<'PY'
+          import json
+          with open("openapi.json", "r", encoding="utf-8") as f:
+              spec = json.load(f)
+
+          assert "/v1/feed" in spec["paths"], "Missing /v1/feed in OpenAPI"
+          assert "/v1/preview/{channel}" in spec["paths"], "Missing /v1/preview/{channel}"
+          assert "/v1/previews" in spec["paths"], "Missing /v1/previews"
+
+          preview_responses = spec["paths"]["/v1/preview/{channel}"]["get"]["responses"]
+          feed_responses = spec["paths"]["/v1/feed"]["post"]["responses"]
+          assert "503" in preview_responses, "Preview endpoint must document 503 when feature disabled"
+          assert "503" in feed_responses, "Feed endpoint must document 503 when feature disabled"
+          PY
+
+      - name: Smoke check feature preset behavior
+        run: |
+          if [ "${{ matrix.preset }}" = "minimal" ]; then
+            preview_code=$(curl -s -o /dev/null -w "%{http_code}" "http://127.0.0.1:8000/v1/preview/durov")
+            feed_code=$(curl -s -o /dev/null -w "%{http_code}" -X POST "http://127.0.0.1:8000/v1/feed" -H "Content-Type: application/json" -d '{"channels":["durov"]}')
+            previews_code=$(curl -s -o /dev/null -w "%{http_code}" -X POST "http://127.0.0.1:8000/v1/previews" -H "Content-Type: application/json" -d '{"channels":["durov"]}')
+            test "$preview_code" = "503"
+            test "$feed_code" = "503"
+            test "$previews_code" = "503"
           else
-            echo "✗ Health check failed"
-            exit 1
+            docs_code=$(curl -s -o /dev/null -w "%{http_code}" "http://127.0.0.1:8000/")
+            test "$docs_code" = "200"
           fi
-
-          # Test other endpoints
-          endpoints=(
-            "/"
-            "/v1/preview/durov"
-            "/v1/post/durov/440"
-            "/v1/more/durov/after/300"
-            "/v1/more/durov/before/300"
-            "/v1/body/durov"
-            "/v1/body/durov?position=350"
-          )
-
-          for endpoint in "${endpoints[@]}"; do
-            echo "Testing $endpoint"
-            status_code=$(curl -s -o /dev/null -w "%{http_code}" "http://127.0.0.1:8000$endpoint")
-            echo "Status: $status_code"
-            if [ "$status_code" -ge 400 ]; then
-              echo "✗ Endpoint $endpoint returned error: $status_code"
-              exit 1
-            fi
-          done
-
-          echo "✓ All endpoint tests passed"
 
       - name: Show server logs (if failed)
         if: failure()
@@ -156,6 +175,9 @@ jobs:
     name: Build and Test Docker Image
     runs-on: ubuntu-latest
     needs: [test]
+    strategy:
+      matrix:
+        preset: [full, minimal]
 
     steps:
       - uses: actions/checkout@v4
@@ -163,6 +185,21 @@ jobs:
       - name: Create .env.local for Docker build
         run: |
           echo "REDIS_URL=${{ secrets.REDIS_URL }}" > .env.local
+          if [ "${{ matrix.preset }}" = "minimal" ]; then
+            echo "ENABLE_FEED=0" >> .env.local
+            echo "ENABLE_PREVIEWS=0" >> .env.local
+            echo "ENABLE_RATE_LIMIT=1" >> .env.local
+            echo "RATE_LIMIT_RPM=90" >> .env.local
+            echo "CACHE_MODE=aggressive" >> .env.local
+            echo "PARSER_MODE=simplified" >> .env.local
+          else
+            echo "ENABLE_FEED=1" >> .env.local
+            echo "ENABLE_PREVIEWS=1" >> .env.local
+            echo "ENABLE_RATE_LIMIT=0" >> .env.local
+            echo "RATE_LIMIT_RPM=120" >> .env.local
+            echo "CACHE_MODE=normal" >> .env.local
+            echo "PARSER_MODE=full" >> .env.local
+          fi
           echo "Created .env.local file with REDIS_URL"
 
       - name: Set up Docker Buildx
@@ -180,7 +217,7 @@ jobs:
           context: .
           file: Dockerfile
           load: true
-          tags: ${{ env.DOCKER_IMAGE }}:test-${{ steps.vars.outputs.short_sha }}
+          tags: ${{ env.DOCKER_IMAGE }}:test-${{ steps.vars.outputs.short_sha }}-${{ matrix.preset }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           build-args: |
@@ -189,7 +226,7 @@ jobs:
       - name: Test Docker image
         run: |
           echo "Starting Docker container for testing..."
-          docker run -d -p 8000:3000 --env-file .env.local --name fastapi-test ${{ env.DOCKER_IMAGE }}:test-${{ steps.vars.outputs.short_sha }}
+          docker run -d -p 8000:3000 --env-file .env.local --name fastapi-test-${{ matrix.preset }} ${{ env.DOCKER_IMAGE }}:test-${{ steps.vars.outputs.short_sha }}-${{ matrix.preset }}
           
           echo "Waiting for container to be ready..."
           for i in {1..30}; do
@@ -207,13 +244,19 @@ jobs:
 
           # Test basic functionality
           echo "Testing basic endpoints..."
-          curl -s http://localhost:8000/ | grep -q "Swagger" && echo "✓ Root endpoint working" || (echo "✗ Root endpoint failed" && exit 1)
+          curl -s -f http://localhost:8000/openapi.json > /dev/null || (echo "✗ OpenAPI endpoint failed" && exit 1)
+          if [ "${{ matrix.preset }}" = "minimal" ]; then
+            preview_code=$(curl -s -o /dev/null -w "%{http_code}" "http://localhost:8000/v1/preview/durov")
+            test "$preview_code" = "503" || (echo "✗ Minimal preset must return 503 for /v1/preview" && exit 1)
+          else
+            curl -s http://localhost:8000/ | grep -q "Swagger" && echo "✓ Root endpoint working" || (echo "✗ Root endpoint failed" && exit 1)
+          fi
 
           echo "✓ All Docker tests passed"
 
           # Cleanup
-          docker stop fastapi-test
-          docker rm fastapi-test
+          docker stop fastapi-test-${{ matrix.preset }}
+          docker rm fastapi-test-${{ matrix.preset }}
 
   build-push:
     name: Build and Push Multi-arch Docker Image

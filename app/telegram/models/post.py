@@ -54,6 +54,7 @@ class TextEntities(BaseModel):
         "animoji", "hashtag"
     ]
     language: Optional[str] = None
+    url: Optional[AnyUrl] = None
 
 
 class Text(BaseModel):
@@ -115,7 +116,7 @@ class Reply(BaseModel):
         text (ParsedAndRaw): Content preview of the original message.
         to_message (int): Unique identifier of the message being replied to.
     """
-    cover: Optional[AnyUrl]
+    cover: Optional[AnyUrl] = None
     name: ParsedAndRaw
     text: ParsedAndRaw
     to_message: int
@@ -131,11 +132,11 @@ class PreviewLink(BaseModel):
         description (Optional[ParsedAndRaw]): Summary text from the linked page.
         thumb (Optional[HttpUrl]): Preview image URL from the linked content.
     """
-    title: Optional[str]
+    title: Optional[str] = None
     url: HttpUrl
-    site_name: Optional[str]
-    description: Optional[ParsedAndRaw]
-    thumb: Optional[HttpUrl]
+    site_name: Optional[str] = None
+    description: Optional[ParsedAndRaw] = None
+    thumb: Optional[HttpUrl] = None
 
 
 class Reacts(BaseModel):

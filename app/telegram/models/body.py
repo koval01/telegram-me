@@ -117,7 +117,7 @@ class Content(BaseModel):
         posts: Either a single Post object or list of Post objects
                representing the channel's content
     """
-    posts: List[Post] | Post
+    posts: List[Post]
 
 
 class ChannelBody(BaseModel):
