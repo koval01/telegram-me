@@ -1,4 +1,4 @@
-fastapi[standard]==0.135.1
+fastapi[standard]==0.135.2
 selectolax==0.4.7
 uvloop==0.22.1
 pydantic-settings==2.13.1
