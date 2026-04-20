@@ -1,6 +1,6 @@
 fastapi[standard]==0.135.2
 selectolax==0.4.7
 uvloop==0.22.1
-pydantic-settings==2.13.1
+pydantic-settings==2.14.0
 redis==7.3.0
 httpx[http2]==0.28.1
