@@ -1,0 +1,113 @@
+{
+  "body": {
+    "content": {
+      "inline": null,
+      "media": [
+        {
+          "available": null,
+          "duration": {
+            "formatted": "0:06",
+            "raw": 6
+          },
+          "thumb": "https://cdn1.telesco.pe/file/vz98IunHtPEm7nagYsr2m0-NdRX3IsviARDmi6HzkEzUz71y6m-8VMV2vugY5GjD7SDzm1ltUTUAg8abz6jADOGWCY6y1bpqK7O_50UYUHTrbCh7eNdiq5Z6XVZvYlcW6sN_mBjW01JDZMtcZGtTOzN7zRm2S-zzk0gJIxmoVsI_dWelJZlcZCrNoiK1qVbjROApDAbKCODEnKw6efIZgVXnyb8WWW15D6Wiv3oY8Yn66T7js4PkOFfkox9-1-UUD-GbFOqQPuRELtuxUvYyDz-SzptVoMGayyAVDn5oo442PjAXRyntHd8DliRJm53Dug6M0tvKP7LABeSTelJcZg",
+          "type": "video",
+          "url": "https://cdn1.telesco.pe/file/c01503a63e.mp4?token=VL9o9XDH70TjbKjy-eJreekCr2z05Kauwss4I03R5wLrEdP4he2xSkpFNd6PuFKCtiQp_VGYsBiHJbGEzbS6kb2uC8voFQpevA_STLs3UQDXRwoL0ZFTIXcI5bWkM0yS5vnrxIvRKCFsvQqr_JuWwA33OB56_pJmHrLt9AoCuexPv_KuhmdmADyQUVlnd1nksbijH339lZDE_ZbahlN4qsh_-gANrw2evrOePcd5MMXWNl7eWuTiywpIY1ByezqxzBkHf2KLzW0GeLnTqxujzrm0gTCegIqUovn3zBWIa-sccDsAP0dyHsS3YgL7P1YfMQ_l3NXKq1IiMegj47XKLA",
+          "waves": null
+        }
+      ],
+      "poll": null,
+      "preview_link": null,
+      "reacts": null,
+      "reply": null,
+      "text": {
+        "entities": [
+          {
+            "language": null,
+            "length": 25,
+            "offset": 0,
+            "type": "bold",
+            "url": null
+          },
+          {
+            "language": null,
+            "length": 10,
+            "offset": 58,
+            "type": "bold",
+            "url": null
+          },
+          {
+            "language": null,
+            "length": 16,
+            "offset": 129,
+            "type": "bold",
+            "url": null
+          },
+          {
+            "language": null,
+            "length": 17,
+            "offset": 151,
+            "type": "bold",
+            "url": null
+          },
+          {
+            "language": null,
+            "length": 1,
+            "offset": 184,
+            "type": "text_link",
+            "url": "https://t.me/telegram/440"
+          },
+          {
+            "language": null,
+            "length": 1,
+            "offset": 188,
+            "type": "bold",
+            "url": null
+          },
+          {
+            "language": null,
+            "length": 1,
+            "offset": 197,
+            "type": "text_link",
+            "url": "https://t.me/telegram/442"
+          },
+          {
+            "language": null,
+            "length": 1,
+            "offset": 201,
+            "type": "text_link",
+            "url": "https://t.me/telegram/443"
+          },
+          {
+            "language": null,
+            "length": 1,
+            "offset": 210,
+            "type": "text_link",
+            "url": "https://t.me/telegram/444"
+          },
+          {
+            "language": null,
+            "length": 4,
+            "offset": 219,
+            "type": "text_link",
+            "url": "https://t.me/telegram/445"
+          }
+        ],
+        "html": "<b>Bot-to-Bot Communication.</b> Bots are now able to respond to <b>other bots</b>, not just users.<br><br>AI enthusiasts can utilize this to create <b>custom workflows</b> with <b>autonomous agents</b>.<br><br>May Features<br><a href=\"https://t.me/telegram/440\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">1</a> • <b>2</b> •&nbsp;<a href=\"https://t.me/telegram/442\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">3</a> • <a href=\"https://t.me/telegram/443\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">4</a> •&nbsp;<a href=\"https://t.me/telegram/444\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">5</a> •&nbsp;<a href=\"https://t.me/telegram/445\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">More</a>",
+        "string": "Bot-to-Bot Communication. Bots are now able to respond to other bots, not just users.\n\nAI enthusiasts can utilize this to create custom workflows with autonomous agents.\n\nMay Features\n1 • 2 • 3 • 4 • 5 • More"
+      }
+    },
+    "footer": {
+      "author": null,
+      "date": {
+        "string": "2026-05-14T16:08:31+00:00",
+        "unix": 1778774911
+      },
+      "edited": false,
+      "views": "1.59M"
+    },
+    "forwarded": null,
+    "id": 441,
+    "view": "eyJjIjotMTAwNTY0MDg5MiwicCI6NDQxLCJ0IjoxNzkyNzA3ODYyLCJoIjoiMDE0ZjE3ZTU5ZDQ0NWY3ZDU2In0"
+  },
+  "status": 200
+}

@@ -1,0 +1,2588 @@
+{
+  "body": {
+    "channel": {
+      "avatar": "https://cdn1.telesco.pe/file/hyLrfQykcxfsrzgDoLFTERKjJO-e-Jd7fNUtkZaiGSncujdGxwwRX8f4Iff_ONCwsUJqbwfopod09eK-J6zhCixYcqdrlES5_0DrRDfMfVeiwIWKd6Edieg6-s8yYXD3pvA0rib-c0aoyhvyJKQxUYNCa7iz9C3iAj9u3mMsZvOupX-5ggKxxvpsDV11dAu-w1XXYBBYtJzavm9xfQRvzh2Xf8wkS5w_LksxfN63TiiUKCYsZDCK9Rrqru8GtwoM99WO7EL351tKf-BRXFHR2HLAIdeuZfo_VTJl0CI2xBRb-4VTihbXHPbbu-e_mKYIfPc3U0LZBnZjEdOC5K_VQw.jpg",
+      "counters": {
+        "files": null,
+        "links": "378",
+        "photos": "16",
+        "subscribers": "9.26M",
+        "videos": "228"
+      },
+      "description": {
+        "html": "The official Telegram on Telegram. Much recursion. Very Telegram. Wow.",
+        "string": "The official Telegram on Telegram. Much recursion. Very Telegram. Wow."
+      },
+      "labels": [
+        "verified"
+      ],
+      "title": {
+        "html": "Telegram News",
+        "string": "Telegram News"
+      },
+      "username": "telegram"
+    },
+    "content": {
+      "posts": [
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": {
+                  "formatted": "0:13",
+                  "raw": 13
+                },
+                "thumb": "https://cdn1.telesco.pe/file/fw3vYb8CEsXZ6ZmvdVXcdZZM7TvIaU--e83bIaKtiwRUbykcR3mitypnUmCXkJSNcl9-QzIVRvN2A4Oozwq5HTKv62yIQMMOJEAivf1qZw_inW7_RJqQ1c3q27P1zvuLnhPCfb9Y00RsJQCHeDtm47kagK0MbuRdW6Zoa0_6LOzv75EleTeHRuliwr2ERCHeaETMXZzX5PT_v3S1wMz5PBM9S5LcQ627HnKpj5AZYca7NWciALJ0HBPU1NmJcTH4aBY6-cy03mlL4tUJyx3_4pagUF1DhIPgY1tRHdis4B_SkorrTD5TVFdQvXQrZv_hwMo25t0kP6bodRDt8QcdqQ",
+                "type": "video",
+                "url": "https://cdn1.telesco.pe/file/f010b64931.mp4?token=qkPE__bdlvOLIOXQld3a2mGIbNEZYDU63LiQmzg7kYgqYk_rfRuTfeZhR3aIb6fRx7AWoEFIjzMXUtW_UvLP_JZA3IxmLLy6i9W8kotl-dFWyZXm7i-XUKeP5BnWoXI06Hq5fjYh5YUCzyUwhDkxUcb5GsHPVIO6u6hgV3NNToQYgDtGYvzHrMLD4quUUUTTOnFb_rwW0kCri-RGBVCy_Hr5MmuJgO4avelpbHJCN213VwQ7hbkHYXMwJ23TTxgogLbz5rrMdFRHNb83mz5OBXNABZIywT0P7ZqofQRq72dlm_fiPlMtib-cN6Oh0jq_j5Inc07nPooTJfJ2hHaZ5g",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": null,
+            "reacts": null,
+            "reply": null,
+            "text": {
+              "entities": [
+                {
+                  "language": null,
+                  "length": 2,
+                  "offset": 0,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/E2AD90.png"
+                },
+                {
+                  "language": null,
+                  "length": 33,
+                  "offset": 3,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 16,
+                  "offset": 52,
+                  "type": "text_link",
+                  "url": "tg://settings/premium"
+                },
+                {
+                  "language": null,
+                  "length": 15,
+                  "offset": 77,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 20,
+                  "offset": 119,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 20,
+                  "offset": 164,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 232,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/429"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 236,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 245,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/431"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 254,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/432"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 263,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/433"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 267,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/434"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 271,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/435"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 275,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/436"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 279,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/437"
+                },
+                {
+                  "language": null,
+                  "length": 4,
+                  "offset": 283,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/438"
+                }
+              ],
+              "html": "<tg-emoji emoji-id=\"6028338546736107668\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/E2AD90.png')\"><b>⭐️</b></i></tg-emoji> <b>Disable Sharing in Private Chats.</b> Subscribers of <a href=\"tg://settings/premium\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Telegram Premium</a> can now <b>disable sharing</b> in any 1-on-1 chat.<br><br>This <b>restricts forwarding</b> or copying messages and <b>prevents screenshots</b> or saving media from the chat.<br><br>March Features<br><a href=\"https://t.me/telegram/429\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">1</a> • <b>2</b> •&nbsp;<a href=\"https://t.me/telegram/431\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">3</a> •&nbsp;<a href=\"https://t.me/telegram/432\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">4</a> •&nbsp;<a href=\"https://t.me/telegram/433\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">5</a> • <a href=\"https://t.me/telegram/434\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">6</a> • <a href=\"https://t.me/telegram/435\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">7</a> • <a href=\"https://t.me/telegram/436\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">8</a> • <a href=\"https://t.me/telegram/437\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">9</a> • <a href=\"https://t.me/telegram/438\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">More</a>",
+              "string": "⭐️ Disable Sharing in Private Chats. Subscribers of Telegram Premium can now disable sharing in any 1-on-1 chat.\n\nThis restricts forwarding or copying messages and prevents screenshots or saving media from the chat.\n\nMarch Features\n1 • 2 • 3 • 4 • 5 • 6 • 7 • 8 • 9 • More"
+            }
+          },
+          "footer": {
+            "author": null,
+            "date": {
+              "string": "2026-03-02T17:33:52+00:00",
+              "unix": 1772472832
+            },
+            "edited": true,
+            "views": "1.81M"
+          },
+          "forwarded": null,
+          "id": 430,
+          "view": "eyJjIjotMTAwNTY0MDg5MiwicCI6NDMwLCJ0IjoxNzkyNzA3ODYyLCJoIjoiMDYxZWUyNjRiYmYxNDhiMjFlIn0"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": {
+                  "formatted": "0:08",
+                  "raw": 8
+                },
+                "thumb": "https://cdn1.telesco.pe/file/K4UzvZY06mT1KyMTueyikr57r_ck64eAdVDOxSUuh6wam-SkJvEqI_IupRwm9QhoLnK9tLZXfb_38kXmjVg1xZA5b4zLlGKQ8S-VCWzaJmct7ROEZmHbeUtiXPF47dCS8Jpy_HSRpQhrgcGzOEh1DthLQZPlsoXIUWaBXJVFK1Z8LGB8u89jiLjhEVOu8DvMMHz4E8kxnheuMaY8rVtCVwvscu_5TCYMKrB93xRowzoi1Aqk2viI7IuQgP0ctyrcz0Td0WV8fkTKwY0qJmfIgw48ZPQDXq8BpszDfSF7oN7bJywgkp65-SxEZN8St0bpeZjlzPSaAgMR84Kbdge2EQ",
+                "type": "video",
+                "url": "https://cdn1.telesco.pe/file/7cd042a826.mp4?token=Dw4c7gRjGmiJzwdwP_QVcu8I4xqH55cZim0hUXdkFtMhAzNbSr65v7H3ILt5wpzdh7LGEtPsf6CySGpe2-THHP1Ei8GnlJCkNxTHoub0fpaSah6R1V8HiYX-zz58leNlzox2eoXVczSTjRWGAnbxI7B5P6evTIpZ21t-wz1M74P3nsB11JO7XYtwvnh-CHdkWgDlLpHSiMi_ah5Y-0Cf8im2UvvNOc2pWV1SClr0HYo05nKxAI0ND2Vi0R33DsjVYpgvrbUrXqlXbdRAwib7GqWaAFrYKji77kJVZf3Va41djH2ArXBlZ5jxTK3cng7xHlOPLLM8KqPv_f0W-YlwqQ",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": null,
+            "reacts": null,
+            "reply": null,
+            "text": {
+              "entities": [
+                {
+                  "language": null,
+                  "length": 18,
+                  "offset": 0,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 13,
+                  "offset": 70,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 11,
+                  "offset": 120,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 149,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/429"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 153,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/430"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 162,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 171,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/432"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 180,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/433"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 184,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/434"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 188,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/435"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 192,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/436"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 196,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/437"
+                },
+                {
+                  "language": null,
+                  "length": 4,
+                  "offset": 200,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/438"
+                }
+              ],
+              "html": "<b>Captions for GIFs.</b> When selecting a GIF in the GIF panel, you can now <b>add a caption</b> directly to it – and send it all as <b>one message</b>.<br><br>March Features<br><a href=\"https://t.me/telegram/429\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">1</a> • <a href=\"https://t.me/telegram/430\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">2</a> •&nbsp;<b>3</b> •&nbsp;<a href=\"https://t.me/telegram/432\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">4</a> •&nbsp;<a href=\"https://t.me/telegram/433\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">5</a> • <a href=\"https://t.me/telegram/434\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">6</a> • <a href=\"https://t.me/telegram/435\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">7</a> • <a href=\"https://t.me/telegram/436\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">8</a> • <a href=\"https://t.me/telegram/437\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">9</a> • <a href=\"https://t.me/telegram/438\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">More</a>",
+              "string": "Captions for GIFs. When selecting a GIF in the GIF panel, you can now add a caption directly to it – and send it all as one message.\n\nMarch Features\n1 • 2 • 3 • 4 • 5 • 6 • 7 • 8 • 9 • More"
+            }
+          },
+          "footer": {
+            "author": null,
+            "date": {
+              "string": "2026-03-02T17:34:08+00:00",
+              "unix": 1772472848
+            },
+            "edited": true,
+            "views": "1.74M"
+          },
+          "forwarded": null,
+          "id": 431,
+          "view": "eyJjIjotMTAwNTY0MDg5MiwicCI6NDMxLCJ0IjoxNzkyNzA3ODYyLCJoIjoiOWNjNjY3NWI3ZjQ1ZGFjY2VhIn0"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": {
+                  "formatted": "0:10",
+                  "raw": 10
+                },
+                "thumb": "https://cdn1.telesco.pe/file/HC663o9mcQ-R-oZS89b6VODbiPHz5S18GE39pRc8Cn2u1USCdAE0guI28N6l5xu1BxhceX3bz5AXAToGirS4I67m2gn4F_rCIVk70LtcIUnWP2Dtn5NDq2jx09mgMVuGCyX4fNJu8-kf5TL8mZpwqMpQhQzb-OvH_M2ujnVhc7gNnZykHiyeh0uP6pkFqSN9FMAcVyaCcHduhEP99XxClKd3Yp6jd5YaMlfmAHPe8ghROIZ1rugv1X6LJ3ECIgWn_k5AKSHcZ4lI4A5UZs6aYopKKpeB44i3s3Bp1G-N7KDwj3u3haXZA-dF5LFqiArrMfQzqj8nsg6YzNE1V-5IEg",
+                "type": "video",
+                "url": "https://cdn1.telesco.pe/file/f345f5cad8.mp4?token=q0svDWbNtaahG4s-AVKGpWPozYuDMh_aUjCjmMnSTJhnq-p6NGsuWsQJFloMfj6SqDqE6Pc2_2b6Ytn6EPtdL_QT5ZQ0JYCfEXeYMLK1SfPF_UBdQU4LmLfXzBKglefJ55y1cl9-jiigSjmn9BM7acwE9JqSX8PubH5dvr8AuHPFoME5QwZC2v5m0Y-SeKfj6UqoKm9n8MxIBE1-cFjRbFkJ4JQFsN3x4KTF4a6vJ_K64gfVAbBODs419L3CYVBVIosifZygxgXv9geMTEZEWFGhRb5lTmesjKpE9kJz60JFpm_6unf62hrbmftNwD6oUw4npT2HG_wKmotaAkZRTA",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": null,
+            "reacts": null,
+            "reply": null,
+            "text": {
+              "entities": [
+                {
+                  "language": null,
+                  "length": 17,
+                  "offset": 0,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 6,
+                  "offset": 21,
+                  "type": "italic",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 22,
+                  "offset": 61,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 14,
+                  "offset": 115,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 20,
+                  "offset": 148,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 19,
+                  "offset": 189,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 226,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/429"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 230,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/430"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 239,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/431"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 248,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 257,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/433"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 261,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/434"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 265,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/435"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 269,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/436"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 273,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/437"
+                },
+                {
+                  "language": null,
+                  "length": 4,
+                  "offset": 277,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/438"
+                }
+              ],
+              "html": "<b>Date Formatting. </b>The <i>'Date'</i> formatting option lets you set a <b>specific date and time</b> to add events to a calendar or <b>set a reminder</b>.<br><br>Date formatting <b>automatically adapts</b> to each recipient's <b>local date and time</b>.<br><br>March Features<br><a href=\"https://t.me/telegram/429\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">1</a> • <a href=\"https://t.me/telegram/430\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">2</a> •&nbsp;<a href=\"https://t.me/telegram/431\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">3</a> •&nbsp;<b>4</b> •&nbsp;<a href=\"https://t.me/telegram/433\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">5</a> • <a href=\"https://t.me/telegram/434\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">6</a> • <a href=\"https://t.me/telegram/435\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">7</a> • <a href=\"https://t.me/telegram/436\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">8</a> • <a href=\"https://t.me/telegram/437\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">9</a> • <a href=\"https://t.me/telegram/438\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">More</a>",
+              "string": "Date Formatting. The 'Date' formatting option lets you set a specific date and time to add events to a calendar or set a reminder.\n\nDate formatting automatically adapts to each recipient's local date and time.\n\nMarch Features\n1 • 2 • 3 • 4 • 5 • 6 • 7 • 8 • 9 • More"
+            }
+          },
+          "footer": {
+            "author": null,
+            "date": {
+              "string": "2026-03-02T17:34:22+00:00",
+              "unix": 1772472862
+            },
+            "edited": true,
+            "views": "2.1M"
+          },
+          "forwarded": null,
+          "id": 432,
+          "view": "eyJjIjotMTAwNTY0MDg5MiwicCI6NDMyLCJ0IjoxNzkyNzA3ODYyLCJoIjoiNzE3MWZmY2M3ZDQ2NTRlZjZiIn0"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": null,
+                "thumb": null,
+                "type": "image",
+                "url": "https://cdn4.telesco.pe/file/G4VzT3UAuRextWI56CHQat__fhYjf6nuBYGAH8iYxF5JEsyfdavEet5gGvok05oHhbi7uyCEFUNCS4RPDMxlTA97YZaFwleVsCcGpFBjHcyQBDCyv3XOLRVB5aLUp7K2pOwtas6AZlYX8Wbm6X070ow8mXIhYQ2fyzvArVFk8Q8K8W3wmjoISIrJtLZSbLSYHEi762isS0bR1XiTtkI3T7lyfrSU9k-CZ1GULan_FG6LEXlWmVo7qsgowuF8rAgyIDqF4s1_avyPcrMdx1X-ciUknitwwBkMTonAzLiJ_0RBJe64xGybl9PPCvSlGL0zLpgRw3SUoToAObveb2Z1pQ.jpg",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": {
+              "description": {
+                "html": "In today's update, we add tags to help group members show who they are, a setting to disable sharing messages in specific 1-on-1 chats, GIF editing and captions, new tools for signing up and logging in to apps and websites with Telegram -- and more.",
+                "string": "In today's update, we add tags to help group members show who they are, a setting to disable sharing messages in specific 1-on-1 chats, GIF editing and captions, new tools for signing up and logging in to apps and websites with Telegram -- and more."
+              },
+              "site_name": "Telegram",
+              "thumb": null,
+              "title": "Member Tags, Login with Telegram, Disable Sharing, GIF Editing, Date Formatting, Voting Timestamps",
+              "url": "https://telegram.org/blog/member-tags-disable-sharing-and-more"
+            },
+            "reacts": null,
+            "reply": null,
+            "text": {
+              "entities": [
+                {
+                  "language": null,
+                  "length": 16,
+                  "offset": 44,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 25,
+                  "offset": 74,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 14,
+                  "offset": 119,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 62,
+                  "offset": 190,
+                  "type": "url",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 269,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/429"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 273,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/430"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 282,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/431"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 291,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/432"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 300,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 304,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/434"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 308,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/435"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 312,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/436"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 316,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/437"
+                },
+                {
+                  "language": null,
+                  "length": 4,
+                  "offset": 320,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/438"
+                }
+              ],
+              "html": "For all the features from this update, like <b>instant stickers</b> from photos, <b>editing stickers and GIFs</b>, a new platform to <b>log in to apps</b> with Telegram and more –&nbsp;check out the full blog:<br><br><a href=\"https://telegram.org/blog/member-tags-disable-sharing-and-more\" target=\"_blank\" rel=\"noopener\">https://telegram.org/blog/member-tags-disable-sharing-and-more</a><br><br>March Features<br><a href=\"https://t.me/telegram/429\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">1</a> • <a href=\"https://t.me/telegram/430\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">2</a> •&nbsp;<a href=\"https://t.me/telegram/431\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">3</a> •&nbsp;<a href=\"https://t.me/telegram/432\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">4</a> •&nbsp;<b>5</b> • <a href=\"https://t.me/telegram/434\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">6</a> • <a href=\"https://t.me/telegram/435\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">7</a> • <a href=\"https://t.me/telegram/436\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">8</a> • <a href=\"https://t.me/telegram/437\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">9</a> • <a href=\"https://t.me/telegram/438\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">More</a>",
+              "string": "For all the features from this update, like instant stickers from photos, editing stickers and GIFs, a new platform to log in to apps with Telegram and more – check out the full blog:\n\nhttps://telegram.org/blog/member-tags-disable-sharing-and-more\n\nMarch Features\n1 • 2 • 3 • 4 • 5 • 6 • 7 • 8 • 9 • More"
+            }
+          },
+          "footer": {
+            "author": null,
+            "date": {
+              "string": "2026-03-02T17:34:24+00:00",
+              "unix": 1772472864
+            },
+            "edited": true,
+            "views": "3.27M"
+          },
+          "forwarded": null,
+          "id": 433,
+          "view": "eyJjIjotMTAwNTY0MDg5MiwicCI6NDMzLCJ0IjoxNzkyNzA3ODYyLCJoIjoiNGVmYWUyYTAxN2M3MDIxNTJmIn0"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": {
+                  "formatted": "0:19",
+                  "raw": 19
+                },
+                "thumb": "https://cdn1.telesco.pe/file/kUzG1nzqOCk-BqRh1zkjgvLPThZUj49SOUJqnRRYo1aTLxpbn2zM6mzStHDqTmmbEptl5Y6qIIKLIqcfj461GvooSQG7KqoM6hkkuIFcwryMON7GlhZTX5fcG03kSybSOzg1lVtM_oRdFa3FvdPEttjvEsb98Ng-SpocCkazOHgIMQV4KIlf6PLWVwkRM_ScDsMY3Myrf68wrCU_4TaBxVcpAiw41U8LO2GbMfH2tG9QhPMtXTkWH5cTA75IxBOvGlDDgMkhs8daOd4F3BLmlUQ8tU_1ck3samp4NsoffbYjyzmJA72KCPJeV4kcdizlWmgrAOYSMk2TnP7pM9XZGA",
+                "type": "video",
+                "url": "https://cdn1.telesco.pe/file/81141d7e74.mp4?token=BZA6ace_-z9h3IedE1Wzbu7CBm9Vi5ARe7VDurv98wJCJQr0c_eLFtxA7Xb9hW_Lg0VSWi_etNvYWR6ycCbPjHGgRsOSflHjrkjXYXlGqwOMUXmQyBuSZDjVCZ5p463PXPjWwbkeVYqbl73sjHCKPDyMwKl--OmtT3mU1mvLuwZngIF9QDFQ1b_VzQxQ_cxoMg3OM8KY4dX-dgFTFKM8lhmmpwFUxvYm08rKLj-ZoZhGzfR2YRahHipxOMNXeyXF87bJ-F3HndAC2_LmuM3VQawBXGZs63wjZ9g3gNr8kQ31B9syAhFHRXmkjhz7nT8OTOpg4sJKMTjL5V0WolIBVDzoLYYGMqknLXWitR9ENcuYlvuH2_duRcW1gSNrDutwJRiNb4oohoOr2QiJZhWoYyGpijaw_6z9cGAq5qraeb67jIHbQJRGf3qFSIx1nXYKlYBH2IGEFbmyeDQT784STQ5YPI-eEt4U2NpNTzs5qqOhyJVQlX8AwFaoOXyE8JMF1U5N6F2kgYRk9lSL-fG7i4rS94h3rQJ8XKuOf9GXGF6tJT-wZRWgCS1AQJnzDxJQ0sz9GR52DM9Ho7mOsVJxsH0JrprSkZ-jLGCuNWz4izHcr0djjMAgjRxHVogYUkwXcmv5R27x7EdgEMGthHOr_gJwSqXM3BRMKCcD7HrBjy0",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": null,
+            "reacts": null,
+            "reply": null,
+            "text": {
+              "entities": [
+                {
+                  "language": null,
+                  "length": 15,
+                  "offset": 0,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 11,
+                  "offset": 77,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 14,
+                  "offset": 127,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 143,
+                  "type": "emoji",
+                  "url": "https://telegram.org/img/emoji/40/F09FA49D.png"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 152,
+                  "type": "emoji",
+                  "url": "https://telegram.org/img/emoji/40/F09F8EAF.png"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 160,
+                  "type": "emoji",
+                  "url": "https://telegram.org/img/emoji/40/F09F8D96.png"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 169,
+                  "type": "emoji",
+                  "url": "https://telegram.org/img/emoji/40/F09F97BF.png"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 175,
+                  "type": "emoji",
+                  "url": "https://telegram.org/img/emoji/40/F09F95AF.png"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 186,
+                  "type": "emoji",
+                  "url": "https://telegram.org/img/emoji/40/F09F92BC.png"
+                },
+                {
+                  "language": null,
+                  "length": 12,
+                  "offset": 219,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 17,
+                  "offset": 267,
+                  "type": "text_link",
+                  "url": "https://cocoon.org/"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 302,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/429"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 306,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/430"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 315,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/431"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 324,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/432"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 333,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/433"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 337,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 341,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/435"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 345,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/436"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 349,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/437"
+                },
+                {
+                  "language": null,
+                  "length": 4,
+                  "offset": 353,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/438"
+                }
+              ],
+              "html": "<b>AI Text Editor.</b> The message bar now has a built-in editor that can instantly <b>fix grammar</b>, translate your text or rewrite it in <b>several styles</b>:<br><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09FA49D.png')\"><b>🤝</b></i> Formal<br><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F8EAF.png')\"><b>🎯</b></i> Short<br><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F8D96.png')\"><b>🍖</b></i> Tribal<br><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F97BF.png')\"><b>🗿</b></i> Zen<br><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F95AF.png')\"><b>🕯</b></i> Biblical<br><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F92BC.png')\"><b>💼</b></i> Corp<br><br>Telegram AI features are <b>100% private</b> and optional –&nbsp;powered by the <a href=\"https://cocoon.org/\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Cocoon AI Network</a>.<br><br>March Features<br><a href=\"https://t.me/telegram/429\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">1</a> • <a href=\"https://t.me/telegram/430\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">2</a> •&nbsp;<a href=\"https://t.me/telegram/431\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">3</a> •&nbsp;<a href=\"https://t.me/telegram/432\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">4</a> •&nbsp;<a href=\"https://t.me/telegram/433\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">5</a> • <b>6</b> • <a href=\"https://t.me/telegram/435\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">7</a> • <a href=\"https://t.me/telegram/436\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">8</a> • <a href=\"https://t.me/telegram/437\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">9</a> • <a href=\"https://t.me/telegram/438\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">More</a>",
+              "string": "AI Text Editor. The message bar now has a built-in editor that can instantly fix grammar, translate your text or rewrite it in several styles:\n🤝 Formal\n🎯 Short\n🍖 Tribal\n🗿 Zen\n🕯 Biblical\n💼 Corp\n\nTelegram AI features are 100% private and optional – powered by the Cocoon AI Network.\n\nMarch Features\n1 • 2 • 3 • 4 • 5 • 6 • 7 • 8 • 9 • More"
+            }
+          },
+          "footer": {
+            "author": null,
+            "date": {
+              "string": "2026-04-09T07:01:44+00:00",
+              "unix": 1775718104
+            },
+            "edited": false,
+            "views": "1.71M"
+          },
+          "forwarded": null,
+          "id": 435,
+          "view": "eyJjIjotMTAwNTY0MDg5MiwicCI6NDM1LCJ0IjoxNzkyNzA3ODYyLCJoIjoiMzk0MGY1NTU3OGNhYjlmZDA0In0"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": {
+                  "formatted": "0:20",
+                  "raw": 20
+                },
+                "thumb": "https://cdn1.telesco.pe/file/tSuPUP_8Bg7B1DPxCR2DaRGTOxShJL3lVqhptCA2iVUD4-51_huCMGYD5CBFmaUT8LqdAh7hcce1nsF1IuYuR-fWUviPY9tKAwftAnDrUN0cWbLEWdnTufnrFkaYHxPdZIfaCKkrWlT6TkbMG1fVRKjPlz9wp5L5p320hToO8QVtOvQmwvPyRURS52pIo2Kwh6H0pSlHvzbB11xsxZvE18YlOKEKyxc6KJFt4A5Ez1SJRrr0k5not2lDL1la-LaU63uBKvBB19G9lGeCmaVzKPlAp7bSGAFEookh0rfpdnMQruAuvmAoGUTFAVOAkrn64yzmX1y6cJ8GPJHc3kZPCQ",
+                "type": "video",
+                "url": "https://cdn1.telesco.pe/file/fed01155c6.mp4?token=G8sUHLXRjZvqjkgfFRRNy0vbRdZYaYS3weZ2EYaTf7IXTOXdwi8HhbLaWgF_2TZlIPA-JI_85yHMDuUEvDBuV5xcgJxXF4KANc6ayseBSBNyzd6u5Ydycu9XHQpyvkITfdYEfVEMwldXD44D8RhhFVV5ePwZW-jKvKWzKwglrnzAaJhHBSCNn0a18KnqIXISwFQLg8G0kgW7adq2_s0susTKKlwGYVdis1IM1gvBMRAJ04z7KX5MUj5n_AXQi9PitInuwXL_m6i57iN5yTK8zlKtwotTZb09Kz9dU8y4WMJ8JjILQuL4Q0cN1p6gewu-LlgKwGif_IkgqFcdTgOeSQ",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": null,
+            "reacts": null,
+            "reply": null,
+            "text": {
+              "entities": [
+                {
+                  "language": null,
+                  "length": 23,
+                  "offset": 0,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 12,
+                  "offset": 36,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 17,
+                  "offset": 65,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 19,
+                  "offset": 107,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 8,
+                  "offset": 129,
+                  "type": "text_link",
+                  "url": "https://telegram.org/blog/ai-editor-mighty-polls-and-more#10-new-features-for-polls"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 155,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/429"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 159,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/430"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 168,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/431"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 177,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/432"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 186,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/433"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 190,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/434"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 194,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 198,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/436"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 202,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/437"
+                },
+                {
+                  "language": null,
+                  "length": 4,
+                  "offset": 206,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/438"
+                }
+              ],
+              "html": "<b>10+ Features for Polls.</b> You can now <b>attach media</b> in polls, set a <b>specific duration</b> for the poll, let users <b>suggest new options</b> – <a href=\"https://telegram.org/blog/ai-editor-mighty-polls-and-more#10-new-features-for-polls\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">and more</a>.<br><br>March Features<br><a href=\"https://t.me/telegram/429\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">1</a> • <a href=\"https://t.me/telegram/430\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">2</a> •&nbsp;<a href=\"https://t.me/telegram/431\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">3</a> •&nbsp;<a href=\"https://t.me/telegram/432\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">4</a> •&nbsp;<a href=\"https://t.me/telegram/433\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">5</a> • <a href=\"https://t.me/telegram/434\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">6</a> • <b>7</b> • <a href=\"https://t.me/telegram/436\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">8</a> • <a href=\"https://t.me/telegram/437\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">9</a> • <a href=\"https://t.me/telegram/438\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">More</a>",
+              "string": "10+ Features for Polls. You can now attach media in polls, set a specific duration for the poll, let users suggest new options – and more.\n\nMarch Features\n1 • 2 • 3 • 4 • 5 • 6 • 7 • 8 • 9 • More"
+            }
+          },
+          "footer": {
+            "author": null,
+            "date": {
+              "string": "2026-04-09T07:02:04+00:00",
+              "unix": 1775718124
+            },
+            "edited": false,
+            "views": "1.45M"
+          },
+          "forwarded": null,
+          "id": 436,
+          "view": "eyJjIjotMTAwNTY0MDg5MiwicCI6NDM2LCJ0IjoxNzkyNzA3ODYyLCJoIjoiNmE3MGNiOTA1ZDczYmRjMGMwIn0"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": {
+                  "formatted": "0:10",
+                  "raw": 10
+                },
+                "thumb": "https://cdn1.telesco.pe/file/Qhd_80QbJBy_whlOv0i4cbssMolwI3o1YVGKiYH6tibSz2tluFhcTNXDFQYmufrLiRy7DgueknhV0rTZ5DD1aLAsAqTWabBFhEOFynAixYA-nKyzu8KjhwNXoSlxDz-qECsFOFpdH6DNk3zrNz1jogMgoofZ5YoFGBFU_PgaUc_FdxdXPtds2rxYHX3T4M78cT-PggUm5aY99TUjgI8TImjlEbwVVoZkElAXIhJkMq4-uukkMmXmAZ2T0D99ZjHk6Vj9R_0qgaioYUQRg9eKW010eHmOSU_V9FXC4VHTU9UcrD9dG-SDXDQQ5n9mMuNm8mnlEqEwHs8lEb1ZwTFQNg",
+                "type": "video",
+                "url": "https://cdn1.telesco.pe/file/8654f8c669.mp4?token=CRZx1MkAvcza3i9PfcHUPA4aAmn77KoIcHf4qoXkY2CvcogEmf9iO0xuFy6TCZyw4qtelgkbHlMlvaKu0Kve0514Q7PyO3xjdfwribBs2NnX5h6a8HZGnfLVQV36visqxq4PmEx6GoyRASf2TW85FMYy6jLClLd933CX9yZX5pdZ3ErKBx42e-V0Kh8ebDLcW21nD6IJzI3PxxNXN6KB1Uw8avAteUnc4KFqWwzqbDSndnTBnFbh1G2KKlSlp-aYPMnY2BgJoJ0VLRymOTUWG92pKYc3R7GUTfNkQ0Vq8Is8XdDxVY_KoUqzE8U5PtXZS4fl_J9hv8jyGAtoFXNn7Q",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": null,
+            "reacts": null,
+            "reply": null,
+            "text": {
+              "entities": [
+                {
+                  "language": null,
+                  "length": 23,
+                  "offset": 0,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 17,
+                  "offset": 37,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 15,
+                  "offset": 111,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 7,
+                  "offset": 180,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 205,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/429"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 209,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/430"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 218,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/431"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 227,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/432"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 236,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/433"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 240,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/434"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 244,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/435"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 248,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 252,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/437"
+                },
+                {
+                  "language": null,
+                  "length": 4,
+                  "offset": 256,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/438"
+                }
+              ],
+              "html": "<b>Live and Motion Photos.</b> Telegram now <b>natively supports</b> Live and Motion Photos.<br><br>Android and iOS users can send <b>animated images</b> right from their camera –&nbsp;which are viewable in <b>any app</b>.<br><br>March Features<br><a href=\"https://t.me/telegram/429\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">1</a> • <a href=\"https://t.me/telegram/430\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">2</a> •&nbsp;<a href=\"https://t.me/telegram/431\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">3</a> •&nbsp;<a href=\"https://t.me/telegram/432\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">4</a> •&nbsp;<a href=\"https://t.me/telegram/433\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">5</a> • <a href=\"https://t.me/telegram/434\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">6</a> • <a href=\"https://t.me/telegram/435\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">7</a> • <b>8</b> • <a href=\"https://t.me/telegram/437\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">9</a> • <a href=\"https://t.me/telegram/438\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">More</a>",
+              "string": "Live and Motion Photos. Telegram now natively supports Live and Motion Photos.\n\nAndroid and iOS users can send animated images right from their camera – which are viewable in any app.\n\nMarch Features\n1 • 2 • 3 • 4 • 5 • 6 • 7 • 8 • 9 • More"
+            }
+          },
+          "footer": {
+            "author": null,
+            "date": {
+              "string": "2026-04-09T07:02:22+00:00",
+              "unix": 1775718142
+            },
+            "edited": false,
+            "views": "1.47M"
+          },
+          "forwarded": null,
+          "id": 437,
+          "view": "eyJjIjotMTAwNTY0MDg5MiwicCI6NDM3LCJ0IjoxNzkyNzA3ODYyLCJoIjoiMjk1N2ZmOTI5MGRhNzNlMGM3In0"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": {
+                  "formatted": "0:12",
+                  "raw": 12
+                },
+                "thumb": "https://cdn1.telesco.pe/file/L99CwbHAb1Gpm5s87ay8BCZnrzmmpex6H3RcSw0fFgS9VsBNTzhN7ahU_bCmoHye3GuJzfG_FaPyz05_CPIvr6R35BIh9uUd6c184Pg3CrtCevmMttulQKxyrTkCuJVorOsdnAx-dwdb5NbNPXVzf6HiZ23S2JERSHIUTn0VXgrsKt-9t2zBlciDpJQKJUX0Sd9xYhWopyLuXQSGnvIek6Mbj-NNaoAJYuvxtSfHCSLM_XdqKvuZYu-hdBQOnNYzk_XeFoGucham3OTuqTn8vue1YngueBjjO0mJ61y12H8X9uRTiRXYbLbePlT7RIsRCIgTYOMpz2fWOxIFRy1nQQ",
+                "type": "video",
+                "url": "https://cdn1.telesco.pe/file/9f455034e0.mp4?token=JVIHZRgbvn8W8oDqbtgBeszXbt_nycQ7HWC1ucp1q5RBD1ZqUeTxTG4V1EhCu3DH9h0tS7C6DH8FHbyx-IxKNB3eKVvruMST6dQrb5L9PboQ0mklhiQx3GMXb0cNyny_AKgnrCJJ7k4nihwpVMmTCrXHO5WPUCcNxq_r2oa7FQCzOWlOb2tV7ytPpGqLPCVqNPbEFwCSs8_jy9KRsrssrVB-eAc9oOOGsEs-WQUN3d9wszuKxQ7UcJvlER9DlijjZ3mT3ynhx55N_q_Qu4LeY8J9IBp_k2AFMQIUWV8Pie-o-3w6woMp2Fff_yQ1Is2BGg-Ww4188-Uc-n7-khZFjA",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": null,
+            "reacts": null,
+            "reply": null,
+            "text": {
+              "entities": [
+                {
+                  "language": null,
+                  "length": 13,
+                  "offset": 0,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 15,
+                  "offset": 29,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 20,
+                  "offset": 75,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 14,
+                  "offset": 159,
+                  "type": "text_link",
+                  "url": "https://core.telegram.org/bots/features#managed-bots"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 191,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/429"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 195,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/430"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 204,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/431"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 213,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/432"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 222,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/433"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 226,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/434"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 230,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/435"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 234,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/436"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 238,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 4,
+                  "offset": 242,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/438"
+                }
+              ],
+              "html": "<b>Managed Bots.</b> Anyone can now <b>utilize AI bots</b> to easily develop, launch and <b>manage their own bot</b> – with no coding required.<br><br>More information for developers is <a href=\"https://core.telegram.org/bots/features#managed-bots\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">available here</a>.<br><br>March Features<br><a href=\"https://t.me/telegram/429\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">1</a> • <a href=\"https://t.me/telegram/430\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">2</a> •&nbsp;<a href=\"https://t.me/telegram/431\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">3</a> •&nbsp;<a href=\"https://t.me/telegram/432\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">4</a> •&nbsp;<a href=\"https://t.me/telegram/433\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">5</a> • <a href=\"https://t.me/telegram/434\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">6</a> • <a href=\"https://t.me/telegram/435\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">7</a> • <a href=\"https://t.me/telegram/436\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">8</a> • <b>9</b> • <a href=\"https://t.me/telegram/438\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">More</a>",
+              "string": "Managed Bots. Anyone can now utilize AI bots to easily develop, launch and manage their own bot – with no coding required.\n\nMore information for developers is available here.\n\nMarch Features\n1 • 2 • 3 • 4 • 5 • 6 • 7 • 8 • 9 • More"
+            }
+          },
+          "footer": {
+            "author": null,
+            "date": {
+              "string": "2026-04-09T07:02:39+00:00",
+              "unix": 1775718159
+            },
+            "edited": false,
+            "views": "2.19M"
+          },
+          "forwarded": null,
+          "id": 438,
+          "view": "eyJjIjotMTAwNTY0MDg5MiwicCI6NDM4LCJ0IjoxNzkyNzA3ODYyLCJoIjoiMDBjOWQ5MDRhYTNmZjg3YmIwIn0"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": null,
+                "thumb": null,
+                "type": "image",
+                "url": "https://cdn4.telesco.pe/file/S_jQpsfq3C17XEGK5XmPf5JWXxaMGewS5byonlVL-KpNOKoDxG5UyH_KQ1NWrlpbIoRPGA8eFNrnWVTm9Z30LwPutQ7fvGv2kFgN43EVdRrn4wNKcfMnnfOe6_zg_d0v2HCOrvSd0zBYWzYvBlJmKq-Brq5t5VphhfsUsKwVmiPq2mhowO3g6M6WJkpo7dMPGrmMzBc2Kxpsv1LwqOrC5vgDyh1hTi6s8BvVdKN6o7czDnrc9PJn87YTyamLLV_LxliNWKFH4h5BWKMIJQjwxp5eR-ejqq-LTuiHs0fgiUfRqznpdTAl2G2FVf71J1nOrgim6i-JjjbTrN_Oub2sqw.jpg",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": {
+              "description": {
+                "html": "In today's update we introduce an&nbsp;AI Editor&nbsp;that can&nbsp;translate,&nbsp;transform, or&nbsp;fix&nbsp;your text in just two taps, new features for Polls like&nbsp;attaching media&nbsp;and&nbsp;suggesting new responses&nbsp;for active polls, support for&nbsp;Live and Motion Photos&nbsp;in all apps, bots that…",
+                "string": "In today's update we introduce an AI Editor that can translate, transform, or fix your text in just two taps, new features for Polls like attaching media and suggesting new responses for active polls, support for Live and Motion Photos in all apps, bots that…"
+              },
+              "site_name": "Telegram",
+              "thumb": null,
+              "title": "AI Editor, Mighty Polls, Live Photos, Bots Managed by Bots, and More",
+              "url": "https://telegram.org/blog/ai-editor-mighty-polls-and-more"
+            },
+            "reacts": null,
+            "reply": null,
+            "text": {
+              "entities": [
+                {
+                  "language": null,
+                  "length": 18,
+                  "offset": 44,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 15,
+                  "offset": 77,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 57,
+                  "offset": 172,
+                  "type": "url",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 246,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/429"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 250,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/430"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 259,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/431"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 268,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/432"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 277,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/433"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 281,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/434"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 285,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/435"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 289,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/436"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 293,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/437"
+                },
+                {
+                  "language": null,
+                  "length": 4,
+                  "offset": 297,
+                  "type": "bold",
+                  "url": null
+                }
+              ],
+              "html": "For all the features from this update, like <b>scanning documents</b> on iOS, extra <b>security alerts</b> to protect user privacy, and even more options for polls – check out our blog:<br><a href=\"https://telegram.org/blog/ai-editor-mighty-polls-and-more\" target=\"_blank\" rel=\"noopener\">https://telegram.org/blog/ai-editor-mighty-polls-and-more</a><br><br>March Features<br><a href=\"https://t.me/telegram/429\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">1</a> • <a href=\"https://t.me/telegram/430\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">2</a> •&nbsp;<a href=\"https://t.me/telegram/431\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">3</a> •&nbsp;<a href=\"https://t.me/telegram/432\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">4</a> •&nbsp;<a href=\"https://t.me/telegram/433\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">5</a> • <a href=\"https://t.me/telegram/434\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">6</a> • <a href=\"https://t.me/telegram/435\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">7</a> • <a href=\"https://t.me/telegram/436\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">8</a> • <a href=\"https://t.me/telegram/437\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">9</a> • <b>More</b>",
+              "string": "For all the features from this update, like scanning documents on iOS, extra security alerts to protect user privacy, and even more options for polls – check out our blog:\nhttps://telegram.org/blog/ai-editor-mighty-polls-and-more\n\nMarch Features\n1 • 2 • 3 • 4 • 5 • 6 • 7 • 8 • 9 • More"
+            }
+          },
+          "footer": {
+            "author": null,
+            "date": {
+              "string": "2026-04-09T07:02:48+00:00",
+              "unix": 1775718168
+            },
+            "edited": true,
+            "views": "3.04M"
+          },
+          "forwarded": null,
+          "id": 439,
+          "view": "eyJjIjotMTAwNTY0MDg5MiwicCI6NDM5LCJ0IjoxNzkyNzA3ODYyLCJoIjoiYzE4MzY4MzEzNzY2NzFjYzJiIn0"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": {
+                  "formatted": "0:07",
+                  "raw": 7
+                },
+                "thumb": "https://cdn1.telesco.pe/file/ajh7hQPM41X27KpQ4w2KnV6Udv9QDzvdtPBHNwLNVnS7CIh3kbyzCHCeUC-qbStOImk0_VQHBhDSvOT8xEYyBF-ZLzWgIgniMEPy5e1hkfeA4FrxRk1bWwuKTs-ZdfM04uq4BvfKmpfgQv_3iGS2ICKKn1FzZXAudQtT_W84IIyp_oTP1AwxAgRwhFTm28ZEie0B8fKi7_HSdO0nkedaCTqeCOvlNauT3LRpiaiwzGuS8KTnerMvxGuoNQI9oYyryYMabKoYB5-GYUBSIw63bp9ZjDFklUsgW781N1JaJz-1_UgRWcY0P6-YwWSM-YlkuTdr97HCb8EZC6v-dOEsUA",
+                "type": "video",
+                "url": "https://cdn1.telesco.pe/file/bd37eb87ef.mp4?token=us4WfThhqyRCfmkaoixSdYPmp6HCGJ-VGgaaw7EsQvxjQtgccGHq5yYhRqC_Bwq2gLsppoL9oYA3NVF7AeVyYUVWy7u2ztKdwfeU4IWsbcwEajohiT1poGmT2ji7MNgmzroWtp1l4nN8BzSB94E9-PUX8XPtcgJ1I-vvGJN75RwhUM8dDeLQf3GRLPlfLluCqlah25XJ5HZLi_3HH0bIRXOwNvXnO6VPJ1i9PiSy-7ORr6GYYEws8YBtBlEJVRq0z1OxGMHEmtdPaH9i7z6vpV0_yrvPimChM14MkVleZBcaS5vpEvResUylKm2ICA4qmQ-UXNpnwT1AkNGGDZxVBw",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": null,
+            "reacts": null,
+            "reply": null,
+            "text": {
+              "entities": [
+                {
+                  "language": null,
+                  "length": 11,
+                  "offset": 0,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 23,
+                  "offset": 58,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 13,
+                  "offset": 106,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 135,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 139,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/441"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 148,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/442"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 152,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/443"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 161,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/444"
+                },
+                {
+                  "language": null,
+                  "length": 4,
+                  "offset": 170,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/445"
+                }
+              ],
+              "html": "<b>Guest Bots.</b> Telegram bots can now be accessed directly in <b>groups and 1-on-1 chats</b> to answer questions and <b>perform tasks</b>.<br><br>May Features<br><b>1</b> • <a href=\"https://t.me/telegram/441\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">2</a> •&nbsp;<a href=\"https://t.me/telegram/442\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">3</a> • <a href=\"https://t.me/telegram/443\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">4</a> •&nbsp;<a href=\"https://t.me/telegram/444\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">5</a> •&nbsp;<a href=\"https://t.me/telegram/445\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">More</a>",
+              "string": "Guest Bots. Telegram bots can now be accessed directly in groups and 1-on-1 chats to answer questions and perform tasks.\n\nMay Features\n1 • 2 • 3 • 4 • 5 • More"
+            }
+          },
+          "footer": {
+            "author": null,
+            "date": {
+              "string": "2026-05-14T16:08:06+00:00",
+              "unix": 1778774886
+            },
+            "edited": false,
+            "views": "1.52M"
+          },
+          "forwarded": null,
+          "id": 440,
+          "view": "eyJjIjotMTAwNTY0MDg5MiwicCI6NDQwLCJ0IjoxNzkyNzA3ODYyLCJoIjoiYWFjMzFlYmE5MTk0ODMyNGZlIn0"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": {
+                  "formatted": "0:06",
+                  "raw": 6
+                },
+                "thumb": "https://cdn1.telesco.pe/file/vz98IunHtPEm7nagYsr2m0-NdRX3IsviARDmi6HzkEzUz71y6m-8VMV2vugY5GjD7SDzm1ltUTUAg8abz6jADOGWCY6y1bpqK7O_50UYUHTrbCh7eNdiq5Z6XVZvYlcW6sN_mBjW01JDZMtcZGtTOzN7zRm2S-zzk0gJIxmoVsI_dWelJZlcZCrNoiK1qVbjROApDAbKCODEnKw6efIZgVXnyb8WWW15D6Wiv3oY8Yn66T7js4PkOFfkox9-1-UUD-GbFOqQPuRELtuxUvYyDz-SzptVoMGayyAVDn5oo442PjAXRyntHd8DliRJm53Dug6M0tvKP7LABeSTelJcZg",
+                "type": "video",
+                "url": "https://cdn1.telesco.pe/file/c01503a63e.mp4?token=VL9o9XDH70TjbKjy-eJreekCr2z05Kauwss4I03R5wLrEdP4he2xSkpFNd6PuFKCtiQp_VGYsBiHJbGEzbS6kb2uC8voFQpevA_STLs3UQDXRwoL0ZFTIXcI5bWkM0yS5vnrxIvRKCFsvQqr_JuWwA33OB56_pJmHrLt9AoCuexPv_KuhmdmADyQUVlnd1nksbijH339lZDE_ZbahlN4qsh_-gANrw2evrOePcd5MMXWNl7eWuTiywpIY1ByezqxzBkHf2KLzW0GeLnTqxujzrm0gTCegIqUovn3zBWIa-sccDsAP0dyHsS3YgL7P1YfMQ_l3NXKq1IiMegj47XKLA",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": null,
+            "reacts": null,
+            "reply": null,
+            "text": {
+              "entities": [
+                {
+                  "language": null,
+                  "length": 25,
+                  "offset": 0,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 10,
+                  "offset": 58,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 16,
+                  "offset": 129,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 17,
+                  "offset": 151,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 184,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/440"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 188,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 197,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/442"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 201,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/443"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 210,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/444"
+                },
+                {
+                  "language": null,
+                  "length": 4,
+                  "offset": 219,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/445"
+                }
+              ],
+              "html": "<b>Bot-to-Bot Communication.</b> Bots are now able to respond to <b>other bots</b>, not just users.<br><br>AI enthusiasts can utilize this to create <b>custom workflows</b> with <b>autonomous agents</b>.<br><br>May Features<br><a href=\"https://t.me/telegram/440\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">1</a> • <b>2</b> •&nbsp;<a href=\"https://t.me/telegram/442\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">3</a> • <a href=\"https://t.me/telegram/443\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">4</a> •&nbsp;<a href=\"https://t.me/telegram/444\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">5</a> •&nbsp;<a href=\"https://t.me/telegram/445\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">More</a>",
+              "string": "Bot-to-Bot Communication. Bots are now able to respond to other bots, not just users.\n\nAI enthusiasts can utilize this to create custom workflows with autonomous agents.\n\nMay Features\n1 • 2 • 3 • 4 • 5 • More"
+            }
+          },
+          "footer": {
+            "author": null,
+            "date": {
+              "string": "2026-05-14T16:08:31+00:00",
+              "unix": 1778774911
+            },
+            "edited": false,
+            "views": "1.59M"
+          },
+          "forwarded": null,
+          "id": 441,
+          "view": "eyJjIjotMTAwNTY0MDg5MiwicCI6NDQxLCJ0IjoxNzkyNzA3ODYyLCJoIjoiMDE0ZjE3ZTU5ZDQ0NWY3ZDU2In0"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": {
+                  "formatted": "0:09",
+                  "raw": 9
+                },
+                "thumb": "https://cdn1.telesco.pe/file/TfGEBLlB96KXcnpOj8XLZLriK3Y-wo_vXqCIhX9BKhp9CS61GHd8IZibWwmWawzPOSo_37dvvQqvkU58KfjpHYTHel-PJpP7oDymXzENpM2_9pp89Mcay34e6cJRnjV8w8x38tm4AvM_lMD4MeurxZZqUM2ZXcMlGBMdHoR6Vb2aEdghXN7yJMaph911-BZMFbQ8-jWlA2DnPG92X76EfpKrHec7JEfVPAbcD66I7_Z4uFdvfOREcfSVasp2ddSc9Kq0GTd7KIIA1256odAhhyEmTtWZM4PPXAAeNsfItA-GsO9ovOAkp7izTupbKxNGT9dPWRLtZqNLk2vMZr9b4g",
+                "type": "video",
+                "url": "https://cdn1.telesco.pe/file/eb82a15bbc.mp4?token=hkKdx9j-VbIoC1qoPTsWvArHyNFFt0txAlWtUXgkyBV_QISnGC0bLSthBnb8nFkc9YyRt8p10zME4buUaOQ4oodoVpHhEtPJ4oub93M2lomqv6f79YjAOVbLIOL7l8KjQxefO-lbmR5kqMYOPhpDDdHgtOF6IOL6LdwIuZB0Ep918xto4ccmZtJ-MbI5JyIAkkfJ3ML6kM8WDVxr-yFPjPYMrwNT9SHVaM0bZUDhGThjIORL97FKb3YinkGpKEACI_-5Rb-gwXAlS3o_bfFs5CQZ69FHFHl1mbYti-ZLXasz_jHeo9AYW7se52xq26XMYKSfIdO9F5HxGWcDKtezMw",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": null,
+            "reacts": null,
+            "reply": null,
+            "text": {
+              "entities": [
+                {
+                  "language": null,
+                  "length": 28,
+                  "offset": 0,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 14,
+                  "offset": 57,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 19,
+                  "offset": 101,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 152,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/440"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 156,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/441"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 165,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 169,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/443"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 178,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/444"
+                },
+                {
+                  "language": null,
+                  "length": 4,
+                  "offset": 187,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/445"
+                }
+              ],
+              "html": "<b>Chat Automation in Profiles.</b> Every Telegram user can now <b>connect a bot </b>to their profile – and let it <b>respond to messages</b> on their behalf.<br><br>May Features<br><a href=\"https://t.me/telegram/440\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">1</a> • <a href=\"https://t.me/telegram/441\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">2</a> •&nbsp;<b>3</b> • <a href=\"https://t.me/telegram/443\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">4</a> •&nbsp;<a href=\"https://t.me/telegram/444\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">5</a> •&nbsp;<a href=\"https://t.me/telegram/445\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">More</a>",
+              "string": "Chat Automation in Profiles. Every Telegram user can now connect a bot to their profile – and let it respond to messages on their behalf.\n\nMay Features\n1 • 2 • 3 • 4 • 5 • More"
+            }
+          },
+          "footer": {
+            "author": null,
+            "date": {
+              "string": "2026-05-14T16:08:52+00:00",
+              "unix": 1778774932
+            },
+            "edited": false,
+            "views": "1.35M"
+          },
+          "forwarded": null,
+          "id": 442,
+          "view": "eyJjIjotMTAwNTY0MDg5MiwicCI6NDQyLCJ0IjoxNzkyNzA3ODYyLCJoIjoiMmFlNWY0MDM1YmUzN2U2NzBkIn0"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": {
+                  "formatted": "0:16",
+                  "raw": 16
+                },
+                "thumb": "https://cdn1.telesco.pe/file/EJ7m-BMI38-7JgUwg9jCGKPxWWMwAX7uMiIkFFMEomN5mUlECRBkoEpqLD6eVt8PLZThCa8-v9fnJMMUDZNo4rdgQYzXVvJq76JrrYpn7yOUt_kasg-02uBbvTCZAoKB0BvnGz0zL6POV-xJIK4LAxmGZH81Zw98GnGx_rp8aWG1egKOFGtJ_8-qTgGfT4auQjPLKT5TphZXQSf1WCA63x8kTSdAQBx2b-8weRRbDJGjI4BMG9GCabKus9Tz0ZZGQhXj_w2PHctbqVLe5fKuhscNeQmNZIcfrzDX7HHzeDb6cnWFk0tOZ-gDmpk_kuKp76W2NN47a1M27qnYPjPPtQ",
+                "type": "video",
+                "url": "https://cdn1.telesco.pe/file/7fde212b67.mp4?token=jyPhTWhLqcvhrJ_6dYO-xPiGU94fXUJ1HrfWSs-ppt_0cmxd_aSJfHepUBSlKEeLXfdo32UpPVJquNaygmcMJIGrAMilwPT9U6zX0Ewh_SEqQ4AaERgt6teVWXh_W6Yc6XGgmXza8xP-yioW3nFg5sDUiUUxo1wfrFJfpiqvkfeCoTu9eksDyHkbrbYS3LqxhhOYzou2p4NXr7a4QtdJmT1emagOhJ9sNzzpm0mda9kC6NtZ5KoL_6DnuaJg2ps4GlMq3FjSWFYPTRTuEr3cE2LRInypJ4Hq-0p2S3gwRRKrlcVNVjsDD6TcbTPkev0afo-fgMCJk1R3gHiglW0fOQ",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": null,
+            "reacts": null,
+            "reply": null,
+            "text": {
+              "entities": [
+                {
+                  "language": null,
+                  "length": 17,
+                  "offset": 0,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 11,
+                  "offset": 22,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/435"
+                },
+                {
+                  "language": null,
+                  "length": 17,
+                  "offset": 55,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 13,
+                  "offset": 82,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 14,
+                  "offset": 122,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 195,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/440"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 199,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/441"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 208,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/442"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 212,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 221,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/444"
+                },
+                {
+                  "language": null,
+                  "length": 4,
+                  "offset": 230,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/445"
+                }
+              ],
+              "html": "<b>Custom AI Styles.</b> The <a href=\"https://t.me/telegram/435\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">text editor</a> allows anyone to use <b>their own prompts</b> to build <b>unique styles</b>.<br><br>Each custom style has a <b>shareable link</b> so others users can add it to their editor.<br><br>May Features<br><a href=\"https://t.me/telegram/440\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">1</a> • <a href=\"https://t.me/telegram/441\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">2</a> •&nbsp;<a href=\"https://t.me/telegram/442\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">3</a> • <b>4</b> •&nbsp;<a href=\"https://t.me/telegram/444\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">5</a> •&nbsp;<a href=\"https://t.me/telegram/445\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">More</a>",
+              "string": "Custom AI Styles. The text editor allows anyone to use their own prompts to build unique styles.\n\nEach custom style has a shareable link so others users can add it to their editor.\n\nMay Features\n1 • 2 • 3 • 4 • 5 • More"
+            }
+          },
+          "footer": {
+            "author": null,
+            "date": {
+              "string": "2026-05-14T16:09:19+00:00",
+              "unix": 1778774959
+            },
+            "edited": false,
+            "views": "1.8M"
+          },
+          "forwarded": null,
+          "id": 443,
+          "view": "eyJjIjotMTAwNTY0MDg5MiwicCI6NDQzLCJ0IjoxNzkyNzA3ODYyLCJoIjoiZDM2MWM2YmQzYmRmOGMyY2ZmIn0"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": {
+                  "formatted": "0:14",
+                  "raw": 14
+                },
+                "thumb": "https://cdn1.telesco.pe/file/cxCSx6z_yA350EgS6tZOExcQNP9axq15_Yc-xJ_9QGF2oxIp7T4bCexpPvfRmo4ycYBepTG3QPu5MGloRpaoP8nKd6wHLBIX-RtWuV2rhcbGVeWoVb5vVB_NwSSpNiPvuq4umlGiRFK5VYSwmEPrmFT4B7Yyr93gyce8FVgOoigbTK0DoNez9ZoeJ1f0-ZtjfIZFQR74P5bmQ01rnD5b73fP_YNXSIHHG4NJCYbshfb4gex2xY6h0pD2LXqkPES3kQMEsrCvTB_w0x69dDvymBkFhz-EeLtDktfHUk7lNbg6MXd1k7pgG9ne3wI5vTrsga5Xk2RerVdtfNJVwbDZvg",
+                "type": "video",
+                "url": "https://cdn1.telesco.pe/file/0273105fd2.mp4?token=RArjFfiXGT2ua6K3lbLAIND6OL7pEmcWsO9K02fsHj8-GkImbCS3Uv7vhht0zRTYl0Xm6Rklu3IX1uBreRKoIeAF6Ye4GjZVeelBwU98IxOg9h9gHj_ercKDIOJKNXlCI24zY1ZzsBnCamm2cYxM2kT5EHTryeHlKWH8mVXJn7c0IxdUOeE5oBomCPb271KIKrAon6jaYhC1aOMh7b1ffxe6JCChBiFMPpjwS-4240o0PYA2BDwrunELWjZPCDnGBenAfsBA8ba22WZ-rlXsO9B0QoiY0TYeZxRhOGFQW4_VFfoMAEwBhL1HBstiqm6yPiSaM8NpC9kcliyWihtmeQ",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": null,
+            "reacts": null,
+            "reply": null,
+            "text": {
+              "entities": [
+                {
+                  "language": null,
+                  "length": 34,
+                  "offset": 0,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 11,
+                  "offset": 40,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 15,
+                  "offset": 96,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 148,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/440"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 152,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/441"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 161,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/442"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 165,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/443"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 174,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 4,
+                  "offset": 183,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/445"
+                }
+              ],
+              "html": "<b>Expanded Emoji and Sticker Search.</b> Over <b>100 million</b> emoji and stickers can now be found via the <b>search function</b> in the sticker panel.<br><br>May Features<br><a href=\"https://t.me/telegram/440\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">1</a> • <a href=\"https://t.me/telegram/441\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">2</a> •&nbsp;<a href=\"https://t.me/telegram/442\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">3</a> • <a href=\"https://t.me/telegram/443\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">4</a> •&nbsp;<b>5</b> •&nbsp;<a href=\"https://t.me/telegram/445\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">More</a>",
+              "string": "Expanded Emoji and Sticker Search. Over 100 million emoji and stickers can now be found via the search function in the sticker panel.\n\nMay Features\n1 • 2 • 3 • 4 • 5 • More"
+            }
+          },
+          "footer": {
+            "author": null,
+            "date": {
+              "string": "2026-05-14T16:09:39+00:00",
+              "unix": 1778774979
+            },
+            "edited": false,
+            "views": "2.11M"
+          },
+          "forwarded": null,
+          "id": 444,
+          "view": "eyJjIjotMTAwNTY0MDg5MiwicCI6NDQ0LCJ0IjoxNzkyNzA3ODYyLCJoIjoiNjAzOTVhY2M2ZmU2NTAwOWUzIn0"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": null,
+                "thumb": null,
+                "type": "image",
+                "url": "https://cdn4.telesco.pe/file/NVoBIt_bZFHSj9vz2K9NP0JDdBeXig8CRP8bq8aw_xVTfc-E7zxw9CgOidAbrUhaxMnhPSFUVBuPN49eoKGc7rWPJ4ZISXDrh2j21PMORDHWsVcdc0s9yA4o16pjhUyQz-M2xMABkLtPn9XkMhFUEv5sevTdA8Oi_4l-Az0KuzBK7Qtc647vQyM90qqtr2P1yX8SdW2GfA5YxoEKOU4qDGu39dAsDsjU9Gu1uKxaZVnVzqgStZmxNtUALJGBDhyBapG239uizyHDUdxzdy85v1iiSI53SuokAmjh1UUBBhsgCvVf5k0LPlRtmLe69E8YRge52-MSNlIzywwnV9kZeA.jpg",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": {
+              "description": {
+                "html": "Telegram adds over 10 new features, including ways for users to access AI services from any chat, automate their inbox with bots, create custom styles in the AI text editor, set limits and view statistics for polls — and much more.",
+                "string": "Telegram adds over 10 new features, including ways for users to access AI services from any chat, automate their inbox with bots, create custom styles in the AI text editor, set limits and view statistics for polls — and much more."
+              },
+              "site_name": "Telegram",
+              "thumb": null,
+              "title": "Guest AI Bots, Bot-to-Bot Chats, Chat Automation, Custom AI Styles, 100M+ Emoji & Sticker Search and Much More",
+              "url": "https://telegram.org/blog/ai-bot-revolution-11-new-features"
+            },
+            "reacts": null,
+            "reply": null,
+            "text": {
+              "entities": [
+                {
+                  "language": null,
+                  "length": 10,
+                  "offset": 44,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 13,
+                  "offset": 59,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 14,
+                  "offset": 84,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 25,
+                  "offset": 109,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 59,
+                  "offset": 176,
+                  "type": "url",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 250,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/440"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 254,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/441"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 263,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/442"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 267,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/443"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 276,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/444"
+                },
+                {
+                  "language": null,
+                  "length": 4,
+                  "offset": 285,
+                  "type": "bold",
+                  "url": null
+                }
+              ],
+              "html": "For all the features from this update, like <b>statistics</b> and <b>custom limits</b> for polls, <b>streaming text</b> for bots, <b>silent scheduled messages</b> and more –&nbsp;check out the full blog:<br><a href=\"https://telegram.org/blog/ai-bot-revolution-11-new-features\" target=\"_blank\" rel=\"noopener\">https://telegram.org/blog/ai-bot-revolution-11-new-features</a><br><br>May Features<br><a href=\"https://t.me/telegram/440\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">1</a> • <a href=\"https://t.me/telegram/441\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">2</a> •&nbsp;<a href=\"https://t.me/telegram/442\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">3</a> • <a href=\"https://t.me/telegram/443\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">4</a> •&nbsp;<a href=\"https://t.me/telegram/444\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">5</a> •&nbsp;<b>More</b>",
+              "string": "For all the features from this update, like statistics and custom limits for polls, streaming text for bots, silent scheduled messages and more – check out the full blog:\nhttps://telegram.org/blog/ai-bot-revolution-11-new-features\n\nMay Features\n1 • 2 • 3 • 4 • 5 • More"
+            }
+          },
+          "footer": {
+            "author": null,
+            "date": {
+              "string": "2026-05-14T16:09:50+00:00",
+              "unix": 1778774990
+            },
+            "edited": false,
+            "views": "3.04M"
+          },
+          "forwarded": null,
+          "id": 445,
+          "view": "eyJjIjotMTAwNTY0MDg5MiwicCI6NDQ1LCJ0IjoxNzkyNzA3ODYyLCJoIjoiZTJlM2FjY2Y5ZGIzYmRjMDE4In0"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": {
+                  "formatted": "0:13",
+                  "raw": 13
+                },
+                "thumb": "https://cdn1.telesco.pe/file/OxKZpPrI8f7LO5MY8tGMPlaQhKZed3SadUzAzy5096rODZfRvT4t-zNZnZudX2Vsmi0o67Unha30TJx7l9hoWW8sl88XEcuBj66RLVs_04HUYcVs6ricXE1ydy9pKJGabWGTe9JOgyYb0YlBJEmSqzhifOE_Zz5eFijbQV2mni5FyWcGUMGu_eItzSOeJIXz9PHF1VgwUe1P8KRzDANY8XesdoY_QJcvKYuhp-D0nLuXQVn4RPLQya24F7CsrZVihAorIGYy8X1wKodRFRq4zw9UFrvNK3OHVitjSF8xXub19GROOIFzWBfFgtZlc_IdCMAtFzrIZksugIwASyTdEw",
+                "type": "video",
+                "url": "https://cdn1.telesco.pe/file/c71750f6fa.mp4?token=Koi9Qr7f4urKID8TEuGovazXxwpv88voMNxU1Q8e661oqmpSk1AL4iMvLOIcA-VgdwOnP7F4-j20LoTxoeDrp2tUd--6yvvuasXtxwjW75ffF9KQNt1qUtz0gkVY21e3UPzGUk__uNOTlfNUKftQsCC_znF_godyMCxwLY6P7CUSUlUgM37G7CT9dBwdfH8VDWDcUI5cR77AKTL4Iit_ojaNjnyGnAwCkOmj_g_GuxtEywhZMtxRPLkhLFOtnjEk5ZVxAChuyMFEwcTiVc0Cm7HBy_H0-YiMf5KsaanoDYyYtL7IjqaJWdVmG70chC3fPQV-paiSwxZPZqg255cW0Q",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": null,
+            "reacts": null,
+            "reply": null,
+            "text": {
+              "entities": [
+                {
+                  "language": null,
+                  "length": 11,
+                  "offset": 0,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 30,
+                  "offset": 41,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 25,
+                  "offset": 116,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 158,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 167,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/447"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 176,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/448"
+                },
+                {
+                  "language": null,
+                  "length": 4,
+                  "offset": 180,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/449"
+                }
+              ],
+              "html": "<b>Watch Apps.</b> Telegram is now available on <b>Apple and Android smartwatches</b>.<br><br>Send messages, manage your chats and more <b>without your phone nearby</b>.<br><br>June Features<br><b>1</b> •&nbsp;<a href=\"https://t.me/telegram/447\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">2</a> •&nbsp;<a href=\"https://t.me/telegram/448\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">3</a> • <a href=\"https://t.me/telegram/449\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">More</a>",
+              "string": "Watch Apps. Telegram is now available on Apple and Android smartwatches.\n\nSend messages, manage your chats and more without your phone nearby.\n\nJune Features\n1 • 2 • 3 • More"
+            }
+          },
+          "footer": {
+            "author": null,
+            "date": {
+              "string": "2026-06-18T14:34:18+00:00",
+              "unix": 1781793258
+            },
+            "edited": false,
+            "views": "1.67M"
+          },
+          "forwarded": null,
+          "id": 446,
+          "view": "eyJjIjotMTAwNTY0MDg5MiwicCI6NDQ2LCJ0IjoxNzkyNzA3ODYyLCJoIjoiMThiMGVkMTc2OWU4OWU1ZmEyIn0"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": {
+                  "formatted": "0:15",
+                  "raw": 15
+                },
+                "thumb": "https://cdn1.telesco.pe/file/M4MKwdDUnuZn8HblbQrqkPW9UyP0QQzI1ZrTjADfGqPyXrcrAvTvFIMKFIHMBws7p25fBXETK5NibcEzu1UOwI4cI4wh3WdhMFEFN61X2OeV3vKMdk1uSEYbRrlBy6JsiodCjPvi957Ullghk50Q5sxQj98I4jscvJlG0cPoxR5tZWytmH8nPpO3W_fR0GYxbCRSL1vgZOdRly_Ms4mqVsTjpvkOQDsa97NTwUtAIiCTaYh-jm-G7AdbjpGy9DRyez4_WrvZnX_E4k1cBHwmmjLmLn_KeiPLlS1X2vFdV6JmvvMKi_rbI1QSqnixHPsjU7ydlYY84giDvDTBf-9euQ",
+                "type": "video",
+                "url": "https://cdn1.telesco.pe/file/02d669b4f7.mp4?token=vZCyry5SOA642FuXdCbYvz57Oip3eYtArsJNC4j9LgWBQjbi9z1MSXGYnQTKYMZXWw8KRebRqN-uxKNT65znWfuD3fuGKVjwOniRnl1VcW0f9gYftWF067u6IGQW6XN6_fIzbMi-jNh_-O3nQdIjI7VhrM-r0Vz5pJ7O73X-37JB19pbIGESfshA0b9a0iZl_DhwJ87RScuAPX1IQ5IEwfR-72fK-RQy336Y4KWnxOBO9mYvWRk6kvjW-0H0XPamJD4vHvQDFiRYC2ErxQQPMDCcK8LsEE3YzHViUvgYI3-OY2VM0RvX_iA4My0lyCuL_Ja6JvpsmAyWktz70uhQ5g",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": null,
+            "reacts": null,
+            "reply": null,
+            "text": {
+              "entities": [
+                {
+                  "language": null,
+                  "length": 30,
+                  "offset": 0,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 23,
+                  "offset": 78,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 180,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/446"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 189,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 198,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/448"
+                },
+                {
+                  "language": null,
+                  "length": 4,
+                  "offset": 202,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/449"
+                }
+              ],
+              "html": "<b>Rich Text Formatting for Bots.</b> Telegram bots and AI agents now have access to <b>nearly 100 text formats</b> –&nbsp;like headers, tables, math or code formatting and more.<br><br>June Features<br><a href=\"https://t.me/telegram/446\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">1</a> •&nbsp;<b>2</b> •&nbsp;<a href=\"https://t.me/telegram/448\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">3</a> • <a href=\"https://t.me/telegram/449\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">More</a>",
+              "string": "Rich Text Formatting for Bots. Telegram bots and AI agents now have access to nearly 100 text formats – like headers, tables, math or code formatting and more.\n\nJune Features\n1 • 2 • 3 • More"
+            }
+          },
+          "footer": {
+            "author": null,
+            "date": {
+              "string": "2026-06-18T14:35:36+00:00",
+              "unix": 1781793336
+            },
+            "edited": false,
+            "views": "1.8M"
+          },
+          "forwarded": null,
+          "id": 447,
+          "view": "eyJjIjotMTAwNTY0MDg5MiwicCI6NDQ3LCJ0IjoxNzkyNzA3ODYyLCJoIjoiMDRhYTM0NzYxMGI2Zjc0NjdkIn0"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": {
+                  "formatted": "0:11",
+                  "raw": 11
+                },
+                "thumb": "https://cdn1.telesco.pe/file/qVFfwHbcC-jblcj3t8f0Ejcxr4htmn1iHqV_b6NEEcde1E88tpZeD3_x6rgS6xy0wWYIkOxhJCqf4IB5NgWySD7OKuSStfJ1A-1_0BfVheghQI90nPL4zyzAtvSW1mau_y_OAL7IDz7bmYQOTPXXKqso553EY8GDvmn54oM5xTYNUdHfxozQj9-FxDPVWO8YklwpAgR3kum_M8LflHpxaRTvUpLilFj7IsVVJ7rJ0MJKSvfqxR7DkJqOjBFQwb4s-w0jIoH87BaYViVkzuV2hn_QjMX85W4FQ9_WWcZe1dNILVa6B1_wjpr1brGh_Lcio-259Zct0DK8S3iieJa6Pw",
+                "type": "video",
+                "url": "https://cdn1.telesco.pe/file/a97abce758.mp4?token=hmxp5ts7kBtxAmJJmEbhai42M_wA8kg37jDBvAS3IjyaMbaL2mRoK08wVNsJp4BLPthm3da1DNau-BrgrqYWjId9bB-JAkl6oxtgwLetXtCOnYQNSHhtuHMddYpuWnScykwo2_10_4EPa4p94z91jIRtxEpzU6am9pT3-4ZCPptLR-TKsSrDL8-47BBmMjVPUFz4a71XqLyECMRJcg-4p57dtuYi-x80MmG6bJ6uAJ6COccQFhM7IL57l1Nh-Icli9cABuNMqtW65eR3_ZmyH6wiJhWATQPLlHDTcBhMwrYoDrmrXt1o079A46mnEzKQsS4MaOUrQOXme5vWQAy4sQ",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": null,
+            "reacts": null,
+            "reply": null,
+            "text": {
+              "entities": [
+                {
+                  "language": null,
+                  "length": 21,
+                  "offset": 0,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 22,
+                  "offset": 62,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 15,
+                  "offset": 110,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 142,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/446"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 151,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/447"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 160,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 4,
+                  "offset": 164,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/449"
+                }
+              ],
+              "html": "<b>AI Admins for Groups.</b> Groups can now add AI bots as admins to <b>process join requests </b>with unique features like <b>captcha support</b>.<br><br>June Features<br><a href=\"https://t.me/telegram/446\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">1</a> •&nbsp;<a href=\"https://t.me/telegram/447\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">2</a> •&nbsp;<b>3</b> • <a href=\"https://t.me/telegram/449\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">More</a>",
+              "string": "AI Admins for Groups. Groups can now add AI bots as admins to process join requests with unique features like captcha support.\n\nJune Features\n1 • 2 • 3 • More"
+            }
+          },
+          "footer": {
+            "author": null,
+            "date": {
+              "string": "2026-06-18T14:35:57+00:00",
+              "unix": 1781793357
+            },
+            "edited": false,
+            "views": "1.94M"
+          },
+          "forwarded": null,
+          "id": 448,
+          "view": "eyJjIjotMTAwNTY0MDg5MiwicCI6NDQ4LCJ0IjoxNzkyNzA3ODYyLCJoIjoiNTlkMmYwMzU1MDljMGQwNDUxIn0"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": null,
+                "thumb": null,
+                "type": "image",
+                "url": "https://cdn4.telesco.pe/file/c4Y4jJTO3zvpswJpseG89dfEX2ayzTvOh8al9fhDTA7am-T0w2lEuyjf_xoKxjGN3OmAHNwNPP2mryor8Dl2Ru3VtRVfG83nnCt3tgaGXIS7LvP99OOzuH_ZaKg0tPU1162zoeNj_tCWMumDn4UJhaAv1_Xwl4M8Ed3nFzxQmF2aCZM_tN3niUoOLNSf_iO57RMxw0M-rb4MuI7ZV1WNa-1H9bbFvbjoiox1uRIrebccF8gVFwLLFMQAo6yNaDVocg0zhPc9NiRj4tnIPCXgoJP8Kjtw8r5BqKpPcU5ai8xpQSWILY0dLVLLMRemmWNsbUkO04VFRv5J5M8x9Dtuuw.jpg",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": {
+              "description": {
+                "html": "Today’s update brings Telegram to Apple Watch and Android smartwatches, adds filthy rich text for bots, lets AI admins screen new group members, and introduces smarter polls, browser controls, and much more.",
+                "string": "Today’s update brings Telegram to Apple Watch and Android smartwatches, adds filthy rich text for bots, lets AI admins screen new group members, and introduces smarter polls, browser controls, and much more."
+              },
+              "site_name": "Telegram",
+              "thumb": null,
+              "title": "Smartwatch Apps, Rich Text for Bots, AI Guardians for Groups, and Much More",
+              "url": "https://telegram.org/blog/watch-apps-and-more"
+            },
+            "reacts": null,
+            "reply": null,
+            "text": {
+              "entities": [
+                {
+                  "language": null,
+                  "length": 21,
+                  "offset": 44,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 9,
+                  "offset": 79,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 16,
+                  "offset": 97,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 45,
+                  "offset": 146,
+                  "type": "url",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 207,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/446"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 216,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/447"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 225,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/448"
+                },
+                {
+                  "language": null,
+                  "length": 4,
+                  "offset": 229,
+                  "type": "bold",
+                  "url": null
+                }
+              ],
+              "html": "For all the features from this update, like <b>links in poll options</b>, support for <b>.md files</b> and new <b>browser settings</b> –&nbsp;check out the full blog:<br><a href=\"https://telegram.org/blog/watch-apps-and-more\" target=\"_blank\" rel=\"noopener\">https://telegram.org/blog/watch-apps-and-more</a><br><br>June Features<br><a href=\"https://t.me/telegram/446\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">1</a> •&nbsp;<a href=\"https://t.me/telegram/447\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">2</a> •&nbsp;<a href=\"https://t.me/telegram/448\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">3</a> • <b>More</b>",
+              "string": "For all the features from this update, like links in poll options, support for .md files and new browser settings – check out the full blog:\nhttps://telegram.org/blog/watch-apps-and-more\n\nJune Features\n1 • 2 • 3 • More"
+            }
+          },
+          "footer": {
+            "author": null,
+            "date": {
+              "string": "2026-06-18T14:36:06+00:00",
+              "unix": 1781793366
+            },
+            "edited": false,
+            "views": "2.54M"
+          },
+          "forwarded": null,
+          "id": 449,
+          "view": "eyJjIjotMTAwNTY0MDg5MiwicCI6NDQ5LCJ0IjoxNzkyNzA3ODYyLCJoIjoiODg0MTRkZDRjODFlNDBkMDAyIn0"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": {
+                  "formatted": "0:14",
+                  "raw": 14
+                },
+                "thumb": "https://cdn1.telesco.pe/file/BNryedbRhSalJ7cQiaHODSSCNr2NNLNemAfpyjf3xDtcVkue-8U3tJJ58py_TnpkQyhchevbBJf2mgyGgZPwbeT9aGTZ2-GDOcqH1nBzzejXlTGgAV0joEx6TQs9g57Zrz0dmRQxMMHO5qiWx_Fn2CLEZuxh4AolVDlbxewhhjAQzwVDjxBuhFOeCO4wzZ-XiG0FRE071_sx8n9woqG2G_jx_qwl3-UjkyjOKYRtUKGKIegbtDZc4vydK1zDOpCdvRZGTFUiy4EWNZiy4mt0LLoSMOH08rnrKnoAtTMfg8e2zB2vEMPc2GjLmS3KHq7Iu8djeRg-KY72f4lexhMDmA",
+                "type": "video",
+                "url": "https://cdn1.telesco.pe/file/9998a6a814.mp4?token=A6Nn45B1UMUZ5n0nJM1My4IqNcVg0l7jaQwjSbAKKh_CDAyRNbRzjtYp83-i-aTITfBHDXkAVzQUEfnPFOF4_7UmGu0f7RJXM9yWdW-_Q0k-7FhN1o8X9UWYB51-NPOEWh3oM9BAix3rT0h9KeOfh_1YBYDXAjBHMhgmhrz8kOJcEOAZOtnLolVEqHs8KbxwGhQb_1sBFDAZ4MyGtUyQ6hwJZ0bJAtJ7CdArfIraq75ZtSCkUgW25uqG_2DbwuwyijFMz39qh7PB2mi76WGIHnk7FdN3zqiEnlVe4L5V8YbQEcVvmfdEZyBaj2GiTq6_hkFMfTvkRgx6QijvoCcOeA",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": null,
+            "reacts": null,
+            "reply": null,
+            "text": {
+              "entities": [
+                {
+                  "language": null,
+                  "length": 2,
+                  "offset": 0,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/E2AD90.png"
+                },
+                {
+                  "language": null,
+                  "length": 17,
+                  "offset": 3,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 13,
+                  "offset": 69,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 28,
+                  "offset": 97,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 13,
+                  "offset": 144,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 206,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 210,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/451"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 219,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/452"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 228,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/453"
+                },
+                {
+                  "language": null,
+                  "length": 4,
+                  "offset": 237,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/454"
+                }
+              ],
+              "html": "<tg-emoji emoji-id=\"6028338546736107668\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/E2AD90.png')\"><b>⭐️</b></i></tg-emoji> <b>Rich Text Editor.</b> You can now create articles and long posts in a <b>visual editor</b> that supports <b>dozens of formatting options</b> and allows you to <b>generate text</b> with privacy-conscious AI tools.<br><br>July Features<br><b>1</b> • <a href=\"https://t.me/telegram/451\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">2</a> •&nbsp;<a href=\"https://t.me/telegram/452\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">3</a> •&nbsp;<a href=\"https://t.me/telegram/453\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">4</a> •&nbsp;<a href=\"https://t.me/telegram/454\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">More</a>",
+              "string": "⭐️ Rich Text Editor. You can now create articles and long posts in a visual editor that supports dozens of formatting options and allows you to generate text with privacy-conscious AI tools.\n\nJuly Features\n1 • 2 • 3 • 4 • More"
+            }
+          },
+          "footer": {
+            "author": null,
+            "date": {
+              "string": "2026-07-19T17:57:15+00:00",
+              "unix": 1784483835
+            },
+            "edited": false,
+            "views": "1.31M"
+          },
+          "forwarded": null,
+          "id": 450,
+          "view": "eyJjIjotMTAwNTY0MDg5MiwicCI6NDUwLCJ0IjoxNzkyNzA3ODYyLCJoIjoiZWUzNmI5NWY5NmFjZWRmMTA3In0"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": {
+                  "formatted": "0:18",
+                  "raw": 18
+                },
+                "thumb": "https://cdn1.telesco.pe/file/ULv6EtllBnQfuWuIKgosnJqVcgN3Xgn3FjEktANBrZpOdNMIMpSZVO1g4Q1hx8ITLbHEvIoLNcUvkuyRkvNHtxliEl-cZmiPfcpQZnXMPondRzzJqx2UIHy3_xfvxlSU_HIj5mcfyT47saMRwj-KF8zl1a6QLIjKn4-8ioaP8mcw36uahKD5JJ0Fx6KprWVw89B51Auh6-TycYItgduH8RQoVI03CW3PQv-5HD4JQ8ce0XyRtxXm03nGQQi38K4lG8zT1Uod4NKkmwWXVJVN5ZjydV5MS3zYcC6ZBwksdvNJ0oKmArBmf6slOL3KU70yKW__253OOrDO2ljg0eRrJg",
+                "type": "video",
+                "url": "https://cdn1.telesco.pe/file/6ca2d20645.mp4?token=v7fWj900787gEjLxt-t6DO7DfjX9jU2EhPo4taKWWhv5UMK0ipMI83OQk0zk3EZ1sCF_49HSatIAhLwqf9FraZoEhJbmLAzt9FZKC6DzI4tXs8hr1S587R4Ysf_yhraX_JL3zwMyDkQAeq6xro5Ij-IC6TZTy6PoEXmjWJ8qrgbR2VddjlIaXHhujRsDK6T57RelHU_kMO_XQ91coXOK1hL1sH26iCsqkRxHt_q-maeAjmAi4Su1gcHI6YGvDGAbhXOYl-xESWlZsLG5rmlynUJyoXC1bhxb-xm96VB_4ldkegGrmYMwLaqx70XeQ30QCLfoHprDKW5lmfo5dVaO6TzoLYYGMqknLXWitR9ENcuYlvuH2_duRcW1gSNrDutwJRiNb4oohoOr2QiJZhWoYyGpijaw_6z9cGAq5qraeb67jIHbQJRGf3qFSIx1nXYKlYBH2IGEFbmyeDQT784STQ5YPI-eEt4U2NpNTzs5qqOhyJVQlX8AwFaoOXyE8JMF1U5N6F2kgYRk9lSL-fG7i4rS94h3rQJ8XKuOf9GXGF6tJT-wZRWgCS1AQJnzDxJQ0sz9GR52DM9Ho7mOsVJxsH0JrprSkZ-jLGCuNWz4izHcr0djjMAgjRxHVogYUkwXcmv5R27x7EdgEMGthHOr_gJwSqXM3BRMKCcD7HrBjy0",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": null,
+            "reacts": null,
+            "reply": null,
+            "text": {
+              "entities": [
+                {
+                  "language": null,
+                  "length": 21,
+                  "offset": 0,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 15,
+                  "offset": 67,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 16,
+                  "offset": 133,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 176,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/450"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 180,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 189,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/452"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 198,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/453"
+                },
+                {
+                  "language": null,
+                  "length": 4,
+                  "offset": 207,
+                  "type": "text_link",
+                  "url": "https://t.me/telegram/454"
+                }
+              ],
+              "html": "<b>Telegram Communities.</b> Several groups, channels and bots can now be <b>linked together</b> in a single community, where members can view and <b>join other chats</b> instantly.<br><br>July Features<br><a href=\"https://t.me/telegram/450\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">1</a> • <b>2</b> •&nbsp;<a href=\"https://t.me/telegram/452\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">3</a> •&nbsp;<a href=\"https://t.me/telegram/453\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">4</a> •&nbsp;<a href=\"https://t.me/telegram/454\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">More</a>",
+              "string": "Telegram Communities. Several groups, channels and bots can now be linked together in a single community, where members can view and join other chats instantly.\n\nJuly Features\n1 • 2 • 3 • 4 • More"
+            }
+          },
+          "footer": {
+            "author": null,
+            "date": {
+              "string": "2026-07-19T17:57:29+00:00",
+              "unix": 1784483849
+            },
+            "edited": false,
+            "views": "1.44M"
+          },
+          "forwarded": null,
+          "id": 451,
+          "view": "eyJjIjotMTAwNTY0MDg5MiwicCI6NDUxLCJ0IjoxNzkyNzA3ODYyLCJoIjoiNDA1NjAwM2JhNDFiZWE3NmYzIn0"
+        }
+      ]
+    },
+    "meta": {
+      "offset": {
+        "after": 451,
+        "before": 430
+      }
+    }
+  },
+  "status": 200
+}

@@ -1,0 +1,242 @@
+{
+  "channels": {
+    "durov": {
+      "post_id": 531
+    },
+    "telegram": {
+      "post_id": 441
+    },
+    "stranaua": {
+      "post_id": 252483
+    },
+    "tginfo": {
+      "post_id": 4422
+    },
+    "nebudetafk": {
+      "post_id": 2823
+    }
+  },
+  "missing": "zzzzzznotexistingchannelzzzz",
+  "responses": [
+    {
+      "method": "GET",
+      "path": "/s/durov/None",
+      "params": {},
+      "status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "file": "body_durov.txt.gz"
+    },
+    {
+      "method": "GET",
+      "path": "/s/durov/531",
+      "params": {},
+      "status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "file": "post_durov_531.txt.gz"
+    },
+    {
+      "method": "POST",
+      "path": "/s/durov",
+      "params": {
+        "before": "531"
+      },
+      "status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "file": "more_durov_before_531.txt.gz"
+    },
+    {
+      "method": "POST",
+      "path": "/s/durov",
+      "params": {
+        "after": "531"
+      },
+      "status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "file": "more_durov_after_531.txt.gz"
+    },
+    {
+      "method": "GET",
+      "path": "/s/telegram/None",
+      "params": {},
+      "status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "file": "body_telegram.txt.gz"
+    },
+    {
+      "method": "GET",
+      "path": "/s/telegram/441",
+      "params": {},
+      "status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "file": "post_telegram_441.txt.gz"
+    },
+    {
+      "method": "POST",
+      "path": "/s/telegram",
+      "params": {
+        "before": "441"
+      },
+      "status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "file": "more_telegram_before_441.txt.gz"
+    },
+    {
+      "method": "POST",
+      "path": "/s/telegram",
+      "params": {
+        "after": "441"
+      },
+      "status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "file": "more_telegram_after_441.txt.gz"
+    },
+    {
+      "method": "GET",
+      "path": "/s/stranaua/None",
+      "params": {},
+      "status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "file": "body_stranaua.txt.gz"
+    },
+    {
+      "method": "GET",
+      "path": "/s/stranaua/252483",
+      "params": {},
+      "status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "file": "post_stranaua_252483.txt.gz"
+    },
+    {
+      "method": "POST",
+      "path": "/s/stranaua",
+      "params": {
+        "before": "252483"
+      },
+      "status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "file": "more_stranaua_before_252483.txt.gz"
+    },
+    {
+      "method": "POST",
+      "path": "/s/stranaua",
+      "params": {
+        "after": "252483"
+      },
+      "status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "file": "more_stranaua_after_252483.txt.gz"
+    },
+    {
+      "method": "GET",
+      "path": "/s/tginfo/None",
+      "params": {},
+      "status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "file": "body_tginfo.txt.gz"
+    },
+    {
+      "method": "GET",
+      "path": "/s/tginfo/4422",
+      "params": {},
+      "status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "file": "post_tginfo_4422.txt.gz"
+    },
+    {
+      "method": "POST",
+      "path": "/s/tginfo",
+      "params": {
+        "before": "4422"
+      },
+      "status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "file": "more_tginfo_before_4422.txt.gz"
+    },
+    {
+      "method": "POST",
+      "path": "/s/tginfo",
+      "params": {
+        "after": "4422"
+      },
+      "status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "file": "more_tginfo_after_4422.txt.gz"
+    },
+    {
+      "method": "GET",
+      "path": "/s/nebudetafk/None",
+      "params": {},
+      "status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "file": "body_nebudetafk.txt.gz"
+    },
+    {
+      "method": "GET",
+      "path": "/s/nebudetafk/2823",
+      "params": {},
+      "status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "file": "post_nebudetafk_2823.txt.gz"
+    },
+    {
+      "method": "POST",
+      "path": "/s/nebudetafk",
+      "params": {
+        "before": "2823"
+      },
+      "status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "file": "more_nebudetafk_before_2823.txt.gz"
+    },
+    {
+      "method": "POST",
+      "path": "/s/nebudetafk",
+      "params": {
+        "after": "2823"
+      },
+      "status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "file": "more_nebudetafk_after_2823.txt.gz"
+    },
+    {
+      "method": "GET",
+      "path": "/durov",
+      "params": {},
+      "status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "file": "preview_durov.txt.gz"
+    },
+    {
+      "method": "GET",
+      "path": "/telegram",
+      "params": {},
+      "status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "file": "preview_telegram.txt.gz"
+    },
+    {
+      "method": "GET",
+      "path": "/stranaua",
+      "params": {},
+      "status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "file": "preview_stranaua.txt.gz"
+    },
+    {
+      "method": "GET",
+      "path": "/s/zzzzzznotexistingchannelzzzz/None",
+      "params": {},
+      "status": 302,
+      "content_type": "text/html; charset=UTF-8",
+      "file": "body_missing.txt.gz"
+    },
+    {
+      "method": "GET",
+      "path": "/zzzzzznotexistingchannelzzzz",
+      "params": {},
+      "status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "file": "preview_missing.txt.gz"
+    }
+  ]
+}

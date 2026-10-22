@@ -1,0 +1,3625 @@
+{
+  "body": {
+    "meta": {
+      "offset": {
+        "after": null,
+        "before": 4402
+      }
+    },
+    "posts": [
+      {
+        "content": {
+          "inline": null,
+          "media": [
+            {
+              "available": null,
+              "duration": null,
+              "thumb": null,
+              "type": "image",
+              "url": "https://cdn4.telesco.pe/file/aQ0lhz1uLVj_OyVQTsOCTiXKABDP3Wj98SSyxe22XhUjTD7GH9jEy0YyWzFROefmoiWWU-N7xAL-qRrOcbH_jZBQoIfzNQ_1SmK64JooKUQCw-Vw-jLv1jnoV_yh8m5tp_MVTjjN0BV5HqVhpHNDzqQ4NWns8tOmqyGWAXp1TSBnh53NuXQ-MY8NKYGXdT6HOF3sCkR7BvE42EQZT5y0kYQZcnmTbr5itNPg7IBD3B6Kl-dSnjktbwRELZ3cWhu1ALtv6g7pneEOW2TP6eVTkZCqhsNCOL3fi4tSj6LbMg0PQ-RNXc6lJTzvcXhdWjTGz25ynwYxM5HU6upJ1L5wIg.jpg",
+              "waves": null
+            }
+          ],
+          "poll": null,
+          "preview_link": null,
+          "reacts": [
+            {
+              "count": "452",
+              "emoji": "🤡",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09FA4A1.png",
+              "type": "emoji"
+            },
+            {
+              "count": "389",
+              "emoji": "🎉",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F8E89.png",
+              "type": "emoji"
+            },
+            {
+              "count": "229",
+              "emoji": "🤬",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09FA4AC.png",
+              "type": "emoji"
+            },
+            {
+              "count": "81",
+              "emoji": "👎",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F918E.png",
+              "type": "emoji"
+            },
+            {
+              "count": "49",
+              "emoji": "👏",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F918F.png",
+              "type": "emoji"
+            },
+            {
+              "count": "48",
+              "emoji": "👍",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F918D.png",
+              "type": "emoji"
+            },
+            {
+              "count": "27",
+              "emoji": "😱",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F98B1.png",
+              "type": "emoji"
+            },
+            {
+              "count": "16",
+              "emoji": "🍾",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F8DBE.png",
+              "type": "emoji"
+            },
+            {
+              "count": "12",
+              "emoji": "🥰",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09FA5B0.png",
+              "type": "emoji"
+            },
+            {
+              "count": "12",
+              "emoji": "🆒",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F8692.png",
+              "type": "emoji"
+            },
+            {
+              "count": "8",
+              "emoji": "😍",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F988D.png",
+              "type": "emoji"
+            }
+          ],
+          "reply": null,
+          "text": {
+            "entities": [
+              {
+                "language": null,
+                "length": 81,
+                "offset": 0,
+                "type": "bold",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 6,
+                "offset": 119,
+                "type": "text_link",
+                "url": "https://tass.ru/obschestvo/27009957"
+              },
+              {
+                "language": null,
+                "length": 30,
+                "offset": 279,
+                "type": "bold",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 110,
+                "offset": 498,
+                "type": "bold",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 11,
+                "offset": 1354,
+                "type": "hashtag",
+                "url": null
+              }
+            ],
+            "html": "<b>Общественная палата РФ обвинила Telegram в нарушении финансового законодательства</b><br><br>Член комиссии ОП РФ Евгений Машаров <a href=\"https://tass.ru/obschestvo/27009957\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">заявил</a> ТАСС, что мессенджер нарушает не только законы об информационной безопасности и защите персональных данных, но и законодательство о рынке ценных бумаг.<br><br><b>Основные претензии к Telegram:</b><br><br> • Отсутствие лицензий финансовых регуляторов РФ.<br> • Нарушение ФЗ «О рынке ценных бумаг».<br> • Несоблюдение законодательства о противодействии отмыванию денег и финансированию терроризма.<br><br><b>По словам чиновника, у платформы Telegram нет лицензий на предоставление пользователям следующих возможностей:</b><br><br> • Покупка акций и валют через криптокошелек.<br> • Пополнение кошелька обычными валютами и криптовалютами.<br> • Финансовые услуги наравне с онлайн-казино и ставками на спорт.<br><br>Эксперт предупредил, что такие сервисы создают «окно возможностей» для легализации средств, похищенных мошенниками, а также финансирования терроризма и посягательства на конституционный строй.<br><br>Обвинения в нарушении финансового законодательства — ещё один рычаг давления на мессенджер. Ранее власти уже блокировали VPN-сервисы в App Store, а депутаты не исключают признание Telegram экстремистской организацией.<br><br>В Госдуме на рассмотрении находится законопроект о крипторегулировании, который должен определить уполномоченные организации для работы с цифровыми валютами.<br><br><a href=\"?q=%23%D0%B1%D0%BB%D0%BE%D0%BA%D0%B8%D1%80%D0%BE%D0%B2%D0%BA%D0%B8\">#блокировки</a>",
+            "string": "Общественная палата РФ обвинила Telegram в нарушении финансового законодательства\n\nЧлен комиссии ОП РФ Евгений Машаров заявил ТАСС, что мессенджер нарушает не только законы об информационной безопасности и защите персональных данных, но и законодательство о рынке ценных бумаг.\n\nОсновные претензии к Telegram:\n\n • Отсутствие лицензий финансовых регуляторов РФ.\n • Нарушение ФЗ «О рынке ценных бумаг».\n • Несоблюдение законодательства о противодействии отмыванию денег и финансированию терроризма.\n\nПо словам чиновника, у платформы Telegram нет лицензий на предоставление пользователям следующих возможностей:\n\n • Покупка акций и валют через криптокошелек.\n • Пополнение кошелька обычными валютами и криптовалютами.\n • Финансовые услуги наравне с онлайн-казино и ставками на спорт.\n\nЭксперт предупредил, что такие сервисы создают «окно возможностей» для легализации средств, похищенных мошенниками, а также финансирования терроризма и посягательства на конституционный строй.\n\nОбвинения в нарушении финансового законодательства — ещё один рычаг давления на мессенджер. Ранее власти уже блокировали VPN-сервисы в App Store, а депутаты не исключают признание Telegram экстремистской организацией.\n\nВ Госдуме на рассмотрении находится законопроект о крипторегулировании, который должен определить уполномоченные организации для работы с цифровыми валютами.\n\n#блокировки"
+          }
+        },
+        "footer": {
+          "author": {
+            "html": "Antonio Marreti",
+            "string": "Antonio Marreti"
+          },
+          "date": {
+            "string": "2026-04-06T12:23:38+00:00",
+            "unix": 1775478218
+          },
+          "edited": false,
+          "views": "35K"
+        },
+        "forwarded": null,
+        "id": 4402,
+        "view": "eyJjIjotMTAwMzMwNzUyNywicCI6NDQwMiwidCI6MTc5MjcwNzg2MywiaCI6ImY3ZDMwOWRhMTczZjU3NzBkNiJ9"
+      },
+      {
+        "content": {
+          "inline": null,
+          "media": [
+            {
+              "available": null,
+              "duration": null,
+              "thumb": null,
+              "type": "image",
+              "url": "https://cdn4.telesco.pe/file/h1nV0ej3J9jpNJvXy3HF2KYoufoLPsrQjFRI1wuPMJsBn-v1uz1SvnpILw9bEg0zhPcnh9VBkwr_iWgnVFyCX-AxVxznyrVMz-XS0D9wjQhIWonJ89RYKgpuiUf4k_bopcfo7-ykuRCfAV_lanU-9vPugSXpyBrg3uyJcJtjXUwvvLFtlznI_xiAe7C4Y5FPO_x1YQWHliuAT4QlaZJkqlyh_IFM6v_KmBxSe5rSPzWffYWuGwSHhB7WM7vh8MPNix044yoW4TqtqtSCHr7ZUUldFPrCZNxW7k5Sy2boYHkmv8syr0BLQbz_BRE99wrAbN-Wgdr4l7Ujk9XXh86FiQ.jpg",
+              "waves": null
+            }
+          ],
+          "poll": null,
+          "preview_link": null,
+          "reacts": [
+            {
+              "count": "10",
+              "emoji": "⭐",
+              "emoji_id": null,
+              "emoji_image": null,
+              "type": "telegram_stars"
+            },
+            {
+              "count": "311",
+              "emoji": "👍",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F918D.png",
+              "type": "emoji"
+            },
+            {
+              "count": "77",
+              "emoji": "😱",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F98B1.png",
+              "type": "emoji"
+            },
+            {
+              "count": "65",
+              "emoji": "🎉",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F8E89.png",
+              "type": "emoji"
+            },
+            {
+              "count": "52",
+              "emoji": "🤡",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09FA4A1.png",
+              "type": "emoji"
+            },
+            {
+              "count": "47",
+              "emoji": "👏",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F918F.png",
+              "type": "emoji"
+            },
+            {
+              "count": "25",
+              "emoji": "😍",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F988D.png",
+              "type": "emoji"
+            },
+            {
+              "count": "21",
+              "emoji": "🤬",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09FA4AC.png",
+              "type": "emoji"
+            },
+            {
+              "count": "18",
+              "emoji": "🍾",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F8DBE.png",
+              "type": "emoji"
+            },
+            {
+              "count": "18",
+              "emoji": "🆒",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F8692.png",
+              "type": "emoji"
+            },
+            {
+              "count": "17",
+              "emoji": "👎",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F918E.png",
+              "type": "emoji"
+            },
+            {
+              "count": "15",
+              "emoji": "🥰",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09FA5B0.png",
+              "type": "emoji"
+            }
+          ],
+          "reply": null,
+          "text": {
+            "entities": [
+              {
+                "language": null,
+                "length": 46,
+                "offset": 0,
+                "type": "bold",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 10,
+                "offset": 228,
+                "type": "bold",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 21,
+                "offset": 419,
+                "type": "bold",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 26,
+                "offset": 589,
+                "type": "bold",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 8,
+                "offset": 638,
+                "type": "text_link",
+                "url": "https://core.telegram.org/bots/features#bot-to-bot-communication"
+              },
+              {
+                "language": null,
+                "length": 5,
+                "offset": 679,
+                "type": "hashtag",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 7,
+                "offset": 685,
+                "type": "hashtag",
+                "url": null
+              }
+            ],
+            "html": "<b>Telegram разрешил ботам общаться друг с другом</b><br><br>Раньше боты в Telegram не могли видеть сообщения друг друга — платформа блокировала такую возможность, чтобы избежать бесконечных циклов сообщений. Сегодня это ограничение сняли.<br><br><b> • В чатах</b><br>Нововведение позволит администраторам выстраивать сложные цепочки: например, один бот сможет активировать другого, а системы логирования — фиксировать действия всех ботов в чате.<br><br><b> • Через бизнес-режим</b><br>Бизнес-боты смогут от вашего имени отправлять сообщения другим ботам в личных сообщениях.<br><br>Новая возможность активируется через <a href=\"https://t.me/BotFather\" target=\"_blank\">@BotFather</a> в режиме <b>«Bot-to-Bot Communication»</b>.<br><br>Полная документация <a href=\"https://core.telegram.org/bots/features#bot-to-bot-communication\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">доступна</a> на официальном сайте Telegram.<br><br><a href=\"?q=%23%D0%B1%D0%BE%D1%82%D1%8B\">#боты</a> <a href=\"?q=%23BotAPI\">#BotAPI</a>",
+            "string": "Telegram разрешил ботам общаться друг с другом\n\nРаньше боты в Telegram не могли видеть сообщения друг друга — платформа блокировала такую возможность, чтобы избежать бесконечных циклов сообщений. Сегодня это ограничение сняли.\n\n • В чатах\nНововведение позволит администраторам выстраивать сложные цепочки: например, один бот сможет активировать другого, а системы логирования — фиксировать действия всех ботов в чате.\n\n • Через бизнес-режим\nБизнес-боты смогут от вашего имени отправлять сообщения другим ботам в личных сообщениях.\n\nНовая возможность активируется через @BotFather в режиме «Bot-to-Bot Communication».\n\nПолная документация доступна на официальном сайте Telegram.\n\n#боты #BotAPI"
+          }
+        },
+        "footer": {
+          "author": {
+            "html": "Antonio Marreti",
+            "string": "Antonio Marreti"
+          },
+          "date": {
+            "string": "2026-04-07T10:56:33+00:00",
+            "unix": 1775559393
+          },
+          "edited": false,
+          "views": "34.5K"
+        },
+        "forwarded": null,
+        "id": 4403,
+        "view": "eyJjIjotMTAwMzMwNzUyNywicCI6NDQwMywidCI6MTc5MjcwNzg2MywiaCI6ImI3ZTk5NGQyYzQ3OTlkOWRiMiJ9"
+      },
+      {
+        "content": {
+          "inline": null,
+          "media": [
+            {
+              "available": null,
+              "duration": null,
+              "thumb": null,
+              "type": "image",
+              "url": "https://cdn4.telesco.pe/file/vKBoERZBBV2HPiCDMERHnNvkMDvD5jkWKinVPLZEl3Qc--XD7TGHOELgGmHRk70PWkTelY1yf-K0CIJHAnsDqt1NoCSwbV804qVK4tQbDulKOrq1_FKZf4zsY_TyjkWDETVjAYVnCm9vNprekrFTsSRgbR2-COpEAHtYOzaJI6kDthVfj86WCAnmdPLo11Ms7EqsASR_YwQLwyTNnfCj7-ymIycBDUrVYBrN-v5cNNBURu78Z5QL89whPxn7V49ABK3vuMHsi9kvcOqxyar5SyeAi-U-y6rqnbDgJNgiwrJrotuFMkLBwIfOaML_8DZ4YKYM2MSZIjY_rBJlpoOznw.jpg",
+              "waves": null
+            }
+          ],
+          "poll": null,
+          "preview_link": null,
+          "reacts": [
+            {
+              "count": "313",
+              "emoji": "👍",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F918D.png",
+              "type": "emoji"
+            },
+            {
+              "count": "95",
+              "emoji": "👏",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F918F.png",
+              "type": "emoji"
+            },
+            {
+              "count": "54",
+              "emoji": "🎉",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F8E89.png",
+              "type": "emoji"
+            },
+            {
+              "count": "38",
+              "emoji": "🤡",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09FA4A1.png",
+              "type": "emoji"
+            },
+            {
+              "count": "25",
+              "emoji": "🆒",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F8692.png",
+              "type": "emoji"
+            },
+            {
+              "count": "19",
+              "emoji": "👎",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F918E.png",
+              "type": "emoji"
+            },
+            {
+              "count": "18",
+              "emoji": "😍",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F988D.png",
+              "type": "emoji"
+            },
+            {
+              "count": "17",
+              "emoji": "🍾",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F8DBE.png",
+              "type": "emoji"
+            },
+            {
+              "count": "16",
+              "emoji": "😱",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F98B1.png",
+              "type": "emoji"
+            },
+            {
+              "count": "15",
+              "emoji": "🥰",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09FA5B0.png",
+              "type": "emoji"
+            },
+            {
+              "count": "10",
+              "emoji": "🤬",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09FA4AC.png",
+              "type": "emoji"
+            }
+          ],
+          "reply": null,
+          "text": {
+            "entities": [
+              {
+                "language": null,
+                "length": 71,
+                "offset": 0,
+                "type": "bold",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 8,
+                "offset": 85,
+                "type": "text_link",
+                "url": "https://t.me/durov/479"
+              },
+              {
+                "language": null,
+                "length": 6,
+                "offset": 122,
+                "type": "url",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 5,
+                "offset": 229,
+                "type": "text_link",
+                "url": "https://t.me/tginfo/2705"
+              },
+              {
+                "language": null,
+                "length": 10,
+                "offset": 779,
+                "type": "text_link",
+                "url": "https://t.me/tginfo/3831"
+              },
+              {
+                "language": null,
+                "length": 8,
+                "offset": 950,
+                "type": "text_link",
+                "url": "https://vk.com/wall-2158488_189486"
+              },
+              {
+                "language": null,
+                "length": 7,
+                "offset": 1148,
+                "type": "text_link",
+                "url": "https://t.me/tginfolive/528"
+              },
+              {
+                "language": null,
+                "length": 18,
+                "offset": 1496,
+                "type": "bold",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 29,
+                "offset": 1630,
+                "type": "bold",
+                "url": null
+              }
+            ],
+            "html": "<b>В Telegram могут появиться инструменты для борьбы с накруткой в опросах</b><br><br>Павел Дуров <a href=\"https://t.me/durov/479\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">упомянул</a> в своём сообщении на канале <a href=\"https://t.me/durov\" target=\"_blank\">@durov</a>, что мессенджер работает над инструментами, которые позволят владельцам каналов выявлять накрутку в опросах и защищать их от манипуляций с результатами.<br><br>Владелец Telegram перечислил такие меры:<br> • Статистика опросов.<br> • Ограничение голосования только для подписчиков канала.<br> • Ограничение по странам пользователей.<br><br>В прошлом Telegram использовал ограничение по странам как способ борьбы с накрутками в частном порядке — например, во время протестов в Беларуси в 2020 году Telegram провёл <a href=\"https://t.me/tginfo/2705\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">опрос</a>, оставить голос в котором можно было только с аккаунта, привязанного к белорусской SIM-карте. <br><br>Ограничение по странам также предлагается мессенджером в <a href=\"https://t.me/tginfo/3831\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">розыгрышах</a>, которые могут проводить каналы.<br><br>Подробная статистика опросов по времени и типу аудитории — полезный инструмент для выявления аномалий, который, например, был <a href=\"https://vk.com/wall-2158488_189486\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">добавлен</a> ВКонтакте в 2012 году, когда Павел Дуров ещё оставался его генеральным директором.<br><br>Анонс новых инструментов, вероятно, связан со значительными накрутками в политическом опросе, на который <a href=\"https://t.me/tginfolive/528\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">обратил</a> внимание Павел Дуров. Он отметил, что большинство накрученных голосов в опросе было оставлено аккаунтами из «экзотических стран».<br><br>Подробностей о том, как именно будет выглядеть статистика, пока нет. Инструменты для ограничения аудитории похожи на те, которые уже есть в розыгрышах, и по ним можно предположить, как это будет работать:<br><br> • <b>Страна голосующего</b><br>Как правило, Telegram определяет регион пользователей по стране, на SIM-карту которой зарегистрирован аккаунт.<br><br> • <b>Только для подписчиков канала</b><br>Накрутка подписчиков на канале — частая проблема, с которой сталкиваются администраторы, когда проводят розыгрыши. Владельцы бот-ферм приказывают своим аккаунтам вступить в каналы с активными розыгрышами, чтобы получить подписки Premium, в то время как у владельцев каналов нет инструментов, чтобы противодействовать этому. <br><br>Без функции «только для старых подписчиков» опросы могут унаследовать эту проблему.",
+            "string": "В Telegram могут появиться инструменты для борьбы с накруткой в опросах\n\nПавел Дуров упомянул в своём сообщении на канале @durov, что мессенджер работает над инструментами, которые позволят владельцам каналов выявлять накрутку в опросах и защищать их от манипуляций с результатами.\n\nВладелец Telegram перечислил такие меры:\n • Статистика опросов.\n • Ограничение голосования только для подписчиков канала.\n • Ограничение по странам пользователей.\n\nВ прошлом Telegram использовал ограничение по странам как способ борьбы с накрутками в частном порядке — например, во время протестов в Беларуси в 2020 году Telegram провёл опрос, оставить голос в котором можно было только с аккаунта, привязанного к белорусской SIM-карте. \n\nОграничение по странам также предлагается мессенджером в розыгрышах, которые могут проводить каналы.\n\nПодробная статистика опросов по времени и типу аудитории — полезный инструмент для выявления аномалий, который, например, был добавлен ВКонтакте в 2012 году, когда Павел Дуров ещё оставался его генеральным директором.\n\nАнонс новых инструментов, вероятно, связан со значительными накрутками в политическом опросе, на который обратил внимание Павел Дуров. Он отметил, что большинство накрученных голосов в опросе было оставлено аккаунтами из «экзотических стран».\n\nПодробностей о том, как именно будет выглядеть статистика, пока нет. Инструменты для ограничения аудитории похожи на те, которые уже есть в розыгрышах, и по ним можно предположить, как это будет работать:\n\n • Страна голосующего\nКак правило, Telegram определяет регион пользователей по стране, на SIM-карту которой зарегистрирован аккаунт.\n\n • Только для подписчиков канала\nНакрутка подписчиков на канале — частая проблема, с которой сталкиваются администраторы, когда проводят розыгрыши. Владельцы бот-ферм приказывают своим аккаунтам вступить в каналы с активными розыгрышами, чтобы получить подписки Premium, в то время как у владельцев каналов нет инструментов, чтобы противодействовать этому. \n\nБез функции «только для старых подписчиков» опросы могут унаследовать эту проблему."
+          }
+        },
+        "footer": {
+          "author": null,
+          "date": {
+            "string": "2026-04-08T08:41:38+00:00",
+            "unix": 1775637698
+          },
+          "edited": false,
+          "views": "33.8K"
+        },
+        "forwarded": null,
+        "id": 4404,
+        "view": "eyJjIjotMTAwMzMwNzUyNywicCI6NDQwNCwidCI6MTc5MjcwNzg2MywiaCI6IjNiMGE3NmI0NzdlYjg3OWYyNyJ9"
+      },
+      {
+        "content": {
+          "inline": null,
+          "media": [
+            {
+              "available": null,
+              "duration": null,
+              "thumb": null,
+              "type": "image",
+              "url": "https://cdn4.telesco.pe/file/jQQSTkL-OOvLpTsLFQ_RSJAqoGMKbsUWptsKB2P5YPutk915pkJVIW8NpLQZHbq-F4J5__Hcwqk10zxRYtTE8UXz5DjxQbMpJfgHwYzYqCi1ca4ai0X-7CwiUBaflIdQ0_AO83JhXPPtVI3Jh3dEeGI5GIXZ30fCncuIPHnPR-1DQKyQhiJfMURChnlAbPwEIbiI1RITu3wclDpoLEY6L03CHet_HXYb3b1fS7K4zFtuRtTwnj9gkvw2uytMCrpMGT8YHNiFllu_kPNb2tRP8ELn6M-vnuA79bV0kbf10RUs5Gwb4CSlBtaoMQYYgCn7H5EaxeMmUY3iwp0OitdDOQ.jpg",
+              "waves": null
+            }
+          ],
+          "poll": null,
+          "preview_link": null,
+          "reacts": [
+            {
+              "count": "1",
+              "emoji": "⭐",
+              "emoji_id": null,
+              "emoji_image": null,
+              "type": "telegram_stars"
+            },
+            {
+              "count": "463",
+              "emoji": "👍",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F918D.png",
+              "type": "emoji"
+            },
+            {
+              "count": "186",
+              "emoji": "🎉",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F8E89.png",
+              "type": "emoji"
+            },
+            {
+              "count": "70",
+              "emoji": "🥰",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09FA5B0.png",
+              "type": "emoji"
+            },
+            {
+              "count": "69",
+              "emoji": "👏",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F918F.png",
+              "type": "emoji"
+            },
+            {
+              "count": "45",
+              "emoji": "🤡",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09FA4A1.png",
+              "type": "emoji"
+            },
+            {
+              "count": "29",
+              "emoji": "🆒",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F8692.png",
+              "type": "emoji"
+            },
+            {
+              "count": "23",
+              "emoji": "😱",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F98B1.png",
+              "type": "emoji"
+            },
+            {
+              "count": "17",
+              "emoji": "👎",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F918E.png",
+              "type": "emoji"
+            },
+            {
+              "count": "17",
+              "emoji": "🤬",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09FA4AC.png",
+              "type": "emoji"
+            },
+            {
+              "count": "12",
+              "emoji": "😍",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F988D.png",
+              "type": "emoji"
+            },
+            {
+              "count": "6",
+              "emoji": "🍾",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F8DBE.png",
+              "type": "emoji"
+            }
+          ],
+          "reply": {
+            "cover": "https://cdn4.telesco.pe/file/YGJq0lTry7zE6Azfd-Y8o_1tGgHyH8x2zawhWjrB_V6lXP1GrrNucTinodjKUim6YiZ6pc42LqX323QGxuzD57BIy5facf4I72GHJHDYMr_VWHRd4pVS7vfXAB7RDzcTa-_DVpq22T6z7wncx86gZFSHx94Vi-I7nsKylN8qGMMN1BVjP2BLV1WwFd_tO1laTP9SNLfPKsZAg0K4twmNa6_tAf3gWrJijpioa2DoVZ4viK1vbdTTaIQmRT4eJtdhONnXZD8-KvYLqeFzzjrVHoGoxR2FyGePS0vE59eYIfGMnp-J7XxyYngmCA-kAzcLMFi8_JSYGfdv651m06ElhQ.jpg",
+            "name": {
+              "html": "Telegram Info",
+              "string": "Telegram Info"
+            },
+            "text": {
+              "html": "Telegram сможет предупреждать собеседников, если вы используете неофициальный клиент  В базе строк для перевода официального приложения Telegram для iOS обнаружена новая запись, указывающая на возможное введение предупреждений об использовании собеседником…",
+              "string": "Telegram сможет предупреждать собеседников, если вы используете неофициальный клиент  В базе строк для перевода официального приложения Telegram для iOS обнаружена новая запись, указывающая на возможное введение предупреждений об использовании собеседником…"
+            },
+            "to_message": 4397
+          },
+          "text": {
+            "entities": null,
+            "html": "Telegram сможет предупреждать собеседников, если вы используете неофициальный клиент  В базе строк для перевода официального приложения Telegram для iOS обнаружена новая запись, указывающая на возможное введение предупреждений об использовании собеседником…",
+            "string": "Telegram сможет предупреждать собеседников, если вы используете неофициальный клиент  В базе строк для перевода официального приложения Telegram для iOS обнаружена новая запись, указывающая на возможное введение предупреждений об использовании собеседником…"
+          }
+        },
+        "footer": {
+          "author": {
+            "html": "Sominemo",
+            "string": "Sominemo"
+          },
+          "date": {
+            "string": "2026-04-09T09:39:37+00:00",
+            "unix": 1775727577
+          },
+          "edited": false,
+          "views": "53.6K"
+        },
+        "forwarded": null,
+        "id": 4405,
+        "view": "eyJjIjotMTAwMzMwNzUyNywicCI6NDQwNSwidCI6MTc5MjcwNzg2MywiaCI6ImFmN2Y3NmEwYmU2MTgzMmViNyJ9"
+      },
+      {
+        "content": {
+          "inline": null,
+          "media": [
+            {
+              "available": null,
+              "duration": null,
+              "thumb": null,
+              "type": "image",
+              "url": "https://cdn4.telesco.pe/file/DvWmNeSgmrl70TA-Os5X1kpm2VENZMhA0Cjr1SEtXvgH4Q1JAEx7QBViWMFaMa4egMpz06dF076SKW19JtMK7_N0JeM8gappt6zy8N3gAiBfEbQ1MHFXI8GYVPMPwwJRnRIxgmY7dEDPUEUjLAPmmM6KTlXobc7rcxfu8_Mjget8kh9LZksSYhR5EZFmu-osFfuNZ-TrtwGqCgvD1SAIZBKa-N4Zvr6x9VZvzuBCdF3iOBkvP-F6NJZPb_DWvHwWoJQV_aPO03JVT_CxptiJl5M8tsExMPEdEu4Q-fHlnd3emk5j357kmuSNLzABs4iUB4eyDZT1bBrBB36a1ibNCg.jpg",
+              "waves": null
+            }
+          ],
+          "poll": null,
+          "preview_link": null,
+          "reacts": [
+            {
+              "count": "1",
+              "emoji": "⭐",
+              "emoji_id": null,
+              "emoji_image": null,
+              "type": "telegram_stars"
+            },
+            {
+              "count": "403",
+              "emoji": "👍",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F918D.png",
+              "type": "emoji"
+            },
+            {
+              "count": "80",
+              "emoji": "🎉",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F8E89.png",
+              "type": "emoji"
+            },
+            {
+              "count": "77",
+              "emoji": "🤡",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09FA4A1.png",
+              "type": "emoji"
+            },
+            {
+              "count": "56",
+              "emoji": "👏",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F918F.png",
+              "type": "emoji"
+            },
+            {
+              "count": "24",
+              "emoji": "😍",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F988D.png",
+              "type": "emoji"
+            },
+            {
+              "count": "22",
+              "emoji": "🆒",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F8692.png",
+              "type": "emoji"
+            },
+            {
+              "count": "17",
+              "emoji": "🥰",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09FA5B0.png",
+              "type": "emoji"
+            },
+            {
+              "count": "14",
+              "emoji": "😱",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F98B1.png",
+              "type": "emoji"
+            },
+            {
+              "count": "12",
+              "emoji": "🤬",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09FA4AC.png",
+              "type": "emoji"
+            },
+            {
+              "count": "10",
+              "emoji": "👎",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F918E.png",
+              "type": "emoji"
+            },
+            {
+              "count": "10",
+              "emoji": "🍾",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F8DBE.png",
+              "type": "emoji"
+            }
+          ],
+          "reply": {
+            "cover": "https://cdn4.telesco.pe/file/KfytvBtxPRM_c2IO6nV4ap-lKzhwHEYC0emCb8ToJAZ95skwK0zYz0rq9VPWkAdErPBwt9hJytjQz7O6wgHOaq1SqUwQ9oXlahSdEILjeBQk84A1YzqTuwG4QiH_Qvkje59TypcDbhYKKQSWhnbckY1h3wuCsOfx0FCW-tQVVzic0mZVdiSexwB4UGnrlGqCEZe7V-0RBYe7lY62so_JFkcHB2p5gfBIqbaCFiUBtqMRXYiU5v3kZ48fK4acci9EDsmYwHEr8ZnsPu4sgANMLvhzW6N8CvSBZi9OZ4qxzkumJr95SZM-vCrkhX6AfA73AQA1HVQIrHnF9V7i5XZfRg.jpg",
+            "name": {
+              "html": "Telegram Info",
+              "string": "Telegram Info"
+            },
+            "text": {
+              "html": "В Telegram могут появиться инструменты для борьбы с накруткой в опросах  Павел Дуров упомянул в своём сообщении на канале @durov, что мессенджер работает над инструментами, которые позволят владельцам каналов выявлять накрутку в опросах и защищать их от манипуляций…",
+              "string": "В Telegram могут появиться инструменты для борьбы с накруткой в опросах  Павел Дуров упомянул в своём сообщении на канале @durov, что мессенджер работает над инструментами, которые позволят владельцам каналов выявлять накрутку в опросах и защищать их от манипуляций…"
+            },
+            "to_message": 4404
+          },
+          "text": {
+            "entities": null,
+            "html": "В Telegram могут появиться инструменты для борьбы с накруткой в опросах  Павел Дуров упомянул в своём сообщении на канале @durov, что мессенджер работает над инструментами, которые позволят владельцам каналов выявлять накрутку в опросах и защищать их от манипуляций…",
+            "string": "В Telegram могут появиться инструменты для борьбы с накруткой в опросах  Павел Дуров упомянул в своём сообщении на канале @durov, что мессенджер работает над инструментами, которые позволят владельцам каналов выявлять накрутку в опросах и защищать их от манипуляций…"
+          }
+        },
+        "footer": {
+          "author": null,
+          "date": {
+            "string": "2026-04-13T15:01:26+00:00",
+            "unix": 1776092486
+          },
+          "edited": false,
+          "views": "43.3K"
+        },
+        "forwarded": null,
+        "id": 4406,
+        "view": "eyJjIjotMTAwMzMwNzUyNywicCI6NDQwNiwidCI6MTc5MjcwNzg2MywiaCI6ImNiNTM0MTM2OGYxNWMwZGQ2ZCJ9"
+      },
+      {
+        "content": {
+          "inline": null,
+          "media": [
+            {
+              "available": null,
+              "duration": null,
+              "thumb": null,
+              "type": "image",
+              "url": "https://cdn4.telesco.pe/file/O4qf98jr3VgrwCBMmkoUkhjX5El_g2iuKL08rmuJVDx-hTz30rac-3xu-6UtZzrLAfmbuzZwopoEdHCJ5UniDfKqqE4wjx1lnH1IlH732oe7knvGM4-7MbCEF4Xq4Jo_p0W6sTyIUT9O4Jh2OryQ-y-vCXNNPAyx6LaYD3C_uiH-vxv7dO9lqyUu17TFB-Tj6YbOAhG7CqyB2_E1kbMVjKH6NOSAfk4OaHH0xh5cI2GTXzVJFAPcmbZfGkiRiPVwyhEBcgmpTiWD-sSZDiwSLzIyBxHAiEjCNrpIzOifslemtNJ58EZW4AxSg7kfHBWJd5ezb9IQrCQOL_tSBpVd3A.jpg",
+              "waves": null
+            }
+          ],
+          "poll": null,
+          "preview_link": null,
+          "reacts": [
+            {
+              "count": "7",
+              "emoji": "⭐",
+              "emoji_id": null,
+              "emoji_image": null,
+              "type": "telegram_stars"
+            },
+            {
+              "count": "604",
+              "emoji": "👍",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F918D.png",
+              "type": "emoji"
+            },
+            {
+              "count": "159",
+              "emoji": "🥰",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09FA5B0.png",
+              "type": "emoji"
+            },
+            {
+              "count": "139",
+              "emoji": "👏",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F918F.png",
+              "type": "emoji"
+            },
+            {
+              "count": "60",
+              "emoji": "🎉",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F8E89.png",
+              "type": "emoji"
+            },
+            {
+              "count": "44",
+              "emoji": "🤡",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09FA4A1.png",
+              "type": "emoji"
+            },
+            {
+              "count": "30",
+              "emoji": "🍾",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F8DBE.png",
+              "type": "emoji"
+            },
+            {
+              "count": "28",
+              "emoji": "😱",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F98B1.png",
+              "type": "emoji"
+            },
+            {
+              "count": "28",
+              "emoji": "😍",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F988D.png",
+              "type": "emoji"
+            },
+            {
+              "count": "25",
+              "emoji": "🆒",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F8692.png",
+              "type": "emoji"
+            },
+            {
+              "count": "15",
+              "emoji": "👎",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F918E.png",
+              "type": "emoji"
+            },
+            {
+              "count": "13",
+              "emoji": "🤬",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09FA4AC.png",
+              "type": "emoji"
+            }
+          ],
+          "reply": {
+            "cover": "https://cdn4.telesco.pe/file/RvSbjntl45zSwkBcZqosOU8d5whsNg1E3Tl5d62CMbVaD_Oj-GkBjEKIFQtB0rxZG0WWP95_MMflqsoDaly1tYHAwUVS6hK6BqHv5_IONWjg71TZzHBt3Y7R7EXhuth1XKAudZTD3_0Mxw0RZAYaOQtedOlkDqH_cR9-qDfqTFW8rXQyUV0Zs1Yraw1pYRFzuv_pyGs6WLtbbZ0Yp56w45bB7VADvE_gaABMW7TbcDujxBrUPGWMVwRNnJhM14TJh_upjj_dLQdzcnivmPfgtoLin0bvxUklizLh7thY6rCCfUnMAhE8X46mxW3aGk1Cjyw94tVJYTeOwDujPJ7xgA.jpg",
+            "name": {
+              "html": "Telegram Info",
+              "string": "Telegram Info"
+            },
+            "text": {
+              "html": "Цифровое сопротивление продолжается  В новых версиях приложений Telegram для Android под номером 12.6.4 (Beta) и Telegram Desktop 6.7.2 появились механизмы, которые затрудняют обнаружение прокси-серверов средствами блокировки интернет-трафика в РФ.  Редакция…",
+              "string": "Цифровое сопротивление продолжается  В новых версиях приложений Telegram для Android под номером 12.6.4 (Beta) и Telegram Desktop 6.7.2 появились механизмы, которые затрудняют обнаружение прокси-серверов средствами блокировки интернет-трафика в РФ.  Редакция…"
+            },
+            "to_message": 4401
+          },
+          "text": {
+            "entities": null,
+            "html": "Цифровое сопротивление продолжается  В новых версиях приложений Telegram для Android под номером 12.6.4 (Beta) и Telegram Desktop 6.7.2 появились механизмы, которые затрудняют обнаружение прокси-серверов средствами блокировки интернет-трафика в РФ.  Редакция…",
+            "string": "Цифровое сопротивление продолжается  В новых версиях приложений Telegram для Android под номером 12.6.4 (Beta) и Telegram Desktop 6.7.2 появились механизмы, которые затрудняют обнаружение прокси-серверов средствами блокировки интернет-трафика в РФ.  Редакция…"
+          }
+        },
+        "footer": {
+          "author": {
+            "html": "DbSergey",
+            "string": "DbSergey"
+          },
+          "date": {
+            "string": "2026-04-17T08:49:37+00:00",
+            "unix": 1776415777
+          },
+          "edited": false,
+          "views": "40.8K"
+        },
+        "forwarded": null,
+        "id": 4407,
+        "view": "eyJjIjotMTAwMzMwNzUyNywicCI6NDQwNywidCI6MTc5MjcwNzg2MywiaCI6ImM3NDlkMDI5N2M5OWYyMTkzOSJ9"
+      },
+      {
+        "content": {
+          "inline": null,
+          "media": [
+            {
+              "available": null,
+              "duration": null,
+              "thumb": null,
+              "type": "image",
+              "url": "https://cdn4.telesco.pe/file/TLaqIxGB1Ecq_QLrSo58QcOjPZloHpofexmU1RoViizsmMwjvLRvHHTousBucRxrmgsbSKIcbXvTAgHmFZ8FXbjvwzwM1w6d5T9Frj9CL8-ZHueVbqeK0mno5HMoS2dLgs9qAB44Fn4ysujvLyYEb7wtXL2K7Kk4s_sR-Kdav1rohTy5H9rRtAq1ZVtCVyOVzF5kYt2m5DOwyDs6USpfLikAf9bX_lV0ZXjei9TDMp2umaaxJdsQR2o1nDC6eFgsjJPQGp5TSXyoQo5Hn5aV_7Wd3_puTNdU4agJKei8wqy8jtoaBYP8zIXR3oBH8KA0wL-BfW4Md_CT-jGpAgrYHQ.jpg",
+              "waves": null
+            }
+          ],
+          "poll": null,
+          "preview_link": null,
+          "reacts": [
+            {
+              "count": "1",
+              "emoji": "⭐",
+              "emoji_id": null,
+              "emoji_image": null,
+              "type": "telegram_stars"
+            },
+            {
+              "count": "289",
+              "emoji": "👏",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F918F.png",
+              "type": "emoji"
+            },
+            {
+              "count": "134",
+              "emoji": "👍",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F918D.png",
+              "type": "emoji"
+            },
+            {
+              "count": "71",
+              "emoji": "🎉",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F8E89.png",
+              "type": "emoji"
+            },
+            {
+              "count": "33",
+              "emoji": "🥰",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09FA5B0.png",
+              "type": "emoji"
+            },
+            {
+              "count": "22",
+              "emoji": "🆒",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F8692.png",
+              "type": "emoji"
+            },
+            {
+              "count": "20",
+              "emoji": "🤬",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09FA4AC.png",
+              "type": "emoji"
+            },
+            {
+              "count": "20",
+              "emoji": "😍",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F988D.png",
+              "type": "emoji"
+            },
+            {
+              "count": "19",
+              "emoji": "👎",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F918E.png",
+              "type": "emoji"
+            },
+            {
+              "count": "17",
+              "emoji": "🤡",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09FA4A1.png",
+              "type": "emoji"
+            },
+            {
+              "count": "10",
+              "emoji": "😱",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F98B1.png",
+              "type": "emoji"
+            },
+            {
+              "count": "10",
+              "emoji": "🍾",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F8DBE.png",
+              "type": "emoji"
+            }
+          ],
+          "reply": {
+            "cover": "https://cdn4.telesco.pe/file/XReRZId_dNd912gexAuWWsM3al-lxZ2JAjOvRpStnpPWG5hjVM4efr_IgicAJQjUsIbfcY8dP7PTxcTHfXsNK8r50GWopgJwzvWLxwESHNAdWupQCat1mwvtWRVdG-FHLQPlhOtgcrsA2BgLV6Kw4rDi0hS2UJCEkNkoEe3sQk9qTfWcH8G_pF2ob8t4bXU0skLUsPNnMyF2EhKLhOUi-LTp0c4s62uH2snKZ_5O57H3jLcFeFrIgV20RuyvBbTDn-BedVQiVGx-R1GYEY2GyyaQAtBsMuV2JpUjs8TuZKKSUhEOdSeE-WDM2PCRpgAggd4L7iFrhPRn9AlpinwwRA.jpg",
+            "name": {
+              "html": "Telegram Info",
+              "string": "Telegram Info"
+            },
+            "text": {
+              "html": "В Telegram могут появиться инструменты для борьбы с накруткой в опросах  Павел Дуров упомянул в своём сообщении на канале @durov, что мессенджер работает над инструментами, которые позволят владельцам каналов выявлять накрутку в опросах и защищать их от манипуляций…",
+              "string": "В Telegram могут появиться инструменты для борьбы с накруткой в опросах  Павел Дуров упомянул в своём сообщении на канале @durov, что мессенджер работает над инструментами, которые позволят владельцам каналов выявлять накрутку в опросах и защищать их от манипуляций…"
+            },
+            "to_message": 4404
+          },
+          "text": {
+            "entities": null,
+            "html": "В Telegram могут появиться инструменты для борьбы с накруткой в опросах  Павел Дуров упомянул в своём сообщении на канале @durov, что мессенджер работает над инструментами, которые позволят владельцам каналов выявлять накрутку в опросах и защищать их от манипуляций…",
+            "string": "В Telegram могут появиться инструменты для борьбы с накруткой в опросах  Павел Дуров упомянул в своём сообщении на канале @durov, что мессенджер работает над инструментами, которые позволят владельцам каналов выявлять накрутку в опросах и защищать их от манипуляций…"
+          }
+        },
+        "footer": {
+          "author": null,
+          "date": {
+            "string": "2026-04-19T11:13:38+00:00",
+            "unix": 1776597218
+          },
+          "edited": true,
+          "views": "37.7K"
+        },
+        "forwarded": null,
+        "id": 4408,
+        "view": "eyJjIjotMTAwMzMwNzUyNywicCI6NDQwOCwidCI6MTc5MjcwNzg2MywiaCI6ImFjYjg0NTNiODI0MGVjYzA4MCJ9"
+      },
+      {
+        "content": {
+          "inline": null,
+          "media": [
+            {
+              "available": null,
+              "duration": null,
+              "thumb": null,
+              "type": "image",
+              "url": "https://cdn4.telesco.pe/file/BaDi0nNs2W2DJIpAhwSuE_4z-6QDal1SRVPCjEnaahhheUSWXyONdzoD2uHL_NIqekEmpfjE-JP281ewX5G09DbugOXFZUVCRFc1kQwM_EttIjdKSfr-Civ7SYmbH9V3oWQQQkXaerAWLP1cqnwAxSblvLCCzNqgswcNRNqUOGndRSK1W2ny4n2lX9FzN63zmVdq0Mh-7srcTiBqabJoNUvHWES3Xr_JRxOdZFGSXrN6XNwIqMXcPrSEBsnVN4SWPN4E6JuYsWgi-wzyav8E67LYQMFJZJiVYjVmsYp5M0Ly-oXU6St9zE-raZAcZRr7vn0O_prmYitGDn_gSsUDcA.jpg",
+              "waves": null
+            }
+          ],
+          "poll": null,
+          "preview_link": null,
+          "reacts": [
+            {
+              "count": "256",
+              "emoji": "🤡",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09FA4A1.png",
+              "type": "emoji"
+            },
+            {
+              "count": "76",
+              "emoji": "👍",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F918D.png",
+              "type": "emoji"
+            },
+            {
+              "count": "68",
+              "emoji": "😱",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F98B1.png",
+              "type": "emoji"
+            },
+            {
+              "count": "43",
+              "emoji": "👏",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F918F.png",
+              "type": "emoji"
+            },
+            {
+              "count": "41",
+              "emoji": "🎉",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F8E89.png",
+              "type": "emoji"
+            },
+            {
+              "count": "34",
+              "emoji": "👎",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F918E.png",
+              "type": "emoji"
+            },
+            {
+              "count": "32",
+              "emoji": "🆒",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F8692.png",
+              "type": "emoji"
+            },
+            {
+              "count": "29",
+              "emoji": "😍",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F988D.png",
+              "type": "emoji"
+            },
+            {
+              "count": "27",
+              "emoji": "🤬",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09FA4AC.png",
+              "type": "emoji"
+            },
+            {
+              "count": "21",
+              "emoji": "🥰",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09FA5B0.png",
+              "type": "emoji"
+            },
+            {
+              "count": "18",
+              "emoji": "🍾",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F8DBE.png",
+              "type": "emoji"
+            }
+          ],
+          "reply": null,
+          "text": {
+            "entities": [
+              {
+                "language": null,
+                "length": 67,
+                "offset": 0,
+                "type": "bold",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 5,
+                "offset": 119,
+                "type": "text_link",
+                "url": "https://www.reuters.com/world/uk/uk-regulator-investigates-telegram-over-child-sexual-abuse-concerns-2026-04-21/"
+              },
+              {
+                "language": null,
+                "length": 20,
+                "offset": 542,
+                "type": "text_link",
+                "url": "https://www.legislation.gov.uk/ukpga/2023/50/schedule/13#schedule-13-paragraph-4-1"
+              },
+              {
+                "language": null,
+                "length": 16,
+                "offset": 614,
+                "type": "bold",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 7,
+                "offset": 1090,
+                "type": "text_link",
+                "url": "https://t.me/durov/496"
+              },
+              {
+                "language": null,
+                "length": 8,
+                "offset": 1205,
+                "type": "bold",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 10,
+                "offset": 1348,
+                "type": "text_link",
+                "url": "https://t.me/tginfo/4227"
+              },
+              {
+                "language": null,
+                "length": 12,
+                "offset": 1531,
+                "type": "text_link",
+                "url": "https://t.me/tginfo/4351"
+              },
+              {
+                "language": null,
+                "length": 14,
+                "offset": 1640,
+                "type": "text_link",
+                "url": "https://t.me/tginfo/4187"
+              },
+              {
+                "language": null,
+                "length": 9,
+                "offset": 1779,
+                "type": "text_link",
+                "url": "https://tginfo.me/esafety-analysis/"
+              },
+              {
+                "language": null,
+                "length": 18,
+                "offset": 2210,
+                "type": "text_link",
+                "url": "https://t.me/tginfo/4307"
+              },
+              {
+                "language": null,
+                "length": 9,
+                "offset": 2540,
+                "type": "text_link",
+                "url": "https://www.bloomberg.com/news/articles/2025-02-21/apple-removes-end-to-end-encryption-feature-from-uk-after-backdoor-order"
+              },
+              {
+                "language": null,
+                "length": 15,
+                "offset": 2637,
+                "type": "text_link",
+                "url": "https://fightchatcontrol.eu/"
+              },
+              {
+                "language": null,
+                "length": 15,
+                "offset": 2708,
+                "type": "hashtag",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 10,
+                "offset": 2724,
+                "type": "hashtag",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 7,
+                "offset": 2735,
+                "type": "hashtag",
+                "url": null
+              }
+            ],
+            "html": "<b>Британский регулятор Ofcom начал расследование в отношении Telegram</b><br><br>Британский регулятор в области коммуникаций Ofcom <a href=\"https://www.reuters.com/world/uk/uk-regulator-investigates-telegram-over-child-sexual-abuse-concerns-2026-04-21/\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">начал</a> расследование против Telegram на предмет соблюдения обязательств по борьбе с незаконным контентом в рамках местного «Закона о сетевой безопасности» (Online Safety Act 2023).<br><br>Согласно Reuters, поводом послужили данные от Канадского центра защиты детей о распространении материалов с сексуальным насилием над детьми (CSAM) на платформе, а также собственная оценка регулятора. <br><br>В случае выявления нарушений платформам <a href=\"https://www.legislation.gov.uk/ukpga/2023/50/schedule/13#schedule-13-paragraph-4-1\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">могут грозить штрафы</a> в размере до £18 млн или 10% их мирового оборота.<br><br><b>Позиция Telegram</b><br><br> • Мессенджер «категорически» отвергает обвинения Ofcom.<br> • По утверждению компании, с 2018 года публичное распространение CSAM-материалов на платформе «практически полностью искоренено» благодаря работе алгоритмов автоматического обнаружения.<br> • В Telegram заявили, что удивлены расследованием и обеспокоены тем, что оно может быть «частью более широкой атаки на онлайн-платформы, защищающие свободу слова и право на приватность».<br> • Днём ранее Павел Дуров <a href=\"https://t.me/durov/496\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">отметил</a>, что «защита детей» стала стандартным PR-ходом законодателей для получения контроля над нарративом медиа.<br><br><b>Контекст</b><br><br>Это уже не первое столкновение Telegram с регуляторами по линии CSAM-материалов. В феврале 2025 года австралийский регулятор eSafety <a href=\"https://t.me/tginfo/4227\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">оштрафовал</a> мессенджер на $600 тысяч за задержку с ответом на подобный запрос. В ответ на это компания отошла от привычной пассивной роли, перешла к активной юридической защите и сама <a href=\"https://t.me/tginfo/4351\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">подала в суд</a> на Австралию, оспаривая законность штрафа.<br><br>В конце 2024 года Telegram официально согласился на <a href=\"https://t.me/tginfo/4187\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">сотрудничество</a> с Internet Watch Foundation (IWF) — одной из ключевых организаций, ведущих базы сигнатур CSAM. Наша редакция также подробно <a href=\"https://tginfo.me/esafety-analysis/\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">разбирала</a> внутренние процессы модерации Telegram на основе отчётов для eSafety: из раскрытых документов следует, что фото и видео во всех частных группах и каналах платформы автоматически сканируются на соответствие известным незаконным материалам.<br><br>Великобритания в последнее время последовательно усиливает давление на социальные сети. Ранее в этом году, чтобы соответствовать требованиям местного законодательства, Telegram уже <a href=\"https://t.me/tginfo/4307\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">пришлось запустить</a> экспериментальную верификацию возраста по лицу для британских пользователей.<br><br>Отметим, что в последние годы под лозунгом защиты детей страны Европы всё активнее продвигают требования, которые могут нарушать приватность личной жизни и тайну переписки. Например, из-за требований того же Ofcom Apple был вынужден <a href=\"https://www.bloomberg.com/news/articles/2025-02-21/apple-removes-end-to-end-encryption-feature-from-uk-after-backdoor-order\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">отключить</a> E2E-шифрование для резервных копий iCloud, а в Европейском союзе разрабатывается закон <a href=\"https://fightchatcontrol.eu/\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">EU Chat Control</a>, который схож с британским OSA по своей инвазивности.<br><br><a href=\"?q=%23%D0%92%D0%B5%D0%BB%D0%B8%D0%BA%D0%BE%D0%B1%D1%80%D0%B8%D1%82%D0%B0%D0%BD%D0%B8%D1%8F\">#Великобритания</a> <a href=\"?q=%23%D0%BC%D0%BE%D0%B4%D0%B5%D1%80%D0%B0%D1%86%D0%B8%D1%8F\">#модерация</a> <a href=\"?q=%23%D0%B7%D0%B0%D0%BA%D0%BE%D0%BD%D1%8B\">#законы</a>",
+            "string": "Британский регулятор Ofcom начал расследование в отношении Telegram\n\nБританский регулятор в области коммуникаций Ofcom начал расследование против Telegram на предмет соблюдения обязательств по борьбе с незаконным контентом в рамках местного «Закона о сетевой безопасности» (Online Safety Act 2023).\n\nСогласно Reuters, поводом послужили данные от Канадского центра защиты детей о распространении материалов с сексуальным насилием над детьми (CSAM) на платформе, а также собственная оценка регулятора. \n\nВ случае выявления нарушений платформам могут грозить штрафы в размере до £18 млн или 10% их мирового оборота.\n\nПозиция Telegram\n\n • Мессенджер «категорически» отвергает обвинения Ofcom.\n • По утверждению компании, с 2018 года публичное распространение CSAM-материалов на платформе «практически полностью искоренено» благодаря работе алгоритмов автоматического обнаружения.\n • В Telegram заявили, что удивлены расследованием и обеспокоены тем, что оно может быть «частью более широкой атаки на онлайн-платформы, защищающие свободу слова и право на приватность».\n • Днём ранее Павел Дуров отметил, что «защита детей» стала стандартным PR-ходом законодателей для получения контроля над нарративом медиа.\n\nКонтекст\n\nЭто уже не первое столкновение Telegram с регуляторами по линии CSAM-материалов. В феврале 2025 года австралийский регулятор eSafety оштрафовал мессенджер на $600 тысяч за задержку с ответом на подобный запрос. В ответ на это компания отошла от привычной пассивной роли, перешла к активной юридической защите и сама подала в суд на Австралию, оспаривая законность штрафа.\n\nВ конце 2024 года Telegram официально согласился на сотрудничество с Internet Watch Foundation (IWF) — одной из ключевых организаций, ведущих базы сигнатур CSAM. Наша редакция также подробно разбирала внутренние процессы модерации Telegram на основе отчётов для eSafety: из раскрытых документов следует, что фото и видео во всех частных группах и каналах платформы автоматически сканируются на соответствие известным незаконным материалам.\n\nВеликобритания в последнее время последовательно усиливает давление на социальные сети. Ранее в этом году, чтобы соответствовать требованиям местного законодательства, Telegram уже пришлось запустить экспериментальную верификацию возраста по лицу для британских пользователей.\n\nОтметим, что в последние годы под лозунгом защиты детей страны Европы всё активнее продвигают требования, которые могут нарушать приватность личной жизни и тайну переписки. Например, из-за требований того же Ofcom Apple был вынужден отключить E2E-шифрование для резервных копий iCloud, а в Европейском союзе разрабатывается закон EU Chat Control, который схож с британским OSA по своей инвазивности.\n\n#Великобритания #модерация #законы"
+          }
+        },
+        "footer": {
+          "author": {
+            "html": "Sominemo",
+            "string": "Sominemo"
+          },
+          "date": {
+            "string": "2026-04-21T13:30:41+00:00",
+            "unix": 1776778241
+          },
+          "edited": false,
+          "views": "36.2K"
+        },
+        "forwarded": null,
+        "id": 4409,
+        "view": "eyJjIjotMTAwMzMwNzUyNywicCI6NDQwOSwidCI6MTc5MjcwNzg2MywiaCI6IjIzNGY1YWMyYzI3YzNmMTliZiJ9"
+      },
+      {
+        "content": {
+          "inline": null,
+          "media": [
+            {
+              "available": null,
+              "duration": null,
+              "thumb": null,
+              "type": "image",
+              "url": "https://cdn4.telesco.pe/file/PalB8Cx1LjvxjyTucFF2e7r4ks3wmWDf2KaJekCxMx60Y5rkrFwvRkmNrKsXwR3iNMmEE9iw0xrz8t_-mmcOwHcJzLTirk7LRZcJ2Ybxsy3BIT8WtG3V3plvXRWFhp017x1AHW2Ak5BzbjMF0lfCag-TxP3q7x-603FEsH7D_qK5sDzWckjCbn5BoFxosnlOiXPTao7Zo-8gWQZGUuA07r3yw4PK8fMlL2eIUCrMnI1ZHLYQfG336lSuyTLXTM284exGWszoPvHMbYeIWgImkc1ti3U9OeUrimxqf2998AnZ7Lu3SIKfVJ7uQb9ighlt_f2xOCcN8IjkCAP-oYDWCA.jpg",
+              "waves": null
+            }
+          ],
+          "poll": null,
+          "preview_link": null,
+          "reacts": [
+            {
+              "count": "249",
+              "emoji": "👍",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F918D.png",
+              "type": "emoji"
+            },
+            {
+              "count": "75",
+              "emoji": "👏",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F918F.png",
+              "type": "emoji"
+            },
+            {
+              "count": "37",
+              "emoji": "🥰",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09FA5B0.png",
+              "type": "emoji"
+            },
+            {
+              "count": "37",
+              "emoji": "🎉",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F8E89.png",
+              "type": "emoji"
+            },
+            {
+              "count": "30",
+              "emoji": "🆒",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F8692.png",
+              "type": "emoji"
+            },
+            {
+              "count": "25",
+              "emoji": "🤡",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09FA4A1.png",
+              "type": "emoji"
+            },
+            {
+              "count": "23",
+              "emoji": "😍",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F988D.png",
+              "type": "emoji"
+            },
+            {
+              "count": "19",
+              "emoji": "😱",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F98B1.png",
+              "type": "emoji"
+            },
+            {
+              "count": "18",
+              "emoji": "🤬",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09FA4AC.png",
+              "type": "emoji"
+            },
+            {
+              "count": "16",
+              "emoji": "🍾",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F8DBE.png",
+              "type": "emoji"
+            },
+            {
+              "count": "15",
+              "emoji": "👎",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F918E.png",
+              "type": "emoji"
+            }
+          ],
+          "reply": {
+            "cover": null,
+            "name": {
+              "html": "Telegram Info",
+              "string": "Telegram Info"
+            },
+            "text": {
+              "html": "Telegram запустил авторизацию по Passkey  UPD. 09.12.2025 18:00 МСК: Функция заработала по всему миру  В Telegram заработала система входа в аккаунт через Passkey. Ключевое преимущество Passkeys — возможность войти в аккаунт в одно касание, не вводя номер…",
+              "string": "Telegram запустил авторизацию по Passkey  UPD. 09.12.2025 18:00 МСК: Функция заработала по всему миру  В Telegram заработала система входа в аккаунт через Passkey. Ключевое преимущество Passkeys — возможность войти в аккаунт в одно касание, не вводя номер…"
+            },
+            "to_message": 4356
+          },
+          "text": {
+            "entities": null,
+            "html": "Telegram запустил авторизацию по Passkey  UPD. 09.12.2025 18:00 МСК: Функция заработала по всему миру  В Telegram заработала система входа в аккаунт через Passkey. Ключевое преимущество Passkeys — возможность войти в аккаунт в одно касание, не вводя номер…",
+            "string": "Telegram запустил авторизацию по Passkey  UPD. 09.12.2025 18:00 МСК: Функция заработала по всему миру  В Telegram заработала система входа в аккаунт через Passkey. Ключевое преимущество Passkeys — возможность войти в аккаунт в одно касание, не вводя номер…"
+          }
+        },
+        "footer": {
+          "author": {
+            "html": "Antonio Marreti",
+            "string": "Antonio Marreti"
+          },
+          "date": {
+            "string": "2026-04-23T09:06:49+00:00",
+            "unix": 1776935209
+          },
+          "edited": false,
+          "views": "43.7K"
+        },
+        "forwarded": null,
+        "id": 4410,
+        "view": "eyJjIjotMTAwMzMwNzUyNywicCI6NDQxMCwidCI6MTc5MjcwNzg2MywiaCI6IjZiNzc3YWJhMTJhMDYxMTU1ZiJ9"
+      },
+      {
+        "content": {
+          "inline": null,
+          "media": [
+            {
+              "available": null,
+              "duration": null,
+              "thumb": null,
+              "type": "image",
+              "url": "https://cdn4.telesco.pe/file/Tbpq1b558jywyQzuqumuyZI5Fi5uTbV5ISBx7ED0wK40NVFlcdLyjJBhJSiMBDGxyeTmWVryZYD7yZ8kc06tIMaU8ZoQBml-Q48xGnn32_hrmfmrRDGA1c7Se6QSCecY4Nq3i_qoiqlAESpyQjjtAqridNkxzYwgylKQKXjnzfZsqhO7pWfk_Hp1j7BLGy8JpC0LhehI9rSyTM5KeFt3MVQBNFloqFavvtLF7UxWVy1zNK1nbNdyWcWJmKPUz2DEqHJdiUIlzNFvFmv9gv23GLIjfxhiahsK-7COls-l7vLg0NNG_dpTWwhKX83hANSHIGTGyWHDOu2O2pv4w2aX5g.jpg",
+              "waves": null
+            }
+          ],
+          "poll": null,
+          "preview_link": null,
+          "reacts": [
+            {
+              "count": "27",
+              "emoji": "⭐",
+              "emoji_id": null,
+              "emoji_image": null,
+              "type": "telegram_stars"
+            },
+            {
+              "count": "293",
+              "emoji": "👍",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F918D.png",
+              "type": "emoji"
+            },
+            {
+              "count": "74",
+              "emoji": "👏",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F918F.png",
+              "type": "emoji"
+            },
+            {
+              "count": "52",
+              "emoji": "😍",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F988D.png",
+              "type": "emoji"
+            },
+            {
+              "count": "51",
+              "emoji": "🎉",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F8E89.png",
+              "type": "emoji"
+            },
+            {
+              "count": "43",
+              "emoji": "🤡",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09FA4A1.png",
+              "type": "emoji"
+            },
+            {
+              "count": "31",
+              "emoji": "🆒",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F8692.png",
+              "type": "emoji"
+            },
+            {
+              "count": "27",
+              "emoji": "🍾",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F8DBE.png",
+              "type": "emoji"
+            },
+            {
+              "count": "20",
+              "emoji": "🥰",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09FA5B0.png",
+              "type": "emoji"
+            },
+            {
+              "count": "18",
+              "emoji": "👎",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F918E.png",
+              "type": "emoji"
+            },
+            {
+              "count": "15",
+              "emoji": "🤬",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09FA4AC.png",
+              "type": "emoji"
+            },
+            {
+              "count": "13",
+              "emoji": "😱",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F98B1.png",
+              "type": "emoji"
+            }
+          ],
+          "reply": {
+            "cover": "https://cdn4.telesco.pe/file/Q-11eOIcVCxbUQ2ZtCChR7b9_ipps5X-rHcows6U_0ysHwopOP87669ngLdxDdEsTgjuleku0ATqFD5UxAYCJmXNVPaqyIC5RpSqODq_VHnvyxS_jBv4baS3J6GNVRfrLM8KitHenR_ibr_oU0-rwaIW3Dl1rDmPK_eYaOBUI0TRMa-0A7N-V0UeZsR8qxsDlhuajjW0dcgchRX18NUyEMkDT8m9OicPP45IdyXUEOjamfZUA7QihvxwaUk11tp2edR9mmkYH7KdKeDlLFNpoStu9Y3QFnjpLnF-8H03s5FkkBaC4Sez__Qx2XCJG_nccpCE2n3apWykSoV8e5-oAA.jpg",
+            "name": {
+              "html": "Telegram Info",
+              "string": "Telegram Info"
+            },
+            "text": {
+              "html": "Telegram разрешил ботам общаться друг с другом  Раньше боты в Telegram не могли видеть сообщения друг друга — платформа блокировала такую возможность, чтобы избежать бесконечных циклов сообщений. Сегодня это ограничение сняли.   • В чатах Нововведение позволит…",
+              "string": "Telegram разрешил ботам общаться друг с другом  Раньше боты в Telegram не могли видеть сообщения друг друга — платформа блокировала такую возможность, чтобы избежать бесконечных циклов сообщений. Сегодня это ограничение сняли.   • В чатах Нововведение позволит…"
+            },
+            "to_message": 4403
+          },
+          "text": {
+            "entities": null,
+            "html": "Telegram разрешил ботам общаться друг с другом  Раньше боты в Telegram не могли видеть сообщения друг друга — платформа блокировала такую возможность, чтобы избежать бесконечных циклов сообщений. Сегодня это ограничение сняли.   • В чатах Нововведение позволит…",
+            "string": "Telegram разрешил ботам общаться друг с другом  Раньше боты в Telegram не могли видеть сообщения друг друга — платформа блокировала такую возможность, чтобы избежать бесконечных циклов сообщений. Сегодня это ограничение сняли.   • В чатах Нововведение позволит…"
+          }
+        },
+        "footer": {
+          "author": {
+            "html": "Antonio Marreti",
+            "string": "Antonio Marreti"
+          },
+          "date": {
+            "string": "2026-04-24T19:39:03+00:00",
+            "unix": 1777059543
+          },
+          "edited": false,
+          "views": "50.5K"
+        },
+        "forwarded": null,
+        "id": 4411,
+        "view": "eyJjIjotMTAwMzMwNzUyNywicCI6NDQxMSwidCI6MTc5MjcwNzg2MywiaCI6ImEyMGVmZTUyNWRkMDU5YmU0YiJ9"
+      },
+      {
+        "content": {
+          "inline": null,
+          "media": [
+            {
+              "available": null,
+              "duration": null,
+              "thumb": null,
+              "type": "image",
+              "url": "https://cdn4.telesco.pe/file/bUZtIi0CFms39x8XDkf9kA1pBQl1ZfMZgr47BbABdNU6IT-ARqTOCAb_27RWQt3ctm0LKbl7l1-FEMl8OJefwvjqYCZ70hA6Dp2a91nyiEeK8CF72pPIfzlic54IoQ-BLLjozI5vCGIPeQTKlwmOyfdexCyITppNTOcuR66q_ZnCriP8ZJzVF06aFRAiw0LFw1-rS7Qu1-EHb3CIhvFrO2ZqzsF29nizTQJBEGYs5fKnWiEzTqIbJOmmA2VeYYmn0ntfcG7WbOo_iqxYSOgpjrDgaKi8il15eg4bFevEKuopDPwlv2tNoAa1jRWu-5i9iJa1jdzOItkpst6wqo7NaQ.jpg",
+              "waves": null
+            }
+          ],
+          "poll": null,
+          "preview_link": null,
+          "reacts": [
+            {
+              "count": "552",
+              "emoji": "👍",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F918D.png",
+              "type": "emoji"
+            },
+            {
+              "count": "341",
+              "emoji": "👏",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F918F.png",
+              "type": "emoji"
+            },
+            {
+              "count": "101",
+              "emoji": "🎉",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F8E89.png",
+              "type": "emoji"
+            },
+            {
+              "count": "46",
+              "emoji": "🤡",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09FA4A1.png",
+              "type": "emoji"
+            },
+            {
+              "count": "25",
+              "emoji": "🆒",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F8692.png",
+              "type": "emoji"
+            },
+            {
+              "count": "22",
+              "emoji": "😍",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F988D.png",
+              "type": "emoji"
+            },
+            {
+              "count": "20",
+              "emoji": "👎",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F918E.png",
+              "type": "emoji"
+            },
+            {
+              "count": "20",
+              "emoji": "🥰",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09FA5B0.png",
+              "type": "emoji"
+            },
+            {
+              "count": "16",
+              "emoji": "🤬",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09FA4AC.png",
+              "type": "emoji"
+            },
+            {
+              "count": "15",
+              "emoji": "😱",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F98B1.png",
+              "type": "emoji"
+            },
+            {
+              "count": "13",
+              "emoji": "🍾",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F8DBE.png",
+              "type": "emoji"
+            }
+          ],
+          "reply": null,
+          "text": {
+            "entities": [
+              {
+                "language": null,
+                "length": 52,
+                "offset": 0,
+                "type": "bold",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 9,
+                "offset": 147,
+                "type": "text_link",
+                "url": "https://t.me/tginfo/4404"
+              },
+              {
+                "language": null,
+                "length": 9,
+                "offset": 172,
+                "type": "text_link",
+                "url": "https://t.me/tginfo/4406"
+              },
+              {
+                "language": null,
+                "length": 0,
+                "offset": 181,
+                "type": "text_link",
+                "url": "https://t.me/betainfo/2300"
+              },
+              {
+                "language": null,
+                "length": 2,
+                "offset": 230,
+                "type": "bold",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 0,
+                "offset": 232,
+                "type": "text_link",
+                "url": "https://t.me/betainfo/2301"
+              },
+              {
+                "language": null,
+                "length": 1,
+                "offset": 730,
+                "type": "bold",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 0,
+                "offset": 731,
+                "type": "text_link",
+                "url": "https://t.me/betainfo/2296"
+              },
+              {
+                "language": null,
+                "length": 2,
+                "offset": 1033,
+                "type": "bold",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 27,
+                "offset": 1258,
+                "type": "text_link",
+                "url": "https://t.me/betainfo/2297"
+              },
+              {
+                "language": null,
+                "length": 0,
+                "offset": 1285,
+                "type": "text_link",
+                "url": "https://t.me/betainfo/2298"
+              },
+              {
+                "language": null,
+                "length": 1,
+                "offset": 1416,
+                "type": "bold",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 13,
+                "offset": 1686,
+                "type": "text_link",
+                "url": "https://t.me/betainfo/1667"
+              },
+              {
+                "language": null,
+                "length": 19,
+                "offset": 1729,
+                "type": "bold",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 5,
+                "offset": 1762,
+                "type": "text_link",
+                "url": "https://t.me/betainfo/2299"
+              },
+              {
+                "language": null,
+                "length": 3,
+                "offset": 1827,
+                "type": "bold",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 11,
+                "offset": 1853,
+                "type": "text_link",
+                "url": "https://t.me/betainfo/2302"
+              },
+              {
+                "language": null,
+                "length": 7,
+                "offset": 2165,
+                "type": "bold",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 18,
+                "offset": 2229,
+                "type": "bold",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 12,
+                "offset": 2259,
+                "type": "text_link",
+                "url": "http://play.google.com/store/apps/details?id=org.telegram.messenger"
+              },
+              {
+                "language": null,
+                "length": 18,
+                "offset": 2278,
+                "type": "text_link",
+                "url": "http://telegram.org/dl/android/apk"
+              },
+              {
+                "language": null,
+                "length": 25,
+                "offset": 2301,
+                "type": "text_link",
+                "url": "http://t.me/TAndroidAPK"
+              },
+              {
+                "language": null,
+                "length": 9,
+                "offset": 2334,
+                "type": "text_link",
+                "url": "http://itunes.apple.com/ru/app/telegram-messenger/id686449807?mt=8"
+              },
+              {
+                "language": null,
+                "length": 11,
+                "offset": 2346,
+                "type": "hashtag",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 8,
+                "offset": 2358,
+                "type": "hashtag",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 4,
+                "offset": 2367,
+                "type": "hashtag",
+                "url": null
+              }
+            ],
+            "html": "<b>Telegram для Android и iOS обновились до версии 12.7</b><br><br>В майском обновлении приложение получило ряд полезных инструментов, направленных на борьбу с <a href=\"https://t.me/tginfo/4404\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">накруткой</a> в опросах и со <a href=\"https://t.me/tginfo/4406\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">спамерами</a> в реакциях.<br><br> • <a href=\"https://t.me/betainfo/2300\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\"><b>Создание стилей для ИИ-редактора</b></a><b>: </b>В Telegram появилась возможность создавать собственные стили внутри редактора на базе искусственного интеллекта. Для этого достаточно придумать название, выбрать иконку из числа кастомных эмодзи и составить инструкцию для нейросети.<br><br>Готовыми стилями можно делиться с другими пользователями — при переходе по ссылке им будут представлены примеры преобразования текста. Сам же создатель вправе разрешить отображать ссылку на свой профиль в окне предпросмотра стиля.<br><br> • <a href=\"https://t.me/betainfo/2301\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\"><b>Новые инструменты для опросов</b></a><b>:</b> С сегодняшнего дня администраторы вправе разрешить голосовать тем подписчикам, которые присоединились к каналу не менее 24 часов назад. Кроме того, они могут установить географические ограничения, позволив участвовать в опросе только пользователям из определённых стран.<br><br> • <a href=\"https://t.me/betainfo/2296\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\"><b>Удаление реакций в группах</b></a><b>: </b>Админы групп, обладающие правом на удаление сообщений, теперь могут удалять и реакции на любые сообщения. Для этого необходимо перейти в список всех реакций и удерживать нужного пользователя.<br><br>В групповых чатах также можно <a href=\"https://t.me/betainfo/2297\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">ограничить отправку реакций</a>. Запрет можно настроить как для всех участников беседы, так и для конкретного пользователя.<br><br> • <a href=\"https://t.me/betainfo/2298\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\"><b>Бизнес-боты для всех пользователей</b></a><b>:</b> Теперь мессенджер позволяет привязывать бизнес-ботов к своему аккаунту даже тем, у кого нет Telegram Premium. С их помощью пользователи могут автоматически обрабатывать чаты и взаимодействовать с клиентами.<br><br>С момента запуска Telegram Business в 2024 году эта функция <a href=\"https://t.me/betainfo/1667\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">была доступна</a> только платным подписчикам.<br><br><b>Прочие нововведения</b><br> • Добавлена <a href=\"https://t.me/betainfo/2299\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">опция</a> отправки отложенного сообщения без звука.<br> • Файлы формата <b>.md</b> весом до 64 КБ теперь <a href=\"https://t.me/betainfo/2302\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">открываются</a> в режиме Instant View.<br> • Стал доступен просмотр статистики для опросов, набравших не менее 100 голосов.<br> • Боты, которые обеспечивают работу автоматизированных инструментов и ИИ-ассистентов в Telegram, теперь можно вызывать прямо из строки ввода сообщений (поддержка «гостевого режима» для ботов).<br><br><b>Статья:</b> <a href=\"http://telegram.org/blog/ai-bot-revolution-11-new-features/ru\" target=\"_blank\" rel=\"noopener\">telegram.org/blog/ai-bot-revolution-11-new-features/ru</a><br><br><b>Скачать обновление</b><br>• Android: <a href=\"http://play.google.com/store/apps/details?id=org.telegram.messenger\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Google Play,</a> APK с <a href=\"http://telegram.org/dl/android/apk\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">официального сайта</a> или <a href=\"http://t.me/TAndroidAPK\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">верифицированного канала.</a><br>• iOS: <a href=\"http://itunes.apple.com/ru/app/telegram-messenger/id686449807?mt=8\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">App Store</a>.<br><br><a href=\"?q=%23%D0%BE%D0%B1%D0%BD%D0%BE%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5\">#обновление</a> <a href=\"?q=%23Android\">#Android</a> <a href=\"?q=%23iOS\">#iOS</a>",
+            "string": "Telegram для Android и iOS обновились до версии 12.7\n\nВ майском обновлении приложение получило ряд полезных инструментов, направленных на борьбу с накруткой в опросах и со спамерами в реакциях.\n\n • Создание стилей для ИИ-редактора: В Telegram появилась возможность создавать собственные стили внутри редактора на базе искусственного интеллекта. Для этого достаточно придумать название, выбрать иконку из числа кастомных эмодзи и составить инструкцию для нейросети.\n\nГотовыми стилями можно делиться с другими пользователями — при переходе по ссылке им будут представлены примеры преобразования текста. Сам же создатель вправе разрешить отображать ссылку на свой профиль в окне предпросмотра стиля.\n\n • Новые инструменты для опросов: С сегодняшнего дня администраторы вправе разрешить голосовать тем подписчикам, которые присоединились к каналу не менее 24 часов назад. Кроме того, они могут установить географические ограничения, позволив участвовать в опросе только пользователям из определённых стран.\n\n • Удаление реакций в группах: Админы групп, обладающие правом на удаление сообщений, теперь могут удалять и реакции на любые сообщения. Для этого необходимо перейти в список всех реакций и удерживать нужного пользователя.\n\nВ групповых чатах также можно ограничить отправку реакций. Запрет можно настроить как для всех участников беседы, так и для конкретного пользователя.\n\n • Бизнес-боты для всех пользователей: Теперь мессенджер позволяет привязывать бизнес-ботов к своему аккаунту даже тем, у кого нет Telegram Premium. С их помощью пользователи могут автоматически обрабатывать чаты и взаимодействовать с клиентами.\n\nС момента запуска Telegram Business в 2024 году эта функция была доступна только платным подписчикам.\n\nПрочие нововведения\n • Добавлена опция отправки отложенного сообщения без звука.\n • Файлы формата .md весом до 64 КБ теперь открываются в режиме Instant View.\n • Стал доступен просмотр статистики для опросов, набравших не менее 100 голосов.\n • Боты, которые обеспечивают работу автоматизированных инструментов и ИИ-ассистентов в Telegram, теперь можно вызывать прямо из строки ввода сообщений (поддержка «гостевого режима» для ботов).\n\nСтатья: telegram.org/blog/ai-bot-revolution-11-new-features/ru\n\nСкачать обновление\n• Android: Google Play, APK с официального сайта или верифицированного канала.\n• iOS: App Store.\n\n#обновление #Android #iOS"
+          }
+        },
+        "footer": {
+          "author": null,
+          "date": {
+            "string": "2026-05-06T23:10:35+00:00",
+            "unix": 1778109035
+          },
+          "edited": true,
+          "views": "55.7K"
+        },
+        "forwarded": null,
+        "id": 4412,
+        "view": "eyJjIjotMTAwMzMwNzUyNywicCI6NDQxMiwidCI6MTc5MjcwNzg2MywiaCI6IjhlZTgxY2FjNzdiMjA1YzQyOCJ9"
+      },
+      {
+        "content": {
+          "inline": null,
+          "media": [
+            {
+              "available": null,
+              "duration": null,
+              "thumb": null,
+              "type": "image",
+              "url": "https://cdn4.telesco.pe/file/F_tkmIaaVcf88jssJxIKOMgQD02QT_U2OrZ3dpSPAJ0sVW4CSZsVZ2MevEMaW9dM_S7Z8Bpd5BNU1mJWxT0aJa9uKZVlM6JrmXM4mtHyFSgnFsJdTDZK6sXvxO5xIfvk6Q7ZTgmDZyo3jq8cYnMPlLut9KVAKDXq-K_tesq4IySLvpHraPaehRQfN-agExQZBbEWNE_8bcHR8JOWf4MBrH7oFfhOKxqhefH_aFZUpBEAfgKNUJ_EFJ2vswCV1pM_RVVpv68jJknKo4BhYVeupAC_sjDKl_0pFw6F2Uxw_L_5IAi2W1PWUbDVnsQkRAxOtti-cZtsGXxwmlXwKBd0fg.jpg",
+              "waves": null
+            }
+          ],
+          "poll": null,
+          "preview_link": null,
+          "reacts": [
+            {
+              "count": "273",
+              "emoji": "😍",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F988D.png",
+              "type": "emoji"
+            },
+            {
+              "count": "212",
+              "emoji": "👍",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F918D.png",
+              "type": "emoji"
+            },
+            {
+              "count": "59",
+              "emoji": "👏",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F918F.png",
+              "type": "emoji"
+            },
+            {
+              "count": "51",
+              "emoji": "🥰",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09FA5B0.png",
+              "type": "emoji"
+            },
+            {
+              "count": "37",
+              "emoji": "🎉",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F8E89.png",
+              "type": "emoji"
+            },
+            {
+              "count": "30",
+              "emoji": "🆒",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F8692.png",
+              "type": "emoji"
+            },
+            {
+              "count": "29",
+              "emoji": "🤡",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09FA4A1.png",
+              "type": "emoji"
+            },
+            {
+              "count": "28",
+              "emoji": "😱",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F98B1.png",
+              "type": "emoji"
+            },
+            {
+              "count": "19",
+              "emoji": "🍾",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F8DBE.png",
+              "type": "emoji"
+            },
+            {
+              "count": "15",
+              "emoji": "👎",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F918E.png",
+              "type": "emoji"
+            },
+            {
+              "count": "12",
+              "emoji": "🤬",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09FA4AC.png",
+              "type": "emoji"
+            }
+          ],
+          "reply": null,
+          "text": {
+            "entities": [
+              {
+                "language": null,
+                "length": 37,
+                "offset": 0,
+                "type": "bold",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 16,
+                "offset": 53,
+                "type": "bold",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 4,
+                "offset": 82,
+                "type": "bold",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 9,
+                "offset": 387,
+                "type": "text_link",
+                "url": "https://t.me/betainfo/2302"
+              },
+              {
+                "language": null,
+                "length": 3,
+                "offset": 438,
+                "type": "bold",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 9,
+                "offset": 665,
+                "type": "bold",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 4,
+                "offset": 741,
+                "type": "hashtag",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 5,
+                "offset": 746,
+                "type": "hashtag",
+                "url": null
+              }
+            ],
+            "html": "<b>Поддержка расширенной версии Markdown</b><br><br>В Beta-версии <b>Telegram для iOS</b> под номером <b>12.8</b> замечена поддержка дополнительных элементов Markdown-разметки в сообщениях.<br><br>Среди поддерживаемых элементов обнаружены:<br><br>• Математические формулы.<br>• Таблицы.<br>• Блоки с кодом, включая inline-код.<br>• Чек-листы.<br>• Цитаты.<br><br>Напомним, что появлению расширенной поддержки Markdown в Telegram предшествовало <a href=\"https://t.me/betainfo/2302\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">внедрение</a> нативного просмотра файлов с расширением <b>.md</b> через Instant View.<br><br>Сейчас эта функция находится на стадии тестирования и не поддерживается у большинства пользователей. В скором времени она может появиться и в приложении для Android.<br><br>Подписывайтесь на наш второй канал <a href=\"https://t.me/BetaInfo\" target=\"_blank\"><b>@BetaInfo</b></a>, чтобы одними из первых узнавать о будущих обновлениях Telegram.<br><br><a href=\"?q=%23iOS\">#iOS</a> <a href=\"?q=%23Beta\">#Beta</a>",
+            "string": "Поддержка расширенной версии Markdown\n\nВ Beta-версии Telegram для iOS под номером 12.8 замечена поддержка дополнительных элементов Markdown-разметки в сообщениях.\n\nСреди поддерживаемых элементов обнаружены:\n\n• Математические формулы.\n• Таблицы.\n• Блоки с кодом, включая inline-код.\n• Чек-листы.\n• Цитаты.\n\nНапомним, что появлению расширенной поддержки Markdown в Telegram предшествовало внедрение нативного просмотра файлов с расширением .md через Instant View.\n\nСейчас эта функция находится на стадии тестирования и не поддерживается у большинства пользователей. В скором времени она может появиться и в приложении для Android.\n\nПодписывайтесь на наш второй канал @BetaInfo, чтобы одними из первых узнавать о будущих обновлениях Telegram.\n\n#iOS #Beta"
+          }
+        },
+        "footer": {
+          "author": {
+            "html": "Antonio Marreti",
+            "string": "Antonio Marreti"
+          },
+          "date": {
+            "string": "2026-05-28T16:50:26+00:00",
+            "unix": 1779987026
+          },
+          "edited": false,
+          "views": "45K"
+        },
+        "forwarded": null,
+        "id": 4413,
+        "view": "eyJjIjotMTAwMzMwNzUyNywicCI6NDQxMywidCI6MTc5MjcwNzg2MywiaCI6ImZkZWM0MTY0NzllMjE3MmRkNCJ9"
+      },
+      {
+        "content": {
+          "inline": null,
+          "media": [
+            {
+              "available": null,
+              "duration": null,
+              "thumb": null,
+              "type": "image",
+              "url": "https://cdn4.telesco.pe/file/Pc_jEzUurKdQbyDbvf70yOXw7jcFABPZcqgh_RYMVbshwcn7a2JDUstW0QqTbv_unkaJyWzZt2frGxyJnK2dJdXX6Nh2R8VNsZeWTu2Hb7vc8ckyAm9KWAavmpA1fSpa4jEq7Ww5wDkS6dQueevKiagzf8XWt5cxkJtef1OxbnfrFuegvCJufhyirrOboexjaCHA5FeYetOrN0FsPJCWtCIzUBpEtwqWhG28ZRUZK1dLap9Yw0PT72AHUqwMp4ElYFxAc2B5zvhGW0hT4t0oFqsICWtbwSN-DDZd-DkwhUYhj1SXP-JCoabsRA32o2JB3vZGp6GljcX_u7ieFf-b4Q.jpg",
+              "waves": null
+            }
+          ],
+          "poll": null,
+          "preview_link": null,
+          "reacts": [
+            {
+              "count": "1",
+              "emoji": "⭐",
+              "emoji_id": null,
+              "emoji_image": null,
+              "type": "telegram_stars"
+            },
+            {
+              "count": "226",
+              "emoji": "👍",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F918D.png",
+              "type": "emoji"
+            },
+            {
+              "count": "54",
+              "emoji": "👏",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F918F.png",
+              "type": "emoji"
+            },
+            {
+              "count": "49",
+              "emoji": "🥰",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09FA5B0.png",
+              "type": "emoji"
+            },
+            {
+              "count": "40",
+              "emoji": "🎉",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F8E89.png",
+              "type": "emoji"
+            },
+            {
+              "count": "37",
+              "emoji": "🍾",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F8DBE.png",
+              "type": "emoji"
+            },
+            {
+              "count": "34",
+              "emoji": "🤡",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09FA4A1.png",
+              "type": "emoji"
+            },
+            {
+              "count": "28",
+              "emoji": "😍",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F988D.png",
+              "type": "emoji"
+            },
+            {
+              "count": "26",
+              "emoji": "🆒",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F8692.png",
+              "type": "emoji"
+            },
+            {
+              "count": "24",
+              "emoji": "👎",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F918E.png",
+              "type": "emoji"
+            },
+            {
+              "count": "23",
+              "emoji": "🤬",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09FA4AC.png",
+              "type": "emoji"
+            }
+          ],
+          "reply": null,
+          "text": {
+            "entities": [
+              {
+                "language": null,
+                "length": 52,
+                "offset": 0,
+                "type": "bold",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 25,
+                "offset": 199,
+                "type": "bold",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 0,
+                "offset": 224,
+                "type": "text_link",
+                "url": "https://t.me/tginfo/4413"
+              },
+              {
+                "language": null,
+                "length": 16,
+                "offset": 1250,
+                "type": "bold",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 0,
+                "offset": 1266,
+                "type": "text_link",
+                "url": "https://t.me/betainfo/2334"
+              },
+              {
+                "language": null,
+                "length": 1,
+                "offset": 1294,
+                "type": "bold",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 21,
+                "offset": 1535,
+                "type": "text_link",
+                "url": "https://t.me/tginfo/4072"
+              },
+              {
+                "language": null,
+                "length": 23,
+                "offset": 1562,
+                "type": "bold",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 20,
+                "offset": 1878,
+                "type": "bold",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 15,
+                "offset": 1918,
+                "type": "text_link",
+                "url": "https://t.me/betainfo/2329"
+              },
+              {
+                "language": null,
+                "length": 3,
+                "offset": 2092,
+                "type": "bold",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 8,
+                "offset": 2098,
+                "type": "bold",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 18,
+                "offset": 2148,
+                "type": "bold",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 12,
+                "offset": 2179,
+                "type": "text_link",
+                "url": "http://play.google.com/store/apps/details?id=org.telegram.messenger"
+              },
+              {
+                "language": null,
+                "length": 18,
+                "offset": 2198,
+                "type": "text_link",
+                "url": "http://telegram.org/dl/android/apk"
+              },
+              {
+                "language": null,
+                "length": 25,
+                "offset": 2221,
+                "type": "text_link",
+                "url": "http://t.me/TAndroidAPK"
+              },
+              {
+                "language": null,
+                "length": 9,
+                "offset": 2255,
+                "type": "text_link",
+                "url": "http://itunes.apple.com/ru/app/telegram-messenger/id686449807?mt=8"
+              },
+              {
+                "language": null,
+                "length": 11,
+                "offset": 2267,
+                "type": "hashtag",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 8,
+                "offset": 2279,
+                "type": "hashtag",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 4,
+                "offset": 2288,
+                "type": "hashtag",
+                "url": null
+              }
+            ],
+            "html": "<b>Telegram для Android и iOS обновились до версии 12.8</b><br><br>Июньское обновление принесло с собой возрождение приложения для смарт-часов, а также поддержку расширенного форматирования текста для ботов.<br><br> • <b>Telegram для умных часов:</b> Спустя несколько лет у мессенджера вновь появились приложения для Apple Watch и Android Wear OS.<br><br>Клиенты уже поддерживают некоторые базовые возможности, позволяя пользователям отправлять текстовые и голосовые сообщения, просматривать медиа, видеосообщения и т.д.<br><br> • <a href=\"https://t.me/tginfo/4413\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\"><b>Расширенное форматирование текста:</b></a> Начиная с этой версии, боты могут использовать в своих ответах Markdown-разметку для более структурированного форматирования. В число поддерживаемых форматов входят различные стили оформления текста и заголовков, таблицы, блочные и выпадающие цитаты, математические формулы, списки задач, коллажи и слайд-шоу, а также вложения посреди сообщения.<br><br>Сообщения с Markdown вмещают в себя до 32768 символов, а слишком длинные из них (примерно от 8000 знаков) автоматически сворачиваются под кнопку «Показать ещё». Разработчики ИИ-ботов вдобавок могут настроить потоковую передачу ответов во время генерации Rich Messages.<br><br>Изучить устройство сообщений с различными типами расширенного форматирования можно в интерактивном демо: <a href=\"https://t.me/RichTextDemoBot\" target=\"_blank\"><b>@RichTextDemoBot</b></a>.<br><br> • <a href=\"https://t.me/betainfo/2334\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\"><b>Быстрый выбор браузера</b></a><b>:</b> Теперь можно выбирать, где открывать ссылки на внешние сайты — прямо в браузере Telegram или в стороннем приложении.<br><br>Кроме того, мессенджер позволяет указывать ссылки, которые всегда будут открываться во встроенном браузере, даже если он <a href=\"https://t.me/tginfo/4072\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">отключён в настройках</a>.<br><br> • <b>ИИ-защитники для групп:</b> Появилась возможность назначать ботов на базе ИИ администраторами своих групповых чатов, чтобы поручить им обработку заявок на вступление. Для этого разработчиками могут использоваться гибкие интерфейсы мини-приложений, чтобы отсеивать новых участников по результатам тех или иных проверок.<br><br><b>Прочие нововведения:</b><br> • Обновлён дизайн <a href=\"https://t.me/betainfo/2329\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">верхних панелей</a> в приложении для Android.<br> • Добавлена поддержка ссылок в вариантах ответа на опросы.<br> • Поддержка встроенным браузером Telegram файлов с разметкой в формате <b>.md</b>.<br><br><b>Статья: </b><a href=\"http://telegram.org/blog/watch-apps-and-more/ru\" target=\"_blank\" rel=\"noopener\">telegram.org/blog/watch-apps-and-more/ru</a><br><br><b>Скачать обновление</b><br> • Android: <a href=\"http://play.google.com/store/apps/details?id=org.telegram.messenger\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Google Play,</a> APK с <a href=\"http://telegram.org/dl/android/apk\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">официального сайта</a> или <a href=\"http://t.me/TAndroidAPK\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">верифицированного канала.</a><br> • iOS: <a href=\"http://itunes.apple.com/ru/app/telegram-messenger/id686449807?mt=8\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">App Store</a>.<br><br><a href=\"?q=%23%D0%BE%D0%B1%D0%BD%D0%BE%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5\">#обновление</a> <a href=\"?q=%23Android\">#Android</a> <a href=\"?q=%23iOS\">#iOS</a>",
+            "string": "Telegram для Android и iOS обновились до версии 12.8\n\nИюньское обновление принесло с собой возрождение приложения для смарт-часов, а также поддержку расширенного форматирования текста для ботов.\n\n • Telegram для умных часов: Спустя несколько лет у мессенджера вновь появились приложения для Apple Watch и Android Wear OS.\n\nКлиенты уже поддерживают некоторые базовые возможности, позволяя пользователям отправлять текстовые и голосовые сообщения, просматривать медиа, видеосообщения и т.д.\n\n • Расширенное форматирование текста: Начиная с этой версии, боты могут использовать в своих ответах Markdown-разметку для более структурированного форматирования. В число поддерживаемых форматов входят различные стили оформления текста и заголовков, таблицы, блочные и выпадающие цитаты, математические формулы, списки задач, коллажи и слайд-шоу, а также вложения посреди сообщения.\n\nСообщения с Markdown вмещают в себя до 32768 символов, а слишком длинные из них (примерно от 8000 знаков) автоматически сворачиваются под кнопку «Показать ещё». Разработчики ИИ-ботов вдобавок могут настроить потоковую передачу ответов во время генерации Rich Messages.\n\nИзучить устройство сообщений с различными типами расширенного форматирования можно в интерактивном демо: @RichTextDemoBot.\n\n • Быстрый выбор браузера: Теперь можно выбирать, где открывать ссылки на внешние сайты — прямо в браузере Telegram или в стороннем приложении.\n\nКроме того, мессенджер позволяет указывать ссылки, которые всегда будут открываться во встроенном браузере, даже если он отключён в настройках.\n\n • ИИ-защитники для групп: Появилась возможность назначать ботов на базе ИИ администраторами своих групповых чатов, чтобы поручить им обработку заявок на вступление. Для этого разработчиками могут использоваться гибкие интерфейсы мини-приложений, чтобы отсеивать новых участников по результатам тех или иных проверок.\n\nПрочие нововведения:\n • Обновлён дизайн верхних панелей в приложении для Android.\n • Добавлена поддержка ссылок в вариантах ответа на опросы.\n • Поддержка встроенным браузером Telegram файлов с разметкой в формате .md.\n\nСтатья: telegram.org/blog/watch-apps-and-more/ru\n\nСкачать обновление\n • Android: Google Play, APK с официального сайта или верифицированного канала.\n • iOS: App Store.\n\n#обновление #Android #iOS"
+          }
+        },
+        "footer": {
+          "author": null,
+          "date": {
+            "string": "2026-06-12T13:59:13+00:00",
+            "unix": 1781272753
+          },
+          "edited": false,
+          "views": "34.9K"
+        },
+        "forwarded": null,
+        "id": 4414,
+        "view": "eyJjIjotMTAwMzMwNzUyNywicCI6NDQxNCwidCI6MTc5MjcwNzg2MywiaCI6ImIyYjgyMTc1NzI3YmU5ZTk3MyJ9"
+      },
+      {
+        "content": {
+          "inline": null,
+          "media": [
+            {
+              "available": null,
+              "duration": null,
+              "thumb": null,
+              "type": "image",
+              "url": "https://cdn4.telesco.pe/file/gSJQ1hha51aa1AXaZnpTUnVWb8RVCB9Yhr46vE84RM2YkBhRBVkhA1mFI6k4J9aAAgEBxspQLzWdYs6ak-EWgdhqCwtBIXbI-QeYzHrr-7WffzQadpXGe7o3azIZU6sHFCvR_IIjYTgQesQWQ_fw-heOFe0jBx99zdidJJJDsFgnszqfWoaIKfDmk9CPH8oQWn0Iod5Pea-sTiN-hJC8NpwxRUIdsDubKqPgTXbwzCrBwNZ46sEQuXogKbVqysCSraY8-R-WbLOVrpIgknLhHXvCwT7_wFda96ZNDE6AcP3_LlbjlIrSzmmAZo6BOYaAVxQC4MmHP1H3BZno1i1IdQ.jpg",
+              "waves": null
+            }
+          ],
+          "poll": null,
+          "preview_link": null,
+          "reacts": [
+            {
+              "count": "209",
+              "emoji": "🥰",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09FA5B0.png",
+              "type": "emoji"
+            },
+            {
+              "count": "179",
+              "emoji": "👍",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F918D.png",
+              "type": "emoji"
+            },
+            {
+              "count": "61",
+              "emoji": "🎉",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F8E89.png",
+              "type": "emoji"
+            },
+            {
+              "count": "50",
+              "emoji": "🍾",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F8DBE.png",
+              "type": "emoji"
+            },
+            {
+              "count": "42",
+              "emoji": "👏",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F918F.png",
+              "type": "emoji"
+            },
+            {
+              "count": "26",
+              "emoji": "😍",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F988D.png",
+              "type": "emoji"
+            },
+            {
+              "count": "25",
+              "emoji": "🆒",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F8692.png",
+              "type": "emoji"
+            },
+            {
+              "count": "16",
+              "emoji": "🤡",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09FA4A1.png",
+              "type": "emoji"
+            },
+            {
+              "count": "13",
+              "emoji": "👎",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F918E.png",
+              "type": "emoji"
+            },
+            {
+              "count": "12",
+              "emoji": "🤬",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09FA4AC.png",
+              "type": "emoji"
+            },
+            {
+              "count": "9",
+              "emoji": "😱",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F98B1.png",
+              "type": "emoji"
+            }
+          ],
+          "reply": null,
+          "text": {
+            "entities": [
+              {
+                "language": null,
+                "length": 66,
+                "offset": 0,
+                "type": "bold",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 7,
+                "offset": 105,
+                "type": "text_link",
+                "url": "https://x.com/durov/status/2065899497289392440"
+              },
+              {
+                "language": null,
+                "length": 5,
+                "offset": 523,
+                "type": "hashtag",
+                "url": null
+              }
+            ],
+            "html": "<b>Расширенное форматирование текста скоро появится и у пользователей</b><br><br>В своём Twitter-аккаунте Павел Дуров <a href=\"https://x.com/durov/status/2065899497289392440\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">сообщил</a>, что расширенная Markdown-разметка — таблицы, заголовки, формулы, списки задач и выпадающие цитаты — появится не только у ботов, но и у обычных пользователей. По словам основателя мессенджера, сначала всё проверят на ботах:<br><br><blockquote>Запланировано на более позднюю дату этого месяца, но сначала нужно протестировать всё на ботах.</blockquote><br><br>Посмотреть, как работает форматирование, можно в интерактивном демо: <a href=\"https://t.me/RichTextDemoBot\" target=\"_blank\">@RichTextDemoBot</a>.<br><br><a href=\"?q=%23%D0%B1%D0%BE%D1%82%D1%8B\">#боты</a>",
+            "string": "Расширенное форматирование текста скоро появится и у пользователей\n\nВ своём Twitter-аккаунте Павел Дуров сообщил, что расширенная Markdown-разметка — таблицы, заголовки, формулы, списки задач и выпадающие цитаты — появится не только у ботов, но и у обычных пользователей. По словам основателя мессенджера, сначала всё проверят на ботах:\n\n<blockquote>Запланировано на более позднюю дату этого месяца, но сначала нужно протестировать всё на ботах.</blockquote>\n\nПосмотреть, как работает форматирование, можно в интерактивном демо: @RichTextDemoBot.\n\n#боты"
+          }
+        },
+        "footer": {
+          "author": {
+            "html": "Antonio Marreti",
+            "string": "Antonio Marreti"
+          },
+          "date": {
+            "string": "2026-06-14T09:07:35+00:00",
+            "unix": 1781428055
+          },
+          "edited": false,
+          "views": "32.6K"
+        },
+        "forwarded": null,
+        "id": 4415,
+        "view": "eyJjIjotMTAwMzMwNzUyNywicCI6NDQxNSwidCI6MTc5MjcwNzg2MywiaCI6IjAyZTdkMzUzNzIzMDdmYjMxYiJ9"
+      },
+      {
+        "content": {
+          "inline": null,
+          "media": [
+            {
+              "available": null,
+              "duration": null,
+              "thumb": null,
+              "type": "image",
+              "url": "https://cdn4.telesco.pe/file/nlG_7_5CfgUIix05nSFQHgL95r0_QFMxI6Ku0jltQ_GMxBqd409c00IAPmYKGi_Zky6_YcV54Up-QlrlhJDqENA_RUxcKjgvbG0n6fdVZIQs2UaVc07qj4b0mEmSjL_GeopFihmVYu_DUnZIqBpa1JT-EjNS_yo0g7M4euub_dTwoTXa2b2ZE9qV9tDEmzXEZmrKBJD_Q5J9RS1Wvf0EV-X6alg8w53gqnJY90H87IXfnCSpiMPkUNJ68B0AVbOClLT55GFr0k-vIEUBxNGFJ-NNIR1Wo18K2PMhHe5x1HFzCoLw7ufBZPpyl6Ngl95KxFP-MqguXzSnP1vmHtITxQ.jpg",
+              "waves": null
+            }
+          ],
+          "poll": null,
+          "preview_link": null,
+          "reacts": [
+            {
+              "count": "1",
+              "emoji": "⭐",
+              "emoji_id": null,
+              "emoji_image": null,
+              "type": "telegram_stars"
+            },
+            {
+              "count": "277",
+              "emoji": "👍",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F918D.png",
+              "type": "emoji"
+            },
+            {
+              "count": "109",
+              "emoji": "🎉",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F8E89.png",
+              "type": "emoji"
+            },
+            {
+              "count": "79",
+              "emoji": "👏",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F918F.png",
+              "type": "emoji"
+            },
+            {
+              "count": "26",
+              "emoji": "🤡",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09FA4A1.png",
+              "type": "emoji"
+            },
+            {
+              "count": "24",
+              "emoji": "🆒",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F8692.png",
+              "type": "emoji"
+            },
+            {
+              "count": "23",
+              "emoji": "😍",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F988D.png",
+              "type": "emoji"
+            },
+            {
+              "count": "20",
+              "emoji": "🤬",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09FA4AC.png",
+              "type": "emoji"
+            },
+            {
+              "count": "13",
+              "emoji": "👎",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F918E.png",
+              "type": "emoji"
+            },
+            {
+              "count": "13",
+              "emoji": "🍾",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F8DBE.png",
+              "type": "emoji"
+            },
+            {
+              "count": "12",
+              "emoji": "🥰",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09FA5B0.png",
+              "type": "emoji"
+            },
+            {
+              "count": "11",
+              "emoji": "😱",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F98B1.png",
+              "type": "emoji"
+            }
+          ],
+          "reply": null,
+          "text": {
+            "entities": [
+              {
+                "language": null,
+                "length": 58,
+                "offset": 0,
+                "type": "bold",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 6,
+                "offset": 63,
+                "type": "text_link",
+                "url": "https://www.kommersant.ru/doc/8738557"
+              },
+              {
+                "language": null,
+                "length": 6,
+                "offset": 765,
+                "type": "text_link",
+                "url": "https://www.rbc.ru/technology_and_media/09/04/2026/69d77f029a7947f9e3725a9d"
+              },
+              {
+                "language": null,
+                "length": 11,
+                "offset": 864,
+                "type": "hashtag",
+                "url": null
+              }
+            ],
+            "html": "<b>Российский бизнес продолжает наращивать рекламу в Telegram</b><br><br>По <a href=\"https://www.kommersant.ru/doc/8738557\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">данным</a> МТС AdTech, в мае рекламные бюджеты в Telegram выросли на 11% к апрелю. При этом кликабельность объявлений (CTR) увеличилась на 22%, а цена за клик снизилась на 10% — то есть площадка стала эффективнее.<br><br>Это происходит на фоне ограничений: Telegram работает в России с препятствиями, а ФАС ещё в марте объявила о признании рекламы в мессенджере незаконной с конца 2026 года. Часть участников рынка называет происходящее попыткой «запрыгнуть в последний вагон». Агентства уже заключают с клиентами допсоглашения: в случае штрафа финансовые обязательства лягут только на заказчика.<br><br>Несмотря на это, крупные ритейлеры, банки и девелоперы проводят тендеры на продвижение в Telegram на 2026 год. По <a href=\"https://www.rbc.ru/technology_and_media/09/04/2026/69d77f029a7947f9e3725a9d\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">данным</a> Mediascope за апрель, мессенджер сохраняет лидерство по охвату — 87,9 млн человек в месяц.<br><br><a href=\"?q=%23%D0%BF%D1%80%D0%BE%D0%A0%D0%B5%D0%BA%D0%BB%D0%B0%D0%BC%D1%83\">#проРекламу</a>",
+            "string": "Российский бизнес продолжает наращивать рекламу в Telegram\n\nПо данным МТС AdTech, в мае рекламные бюджеты в Telegram выросли на 11% к апрелю. При этом кликабельность объявлений (CTR) увеличилась на 22%, а цена за клик снизилась на 10% — то есть площадка стала эффективнее.\n\nЭто происходит на фоне ограничений: Telegram работает в России с препятствиями, а ФАС ещё в марте объявила о признании рекламы в мессенджере незаконной с конца 2026 года. Часть участников рынка называет происходящее попыткой «запрыгнуть в последний вагон». Агентства уже заключают с клиентами допсоглашения: в случае штрафа финансовые обязательства лягут только на заказчика.\n\nНесмотря на это, крупные ритейлеры, банки и девелоперы проводят тендеры на продвижение в Telegram на 2026 год. По данным Mediascope за апрель, мессенджер сохраняет лидерство по охвату — 87,9 млн человек в месяц.\n\n#проРекламу"
+          }
+        },
+        "footer": {
+          "author": {
+            "html": "Antonio Marreti",
+            "string": "Antonio Marreti"
+          },
+          "date": {
+            "string": "2026-06-16T10:54:50+00:00",
+            "unix": 1781607290
+          },
+          "edited": false,
+          "views": "33.1K"
+        },
+        "forwarded": null,
+        "id": 4416,
+        "view": "eyJjIjotMTAwMzMwNzUyNywicCI6NDQxNiwidCI6MTc5MjcwNzg2MywiaCI6Ijg1MmQwOTYxNzczZDliZmUzMyJ9"
+      },
+      {
+        "content": {
+          "inline": null,
+          "media": [
+            {
+              "available": null,
+              "duration": null,
+              "thumb": null,
+              "type": "image",
+              "url": "https://cdn4.telesco.pe/file/bgIvZ51QodtdCQW79XsINqsC90kCyt8WXjeZNXbECXxbeeKEDdhI8xX4-b0UCTk3qw8nGBy3I1o-G6vMt5YTmAfvMsiQJuQMtlYaggmj_4G1RJ9TvjuX0bpaRTv5GsFGIq3jf3uTcSD11krcw80oO6hgTqfwzUFz3jOUocfAU9D0ufCF4BpQwcC3DPhZj8s1AGiLY_fI3m3Vxi5bT4zn3U0lzlf6a1H-Cd699-xfTnlWviyQRkwUQF-wr-fMWUo3C2Nh4RbrYgPi55e3d2hxBW_RCef4wxtFagpaSzCX1V4XoxXQR4hfIlHZTiLmHDvdFdfqbhQQMlEq5mybqObUEA.jpg",
+              "waves": null
+            }
+          ],
+          "poll": null,
+          "preview_link": null,
+          "reacts": [
+            {
+              "count": "1",
+              "emoji": "⭐",
+              "emoji_id": null,
+              "emoji_image": null,
+              "type": "telegram_stars"
+            },
+            {
+              "count": "195",
+              "emoji": "👍",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F918D.png",
+              "type": "emoji"
+            },
+            {
+              "count": "59",
+              "emoji": "😱",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F98B1.png",
+              "type": "emoji"
+            },
+            {
+              "count": "46",
+              "emoji": "👏",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F918F.png",
+              "type": "emoji"
+            },
+            {
+              "count": "46",
+              "emoji": "🤡",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09FA4A1.png",
+              "type": "emoji"
+            },
+            {
+              "count": "36",
+              "emoji": "🎉",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F8E89.png",
+              "type": "emoji"
+            },
+            {
+              "count": "35",
+              "emoji": "🆒",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F8692.png",
+              "type": "emoji"
+            },
+            {
+              "count": "23",
+              "emoji": "😍",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F988D.png",
+              "type": "emoji"
+            },
+            {
+              "count": "18",
+              "emoji": "👎",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F918E.png",
+              "type": "emoji"
+            },
+            {
+              "count": "13",
+              "emoji": "🥰",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09FA5B0.png",
+              "type": "emoji"
+            },
+            {
+              "count": "12",
+              "emoji": "🤬",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09FA4AC.png",
+              "type": "emoji"
+            },
+            {
+              "count": "12",
+              "emoji": "🍾",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F8DBE.png",
+              "type": "emoji"
+            }
+          ],
+          "reply": null,
+          "text": {
+            "entities": [
+              {
+                "language": null,
+                "length": 90,
+                "offset": 0,
+                "type": "bold",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 10,
+                "offset": 105,
+                "type": "text_link",
+                "url": "https://www.dw.com/en/india-blocks-telegram-before-a-nationwide-medical-college-entrance-exam/a-77573358"
+              },
+              {
+                "language": null,
+                "length": 7,
+                "offset": 340,
+                "type": "bold",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 21,
+                "offset": 416,
+                "type": "bold",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 9,
+                "offset": 605,
+                "type": "text_link",
+                "url": "https://applecensorship.com/app-store-monitor/app/686449807?tab=unavailable"
+              },
+              {
+                "language": null,
+                "length": 11,
+                "offset": 617,
+                "type": "text_link",
+                "url": "https://play.google.com/store/apps/details?id=org.telegram.messenger&amp;amp;gl=in"
+              },
+              {
+                "language": null,
+                "length": 10,
+                "offset": 673,
+                "type": "text_link",
+                "url": "https://t.me/durov/529"
+              },
+              {
+                "language": null,
+                "length": 8,
+                "offset": 1105,
+                "type": "text_link",
+                "url": "https://t.me/tginfo/3435"
+              },
+              {
+                "language": null,
+                "length": 11,
+                "offset": 1176,
+                "type": "text_link",
+                "url": "https://t.me/tginfo/3507"
+              },
+              {
+                "language": null,
+                "length": 24,
+                "offset": 1319,
+                "type": "text_link",
+                "url": "https://t.me/tginfo/3512"
+              },
+              {
+                "language": null,
+                "length": 42,
+                "offset": 1472,
+                "type": "bold",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 8,
+                "offset": 1590,
+                "type": "text_link",
+                "url": "https://x.com/durov/status/2066950943929753854"
+              },
+              {
+                "language": null,
+                "length": 7,
+                "offset": 2121,
+                "type": "text_link",
+                "url": "https://t.me/durov/530"
+              },
+              {
+                "language": null,
+                "length": 8,
+                "offset": 2222,
+                "type": "text_link",
+                "url": "https://www.kentik.com/blog/iraq-blocks-telegram-leaks-blackhole-bgp-routes/"
+              },
+              {
+                "language": null,
+                "length": 13,
+                "offset": 2258,
+                "type": "text_link",
+                "url": "https://t.me/tginfo/3715"
+              },
+              {
+                "language": null,
+                "length": 8,
+                "offset": 2299,
+                "type": "text_link",
+                "url": "https://t.me/drproxy/65"
+              },
+              {
+                "language": null,
+                "length": 7,
+                "offset": 2462,
+                "type": "text_link",
+                "url": "https://t.me/durov/530"
+              },
+              {
+                "language": null,
+                "length": 32,
+                "offset": 2538,
+                "type": "bold",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 6,
+                "offset": 2584,
+                "type": "text_link",
+                "url": "https://t.me/durov/530"
+              },
+              {
+                "language": null,
+                "length": 10,
+                "offset": 2821,
+                "type": "text_link",
+                "url": "https://kod.ru/telegram-india-reliance-bgp"
+              },
+              {
+                "language": null,
+                "length": 13,
+                "offset": 3370,
+                "type": "text_link",
+                "url": "https://t.me/castgreen/17"
+              },
+              {
+                "language": null,
+                "length": 6,
+                "offset": 3515,
+                "type": "hashtag",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 11,
+                "offset": 3522,
+                "type": "hashtag",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 5,
+                "offset": 3534,
+                "type": "hashtag",
+                "url": null
+              }
+            ],
+            "html": "<b>Блокировка Telegram в Индии, удаление Telegram из индийских магазинов и сбой по всему миру</b><br><br>Власти Индии <a href=\"https://www.dw.com/en/india-blocks-telegram-before-a-nationwide-medical-college-entrance-exam/a-77573358\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">предписали</a> временно заблокировать Telegram из-за массовой утечки экзаменационных билетов (NEET-UG). Однако попытка местного оператора связи ограничить доступ привела к перехвату трафика мессенджера далеко за пределами страны. Редакция <a href=\"https://t.me/tginfo\" target=\"_blank\"><b>@tginfo</b></a> разобралась, как локальная цензура превратилась в глобальный сбой.<br><br><b>Что произошло в Индии</b><br><br>Формальной причиной блокировки стала продажа ответов к национальному медицинскому экзамену в Telegram-каналах. Сейчас приложение Telegram недоступно даже в индийских <a href=\"https://applecensorship.com/app-store-monitor/app/686449807?tab=unavailable\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">App Store</a> и <a href=\"https://play.google.com/store/apps/details?id=org.telegram.messenger&amp;amp;gl=in\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Google Play</a>.<br><br>По словам Павла Дурова, такое ограничение <a href=\"https://t.me/durov/529\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">наказывает</a> 150 миллионов индийских пользователей мессенджера, в то время как сами злоумышленники просто перешли в другие приложения.<br><br>Основатель мессенджера отмечает, что Telegram пошёл навстречу регуляторам: удалил сотни мошеннических каналов и даже сделал метку редактирования постов более заметной для индийских пользователей, чтобы злоумышленники не могли изменять старые сообщения, выдавая их за «утечки».<br><br>Напомним, что Индия <a href=\"https://t.me/tginfo/3435\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">является</a> одним из крупнейших рынков для Telegram. Ранее мессенджер уже <a href=\"https://t.me/tginfo/3507\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">сталкивался</a> с давлением индийских властей: в 2022 году суд требовал передать данные администраторов пиратских каналов. Тогда решение суда было <a href=\"https://t.me/tginfo/3512\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">исполнено лишь формально</a>, так как нужных данных для выдачи на серверах просто не было. Очевидно, в этот раз власти решили действовать более радикально.<br><br><b>От локальной блокировки к глобальному сбою</b><br><br>Пытаясь закрыть доступ к Telegram внутри страны, индийский оператор связи <a href=\"https://x.com/durov/status/2066950943929753854\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">применил</a> подмену маршрутизации — BGP Hijacking.<br><br>• Интернет состоит из множества сетей, обменивающихся маршрутами по протоколу BGP.<br> • Индийский оператор проанонсировал на весь мир, что IP-адреса Telegram находятся у него, заставив часть мирового трафика идти по ложному пути, который блокирует доступ к мессенджеру.<br> • Поскольку многие мировые провайдеры до сих пор не проверяют подлинность таких анонсов, ложные маршруты распространились по планете.<br><br>В результате перебои со связью наблюдались у пользователей в других регионах, <a href=\"https://t.me/durov/530\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">включая</a> ОАЭ. Подобные инциденты происходили и раньше: например, в 2023 году похожим инфраструктурным <a href=\"https://www.kentik.com/blog/iraq-blocks-telegram-leaks-blackhole-bgp-routes/\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">способом</a> доступ к Telegram пытались <a href=\"https://t.me/tginfo/3715\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">заблокировать</a> власти Ирака.<br><br>Специалисты <a href=\"https://t.me/drproxy/65\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">отмечают</a>, что индийский провайдер успел поучаствовать с Telegram в небольшой сетевой войне, в которой одна компания пыталась перебить маршруты другой. Павел Дуров <a href=\"https://t.me/durov/530\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">сообщил</a>, что компания Reliance прекратила подменять маршруты через 4 часа.<br><br><b>Ошибочные обвинения в адрес Meta</b><br><br>Павел Дуров <a href=\"https://t.me/durov/530\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">назвал</a> действия оператора намеренным саботажем и предположил, что это часть конкурентной войны, так как индийской компанией Reliance частично владеет Meta (материнская компания WhatsApp и Facebook).<br><br>Однако анализ профильного сообщества <a href=\"https://kod.ru/telegram-india-reliance-bgp\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">показывает</a>, что Павел Дуров перепутал компании. Система, перехватившая трафик, принадлежит компании Reliance Communications — старому телеком-активу, находящемуся в процессе банкротства, тогда как Meta инвестировала в совершенно другую компанию — Jio Platforms (которой принадлежит крупнейший индийский оператор Reliance Jio). <br><br>Версия о корпоративном сговоре WhatsApp не находит технических подтверждений. Скорее всего, глобальный перехват трафика стал следствием некомпетентности индийских инженеров при настройке оборудования для блокировки. Это <a href=\"https://t.me/castgreen/17\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">не первый раз</a>, когда Павел Дуров публично обвиняет WhatsApp в борьбе с Telegram, объясняя неблагоприятные события конспирологическими теориями.<br><br><a href=\"?q=%23%D0%98%D0%BD%D0%B4%D0%B8%D1%8F\">#Индия</a> <a href=\"?q=%23%D0%B1%D0%BB%D0%BE%D0%BA%D0%B8%D1%80%D0%BE%D0%B2%D0%BA%D0%B8\">#блокировки</a> <a href=\"?q=%23%D1%81%D0%B1%D0%BE%D0%B8\">#сбои</a>",
+            "string": "Блокировка Telegram в Индии, удаление Telegram из индийских магазинов и сбой по всему миру\n\nВласти Индии предписали временно заблокировать Telegram из-за массовой утечки экзаменационных билетов (NEET-UG). Однако попытка местного оператора связи ограничить доступ привела к перехвату трафика мессенджера далеко за пределами страны. Редакция @tginfo разобралась, как локальная цензура превратилась в глобальный сбой.\n\nЧто произошло в Индии\n\nФормальной причиной блокировки стала продажа ответов к национальному медицинскому экзамену в Telegram-каналах. Сейчас приложение Telegram недоступно даже в индийских App Store и Google Play.\n\nПо словам Павла Дурова, такое ограничение наказывает 150 миллионов индийских пользователей мессенджера, в то время как сами злоумышленники просто перешли в другие приложения.\n\nОснователь мессенджера отмечает, что Telegram пошёл навстречу регуляторам: удалил сотни мошеннических каналов и даже сделал метку редактирования постов более заметной для индийских пользователей, чтобы злоумышленники не могли изменять старые сообщения, выдавая их за «утечки».\n\nНапомним, что Индия является одним из крупнейших рынков для Telegram. Ранее мессенджер уже сталкивался с давлением индийских властей: в 2022 году суд требовал передать данные администраторов пиратских каналов. Тогда решение суда было исполнено лишь формально, так как нужных данных для выдачи на серверах просто не было. Очевидно, в этот раз власти решили действовать более радикально.\n\nОт локальной блокировки к глобальному сбою\n\nПытаясь закрыть доступ к Telegram внутри страны, индийский оператор связи применил подмену маршрутизации — BGP Hijacking.\n\n• Интернет состоит из множества сетей, обменивающихся маршрутами по протоколу BGP.\n • Индийский оператор проанонсировал на весь мир, что IP-адреса Telegram находятся у него, заставив часть мирового трафика идти по ложному пути, который блокирует доступ к мессенджеру.\n • Поскольку многие мировые провайдеры до сих пор не проверяют подлинность таких анонсов, ложные маршруты распространились по планете.\n\nВ результате перебои со связью наблюдались у пользователей в других регионах, включая ОАЭ. Подобные инциденты происходили и раньше: например, в 2023 году похожим инфраструктурным способом доступ к Telegram пытались заблокировать власти Ирака.\n\nСпециалисты отмечают, что индийский провайдер успел поучаствовать с Telegram в небольшой сетевой войне, в которой одна компания пыталась перебить маршруты другой. Павел Дуров сообщил, что компания Reliance прекратила подменять маршруты через 4 часа.\n\nОшибочные обвинения в адрес Meta\n\nПавел Дуров назвал действия оператора намеренным саботажем и предположил, что это часть конкурентной войны, так как индийской компанией Reliance частично владеет Meta (материнская компания WhatsApp и Facebook).\n\nОднако анализ профильного сообщества показывает, что Павел Дуров перепутал компании. Система, перехватившая трафик, принадлежит компании Reliance Communications — старому телеком-активу, находящемуся в процессе банкротства, тогда как Meta инвестировала в совершенно другую компанию — Jio Platforms (которой принадлежит крупнейший индийский оператор Reliance Jio). \n\nВерсия о корпоративном сговоре WhatsApp не находит технических подтверждений. Скорее всего, глобальный перехват трафика стал следствием некомпетентности индийских инженеров при настройке оборудования для блокировки. Это не первый раз, когда Павел Дуров публично обвиняет WhatsApp в борьбе с Telegram, объясняя неблагоприятные события конспирологическими теориями.\n\n#Индия #блокировки #сбои"
+          }
+        },
+        "footer": {
+          "author": {
+            "html": "Sominemo",
+            "string": "Sominemo"
+          },
+          "date": {
+            "string": "2026-06-17T09:52:04+00:00",
+            "unix": 1781689924
+          },
+          "edited": false,
+          "views": "41.4K"
+        },
+        "forwarded": null,
+        "id": 4417,
+        "view": "eyJjIjotMTAwMzMwNzUyNywicCI6NDQxNywidCI6MTc5MjcwNzg2MywiaCI6IjE0NjRkNjMwOTEzNTA4MjkwYyJ9"
+      },
+      {
+        "content": {
+          "inline": null,
+          "media": [
+            {
+              "available": null,
+              "duration": null,
+              "thumb": null,
+              "type": "image",
+              "url": "https://cdn4.telesco.pe/file/ju30I8oySiiXtZgaZotGr90g9C3pV3KID4veSUN3fV8ZsUCJYU1Qi8jMV1UGixCOr0eJvNYKKh-TtgVY2O3ZZBFAzejVJ9d6PclDEvjjPWE00znuq8dtDsDl_zHja5ZM0YFZZOqHCd6RKXNg3e-45POKximTxYdBY3zPCcI-esr-CSdUpx-jwJo9hwWHZpWHibbq5k9zy4hrbQdGFs_UqXW_qGltrqwS8q2UXZWx3QMh3wPVTdx7hE_19gwfT_czqsq8WxmwPUt0ifCx6CfNN7_nUQGUYYZFC8lAfVxRsBX9tmMbpi_tFLGIKNUH946aKuiAOlE3Fy_uBCG-YJEu3w.jpg",
+              "waves": null
+            }
+          ],
+          "poll": null,
+          "preview_link": null,
+          "reacts": [
+            {
+              "count": "1",
+              "emoji": "⭐",
+              "emoji_id": null,
+              "emoji_image": null,
+              "type": "telegram_stars"
+            },
+            {
+              "count": "261",
+              "emoji": "👍",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F918D.png",
+              "type": "emoji"
+            },
+            {
+              "count": "83",
+              "emoji": "🎉",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F8E89.png",
+              "type": "emoji"
+            },
+            {
+              "count": "69",
+              "emoji": "👏",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F918F.png",
+              "type": "emoji"
+            },
+            {
+              "count": "30",
+              "emoji": "🤡",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09FA4A1.png",
+              "type": "emoji"
+            },
+            {
+              "count": "24",
+              "emoji": "🍾",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F8DBE.png",
+              "type": "emoji"
+            },
+            {
+              "count": "22",
+              "emoji": "🆒",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F8692.png",
+              "type": "emoji"
+            },
+            {
+              "count": "21",
+              "emoji": "😍",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F988D.png",
+              "type": "emoji"
+            },
+            {
+              "count": "16",
+              "emoji": "👎",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F918E.png",
+              "type": "emoji"
+            },
+            {
+              "count": "14",
+              "emoji": "😱",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F98B1.png",
+              "type": "emoji"
+            },
+            {
+              "count": "13",
+              "emoji": "🥰",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09FA5B0.png",
+              "type": "emoji"
+            }
+          ],
+          "reply": null,
+          "text": {
+            "entities": [
+              {
+                "language": null,
+                "length": 38,
+                "offset": 0,
+                "type": "bold",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 17,
+                "offset": 54,
+                "type": "bold",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 15,
+                "offset": 82,
+                "type": "bold",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 9,
+                "offset": 629,
+                "type": "bold",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 4,
+                "offset": 705,
+                "type": "hashtag",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 5,
+                "offset": 710,
+                "type": "hashtag",
+                "url": null
+              }
+            ],
+            "html": "<b>Расширенный редактор текста в Telegram</b><br><br>В Beta-версии <b>Telegram для iOS </b>под номером<b> 12.9.0 (33214)</b> кнопка ИИ-редактора была заменена на кнопку создания текста с Markdown-разметкой.<br><br>При нажатии этой кнопки поле набора текста разворачивается на всю высоту экрана, превращаясь в многофункциональный текстовый редактор.<br><br>Напомним, что поддержка таких сообщений появилась в приложениях Telegram версии 12.8 — в число поддерживаемых форматов входят различные стили оформления текста и заголовков, таблицы, математические формулы, блоки с кодом, блочные и выпадающие цитаты, коллажи, слайд-шоу и пр.<br><br>Подписывайтесь на наш второй канал <a href=\"https://t.me/BetaInfo\" target=\"_blank\"><b>@BetaInfo</b></a>, чтобы одними из первых узнавать о будущих обновлениях Telegram.<br><br><a href=\"?q=%23iOS\">#iOS</a> <a href=\"?q=%23Beta\">#Beta</a>",
+            "string": "Расширенный редактор текста в Telegram\n\nВ Beta-версии Telegram для iOS под номером 12.9.0 (33214) кнопка ИИ-редактора была заменена на кнопку создания текста с Markdown-разметкой.\n\nПри нажатии этой кнопки поле набора текста разворачивается на всю высоту экрана, превращаясь в многофункциональный текстовый редактор.\n\nНапомним, что поддержка таких сообщений появилась в приложениях Telegram версии 12.8 — в число поддерживаемых форматов входят различные стили оформления текста и заголовков, таблицы, математические формулы, блоки с кодом, блочные и выпадающие цитаты, коллажи, слайд-шоу и пр.\n\nПодписывайтесь на наш второй канал @BetaInfo, чтобы одними из первых узнавать о будущих обновлениях Telegram.\n\n#iOS #Beta"
+          }
+        },
+        "footer": {
+          "author": {
+            "html": "DbSergey",
+            "string": "DbSergey"
+          },
+          "date": {
+            "string": "2026-06-24T08:38:50+00:00",
+            "unix": 1782290330
+          },
+          "edited": false,
+          "views": "37.2K"
+        },
+        "forwarded": null,
+        "id": 4418,
+        "view": "eyJjIjotMTAwMzMwNzUyNywicCI6NDQxOCwidCI6MTc5MjcwNzg2MywiaCI6ImU1YTRlNGNiNjMzZmI4ZGE0ZSJ9"
+      },
+      {
+        "content": {
+          "inline": null,
+          "media": [
+            {
+              "available": null,
+              "duration": null,
+              "thumb": null,
+              "type": "image",
+              "url": "https://cdn4.telesco.pe/file/lTmNYuSsaynMmZ0_aZFGe2UotOC1irMQPnC0PcG9B56tzGPoHShaHjmVIU_5HHuUw_zqNYfUROQlGYIPmG3BgPKHMPzDQE5TtH5Q619v9-W7tsGfLpAokwwQ8IFbKS32ADR91HcyrOG5lgvf-UPTIyUwleDXwzWn29MHDt_6RoYnpXTpwbrvW0Cb2X5JiiuHY8VTAl-lAAvEbvoiRo4qC0AR47XCUGRb9C7szY3BnpyCFwN2tW-FXZ_EzR37NwQjq6bfoB59-9Z98h_XAGkDd3v_Qa4LWpwGpupu4GXYcUd0j9MPkKeAW3gaUZ42wDWlYrw_e0bPsmj-VNwwqZsQpQ.jpg",
+              "waves": null
+            }
+          ],
+          "poll": null,
+          "preview_link": null,
+          "reacts": [
+            {
+              "count": "542",
+              "emoji": "🎉",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F8E89.png",
+              "type": "emoji"
+            },
+            {
+              "count": "162",
+              "emoji": "👍",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F918D.png",
+              "type": "emoji"
+            },
+            {
+              "count": "112",
+              "emoji": "🍾",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F8DBE.png",
+              "type": "emoji"
+            },
+            {
+              "count": "75",
+              "emoji": "👏",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F918F.png",
+              "type": "emoji"
+            },
+            {
+              "count": "45",
+              "emoji": "🥰",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09FA5B0.png",
+              "type": "emoji"
+            },
+            {
+              "count": "42",
+              "emoji": "🤡",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09FA4A1.png",
+              "type": "emoji"
+            },
+            {
+              "count": "37",
+              "emoji": "😍",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F988D.png",
+              "type": "emoji"
+            },
+            {
+              "count": "37",
+              "emoji": "🆒",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F8692.png",
+              "type": "emoji"
+            },
+            {
+              "count": "20",
+              "emoji": "🤬",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09FA4AC.png",
+              "type": "emoji"
+            },
+            {
+              "count": "11",
+              "emoji": "😱",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F98B1.png",
+              "type": "emoji"
+            },
+            {
+              "count": "9",
+              "emoji": "👎",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F918E.png",
+              "type": "emoji"
+            }
+          ],
+          "reply": {
+            "cover": "https://cdn4.telesco.pe/file/fPwvOq3QoSTEPZHTyhSgvqSVZysSxWIbLWAdDZukwhrPlxZjGY-a28YWOsDtVqKZR9SLKW3MoNcnMX4VIDsDNvISwh0OnHBMgMNvC-LDhxBjJEzaiBt9OClQ_ZFbwaeaJwjxzNz7o-cXqzAQ9yA1zK8QEgEv90DdBueujCNx5vMpr3VVLxrnXbAPbBNZtV4f8zYne0g8rhj5spgZzebmTPdFJ_gXtFAxwu3IiTHgCw51NiCqBD6t7pcCk9vCPVvBVnPpbsjmXIg1TvgNTRdAXS15c8mSIfTEmXJyrT1zKgFFbIsBBuS6dJUeu2FhojHhbpJjF3LBDzHBoh2gMoAKHQ.jpg",
+            "name": {
+              "html": "Telegram Info",
+              "string": "Telegram Info"
+            },
+            "text": {
+              "html": "Опасный неофициальный клиент «Telega» удалён из App Store  Установить приложение «Telega» с нового Apple ID больше нельзя. Telegram не заблокировал доступ «Telega» к своим серверам, из чего редакция @tginfo допускает, что приложение могло быть удалено по инициативе…",
+              "string": "Опасный неофициальный клиент «Telega» удалён из App Store  Установить приложение «Telega» с нового Apple ID больше нельзя. Telegram не заблокировал доступ «Telega» к своим серверам, из чего редакция @tginfo допускает, что приложение могло быть удалено по инициативе…"
+            },
+            "to_message": 4405
+          },
+          "text": {
+            "entities": null,
+            "html": "Опасный неофициальный клиент «Telega» удалён из App Store  Установить приложение «Telega» с нового Apple ID больше нельзя. Telegram не заблокировал доступ «Telega» к своим серверам, из чего редакция @tginfo допускает, что приложение могло быть удалено по инициативе…",
+            "string": "Опасный неофициальный клиент «Telega» удалён из App Store  Установить приложение «Telega» с нового Apple ID больше нельзя. Telegram не заблокировал доступ «Telega» к своим серверам, из чего редакция @tginfo допускает, что приложение могло быть удалено по инициативе…"
+          }
+        },
+        "footer": {
+          "author": {
+            "html": "Sominemo",
+            "string": "Sominemo"
+          },
+          "date": {
+            "string": "2026-06-26T10:50:03+00:00",
+            "unix": 1782471003
+          },
+          "edited": false,
+          "views": "41.7K"
+        },
+        "forwarded": null,
+        "id": 4419,
+        "view": "eyJjIjotMTAwMzMwNzUyNywicCI6NDQxOSwidCI6MTc5MjcwNzg2MywiaCI6IjZlZDJmNmJjZjY2MGU5YzM1MCJ9"
+      },
+      {
+        "content": {
+          "inline": null,
+          "media": [
+            {
+              "available": null,
+              "duration": null,
+              "thumb": null,
+              "type": "image",
+              "url": "https://cdn4.telesco.pe/file/akW7BTDhZPGotf0Ig5YATw4VcJ6Dn0DzOllRP-ZDBGCzUqEHceSai-b3-XbJdi7olKZLrJcAgdR8o_iDqyGl_sDkUdIs59ef3QkxzRVNIBHtEEuruB-7wyulLCqVjW0OKQN1JVGmGwbEbZnGJ2EceLEtMYTLejZr_1ZKh4saToGAdLHxYmxHGbt0D6wqDP-kyYcht0bPoQedprP1jLb1KvA5K6AReyVTnwouFuCo1uLr9J19A8WfguY5YXAFj03btcGb7c9D-WM5ZQ4YXESK8IrKHfaWrzFOpYi4WxEyHB6vM2v-UcAezqAC5JgOFLEDfprB-U1l9pIahs9NuAK3kg.jpg",
+              "waves": null
+            }
+          ],
+          "poll": null,
+          "preview_link": null,
+          "reacts": [
+            {
+              "count": "2",
+              "emoji": "⭐",
+              "emoji_id": null,
+              "emoji_image": null,
+              "type": "telegram_stars"
+            },
+            {
+              "count": "263",
+              "emoji": "👍",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F918D.png",
+              "type": "emoji"
+            },
+            {
+              "count": "68",
+              "emoji": "🎉",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F8E89.png",
+              "type": "emoji"
+            },
+            {
+              "count": "65",
+              "emoji": "👏",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F918F.png",
+              "type": "emoji"
+            },
+            {
+              "count": "59",
+              "emoji": "🤡",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09FA4A1.png",
+              "type": "emoji"
+            },
+            {
+              "count": "37",
+              "emoji": "🥰",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09FA5B0.png",
+              "type": "emoji"
+            },
+            {
+              "count": "36",
+              "emoji": "🆒",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F8692.png",
+              "type": "emoji"
+            },
+            {
+              "count": "35",
+              "emoji": "😍",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F988D.png",
+              "type": "emoji"
+            },
+            {
+              "count": "27",
+              "emoji": "👎",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F918E.png",
+              "type": "emoji"
+            },
+            {
+              "count": "17",
+              "emoji": "🤬",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09FA4AC.png",
+              "type": "emoji"
+            },
+            {
+              "count": "11",
+              "emoji": "😱",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F98B1.png",
+              "type": "emoji"
+            },
+            {
+              "count": "1",
+              "emoji": "🍾",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F8DBE.png",
+              "type": "emoji"
+            }
+          ],
+          "reply": null,
+          "text": {
+            "entities": [
+              {
+                "language": null,
+                "length": 10,
+                "offset": 0,
+                "type": "bold",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 26,
+                "offset": 11,
+                "type": "bold",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 20,
+                "offset": 54,
+                "type": "bold",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 4,
+                "offset": 87,
+                "type": "bold",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 25,
+                "offset": 114,
+                "type": "text_link",
+                "url": "https://t.me/betainfo/2345"
+              },
+              {
+                "language": null,
+                "length": 18,
+                "offset": 200,
+                "type": "bold",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 13,
+                "offset": 223,
+                "type": "bold",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 14,
+                "offset": 297,
+                "type": "bold",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 13,
+                "offset": 410,
+                "type": "bold",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 28,
+                "offset": 630,
+                "type": "bold",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 28,
+                "offset": 821,
+                "type": "bold",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 14,
+                "offset": 1144,
+                "type": "bold",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 16,
+                "offset": 1437,
+                "type": "bold",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 24,
+                "offset": 1723,
+                "type": "italic",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 9,
+                "offset": 1786,
+                "type": "bold",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 8,
+                "offset": 1862,
+                "type": "hashtag",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 5,
+                "offset": 1871,
+                "type": "hashtag",
+                "url": null
+              }
+            ],
+            "html": "<b>Сообщества</b> <b>уже тестируются в Telegram</b> <br><br>В Beta-версии <b>Telegram для Android</b> под номером <b>12.9</b> появилась возможность <a href=\"https://t.me/betainfo/2345\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">организовывать сообщества</a>, которые объединяют множество тематических групповых чатов.<br><b><br>Как это работает:</b><br><br> • <b>Только чаты: </b>На текущий момент можно добавлять только групповые чаты.<br><br> • <b>Как вступить: </b>Вы считаетесь участником сообщества, если находитесь хотя бы в одном чате, привязанном к нему.<br><br> • <b>Что это даёт:</b> Если чат привязан к сообществу, об этом будет указано в его профиле. Оттуда же можно перейти в само сообщество. Участники могут просматривать список всех «видимых» чатов в сообществе и вступать в них. <br><br> • <b>Чаты остаются независимыми: </b>Telegram не добавляет участников одного чата сообщества в другие группы автоматически. Разные владельцы могут предлагать добавить свои чаты в одно сообщество.<br><br> • <b>Могут объединяться визуально</b>: Чаты сообщества могут отображаться отдельно или объединяться в один элемент. Это поведение контролируется администраторами сообщества. Если объединение включено, все чаты сообщества превращаются в подобие единого форума, но каждая ветка — независимый чат, к которому можно присоединиться.<br><br> • <b>Скрытые чаты: </b>Чат сообщества можно сделать «скрытым». Скрытый чат видят только те, кого отдельно пригласили именно в него. Это похоже на общие и скрытые каналы на серверах в Discord. Участники скрытого чата могут перейти в сообщество, а остальные участники сообщества в скрытый чат — нет.<br><br> • <b>Будут ли каналы:</b> В коде упоминается возможность привязки каналов, но она неактивна, поэтому неизвестно, появится ли эта функция в будущем.<br><br>Функция сейчас работает только на тестовом сервере. Привязать свою беседу к сообществу можно на странице настроек группы — за это отвечает опция «<i>Add Group to a Community</i>».<br><br><blockquote>Подписывайтесь на наш второй канал <a href=\"https://t.me/BetaInfo\" target=\"_blank\"><b>@BetaInfo</b></a>, чтобы одними из первых узнавать о будущих обновлениях Telegram.</blockquote><br><br><a href=\"?q=%23Android\">#Android</a> <a href=\"?q=%23Beta\">#Beta</a>",
+            "string": "Сообщества уже тестируются в Telegram \n\nВ Beta-версии Telegram для Android под номером 12.9 появилась возможность организовывать сообщества, которые объединяют множество тематических групповых чатов.\n\nКак это работает:\n\n • Только чаты: На текущий момент можно добавлять только групповые чаты.\n\n • Как вступить: Вы считаетесь участником сообщества, если находитесь хотя бы в одном чате, привязанном к нему.\n\n • Что это даёт: Если чат привязан к сообществу, об этом будет указано в его профиле. Оттуда же можно перейти в само сообщество. Участники могут просматривать список всех «видимых» чатов в сообществе и вступать в них. \n\n • Чаты остаются независимыми: Telegram не добавляет участников одного чата сообщества в другие группы автоматически. Разные владельцы могут предлагать добавить свои чаты в одно сообщество.\n\n • Могут объединяться визуально: Чаты сообщества могут отображаться отдельно или объединяться в один элемент. Это поведение контролируется администраторами сообщества. Если объединение включено, все чаты сообщества превращаются в подобие единого форума, но каждая ветка — независимый чат, к которому можно присоединиться.\n\n • Скрытые чаты: Чат сообщества можно сделать «скрытым». Скрытый чат видят только те, кого отдельно пригласили именно в него. Это похоже на общие и скрытые каналы на серверах в Discord. Участники скрытого чата могут перейти в сообщество, а остальные участники сообщества в скрытый чат — нет.\n\n • Будут ли каналы: В коде упоминается возможность привязки каналов, но она неактивна, поэтому неизвестно, появится ли эта функция в будущем.\n\nФункция сейчас работает только на тестовом сервере. Привязать свою беседу к сообществу можно на странице настроек группы — за это отвечает опция «Add Group to a Community».\n\n<blockquote>Подписывайтесь на наш второй канал @BetaInfo, чтобы одними из первых узнавать о будущих обновлениях Telegram.</blockquote>\n\n#Android #Beta"
+          }
+        },
+        "footer": {
+          "author": {
+            "html": "Sominemo",
+            "string": "Sominemo"
+          },
+          "date": {
+            "string": "2026-06-27T14:05:08+00:00",
+            "unix": 1782569108
+          },
+          "edited": false,
+          "views": "41.8K"
+        },
+        "forwarded": null,
+        "id": 4420,
+        "view": "eyJjIjotMTAwMzMwNzUyNywicCI6NDQyMCwidCI6MTc5MjcwNzg2MywiaCI6ImFiM2M4MWY1NmQzZDEyYjM4OCJ9"
+      },
+      {
+        "content": {
+          "inline": null,
+          "media": [
+            {
+              "available": null,
+              "duration": null,
+              "thumb": null,
+              "type": "image",
+              "url": "https://cdn4.telesco.pe/file/ED2Q706f3szVt_0v0moBSFykaXIaK3cNSTMyjL7kfKwKBUlP9JUV6Sph7Hzi97cDjbD83x8igjhCKA5z0iTF-DeGwQA9u0NFBhLb5rXmeZkOVUPGRCTgGIO91cqZLWjzuNU_RwembdkJN9Md0YUZGw2WrWZ9DOzmn9dqPZYYF3UOSncCImg87qfMaqNAd0bXkuUaDrApIFSmU_5kYXlMFpzz814h9-Ll1rS-1DcNg6tFPcDroLZxlbf2p6RzuOykxb0i7xvVVfTXLNBvPBfRnj26t0HRQJrDQctUPxkBs3hx0e26nTvmn0A3KQW4pNgNDpOivWeNObaYNiD-mMQWmQ.jpg",
+              "waves": null
+            }
+          ],
+          "poll": null,
+          "preview_link": null,
+          "reacts": [
+            {
+              "count": "1",
+              "emoji": "⭐",
+              "emoji_id": null,
+              "emoji_image": null,
+              "type": "telegram_stars"
+            },
+            {
+              "count": "188",
+              "emoji": "😍",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F988D.png",
+              "type": "emoji"
+            },
+            {
+              "count": "137",
+              "emoji": "👍",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F918D.png",
+              "type": "emoji"
+            },
+            {
+              "count": "79",
+              "emoji": "🎉",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F8E89.png",
+              "type": "emoji"
+            },
+            {
+              "count": "51",
+              "emoji": "👏",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F918F.png",
+              "type": "emoji"
+            },
+            {
+              "count": "43",
+              "emoji": "🤡",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09FA4A1.png",
+              "type": "emoji"
+            },
+            {
+              "count": "30",
+              "emoji": "🥰",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09FA5B0.png",
+              "type": "emoji"
+            },
+            {
+              "count": "25",
+              "emoji": "👎",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F918E.png",
+              "type": "emoji"
+            },
+            {
+              "count": "21",
+              "emoji": "🆒",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F8692.png",
+              "type": "emoji"
+            },
+            {
+              "count": "19",
+              "emoji": "🍾",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F8DBE.png",
+              "type": "emoji"
+            },
+            {
+              "count": "10",
+              "emoji": "🤬",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09FA4AC.png",
+              "type": "emoji"
+            },
+            {
+              "count": "6",
+              "emoji": "😱",
+              "emoji_id": null,
+              "emoji_image": "https://telegram.org/img/emoji/40/F09F98B1.png",
+              "type": "emoji"
+            }
+          ],
+          "reply": null,
+          "text": {
+            "entities": [
+              {
+                "language": null,
+                "length": 1,
+                "offset": 0,
+                "type": "animoji",
+                "url": "https://telegram.org/img/emoji/40/E2AD90.png"
+              },
+              {
+                "language": null,
+                "length": 51,
+                "offset": 2,
+                "type": "bold",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 16,
+                "offset": 79,
+                "type": "bold",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 6,
+                "offset": 457,
+                "type": "text_link",
+                "url": "https://t.me/betainfo/2343"
+              },
+              {
+                "language": null,
+                "length": 21,
+                "offset": 711,
+                "type": "bold",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 17,
+                "offset": 745,
+                "type": "text_link",
+                "url": "https://t.me/TAndroidBeta"
+              },
+              {
+                "language": null,
+                "length": 16,
+                "offset": 806,
+                "type": "text_link",
+                "url": "https://desktop.telegram.org/changelog#beta-version"
+              },
+              {
+                "language": null,
+                "length": 1,
+                "offset": 895,
+                "type": "animoji",
+                "url": "https://telegram.org/img/emoji/40/F09F938E.png"
+              },
+              {
+                "language": null,
+                "length": 10,
+                "offset": 897,
+                "type": "italic",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 6,
+                "offset": 910,
+                "type": "italic",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 1,
+                "offset": 982,
+                "type": "animoji",
+                "url": "https://telegram.org/img/emoji/40/E28696.png"
+              },
+              {
+                "language": null,
+                "length": 9,
+                "offset": 1072,
+                "type": "bold",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 8,
+                "offset": 1148,
+                "type": "hashtag",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 4,
+                "offset": 1157,
+                "type": "hashtag",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 8,
+                "offset": 1162,
+                "type": "hashtag",
+                "url": null
+              },
+              {
+                "language": null,
+                "length": 9,
+                "offset": 1171,
+                "type": "hashtag",
+                "url": null
+              }
+            ],
+            "html": "<tg-emoji emoji-id=\"5859342759143411889\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/E2AD90.png')\"><b>⭐</b></i></tg-emoji> <b>Сообщения в виде статьи уже в Beta-версии Telegram<br></b><br>Пользователи с подпиской <b>Telegram Premium</b> и Beta-версией Telegram теперь могут отправлять сообщения с расширенным форматированием с помощью полноэкранного редактора.<br><br>В число поддерживаемых форматов входят различные стили оформления текста и заголовков, таблицы, математические формулы, блоки с кодом, блочные и выпадающие цитаты, коллажи, слайд-шоу и пр. Узнать подробнее о новой функции можно в нашем <a href=\"https://t.me/betainfo/2343\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">обзоре</a>.<br><br>В прошедшие недели функция работала только на тестовом сервере, но теперь доступна и на основном. Редактор таких сообщений пока что есть только в Beta-версиях приложений версий 12.9 (Telegram Android и Telegram iOS) и 6.9.4 (Telegram Desktop).<br><br><b>Beta-версии Telegram:</b><br> • Android: <a href=\"https://t.me/TAndroidBeta\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">официальный канал</a><br> • Telegram Desktop (Windows/macOS/Linux): <a href=\"https://desktop.telegram.org/changelog#beta-version\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">официальный сайт</a><br> • iOS: сейчас недоступна для новых тестеров.<br><br>Редактор доступен в меню <tg-emoji emoji-id=\"5877495434124988415\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F938E.png')\"><b>📎</b></i></tg-emoji> <i>Прикрепить</i> › <i>Статья</i>. На телефоне открыть новый интерфейс можно также нажав на иконку <tg-emoji emoji-id=\"5807456032334552310\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/E28696.png')\"><b>↖</b></i></tg-emoji>, которая появляется над кнопкой отправки сообщения.<br><br><blockquote>Подписывайтесь на наш второй канал <a href=\"https://t.me/BetaInfo\" target=\"_blank\"><b>@BetaInfo</b></a>, чтобы одними из первых узнавать о будущих обновлениях Telegram.</blockquote><br><br><a href=\"?q=%23Android\">#Android</a> <a href=\"?q=%23iOS\">#iOS</a> <a href=\"?q=%23Desktop\">#Desktop</a> <a href=\"?q=%23betainfo\">#betainfo</a>",
+            "string": "⭐ Сообщения в виде статьи уже в Beta-версии Telegram\n\nПользователи с подпиской Telegram Premium и Beta-версией Telegram теперь могут отправлять сообщения с расширенным форматированием с помощью полноэкранного редактора.\n\nВ число поддерживаемых форматов входят различные стили оформления текста и заголовков, таблицы, математические формулы, блоки с кодом, блочные и выпадающие цитаты, коллажи, слайд-шоу и пр. Узнать подробнее о новой функции можно в нашем обзоре.\n\nВ прошедшие недели функция работала только на тестовом сервере, но теперь доступна и на основном. Редактор таких сообщений пока что есть только в Beta-версиях приложений версий 12.9 (Telegram Android и Telegram iOS) и 6.9.4 (Telegram Desktop).\n\nBeta-версии Telegram:\n • Android: официальный канал\n • Telegram Desktop (Windows/macOS/Linux): официальный сайт\n • iOS: сейчас недоступна для новых тестеров.\n\nРедактор доступен в меню 📎 Прикрепить › Статья. На телефоне открыть новый интерфейс можно также нажав на иконку ↖, которая появляется над кнопкой отправки сообщения.\n\n<blockquote>Подписывайтесь на наш второй канал @BetaInfo, чтобы одними из первых узнавать о будущих обновлениях Telegram.</blockquote>\n\n#Android #iOS #Desktop #betainfo"
+          }
+        },
+        "footer": {
+          "author": {
+            "html": "Sominemo",
+            "string": "Sominemo"
+          },
+          "date": {
+            "string": "2026-07-11T11:03:18+00:00",
+            "unix": 1783767798
+          },
+          "edited": false,
+          "views": "32.4K"
+        },
+        "forwarded": null,
+        "id": 4421,
+        "view": "eyJjIjotMTAwMzMwNzUyNywicCI6NDQyMSwidCI6MTc5MjcwNzg2MywiaCI6ImM3ZTRjZTE2ZjI4ZjFiMzE2ZiJ9"
+      }
+    ]
+  },
+  "status": 200
+}

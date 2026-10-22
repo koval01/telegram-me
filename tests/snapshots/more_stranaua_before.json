@@ -1,0 +1,1013 @@
+{
+  "body": {
+    "meta": {
+      "offset": {
+        "after": null,
+        "before": 252463
+      }
+    },
+    "posts": [
+      {
+        "content": {
+          "inline": null,
+          "media": [
+            {
+              "available": null,
+              "duration": {
+                "formatted": "0:05",
+                "raw": 5
+              },
+              "thumb": "https://cdn4.telesco.pe/file/ozuXtXevqkVQCUPl9kk89STHFPIjwo1XtC4qvEg4RnZtEvlb3u4wPt6UHEJTIvJuoy4-mxexAIclF32BVCJU5Yp2URiGkjIRt7UFIfb7bNQNLYYwooo_KLjaEOunfLEtylaRTuES4e2Qdr66SNdBuctGn2Q5gBM5_j-s9nZqbTGUgauKTulVKkvu06RiUtel4EjWn6H3CZ4l9oUnYaj5Lc_yK3kgWvLX6EKYKpCmdYojWwA4Ns_S1DiDZ2XDzkBE4XVYfdWVBfvKtF1zIlEmgiH2AmYvhnGMxKk9gVKGOBk7zZYydSS6wUkjuCMzbrVDMozZ74HO8laFw1RvYj7PNQ",
+              "type": "video",
+              "url": "https://cdn4.telesco.pe/file/e26323595c.mp4?token=SkcjlNnzB3fFKjQX2eSqH5IOoeUEseQveGpx5rd_m6CdG93QwVV6Vdvabxs7z3dIuho82nkvxiZOEoISZJo__C6hb57Hx-e4Rq06LRPBgbG0JzG4Fv2-9hOIAqii7SF0wTrmrD9rq56ui5GJls8SbjgaP6x6wkJ6WRJgCDoItJCrojLhjCOOGo9uGsf7blKNZw89ucsGjOOOFKnkuwBNil6o9mh8HJE1SrkV3uOUc6zKlOdR2f3HAmeIk5UPZNS1uI6QqTbPJHIvnlXQLGf59Q12Pf3xjbuIzUcN1uG5BCdg1E5Zl58hD5i2ZKasr1nir1pNK3DmyYKovuOUPAQl2g",
+              "waves": null
+            }
+          ],
+          "poll": null,
+          "preview_link": null,
+          "reacts": null,
+          "reply": null,
+          "text": {
+            "entities": null,
+            "html": "Йеменские хуситы нанесли удар по зданию Минобороны Саудовской Аравии, сообщают израильские паблики.",
+            "string": "Йеменские хуситы нанесли удар по зданию Минобороны Саудовской Аравии, сообщают израильские паблики."
+          }
+        },
+        "footer": {
+          "author": null,
+          "date": {
+            "string": "2026-10-22T13:39:00+00:00",
+            "unix": 1792676340
+          },
+          "edited": false,
+          "views": "78.3K"
+        },
+        "forwarded": null,
+        "id": 252463,
+        "view": "eyJjIjotMTA5MjQxMzgzNCwicCI6MjUyNDYzLCJ0IjoxNzkyNzA3ODYyLCJoIjoiYzEyYTRlZjNhN2E2ZjM5ZGJjIn0"
+      },
+      {
+        "content": {
+          "inline": null,
+          "media": [
+            {
+              "available": null,
+              "duration": null,
+              "thumb": null,
+              "type": "image",
+              "url": "https://cdn4.telesco.pe/file/lfSFXaxbjR7Moe94e8obi9iINg9CJhIMrgJreM--zrwf8F00-qaz6GgYcUQDGxNVL_pzgPMSy71hUHFwlbaSlBetF6UiXK95G-1PmwvjZTZRZqBfV_r3FeNH32dwQdBOV7la13Bsu38manasF2u_w4EliGsmn8PGTDPr12p71frLem62k3jafmdcRz8XH5KHB8G0j70PIse3bBBvaKPWsDLK14uFzF4HNrYo-Qe3bZL6XMuly15P4PbgIwFvTxvgniWvCuQr66QzdIdtecFbN0TJ4QQlXHU_4r02hz-g6oSlVQy8s1bpabFxN5gA0MlbQcUwfysgpRBW3BxRwRpzmQ.jpg",
+              "waves": null
+            }
+          ],
+          "poll": null,
+          "preview_link": null,
+          "reacts": null,
+          "reply": null,
+          "text": {
+            "entities": [
+              {
+                "language": null,
+                "length": 12,
+                "offset": 534,
+                "type": "text_link",
+                "url": "https://stranaua.media/"
+              },
+              {
+                "language": null,
+                "length": 9,
+                "offset": 550,
+                "type": "text_link",
+                "url": "https://x.com/stranaua?s=21"
+              },
+              {
+                "language": null,
+                "length": 27,
+                "offset": 562,
+                "type": "text_link",
+                "url": "http://t.me/strana_send_bot"
+              },
+              {
+                "language": null,
+                "length": 17,
+                "offset": 592,
+                "type": "text_link",
+                "url": "https://t.me/@strana_ad_bot"
+              },
+              {
+                "language": null,
+                "length": 6,
+                "offset": 612,
+                "type": "text_link",
+                "url": "https://t.me/stranaua/137068"
+              }
+            ],
+            "html": "Бывший генпрокурор Кравченко, сбежавший за границу на фоне расследования НАБУ против Офиса генпрокурора, подал новую декларацию как бывший госслужащий.<br><br>В ней он впервые декларирует, что арендует дом в Козине площадью почти 300 квадратных метров, который упоминается на записях НАБУ. В САП говорили, что доверенное лицо Кравченко координировало проведение ремонта в этом доме. <br><br>Также экс-генпрокурор декларирует использование газовой электростанции стоимостью 1,1 млн грн.<br><br>Сам Кравченко, по данным СМИ, сейчас находится в Австрии.<br><br><a href=\"https://stranaua.media/\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Сайт \"Страна</a>\" | <a href=\"https://x.com/stranaua?s=21\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">X/Twitter</a> | <a href=\"http://t.me/strana_send_bot\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Прислать новость/фото/видео</a> | <a href=\"https://t.me/@strana_ad_bot\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Реклама на канале</a> | <a href=\"https://t.me/stranaua/137068\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Помощь</a>",
+            "string": "Бывший генпрокурор Кравченко, сбежавший за границу на фоне расследования НАБУ против Офиса генпрокурора, подал новую декларацию как бывший госслужащий.\n\nВ ней он впервые декларирует, что арендует дом в Козине площадью почти 300 квадратных метров, который упоминается на записях НАБУ. В САП говорили, что доверенное лицо Кравченко координировало проведение ремонта в этом доме. \n\nТакже экс-генпрокурор декларирует использование газовой электростанции стоимостью 1,1 млн грн.\n\nСам Кравченко, по данным СМИ, сейчас находится в Австрии.\n\nСайт \"Страна\" | X/Twitter | Прислать новость/фото/видео | Реклама на канале | Помощь"
+          }
+        },
+        "footer": {
+          "author": null,
+          "date": {
+            "string": "2026-10-22T13:44:01+00:00",
+            "unix": 1792676641
+          },
+          "edited": false,
+          "views": "78.7K"
+        },
+        "forwarded": null,
+        "id": 252464,
+        "view": "eyJjIjotMTA5MjQxMzgzNCwicCI6MjUyNDY0LCJ0IjoxNzkyNzA3ODYyLCJoIjoiYmRlMzU5Yzg5Zjk2M2EyNjFlIn0"
+      },
+      {
+        "content": {
+          "inline": null,
+          "media": null,
+          "poll": null,
+          "preview_link": {
+            "description": {
+              "html": "Что показала встреча Уиткоффа с Путиным?<br>&nbsp;<br>После встречи посланника Трампа Уиткоффа с Путиным, помощник президента РФ Ушаков дал довольно сдержанный комментарий.<br>&nbsp;<br>Он заявил, что на переговорах с Зеленским и европейцами в Осло Уиткофф «почувствовал новые…",
+              "string": "Что показала встреча Уиткоффа с Путиным? После встречи посланника Трампа Уиткоффа с Путиным, помощник президента РФ Ушаков дал довольно сдержанный комментарий. Он заявил, что на переговорах с Зеленским и европейцами в Осло Уиткофф «почувствовал новые…"
+            },
+            "site_name": "Telegram",
+            "thumb": null,
+            "title": "Политика Страны",
+            "url": "https://t.me/stranaua/252345"
+          },
+          "reacts": null,
+          "reply": null,
+          "text": {
+            "entities": [
+              {
+                "language": null,
+                "length": 5,
+                "offset": 125,
+                "type": "text_link",
+                "url": "https://t.me/stranaua/252345"
+              },
+              {
+                "language": null,
+                "length": 12,
+                "offset": 133,
+                "type": "text_link",
+                "url": "https://stranaua.media/"
+              },
+              {
+                "language": null,
+                "length": 9,
+                "offset": 149,
+                "type": "text_link",
+                "url": "https://x.com/stranaua?s=21"
+              },
+              {
+                "language": null,
+                "length": 27,
+                "offset": 161,
+                "type": "text_link",
+                "url": "http://t.me/strana_send_bot"
+              },
+              {
+                "language": null,
+                "length": 17,
+                "offset": 191,
+                "type": "text_link",
+                "url": "https://t.me/@strana_ad_bot"
+              },
+              {
+                "language": null,
+                "length": 6,
+                "offset": 211,
+                "type": "text_link",
+                "url": "https://t.me/stranaua/137068"
+              }
+            ],
+            "html": "Вэнс заявил, что Уиткофф оптимистично настроен по итогам переговоров с Путиным и Зеленским.<br><br>Об итогах этих встреч мы писали <a href=\"https://t.me/stranaua/252345\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">здесь</a>.<br><br><a href=\"https://stranaua.media/\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Сайт \"Страна</a>\" | <a href=\"https://x.com/stranaua?s=21\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">X/Twitter</a> | <a href=\"http://t.me/strana_send_bot\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Прислать новость/фото/видео</a> | <a href=\"https://t.me/@strana_ad_bot\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Реклама на канале</a> | <a href=\"https://t.me/stranaua/137068\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Помощь</a>",
+            "string": "Вэнс заявил, что Уиткофф оптимистично настроен по итогам переговоров с Путиным и Зеленским.\n\nОб итогах этих встреч мы писали здесь.\n\nСайт \"Страна\" | X/Twitter | Прислать новость/фото/видео | Реклама на канале | Помощь"
+          }
+        },
+        "footer": {
+          "author": null,
+          "date": {
+            "string": "2026-10-22T13:49:01+00:00",
+            "unix": 1792676941
+          },
+          "edited": false,
+          "views": "78K"
+        },
+        "forwarded": null,
+        "id": 252465,
+        "view": "eyJjIjotMTA5MjQxMzgzNCwicCI6MjUyNDY1LCJ0IjoxNzkyNzA3ODYyLCJoIjoiNTNkZTBmNmZhMThjMTJlYmM0In0"
+      },
+      {
+        "content": {
+          "inline": null,
+          "media": [
+            {
+              "available": null,
+              "duration": null,
+              "thumb": null,
+              "type": "image",
+              "url": "https://cdn4.telesco.pe/file/dyCNK0Aqd6EUtXHwPMg4pFk0poq6N_uBfpZ9Ie6syFSNjQfIcJUUxdpc3j_p8oASl1PrqbCFeJj2f5mzpFsc7MzuYxSay3WgS-mTCRAxg6czqHjxN0olZawBxm_4Yvmb-3xnPupePi0ihw9dNStgRcWvkj1J91R3kDEARULcB4wfc0KH7ayaZhtKYHcGjZLDKBBQ6wDWtyaUBOd36xyCtJKDWOAS5auQd7kncbcLN4LqaGzfPW5blPhdBE9Uhl3bvdO_5MPA6jHbo0yWUZtXJPn__ggoR_36f9y1fGOnk2lRjaBz28P0scr7RbltmYp77kY4zB5CjAmD_BYk72wwOg.jpg",
+              "waves": null
+            }
+          ],
+          "poll": null,
+          "preview_link": null,
+          "reacts": null,
+          "reply": null,
+          "text": {
+            "entities": [
+              {
+                "language": null,
+                "length": 12,
+                "offset": 960,
+                "type": "text_link",
+                "url": "https://stranaua.media/"
+              },
+              {
+                "language": null,
+                "length": 9,
+                "offset": 976,
+                "type": "text_link",
+                "url": "https://x.com/stranaua?s=21"
+              },
+              {
+                "language": null,
+                "length": 27,
+                "offset": 988,
+                "type": "text_link",
+                "url": "http://t.me/strana_send_bot"
+              },
+              {
+                "language": null,
+                "length": 17,
+                "offset": 1018,
+                "type": "text_link",
+                "url": "https://t.me/@strana_ad_bot"
+              },
+              {
+                "language": null,
+                "length": 6,
+                "offset": 1038,
+                "type": "text_link",
+                "url": "https://t.me/stranaua/137068"
+              }
+            ],
+            "html": "Марин Ле Пен, и так лидировавшая в опросах накануне выборов, еще сильнее укрепляет свои позиции на фоне беспорядков во Франции, сообщает Bild.<br><br>За три недели с конца сентября рейтинг правого политика, выступающего за прекращение помощи Украине, вырос с 32% до 36%.<br><br>Лидер радикальных левых Жан-Люк Меленшон, поддерживающий протесты, также немного укрепился: с 16 до 16,5% и вышел на второе место.<br><br>А рейтинги кандидатов-центристов просели. Рейтинг бывшего премьера Эдуарда Филиппа опустился с 14 до 12%. Рейтинг кандидата от партии Макрона&nbsp;Габриэля Аттала упал до 5%. Представитель левоцентристских&nbsp;сил Рафаэль Глюксман набирает 13,5%.<br><br>Во втором туре, по прогнозам, Ле Пен уверенно побеждает всех возможных оппонентов. Лидер «Национального объединения» набирает&nbsp;68% против Меленшона, 56% против Филиппа, 57% против Глюксмана, 58% против Атталя и 59% против Франсуа Олланда.<br><br>Подробнее о погромах во Франции и связи с выборами мы писали здесь.<br><br><a href=\"https://stranaua.media/\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Сайт \"Страна</a>\" | <a href=\"https://x.com/stranaua?s=21\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">X/Twitter</a> | <a href=\"http://t.me/strana_send_bot\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Прислать новость/фото/видео</a> | <a href=\"https://t.me/@strana_ad_bot\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Реклама на канале</a> | <a href=\"https://t.me/stranaua/137068\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Помощь</a>",
+            "string": "Марин Ле Пен, и так лидировавшая в опросах накануне выборов, еще сильнее укрепляет свои позиции на фоне беспорядков во Франции, сообщает Bild.\n\nЗа три недели с конца сентября рейтинг правого политика, выступающего за прекращение помощи Украине, вырос с 32% до 36%.\n\nЛидер радикальных левых Жан-Люк Меленшон, поддерживающий протесты, также немного укрепился: с 16 до 16,5% и вышел на второе место.\n\nА рейтинги кандидатов-центристов просели. Рейтинг бывшего премьера Эдуарда Филиппа опустился с 14 до 12%. Рейтинг кандидата от партии Макрона Габриэля Аттала упал до 5%. Представитель левоцентристских сил Рафаэль Глюксман набирает 13,5%.\n\nВо втором туре, по прогнозам, Ле Пен уверенно побеждает всех возможных оппонентов. Лидер «Национального объединения» набирает 68% против Меленшона, 56% против Филиппа, 57% против Глюксмана, 58% против Атталя и 59% против Франсуа Олланда.\n\nПодробнее о погромах во Франции и связи с выборами мы писали здесь.\n\nСайт \"Страна\" | X/Twitter | Прислать новость/фото/видео | Реклама на канале | Помощь"
+          }
+        },
+        "footer": {
+          "author": null,
+          "date": {
+            "string": "2026-10-22T14:00:16+00:00",
+            "unix": 1792677616
+          },
+          "edited": false,
+          "views": "79.2K"
+        },
+        "forwarded": null,
+        "id": 252466,
+        "view": "eyJjIjotMTA5MjQxMzgzNCwicCI6MjUyNDY2LCJ0IjoxNzkyNzA3ODYyLCJoIjoiMWQ2ZTExZGYzNzYxOTFjNTA5In0"
+      },
+      {
+        "content": {
+          "inline": null,
+          "media": null,
+          "poll": null,
+          "preview_link": {
+            "description": {
+              "html": "Повреждения железнодорожного полотна и платформы на станции метро «Черниговская» в Киеве.<br><br>КГГА сообщает о запуске дополнительных автобусов через «Черниговскую» и «Лесную» для организации движения.",
+              "string": "Повреждения железнодорожного полотна и платформы на станции метро «Черниговская» в Киеве.КГГА сообщает о запуске дополнительных автобусов через «Черниговскую» и «Лесную» для организации движения."
+            },
+            "site_name": "Telegram",
+            "thumb": null,
+            "title": "Политика Страны",
+            "url": "https://t.me/stranaua/252056"
+          },
+          "reacts": null,
+          "reply": null,
+          "text": {
+            "entities": [
+              {
+                "language": null,
+                "length": 7,
+                "offset": 59,
+                "type": "text_link",
+                "url": "https://t.me/stranaua/252056"
+              },
+              {
+                "language": null,
+                "length": 12,
+                "offset": 164,
+                "type": "text_link",
+                "url": "https://stranaua.media/"
+              },
+              {
+                "language": null,
+                "length": 9,
+                "offset": 180,
+                "type": "text_link",
+                "url": "https://x.com/stranaua?s=21"
+              },
+              {
+                "language": null,
+                "length": 27,
+                "offset": 192,
+                "type": "text_link",
+                "url": "http://t.me/strana_send_bot"
+              },
+              {
+                "language": null,
+                "length": 17,
+                "offset": 222,
+                "type": "text_link",
+                "url": "https://t.me/@strana_ad_bot"
+              },
+              {
+                "language": null,
+                "length": 6,
+                "offset": 242,
+                "type": "text_link",
+                "url": "https://t.me/stranaua/137068"
+              }
+            ],
+            "html": "Станция киевского метро «Черниговская» уже открылась после <a href=\"https://t.me/stranaua/252056\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">прилета</a> 19 октября, сообщает КГВА.<br><br>Станцию планировали открыть завтра. <br><br>Пока открыт только один вход.<br><br><a href=\"https://stranaua.media/\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Сайт \"Страна</a>\" | <a href=\"https://x.com/stranaua?s=21\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">X/Twitter</a> | <a href=\"http://t.me/strana_send_bot\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Прислать новость/фото/видео</a> | <a href=\"https://t.me/@strana_ad_bot\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Реклама на канале</a> | <a href=\"https://t.me/stranaua/137068\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Помощь</a>",
+            "string": "Станция киевского метро «Черниговская» уже открылась после прилета 19 октября, сообщает КГВА.\n\nСтанцию планировали открыть завтра. \n\nПока открыт только один вход.\n\nСайт \"Страна\" | X/Twitter | Прислать новость/фото/видео | Реклама на канале | Помощь"
+          }
+        },
+        "footer": {
+          "author": null,
+          "date": {
+            "string": "2026-10-22T14:12:05+00:00",
+            "unix": 1792678325
+          },
+          "edited": false,
+          "views": "78.1K"
+        },
+        "forwarded": null,
+        "id": 252467,
+        "view": "eyJjIjotMTA5MjQxMzgzNCwicCI6MjUyNDY3LCJ0IjoxNzkyNzA3ODYyLCJoIjoiNTQyMjNlMDZmMWFlN2Q2YWM2In0"
+      },
+      {
+        "content": {
+          "inline": null,
+          "media": null,
+          "poll": null,
+          "preview_link": null,
+          "reacts": null,
+          "reply": null,
+          "text": {
+            "entities": null,
+            "html": "У 15 членов Центральной избирательной комиссии Украины завершился семилетний срок полномочий. Верховная Рада проголосовала за их назначение 4 октября 2019 года. <br><br>Стоит отметить, что сегодня эти 15 составляют весь состав Центризбиркома. По закону ЦИК должен состоять из 17 членов. Два других члена комиссии Юрий Фрицкий и Юрий Буглак, назначенные парламентом вместе с другими, завершили работу соответственно в 2022-м и 2024 годах.<br><br>Согласно сайту ЦИК, в состав комиссии в данный момент входят ее председатель Олег Диденко, его заместители Сергей Дубовик и Виталий Плукар, секретарь Елена Гатауллина, а также Оксана Боярчук, Андрей Гевко, Виктория Глущенко, Виталий Грень, Андрей Евстигнеев, Ирина Ефремова, Александра Кармаза, Павел Любченко, Юрий Мирошниченко, Владимир Перепелюк и Сергей Постивой.<br><br>При этом окончание срока полномочий не означает, что члены Центризбиркома обязаны немедленно прекратить работу. <br><br>Нормы, запрещающей им участвовать в заседаниях ЦИК - основном виде деятельности комиссии, чьи решения носят коллегиальный характер, - больше нет в законодательстве. Ее отменили еще перед президентскими выборами 2014 года. <br><br>Полномочия членов Центризбиркома будут действительными до принятия парламентом решения об их увольнении. <br><br>Прогнозы о том, как долго еще проработает этот состав, расходятся. По данным одних источников, поиск новых членов ведется. По неподтвержденным данным, в Офисе президента даже недавно состоялось техническое совещание на тему перезагрузки ЦИК.<br><br>Однако источники в парламенте опровергают сам факт подготовительной работы, так как “нет решения о проведении выборов” и “вообще это не актуально сейчас”. “Никто запускать избирательный процесс в ближайшее время не собирается. Поэтому менять ЦИК нет смысла. Раньше главным сторонником замены состава был Ермак (бывший глава ОП Андрей Ермак - Ред.), потому что среди членов он видел четырех людей Богдана (бывший глава ОП Андрей Богдан - Ред.) На главу ЦИК хотели Аллу Басалаеву  (уже была членом ЦИК по квоте депутатской группы “Возрождение” - Ред.). Но она уже четвертый год возглавляет Государственную аудиторскую службу, занимается аудитом средств программы Ukraine Facility. Ей и не нужен этот Центризбирком. Да и выдергивать ее оттуда нет смысла, потому что некем заменить. Людей не хватает и на более необходимые задачи, чем на не работающий в принципе ЦИК. В общем сейчас этим никто заниматься не хочет и не будет. Давид (лидер фракции СН Давид Арахамия - Ред.) приводит еще один аргумент, почему не надо сейчас трогать ЦИК. Как только начнется какое-то движение, посыплются вопросы, мол, означает ли это, что мы готовимся к выборам, когда они и какие и т.д. На фоне заявлений Трампа, что нужно менять Зеленского, нам это совсем не нужно. Плюс европейские партнеры - прежде всего, послы, ненавязчиво намекают, что с нынешними членами есть хорошие отношения, и они наработали большой опыт и многое сделали на пути к первым послевоенным выборам”, - говорит народный депутат, близкий к руководству фракции “Слуги народа”.<br><br>Народный депутат, состоящий в парламентском комитете по вопросам организации государственной власти, местного самоуправления, регионального развития и градостроения, который занимается избирательной тематикой, также не верит, что замена состава ЦИК состоится в ближайшее время. “Слухи ходят разные, но в последнее время я ничего об этом не слышал. Вообще вы помните, что у нас был состав ЦИК, который пересидел свой срок на четыре года? Как будет в этот раз, я не знаю. Как вариант могут заполнить квоты тех, чьи полномочия окончились ранее по разным причинам (пенсия и т.д.)” - говорит источник.<br><br>Напомним, предыдущий состав ЦИК проработал после истечения срока полномочий в 2014 году еще примерно четыре года - до сентября 2018 года.",
+            "string": "У 15 членов Центральной избирательной комиссии Украины завершился семилетний срок полномочий. Верховная Рада проголосовала за их назначение 4 октября 2019 года. \n\nСтоит отметить, что сегодня эти 15 составляют весь состав Центризбиркома. По закону ЦИК должен состоять из 17 членов. Два других члена комиссии Юрий Фрицкий и Юрий Буглак, назначенные парламентом вместе с другими, завершили работу соответственно в 2022-м и 2024 годах.\n\nСогласно сайту ЦИК, в состав комиссии в данный момент входят ее председатель Олег Диденко, его заместители Сергей Дубовик и Виталий Плукар, секретарь Елена Гатауллина, а также Оксана Боярчук, Андрей Гевко, Виктория Глущенко, Виталий Грень, Андрей Евстигнеев, Ирина Ефремова, Александра Кармаза, Павел Любченко, Юрий Мирошниченко, Владимир Перепелюк и Сергей Постивой.\n\nПри этом окончание срока полномочий не означает, что члены Центризбиркома обязаны немедленно прекратить работу. \n\nНормы, запрещающей им участвовать в заседаниях ЦИК - основном виде деятельности комиссии, чьи решения носят коллегиальный характер, - больше нет в законодательстве. Ее отменили еще перед президентскими выборами 2014 года. \n\nПолномочия членов Центризбиркома будут действительными до принятия парламентом решения об их увольнении. \n\nПрогнозы о том, как долго еще проработает этот состав, расходятся. По данным одних источников, поиск новых членов ведется. По неподтвержденным данным, в Офисе президента даже недавно состоялось техническое совещание на тему перезагрузки ЦИК.\n\nОднако источники в парламенте опровергают сам факт подготовительной работы, так как “нет решения о проведении выборов” и “вообще это не актуально сейчас”. “Никто запускать избирательный процесс в ближайшее время не собирается. Поэтому менять ЦИК нет смысла. Раньше главным сторонником замены состава был Ермак (бывший глава ОП Андрей Ермак - Ред.), потому что среди членов он видел четырех людей Богдана (бывший глава ОП Андрей Богдан - Ред.) На главу ЦИК хотели Аллу Басалаеву  (уже была членом ЦИК по квоте депутатской группы “Возрождение” - Ред.). Но она уже четвертый год возглавляет Государственную аудиторскую службу, занимается аудитом средств программы Ukraine Facility. Ей и не нужен этот Центризбирком. Да и выдергивать ее оттуда нет смысла, потому что некем заменить. Людей не хватает и на более необходимые задачи, чем на не работающий в принципе ЦИК. В общем сейчас этим никто заниматься не хочет и не будет. Давид (лидер фракции СН Давид Арахамия - Ред.) приводит еще один аргумент, почему не надо сейчас трогать ЦИК. Как только начнется какое-то движение, посыплются вопросы, мол, означает ли это, что мы готовимся к выборам, когда они и какие и т.д. На фоне заявлений Трампа, что нужно менять Зеленского, нам это совсем не нужно. Плюс европейские партнеры - прежде всего, послы, ненавязчиво намекают, что с нынешними членами есть хорошие отношения, и они наработали большой опыт и многое сделали на пути к первым послевоенным выборам”, - говорит народный депутат, близкий к руководству фракции “Слуги народа”.\n\nНародный депутат, состоящий в парламентском комитете по вопросам организации государственной власти, местного самоуправления, регионального развития и градостроения, который занимается избирательной тематикой, также не верит, что замена состава ЦИК состоится в ближайшее время. “Слухи ходят разные, но в последнее время я ничего об этом не слышал. Вообще вы помните, что у нас был состав ЦИК, который пересидел свой срок на четыре года? Как будет в этот раз, я не знаю. Как вариант могут заполнить квоты тех, чьи полномочия окончились ранее по разным причинам (пенсия и т.д.)” - говорит источник.\n\nНапомним, предыдущий состав ЦИК проработал после истечения срока полномочий в 2014 году еще примерно четыре года - до сентября 2018 года."
+          }
+        },
+        "footer": {
+          "author": null,
+          "date": {
+            "string": "2026-10-22T14:25:45+00:00",
+            "unix": 1792679145
+          },
+          "edited": true,
+          "views": "77.8K"
+        },
+        "forwarded": null,
+        "id": 252468,
+        "view": "eyJjIjotMTA5MjQxMzgzNCwicCI6MjUyNDY4LCJ0IjoxNzkyNzA3ODYyLCJoIjoiMGE3NzM5OTJjZjU3NWQ4ZjM3In0"
+      },
+      {
+        "content": {
+          "inline": null,
+          "media": [
+            {
+              "available": null,
+              "duration": {
+                "formatted": "0:21",
+                "raw": 21
+              },
+              "thumb": "https://cdn4.telesco.pe/file/cMoAkr8kzBTf-eTAYsaoTV3DllQprP1gXRkz6OS6KxblKaXnjq9Grd9CRHYsS89rzashpB8-lOASdlhVRFqnAb9uLcnDX4MW7-s45ZqD6iTQeF0PxSQQxcgi0285D2SYPgQNatfBctK_DwpxnmzyqM9Jpm9kux_E9i54iSUURnFJYZQ1BQrVpKpylv-1oRaLJc0UPB7AoobyYe2L56svYNzj7WChswTvMCFtaWaUrn1mKzQek2CJeAJEs-yO4oCRtXjNeQI5jSxcy0pN-ZJc9CS7lGeWTx1cKatuimtJe2zjg2XXcbg1u6Dq7O7s6IbOWoy0C12-Ja3omkq_-RI_AA",
+              "type": "video",
+              "url": "https://cdn4.telesco.pe/file/db8b5e2996.mp4?token=IKgCh7xYn4O6bk3Cs53rJfrfgQ6yu4QqhxG9mBszfrpkGTs8uhVZ9zZ6GgTZPIxqve8F3dvq2gJBe-c4puBalj8u8V2nooj-5cEGHqZshEK6DwCD-28LniaexAH1sxgVrFu41NpQV9y74cNBA6tePwPCWPhLP4rBXWnJ5SpcOZyL64MPOTyFqg6MAXJQzaDeyOW38qYQVlGhVWZnVNpGUpyxxpUpBTCBqysYjZvDSJY1NnS1mmir_MLjiQaSL-CaoOkptWpuviWUfzNvF3u5S9_xgPh7amVy4vQFAYXIXoLfpU3h9XsM7niZHHdINGUNxBdtNGmJWD0LUbu18dcznA",
+              "waves": null
+            }
+          ],
+          "poll": null,
+          "preview_link": null,
+          "reacts": null,
+          "reply": null,
+          "text": {
+            "entities": [
+              {
+                "language": null,
+                "length": 7,
+                "offset": 363,
+                "type": "text_link",
+                "url": "https://t.me/stranaua/252318"
+              },
+              {
+                "language": null,
+                "length": 12,
+                "offset": 458,
+                "type": "text_link",
+                "url": "https://stranaua.media/"
+              },
+              {
+                "language": null,
+                "length": 9,
+                "offset": 474,
+                "type": "text_link",
+                "url": "https://x.com/stranaua?s=21"
+              },
+              {
+                "language": null,
+                "length": 27,
+                "offset": 486,
+                "type": "text_link",
+                "url": "http://t.me/strana_send_bot"
+              },
+              {
+                "language": null,
+                "length": 17,
+                "offset": 516,
+                "type": "text_link",
+                "url": "https://t.me/@strana_ad_bot"
+              },
+              {
+                "language": null,
+                "length": 6,
+                "offset": 536,
+                "type": "text_link",
+                "url": "https://t.me/stranaua/137068"
+              }
+            ],
+            "html": "Трамп увязал невведение им «адских санкций» против РФ с освобождением ею вчера американца Стивена Хаббарда.<br><br>«Все считают, что я поступил правильно, потому что нам удалось вернуть замечательного человека. Понимаете, у нас есть человек, которого можно назвать заложником, пленником или как-то еще и он только что приземлился», - заявил президент США.<br><br>Ранее Трамп <a href=\"https://t.me/stranaua/252318\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">говорил</a>, что Путин в одностороннем порядке освободил Хаббарда «из уважения» к президенту США.<br><br><a href=\"https://stranaua.media/\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Сайт \"Страна</a>\" | <a href=\"https://x.com/stranaua?s=21\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">X/Twitter</a> | <a href=\"http://t.me/strana_send_bot\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Прислать новость/фото/видео</a> | <a href=\"https://t.me/@strana_ad_bot\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Реклама на канале</a> | <a href=\"https://t.me/stranaua/137068\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Помощь</a>",
+            "string": "Трамп увязал невведение им «адских санкций» против РФ с освобождением ею вчера американца Стивена Хаббарда.\n\n«Все считают, что я поступил правильно, потому что нам удалось вернуть замечательного человека. Понимаете, у нас есть человек, которого можно назвать заложником, пленником или как-то еще и он только что приземлился», - заявил президент США.\n\nРанее Трамп говорил, что Путин в одностороннем порядке освободил Хаббарда «из уважения» к президенту США.\n\nСайт \"Страна\" | X/Twitter | Прислать новость/фото/видео | Реклама на канале | Помощь"
+          }
+        },
+        "footer": {
+          "author": null,
+          "date": {
+            "string": "2026-10-22T14:40:23+00:00",
+            "unix": 1792680023
+          },
+          "edited": false,
+          "views": "80.7K"
+        },
+        "forwarded": null,
+        "id": 252469,
+        "view": "eyJjIjotMTA5MjQxMzgzNCwicCI6MjUyNDY5LCJ0IjoxNzkyNzA3ODYyLCJoIjoiMjY2ZDgxZDI4NmI1YmE5MTFkIn0"
+      },
+      {
+        "content": {
+          "inline": null,
+          "media": [
+            {
+              "available": false,
+              "duration": {
+                "formatted": "0:25",
+                "raw": 25
+              },
+              "thumb": "https://cdn4.telesco.pe/file/fiWhQvwtFAbax8LCyEqm7z4y8Ia4FBtZfO_Bq_qy5vgS-LPFE8GRxlQqTrF5KD4cqA-5Wm7FqjfTpg-xqM9kzPTX4ErlxXmG1PQ1A1ubBdfs7xHyaMk0PV4uNUOvOZK1cVk2v6VrmnABUyeorPYjhfE0cvMIWEfBGZStLiDNHvt4RSmERAYFAKCkSgeGjkkIesu2bAwwiHvOPBKQVrZV2bCzbaiyW9N8kfTE4M-fCommuyHm0eAJwLdsw7hA7H3PiP9C6rE5Dg380kIsj2q3lb-LIFGS5pBwU4bHwYI-S99idp7fciAQBWCNMPnugZ7uowXBbZ6__5meRJ_dEw4l1A",
+              "type": "video",
+              "url": null,
+              "waves": null
+            }
+          ],
+          "poll": null,
+          "preview_link": null,
+          "reacts": null,
+          "reply": null,
+          "text": {
+            "entities": [
+              {
+                "language": null,
+                "length": 8,
+                "offset": 21,
+                "type": "text_link",
+                "url": "https://t.me/stranaua/252455"
+              }
+            ],
+            "html": "В Харькове днем дрон <a href=\"https://t.me/stranaua/252455\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">атаковал</a> пассажирский электропоезд: возник пожар в главном вагоне, пострадавших нет, сообщает ГСЧС.",
+            "string": "В Харькове днем дрон атаковал пассажирский электропоезд: возник пожар в главном вагоне, пострадавших нет, сообщает ГСЧС."
+          }
+        },
+        "footer": {
+          "author": null,
+          "date": {
+            "string": "2026-10-22T14:45:01+00:00",
+            "unix": 1792680301
+          },
+          "edited": false,
+          "views": "79.5K"
+        },
+        "forwarded": null,
+        "id": 252470,
+        "view": "eyJjIjotMTA5MjQxMzgzNCwicCI6MjUyNDcwLCJ0IjoxNzkyNzA3ODYyLCJoIjoiZjI4NDhkYTkxM2E5M2IyMzRmIn0"
+      },
+      {
+        "content": {
+          "inline": null,
+          "media": [
+            {
+              "available": null,
+              "duration": null,
+              "thumb": null,
+              "type": "image",
+              "url": "https://cdn4.telesco.pe/file/pLopYZdG8pL60EeXC-633knvG1wf-iVswNEMMjaaNHrTFB9TNxI0UCKd7W4lmKM1bzjldkxQlJURdMkxH46ebR80El4LedOBX4XmRjgyIk9yT5ZnVpD9561RrcXy64v7MI1HuT_0QfCCDR5H49ecbONP0k9yiTjvqarsJs7wvcqDT-up52vLwRRoX4U2lJdPzaXdxXxqRRYyE_59-sF5brRSZOJ43e2NugWMw17Ij5l8gDYByWmt-2DnCpI1mhhZq9ZjDiS3pDxSvDplyXbGDM8l2cpPLbUCE2Gv4besb_Hp8B0ALD--snJM5pKHKiC9G7H_I-sA6dFNsVZAXesJnQ.jpg",
+              "waves": null
+            }
+          ],
+          "poll": null,
+          "preview_link": null,
+          "reacts": null,
+          "reply": null,
+          "text": {
+            "entities": [
+              {
+                "language": null,
+                "length": 12,
+                "offset": 274,
+                "type": "text_link",
+                "url": "https://stranaua.media/"
+              },
+              {
+                "language": null,
+                "length": 9,
+                "offset": 290,
+                "type": "text_link",
+                "url": "https://x.com/stranaua?s=21"
+              },
+              {
+                "language": null,
+                "length": 27,
+                "offset": 302,
+                "type": "text_link",
+                "url": "http://t.me/strana_send_bot"
+              },
+              {
+                "language": null,
+                "length": 17,
+                "offset": 332,
+                "type": "text_link",
+                "url": "https://t.me/@strana_ad_bot"
+              },
+              {
+                "language": null,
+                "length": 6,
+                "offset": 352,
+                "type": "text_link",
+                "url": "https://t.me/stranaua/137068"
+              }
+            ],
+            "html": "Биржевая цена газа в Европе превысила $1050 за тысячу кубометров впервые с декабря 2022 года, пишет агентство Anadolu.<br><br>Оно отмечает, что перебои в работе Ормузского пролива и более низкий, чем обычно, уровень запасов усилили опасения по поводу поставок в преддверии зимы.<br><br><a href=\"https://stranaua.media/\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Сайт \"Страна</a>\" | <a href=\"https://x.com/stranaua?s=21\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">X/Twitter</a> | <a href=\"http://t.me/strana_send_bot\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Прислать новость/фото/видео</a> | <a href=\"https://t.me/@strana_ad_bot\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Реклама на канале</a> | <a href=\"https://t.me/stranaua/137068\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Помощь</a>",
+            "string": "Биржевая цена газа в Европе превысила $1050 за тысячу кубометров впервые с декабря 2022 года, пишет агентство Anadolu.\n\nОно отмечает, что перебои в работе Ормузского пролива и более низкий, чем обычно, уровень запасов усилили опасения по поводу поставок в преддверии зимы.\n\nСайт \"Страна\" | X/Twitter | Прислать новость/фото/видео | Реклама на канале | Помощь"
+          }
+        },
+        "footer": {
+          "author": null,
+          "date": {
+            "string": "2026-10-22T15:10:51+00:00",
+            "unix": 1792681851
+          },
+          "edited": false,
+          "views": "79.5K"
+        },
+        "forwarded": null,
+        "id": 252471,
+        "view": "eyJjIjotMTA5MjQxMzgzNCwicCI6MjUyNDcxLCJ0IjoxNzkyNzA3ODYyLCJoIjoiNGEwZGQzMzBkMmM1ODU2ODAzIn0"
+      },
+      {
+        "content": {
+          "inline": null,
+          "media": [
+            {
+              "available": null,
+              "duration": null,
+              "thumb": null,
+              "type": "image",
+              "url": "https://cdn4.telesco.pe/file/AnReW8inaQYZ6GgFgKGj04Ymn-i5iLt3uY2SI0dZitCGI-twgPNpqqqol8NfIUQRf_AMmJI8qRXJIuzNcYDrUqUeA4imG1hdGNoRjFpRkXQh43cTJWMna6-hHIkEo8jQPONFVpxzazgQ1VQqlXceJ7S78p8p_jqFOaZ4kcW_1PsRobMp-TL1l6WVoPkzYdlUOX16Nehvl-aEVkysurb3cbL4Atn03LyM0n_hJ-Yn5e2dUKbRuFzQA8_JPr1M43FIBshObeoXEREGnfck1VCQe07atgBS2XFq9JeQuPfTDLzqyoVStHgKqp0Rw75bNd7NqVMUA3sh2Vr2uVNeGzLlgw.jpg",
+              "waves": null
+            }
+          ],
+          "poll": null,
+          "preview_link": null,
+          "reacts": null,
+          "reply": null,
+          "text": {
+            "entities": null,
+            "html": "Над Житомиром большой столб дыма после прилета, сообщают местные паблики.<br><br>ОВА сообщает о прилете по частному сектору и девяти пострадавших.",
+            "string": "Над Житомиром большой столб дыма после прилета, сообщают местные паблики.\n\nОВА сообщает о прилете по частному сектору и девяти пострадавших."
+          }
+        },
+        "footer": {
+          "author": null,
+          "date": {
+            "string": "2026-10-22T15:16:02+00:00",
+            "unix": 1792682162
+          },
+          "edited": true,
+          "views": "78K"
+        },
+        "forwarded": null,
+        "id": 252472,
+        "view": "eyJjIjotMTA5MjQxMzgzNCwicCI6MjUyNDcyLCJ0IjoxNzkyNzA3ODYyLCJoIjoiNDEzZDNjOTgzNmQ1OTkxY2FmIn0"
+      },
+      {
+        "content": {
+          "inline": null,
+          "media": [
+            {
+              "available": null,
+              "duration": null,
+              "thumb": null,
+              "type": "image",
+              "url": "https://cdn4.telesco.pe/file/WHICm6UTrm9syqo4PTCNSCVoCkWWWvfeJA3jm4Rr48XDJeFQQ7LHtHZsQyz2LJl0PB5vOoUYdY7Hvy1eBsrdgg4Iy8dNuqAVi6A_ZYilpwXUPaMf0T3Tj7c6Bi_yhIG2R8vYMKXdtpc42IEaFO4BcpjA-IgrxVy4uimADENqm5hNiZF65Ys5wJQB14pFgrBfjFcUIU9avhGMnJp5RaIVoXHhdHoxJgadAUNN2k_fJg7GxUJEA7DLV0GY_ttb7fk7D3NWPde4YvC_ifdJCnsp8TDU6oSaG2p6A8Lx7KNdDeN9m2oFMagBXHuFB1T3vd3NkmhaMp2Pg_C6HopPY94LNg.jpg",
+              "waves": null
+            }
+          ],
+          "poll": null,
+          "preview_link": null,
+          "reacts": null,
+          "reply": null,
+          "text": {
+            "entities": [
+              {
+                "language": null,
+                "length": 12,
+                "offset": 1332,
+                "type": "text_link",
+                "url": "https://stranaua.media/"
+              },
+              {
+                "language": null,
+                "length": 9,
+                "offset": 1348,
+                "type": "text_link",
+                "url": "https://x.com/stranaua?s=21"
+              },
+              {
+                "language": null,
+                "length": 27,
+                "offset": 1360,
+                "type": "text_link",
+                "url": "http://t.me/strana_send_bot"
+              },
+              {
+                "language": null,
+                "length": 17,
+                "offset": 1390,
+                "type": "text_link",
+                "url": "https://t.me/@strana_ad_bot"
+              },
+              {
+                "language": null,
+                "length": 6,
+                "offset": 1410,
+                "type": "text_link",
+                "url": "https://t.me/stranaua/137068"
+              }
+            ],
+            "html": "Армии Украины и РФ все чаще воюют под землей, используя старые советские трубопроводы, пишет The Wall Street Journal.<br><br>\"Несмотря на опасность и всепроникающее чувство клаустрофобии, украинские солдаты говорили своим офицерам, что зачастую предпочитают эти подземные бои войне на поверхности, где дроны представляют постоянную угрозу\", - говорится в статье.<br><br>Издание сравнивает это с войнами против ХАМАС и во Вьетнаме, где также активно использовались подземные туннели.<br><br>По данным украинских военных, РФ готовит целые подразделения, специализирующиеся на подземных боевых действиях. Россияне используют подземные трубы, чтобы незаметно преодолевать километры, выходить в тыл ВСУ и запускать оттуда дроны. <br><br>Сначала украинские военные пытались уничтожать выходы из труб артиллерией и авиацией, но россияне просто проделывали новые отверстия. Тогда украинские бойцы начали полноценную войну под землёй.<br><br>Внутри труб диаметром около 1,2 метра россияне оборудовали пулемётные позиции, баррикады из мешков с песком и даже жилые помещения, где солдаты проводили месяцы. Украинцы отправляют туда наземные дроны со взрывчаткой и дистанционно управляемыми пулемётами. <br><br>В WSJ отмечают, что подобные бои могут распространиться и на другие участки фронта, а советские трубопроводные сети тянутся в том числе в сторону Польши и стран Балтии.<br><br><a href=\"https://stranaua.media/\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Сайт \"Страна</a>\" | <a href=\"https://x.com/stranaua?s=21\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">X/Twitter</a> | <a href=\"http://t.me/strana_send_bot\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Прислать новость/фото/видео</a> | <a href=\"https://t.me/@strana_ad_bot\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Реклама на канале</a> | <a href=\"https://t.me/stranaua/137068\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Помощь</a>",
+            "string": "Армии Украины и РФ все чаще воюют под землей, используя старые советские трубопроводы, пишет The Wall Street Journal.\n\n\"Несмотря на опасность и всепроникающее чувство клаустрофобии, украинские солдаты говорили своим офицерам, что зачастую предпочитают эти подземные бои войне на поверхности, где дроны представляют постоянную угрозу\", - говорится в статье.\n\nИздание сравнивает это с войнами против ХАМАС и во Вьетнаме, где также активно использовались подземные туннели.\n\nПо данным украинских военных, РФ готовит целые подразделения, специализирующиеся на подземных боевых действиях. Россияне используют подземные трубы, чтобы незаметно преодолевать километры, выходить в тыл ВСУ и запускать оттуда дроны. \n\nСначала украинские военные пытались уничтожать выходы из труб артиллерией и авиацией, но россияне просто проделывали новые отверстия. Тогда украинские бойцы начали полноценную войну под землёй.\n\nВнутри труб диаметром около 1,2 метра россияне оборудовали пулемётные позиции, баррикады из мешков с песком и даже жилые помещения, где солдаты проводили месяцы. Украинцы отправляют туда наземные дроны со взрывчаткой и дистанционно управляемыми пулемётами. \n\nВ WSJ отмечают, что подобные бои могут распространиться и на другие участки фронта, а советские трубопроводные сети тянутся в том числе в сторону Польши и стран Балтии.\n\nСайт \"Страна\" | X/Twitter | Прислать новость/фото/видео | Реклама на канале | Помощь"
+          }
+        },
+        "footer": {
+          "author": null,
+          "date": {
+            "string": "2026-10-22T15:21:01+00:00",
+            "unix": 1792682461
+          },
+          "edited": false,
+          "views": "79.7K"
+        },
+        "forwarded": null,
+        "id": 252473,
+        "view": "eyJjIjotMTA5MjQxMzgzNCwicCI6MjUyNDczLCJ0IjoxNzkyNzA3ODYyLCJoIjoiZTUyNjA3YWE0MjE1YjY2NWE0In0"
+      },
+      {
+        "content": {
+          "inline": null,
+          "media": [
+            {
+              "available": null,
+              "duration": null,
+              "thumb": null,
+              "type": "image",
+              "url": "https://cdn4.telesco.pe/file/WjN_d-vZqON07ObgvlaG_G9k08-uREd3SmkBufCxrKfLdy2cC0RnDFc8VHumKGbfuv8pLVneBRQjWAdsT7UEH5yQsHF5E0dj2L4ty13F-W-wxk3Q6J6UwOCB9Av1ImiX12_duFb4b9mXWl8v-Dum4yWL44ZFcnKTach1YKjap4qyQFBWTGAw2NL_DhpxDa649GlXbXadruohLeBFJFPvHLw0UVidhWQRhGeaq6gAvtn8AuwzLuoV_UOzlPVinQUJURF482EZV31yquu1kzXVLuYQ8iub3SWxDE1Rdb13D9Ajdzg10fthOh3trZm2rGc8WQmZisAwU3kmdghveHaeYg.jpg",
+              "waves": null
+            }
+          ],
+          "poll": null,
+          "preview_link": {
+            "description": {
+              "html": "Что изменилось в Украине 22 октября 2026 года",
+              "string": "Что изменилось в Украине 22 октября 2026 года"
+            },
+            "site_name": "stranaua.media",
+            "thumb": null,
+            "title": "Баллистический удар по Киеву, Зеленский критикует Трампа, готовилась ли Украина к вторжению РФ. Итоги",
+            "url": "https://stranaua.media/news/514108-itohi-1702-dnja-vojny-v-ukraine.html"
+          },
+          "reacts": null,
+          "reply": null,
+          "text": {
+            "entities": [
+              {
+                "language": null,
+                "length": 71,
+                "offset": 24,
+                "type": "url",
+                "url": null
+              }
+            ],
+            "html": "Анализируем итоги дня.<br><br><a href=\"https://stranaua.media/news/514108-itohi-1702-dnja-vojny-v-ukraine.html\" target=\"_blank\" rel=\"noopener\">https://stranaua.media/news/514108-itohi-1702-dnja-vojny-v-ukraine.html</a>",
+            "string": "Анализируем итоги дня.\n\nhttps://stranaua.media/news/514108-itohi-1702-dnja-vojny-v-ukraine.html"
+          }
+        },
+        "footer": {
+          "author": null,
+          "date": {
+            "string": "2026-10-22T15:40:16+00:00",
+            "unix": 1792683616
+          },
+          "edited": false,
+          "views": "79.5K"
+        },
+        "forwarded": null,
+        "id": 252474,
+        "view": "eyJjIjotMTA5MjQxMzgzNCwicCI6MjUyNDc0LCJ0IjoxNzkyNzA3ODYyLCJoIjoiZDAwOTAzMjFhNzliNWQ5OWQzIn0"
+      },
+      {
+        "content": {
+          "inline": null,
+          "media": null,
+          "poll": null,
+          "preview_link": null,
+          "reacts": null,
+          "reply": null,
+          "text": {
+            "entities": null,
+            "html": "Взрыв в Виннице.",
+            "string": "Взрыв в Виннице."
+          }
+        },
+        "footer": {
+          "author": null,
+          "date": {
+            "string": "2026-10-22T15:53:59+00:00",
+            "unix": 1792684439
+          },
+          "edited": false,
+          "views": "78.1K"
+        },
+        "forwarded": null,
+        "id": 252475,
+        "view": "eyJjIjotMTA5MjQxMzgzNCwicCI6MjUyNDc1LCJ0IjoxNzkyNzA3ODYyLCJoIjoiNGI4MDJlMzE5MDhlYzhhMDdhIn0"
+      },
+      {
+        "content": {
+          "inline": null,
+          "media": [
+            {
+              "available": null,
+              "duration": null,
+              "thumb": null,
+              "type": "image",
+              "url": "https://cdn4.telesco.pe/file/eJNmQKbUxrmXW97xa6LC6yDTxdQqGapzSGF8p4RC3dHGMyl-pgtoTHD2QiUlCYduVj4OVv2T6KZA_ZdXriB1Mi7edEXz1OO3VbTfzbqNfmDQ-8YaKbI6I00z8GXJ72a2UFRh69IVY5CiJsBz4H-e8xCvHU3vrNW4bNjt1zPC2g_nmY7sJ8Z7psxF87y6p9AJ_b4Pr1SHTqOa-uNje3FSTI8UBa93pePO2GbqJs7DwFAKBehCrmb_-rAFRWbc0vLkvFNINIsqXJ6GtxSFiTdR-U-IALE6p8M-or2BXgwD6sUGAXGD_vLXkkBKnQC3WGP4LfgZBq-tEckPzR8Ucm1Xqw.jpg",
+              "waves": null
+            }
+          ],
+          "poll": null,
+          "preview_link": null,
+          "reacts": null,
+          "reply": null,
+          "text": {
+            "entities": null,
+            "html": "Графики отключений завтра будут действовать в части регионов с 6 утра до полуночи – в объеме от 1 до 2 очередей, сообщает Укрэнерго.",
+            "string": "Графики отключений завтра будут действовать в части регионов с 6 утра до полуночи – в объеме от 1 до 2 очередей, сообщает Укрэнерго."
+          }
+        },
+        "footer": {
+          "author": null,
+          "date": {
+            "string": "2026-10-22T15:55:22+00:00",
+            "unix": 1792684522
+          },
+          "edited": false,
+          "views": "80.4K"
+        },
+        "forwarded": null,
+        "id": 252476,
+        "view": "eyJjIjotMTA5MjQxMzgzNCwicCI6MjUyNDc2LCJ0IjoxNzkyNzA3ODYyLCJoIjoiOWNmOWNiN2MzNzlkZWExYTZiIn0"
+      },
+      {
+        "content": {
+          "inline": null,
+          "media": null,
+          "poll": null,
+          "preview_link": null,
+          "reacts": null,
+          "reply": null,
+          "text": {
+            "entities": null,
+            "html": "В части Винницы исчезло электричество после прилета, сообщают местные паблики.",
+            "string": "В части Винницы исчезло электричество после прилета, сообщают местные паблики."
+          }
+        },
+        "footer": {
+          "author": null,
+          "date": {
+            "string": "2026-10-22T15:56:49+00:00",
+            "unix": 1792684609
+          },
+          "edited": false,
+          "views": "79.8K"
+        },
+        "forwarded": null,
+        "id": 252477,
+        "view": "eyJjIjotMTA5MjQxMzgzNCwicCI6MjUyNDc3LCJ0IjoxNzkyNzA3ODYyLCJoIjoiNzk0Yjk4M2MzZjVlNmZjMWMzIn0"
+      },
+      {
+        "content": {
+          "inline": null,
+          "media": null,
+          "poll": null,
+          "preview_link": null,
+          "reacts": null,
+          "reply": null,
+          "text": {
+            "entities": null,
+            "html": "У части Винницы после прилета также исчезла вода, пишут местные паблики.",
+            "string": "У части Винницы после прилета также исчезла вода, пишут местные паблики."
+          }
+        },
+        "footer": {
+          "author": null,
+          "date": {
+            "string": "2026-10-22T16:30:16+00:00",
+            "unix": 1792686616
+          },
+          "edited": false,
+          "views": "76.3K"
+        },
+        "forwarded": null,
+        "id": 252478,
+        "view": "eyJjIjotMTA5MjQxMzgzNCwicCI6MjUyNDc4LCJ0IjoxNzkyNzA3ODYyLCJoIjoiOTRlNzJjMmU2N2FjMWY3NTBmIn0"
+      },
+      {
+        "content": {
+          "inline": null,
+          "media": null,
+          "poll": null,
+          "preview_link": null,
+          "reacts": null,
+          "reply": null,
+          "text": {
+            "entities": null,
+            "html": "Взрыв в Николаеве, сообщает мэр Сенкевич.",
+            "string": "Взрыв в Николаеве, сообщает мэр Сенкевич."
+          }
+        },
+        "footer": {
+          "author": null,
+          "date": {
+            "string": "2026-10-22T16:36:06+00:00",
+            "unix": 1792686966
+          },
+          "edited": false,
+          "views": "75K"
+        },
+        "forwarded": null,
+        "id": 252479,
+        "view": "eyJjIjotMTA5MjQxMzgzNCwicCI6MjUyNDc5LCJ0IjoxNzkyNzA3ODYyLCJoIjoiMzM0NmExZDMyMWMzMDc0ZWNmIn0"
+      },
+      {
+        "content": {
+          "inline": null,
+          "media": [
+            {
+              "available": null,
+              "duration": null,
+              "thumb": null,
+              "type": "image",
+              "url": "https://cdn4.telesco.pe/file/GGiFObk8NGhBeCir2naFiffspKjWu41xhToBvJ2qCMlQpPpdushxKrFf7SFGn0Y4nyFoHS0uII2nR58D3dqM_f9sz_BHohTcotcP_4IaSEk_zeWTXVGBYJsB1fpCUhvCPDsfJVpIydYBZzVWQtCHWGd-czhqsOvQHgXLk81ltjoJdmD9E5RrJH-jXfpxrPovMilHtCz4a6E9r0XuTXhyD9mPnQnMSANP4R3LhohLJ0vyimVJ2bsKi_ZIGHQ5mhhDCBTRjkW4OW-JYD4EdtyShd8hgun2J-g4T_OMcUbAY27ZqF3EWHJl0m7JGyHXj5fUVr-iQR1-9YLOX01xTf_zmA.jpg",
+              "waves": null
+            }
+          ],
+          "poll": null,
+          "preview_link": null,
+          "reacts": null,
+          "reply": null,
+          "text": {
+            "entities": [
+              {
+                "language": null,
+                "length": 12,
+                "offset": 731,
+                "type": "text_link",
+                "url": "https://stranaua.media/"
+              },
+              {
+                "language": null,
+                "length": 9,
+                "offset": 747,
+                "type": "text_link",
+                "url": "https://x.com/stranaua?s=21"
+              },
+              {
+                "language": null,
+                "length": 27,
+                "offset": 759,
+                "type": "text_link",
+                "url": "http://t.me/strana_send_bot"
+              },
+              {
+                "language": null,
+                "length": 17,
+                "offset": 789,
+                "type": "text_link",
+                "url": "https://t.me/@strana_ad_bot"
+              },
+              {
+                "language": null,
+                "length": 6,
+                "offset": 809,
+                "type": "text_link",
+                "url": "https://t.me/stranaua/137068"
+              }
+            ],
+            "html": "Еврокомиссия подтвердила приостановку санкций на импорт меха российского соболя, сообщает Euractiv.<br><br>Это изменение было включено в последний пакет санкций Брюсселя против Москвы, согласованный на прошлой неделе.<br><br>\"Ряд членов ЕС заявили, что их промышленность зависит от этого очень специфического продукта, не имея альтернативных источников поставок. В результате все 27 стран единогласно договорились о введении целевых изъятий для шкурок соболя\",<br> – заявил евродепутат Сикел.<br><br>Европейская комиссия заявила, что исключение необходимо, поскольку Россия доминирует в мировой торговле соболями, оставляя европейским производителям мало альтернативных поставщиков.<br><br>Сообщается, что инициаторами отмены санкций стали Италия и Греция.<br><br><a href=\"https://stranaua.media/\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Сайт \"Страна</a>\" | <a href=\"https://x.com/stranaua?s=21\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">X/Twitter</a> | <a href=\"http://t.me/strana_send_bot\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Прислать новость/фото/видео</a> | <a href=\"https://t.me/@strana_ad_bot\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Реклама на канале</a> | <a href=\"https://t.me/stranaua/137068\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Помощь</a>",
+            "string": "Еврокомиссия подтвердила приостановку санкций на импорт меха российского соболя, сообщает Euractiv.\n\nЭто изменение было включено в последний пакет санкций Брюсселя против Москвы, согласованный на прошлой неделе.\n\n\"Ряд членов ЕС заявили, что их промышленность зависит от этого очень специфического продукта, не имея альтернативных источников поставок. В результате все 27 стран единогласно договорились о введении целевых изъятий для шкурок соболя\",\n – заявил евродепутат Сикел.\n\nЕвропейская комиссия заявила, что исключение необходимо, поскольку Россия доминирует в мировой торговле соболями, оставляя европейским производителям мало альтернативных поставщиков.\n\nСообщается, что инициаторами отмены санкций стали Италия и Греция.\n\nСайт \"Страна\" | X/Twitter | Прислать новость/фото/видео | Реклама на канале | Помощь"
+          }
+        },
+        "footer": {
+          "author": null,
+          "date": {
+            "string": "2026-10-22T16:52:44+00:00",
+            "unix": 1792687964
+          },
+          "edited": false,
+          "views": "77.2K"
+        },
+        "forwarded": null,
+        "id": 252480,
+        "view": "eyJjIjotMTA5MjQxMzgzNCwicCI6MjUyNDgwLCJ0IjoxNzkyNzA3ODYyLCJoIjoiOWQyNmU4Y2IxMDk2MDQzY2M4In0"
+      },
+      {
+        "content": {
+          "inline": null,
+          "media": null,
+          "poll": null,
+          "preview_link": null,
+          "reacts": null,
+          "reply": null,
+          "text": {
+            "entities": null,
+            "html": "Взрыв в Днепре.",
+            "string": "Взрыв в Днепре."
+          }
+        },
+        "footer": {
+          "author": null,
+          "date": {
+            "string": "2026-10-22T16:54:45+00:00",
+            "unix": 1792688085
+          },
+          "edited": false,
+          "views": "73.6K"
+        },
+        "forwarded": null,
+        "id": 252481,
+        "view": "eyJjIjotMTA5MjQxMzgzNCwicCI6MjUyNDgxLCJ0IjoxNzkyNzA3ODYyLCJoIjoiMDQ3MmI1ZTYwYWEyZjk5NDhhIn0"
+      },
+      {
+        "content": {
+          "inline": null,
+          "media": null,
+          "poll": null,
+          "preview_link": null,
+          "reacts": null,
+          "reply": null,
+          "text": {
+            "entities": null,
+            "html": "Также взрыв в Запорожье.",
+            "string": "Также взрыв в Запорожье."
+          }
+        },
+        "footer": {
+          "author": null,
+          "date": {
+            "string": "2026-10-22T17:00:58+00:00",
+            "unix": 1792688458
+          },
+          "edited": false,
+          "views": "72.1K"
+        },
+        "forwarded": null,
+        "id": 252482,
+        "view": "eyJjIjotMTA5MjQxMzgzNCwicCI6MjUyNDgyLCJ0IjoxNzkyNzA3ODYyLCJoIjoiMDRhMDIzZDE4Y2QxZDA0NzUwIn0"
+      }
+    ]
+  },
+  "status": 200
+}
