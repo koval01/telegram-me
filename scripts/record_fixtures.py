@@ -1,7 +1,7 @@
 """Record real t.me responses as offline test fixtures.
 
 Usage:
-    python scripts/record_fixtures.py
+    uv run python scripts/record_fixtures.py
 
 Writes gzipped raw upstream responses to tests/fixtures/telegram/ together with
 manifest.json, which the snapshot tests use to mock t.me via respx.
@@ -12,17 +12,13 @@ regenerate snapshots with UPDATE_SNAPSHOTS=1 pytest and review the diff.
 import asyncio
 import gzip
 import json
-import sys
 from pathlib import Path
 
 import httpx
 
-ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT))
+from telegram_me.telegram.request import TELEGRAM_HEADERS
 
-from app.telegram.request import TELEGRAM_HEADERS  # noqa: E402
-
-FIXTURES_DIR = ROOT / "tests" / "fixtures" / "telegram"
+FIXTURES_DIR = Path(__file__).resolve().parents[1] / "tests" / "fixtures" / "telegram"
 
 # Channels chosen to cover as many post shapes as possible
 # (media, replies, forwards, reactions, polls, link previews, inline buttons).

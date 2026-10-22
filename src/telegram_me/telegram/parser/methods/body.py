@@ -1,0 +1,83 @@
+"""Body module"""
+
+import json
+
+from telegram_me.telegram.exceptions import TelegramNotFoundError
+from telegram_me.telegram.parser.parser import Parser
+from telegram_me.telegram.parser.types.post import Post
+from telegram_me.telegram.parser.methods.utils import Utils
+
+
+class Body(Parser):
+    """
+    A class for extracting content from the body.
+
+    Attributes:
+        soup (LexborHTMLParser): An instance of LexborHTMLParser for parsing HTML content.
+    """
+
+    def __init__(self, body: str) -> None:
+        """
+        Initializes the Body object.
+
+        Args:
+            body (str): The HTML body content.
+        """
+        Parser.__init__(self, body)
+
+    def get(self, selector: int | None = None) -> dict[str, dict]:
+        """
+        Extracts relevant information from the HTML body.
+
+        Args:
+            selector (int | None): ID message for select one.
+
+        Returns:
+            Dict[str, Dict[str, Dict[str, str]]]: A dictionary containing extracted content.
+        """
+        username_node = self.soup.css_first(".tgme_channel_info_header_username>a")
+        title_node = self.soup.css_first(".tgme_channel_info_header_title>span")
+        if not username_node or not title_node:
+            raise TelegramNotFoundError("Requested Telegram resource was not found")
+
+        description = self.get_meta("property", "og:description")
+        return {
+            "channel": {
+                "username": username_node.text()[1:],
+                "title": {
+                    "string": self.get_meta("property", "og:title"),
+                    "html": Utils.get_text_html(
+                        title_node,
+                        "span",
+                    ),
+                },
+                "description": (
+                    {
+                        "string": description,
+                        "html": Utils.get_text_html(
+                            self.soup.css_first(
+                                ".tgme_channel_info_description"
+                            )
+                        ),
+                    }
+                    if description
+                    else None
+                ),
+                "avatar": self.get_meta("property", "og:image"),
+                "counters": self.get_counters(
+                    self.soup.css(
+                        ".tgme_channel_info_counters>.tgme_channel_info_counter"
+                    )
+                ),
+                "labels": self.get_labels(),
+            },
+            "content": {"posts": Post(self.soup.body.html).get(selector)},
+            "meta": {"offset": self.get_offset(self.soup.head)},
+        }
+
+    def __str__(self) -> str:
+        """
+        Return representation for More object
+        :return:
+        """
+        return json.dumps(self.get())

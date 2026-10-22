@@ -12,9 +12,9 @@ import pytest
 import time_machine
 from fastapi.testclient import TestClient
 
-from app.main import app
-from app.routes.v1 import telegram_routes
-from app.utils.config import settings
+from telegram_me.main import app
+from telegram_me.routes.v1 import telegram_routes
+from telegram_me.utils.config import settings
 
 CHANNELS = ["durov", "telegram", "stranaua", "tginfo", "nebudetafk"]
 PREVIEW_CHANNELS = ["durov", "telegram", "stranaua"]

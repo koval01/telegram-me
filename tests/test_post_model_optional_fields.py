@@ -1,6 +1,6 @@
 # pylint: disable=missing-function-docstring
 
-from app.telegram.models.post import Post
+from telegram_me.telegram.models.post import Post
 
 
 def test_post_model_allows_missing_optional_nested_fields() -> None:

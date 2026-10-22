@@ -1,6 +1,6 @@
 # pylint: disable=missing-function-docstring,duplicate-code
 
-from app.utils.validation import is_valid_channel, validate_channel_or_raise
+from telegram_me.utils.validation import is_valid_channel, validate_channel_or_raise
 
 
 def test_is_valid_channel_accepts_valid_username() -> None:

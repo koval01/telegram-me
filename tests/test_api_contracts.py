@@ -2,10 +2,10 @@
 
 from fastapi.testclient import TestClient
 
-from app.main import app
-from app.routes.v1 import telegram_routes
-from app.telegram.exceptions import TelegramNotFoundError
-from app.utils.config import settings
+from telegram_me.main import app
+from telegram_me.routes.v1 import telegram_routes
+from telegram_me.telegram.exceptions import TelegramNotFoundError
+from telegram_me.utils.config import settings
 
 client = TestClient(app)
 
@@ -70,7 +70,7 @@ def test_feed_feature_gate(monkeypatch) -> None:
         return []
 
     monkeypatch.setattr(
-        "app.routes.v1.feed.PostDataPreparer.prepare_multiple_channels",
+        "telegram_me.routes.v1.feed.PostDataPreparer.prepare_multiple_channels",
         _fake_prepare,
     )
 

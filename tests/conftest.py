@@ -1,7 +1,6 @@
 import gzip
 import json
 import os
-import sys
 from collections.abc import Callable, Iterator
 from pathlib import Path
 from typing import Any
@@ -10,12 +9,9 @@ import httpx
 import pytest
 import respx
 
-ROOT = Path(__file__).resolve().parents[1]
-if str(ROOT) not in sys.path:
-    sys.path.insert(0, str(ROOT))
-
-FIXTURES_DIR = ROOT / "tests" / "fixtures" / "telegram"
-SNAPSHOTS_DIR = ROOT / "tests" / "snapshots"
+TESTS_DIR = Path(__file__).resolve().parent
+FIXTURES_DIR = TESTS_DIR / "fixtures" / "telegram"
+SNAPSHOTS_DIR = TESTS_DIR / "snapshots"
 MANIFEST = json.loads((FIXTURES_DIR / "manifest.json").read_text(encoding="utf-8"))
 
 

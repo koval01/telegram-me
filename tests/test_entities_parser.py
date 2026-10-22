@@ -1,6 +1,6 @@
 # pylint: disable=missing-function-docstring
 
-from app.telegram.parser.types.entities import EntitiesParser
+from telegram_me.telegram.parser.types.entities import EntitiesParser
 
 
 def test_entities_parser_keeps_link_url() -> None:
