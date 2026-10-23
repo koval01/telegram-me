@@ -40,10 +40,14 @@ class ScenarioResult:
         return isinstance(self.status, int) and self.status in self.scenario.expected_statuses
 
 
+# Sent with every request (--header), e.g. the key of a Cloudflare WAF skip rule.
+EXTRA_HEADERS: dict[str, str] = {}
+
+
 def call(base_url: str, scenario: Scenario, timeout: float) -> ScenarioResult:
     """Execute one HTTP request scenario."""
     url = f"{base_url}{scenario.path}"
-    headers = {"accept": "application/json"}
+    headers = {"accept": "application/json", **EXTRA_HEADERS}
     data = None
     if scenario.payload is not None:
         data = json.dumps(scenario.payload).encode("utf-8")
@@ -91,7 +95,20 @@ def parse_args() -> argparse.Namespace:
         default="nebudetafk,nebudetgg,dovolllnaya,zalupaonline,stranaua,telegram,durov",
         help="Comma-separated channels for broad extra checks",
     )
-    return parser.parse_args()
+    parser.add_argument(
+        "--header",
+        action="append",
+        default=[],
+        metavar="NAME:VALUE",
+        help="Extra header for every request, e.g. a Cloudflare skip-rule key (repeatable)",
+    )
+    args = parser.parse_args()
+    for header in args.header:
+        name, separator, value = header.partition(":")
+        if not separator or not name.strip():
+            parser.error(f"--header must be NAME:VALUE, got {header!r}")
+        EXTRA_HEADERS[name.strip()] = value.strip()
+    return args
 
 
 def detect_feature_state(base_url: str, timeout: float) -> tuple[bool, bool]:

@@ -6,7 +6,7 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
-## [2.0.0] - unreleased
+## [2.0.0] - 2026-10-24
 
 A rewrite of the internals with the same `/v1` API. Existing clients keep
 working; see the upgrade guide for the few behaviour changes.
