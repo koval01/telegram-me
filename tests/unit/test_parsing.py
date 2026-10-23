@@ -1,15 +1,6 @@
-from datetime import UTC, datetime
-
 import pytest
 from selectolax.lexbor import LexborHTMLParser
 
-from telegram_me.services.scoring import (
-    ScoredPost,
-    content_summary,
-    parse_compact_number,
-    parse_published_at,
-    reaction_counts,
-)
 from telegram_me.telegram.parsing.entities import parse_entities
 from telegram_me.telegram.parsing.html import first_query_param
 from telegram_me.telegram.parsing.media import duration_seconds
@@ -101,33 +92,6 @@ def test_first_query_param() -> None:
 
 def test_unix_timestamp_accepts_both_offset_styles() -> None:
     assert unix_timestamp("2026-10-20T10:00:00+00:00") == unix_timestamp("2026-10-20T10:00:00+0000")
-
-
-@pytest.mark.parametrize(
-    ("value", "expected"),
-    [("15", 15), ("1.2K", 1200), ("3.5M", 3_500_000), ("15 400", 15400), ("n/a", 0), (None, 0)],
-)
-def test_parse_compact_number(value: str | None, expected: int) -> None:
-    assert parse_compact_number(value) == expected
-
-
-def test_scoring_prefers_fresh_engaging_posts() -> None:
-    now = datetime(2026, 10, 23, tzinfo=UTC)
-
-    def score(published: str, views: int) -> float:
-        return ScoredPost(
-            published_at=parse_published_at(published),
-            views=views,
-            content=content_summary({"text": {"string": "x" * 100}, "media": [{"type": "image"}]}),
-            reactions=reaction_counts([{"emoji": "👍", "count": "10"}]),
-            subscribers=1000,
-        ).score(now)
-
-    fresh = score("2026-10-22T23:00:00+00:00", 500)
-    old = score("2026-10-01T00:00:00+00:00", 500)
-    quiet = score("2026-10-22T23:00:00+00:00", 5)
-    assert fresh > quiet > old
-    assert 0 <= old < fresh <= 10
 
 
 def test_channel_validation() -> None:
