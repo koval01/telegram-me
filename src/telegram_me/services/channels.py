@@ -1,7 +1,16 @@
-"""Channel pages, posts and previews with caching and request coalescing."""
+"""Channel pages, posts and previews with caching and request coalescing.
+
+Fetched pages are parsed, validated and rendered on a worker thread: the
+native parser releases the GIL, and even pydantic's share must not run on the
+event loop, where a burst of finished fetches would otherwise stall every
+other request and push in-flight Redis commands past REDIS_TIMEOUT.
+"""
 
 import asyncio
+import functools
 import logging
+from collections.abc import Callable
+from concurrent.futures import Executor
 from typing import Any, Literal
 
 from pydantic import BaseModel, ValidationError
@@ -41,10 +50,18 @@ def _rendered(page_key: str) -> str:
 class ChannelService:
     """Fetches, parses, caches and validates t.me pages."""
 
-    def __init__(self, client: TelegramClient, cache: Cache, settings: Settings) -> None:
+    def __init__(
+        self,
+        client: TelegramClient,
+        cache: Cache,
+        settings: Settings,
+        executor: Executor | None = None,
+    ) -> None:
         self._client = client
         self._cache = cache
         self._settings = settings
+        # Where pages are parsed; None is the event loop's default executor.
+        self._executor = executor
         self._simplified = settings.parser_mode == "simplified"
         self._pages: SingleFlight[JSONDict] = SingleFlight()
         self._previews: SingleFlight[JSONDict | None] = SingleFlight()
@@ -80,22 +97,17 @@ class ChannelService:
 
     async def _load_page(self, key: str, channel: str, position: int | None) -> JSONDict:
         html = await self._client.channel_page(channel, position)
-        data = _parse(parse_channel_page, html, simplified=self._simplified)
         page_ttl = self._settings.page_cache_ttl
+        data, raw, rendered = await self._offload(
+            _process_page, html, channel, simplified=self._simplified, render=bool(page_ttl)
+        )
         # Latest pages stay long enough for the feed's stale-while-revalidate window.
         raw_ttl = page_ttl
         if position is None and self._settings.enable_feed:
             raw_ttl = max(raw_ttl, self._settings.feed_stale_ttl)
-        await self._cache.set(key, encode(data), raw_ttl)
-        if page_ttl:
-            # Pre-render the /v1/body response: cache hits are then served as
-            # bytes without decoding, validating or serializing the page again.
-            try:
-                rendered = dump_json(validate_with_posts(ChannelBody, data, _BODY_POSTS))
-            except TelegramParseError:
-                logger.warning("Channel page of %s does not match the schema", channel)
-            else:
-                await self._cache.set(_rendered(key), rendered, page_ttl)
+        await self._cache.set(key, raw, raw_ttl)
+        if rendered is not None:
+            await self._cache.set(_rendered(key), rendered, page_ttl)
         return data
 
     # Endpoints -----------------------------------------------------------------------
@@ -144,9 +156,7 @@ class ChannelService:
         self, key: str, channel: str, position: int, direction: Literal["before", "after"]
     ) -> bytes:
         html = await self._client.more_page(channel, position, direction)
-        data = _parse(parse_more_page, html, simplified=self._simplified)
-        data = {**data, "posts": [p for p in data["posts"] if p.get("id") != position]}
-        rendered = dump_json(validate_with_posts(More, data, ("posts",)))
+        rendered = await self._offload(_process_more, html, position, simplified=self._simplified)
         await self._cache.set(key, rendered, self._settings.page_cache_ttl)
         return rendered
 
@@ -165,16 +175,17 @@ class ChannelService:
 
     async def _load_preview(self, key: str, channel: str) -> JSONDict | None:
         html = await self._client.preview_page(channel)
-        try:
-            data = parse_preview_page(html)
-        except Exception as exc:
-            msg = "Failed to parse Telegram preview response"
-            raise TelegramParseError(msg) from exc
+        data, raw = await self._offload(_process_preview, html)
         if data is None:
-            await self._cache.set(key, _MISSING, _MISSING_PREVIEW_TTL)
+            await self._cache.set(key, raw, _MISSING_PREVIEW_TTL)
         else:
-            await self._cache.set(key, encode(data), self._settings.preview_cache_ttl)
+            await self._cache.set(key, raw, self._settings.preview_cache_ttl)
         return data
+
+    async def _offload[**P, T](self, func: Callable[P, T], *args: P.args, **kwargs: P.kwargs) -> T:
+        """Run CPU-bound `func` on the parsing executor."""
+        loop = asyncio.get_running_loop()
+        return await loop.run_in_executor(self._executor, functools.partial(func, *args, **kwargs))
 
     async def previews(self, channels: list[str]) -> Previews:
         """Previews of several channels; channels that can not be resolved are omitted.
@@ -224,6 +235,42 @@ def decode_page(value: bytes) -> JSONDict:
         msg = "Corrupted page in cache"
         raise TelegramParseError(msg)
     return data
+
+
+def _process_page(
+    html: str, channel: str, *, simplified: bool, render: bool
+) -> tuple[JSONDict, bytes, bytes | None]:
+    """Parse a channel page into (data, its cache encoding, the rendered /v1/body).
+
+    Runs on a worker thread. The body is pre-rendered so that cache hits are
+    served as bytes without decoding, validating or serializing the page again;
+    it is None when not wanted or when the page does not match the schema.
+    """
+    data = _parse(parse_channel_page, html, simplified=simplified)
+    rendered = None
+    if render:
+        try:
+            rendered = dump_json(validate_with_posts(ChannelBody, data, _BODY_POSTS))
+        except TelegramParseError:
+            logger.warning("Channel page of %s does not match the schema", channel)
+    return data, encode(data), rendered
+
+
+def _process_more(html: str, position: int, *, simplified: bool) -> bytes:
+    """Parse a "load more" fragment into the rendered response, `position` excluded."""
+    data = _parse(parse_more_page, html, simplified=simplified)
+    data = {**data, "posts": [p for p in data["posts"] if p.get("id") != position]}
+    return dump_json(validate_with_posts(More, data, ("posts",)))
+
+
+def _process_preview(html: str) -> tuple[JSONDict | None, bytes]:
+    """Parse a landing page into (data, its cache encoding); data is None for non-channels."""
+    try:
+        data = parse_preview_page(html)
+    except Exception as exc:
+        msg = "Failed to parse Telegram preview response"
+        raise TelegramParseError(msg) from exc
+    return data, _MISSING if data is None else encode(data)
 
 
 def _parse(parser: Any, html: str, *, simplified: bool) -> JSONDict:

@@ -110,10 +110,14 @@ class FeedRefresher:
 
     The more popular a channel, the more often it is refreshed: the interval is
     FEED_REFRESH_MAX_INTERVAL / (1 + score), clamped to the configured bounds.
+    At most `concurrency` channels are refreshed at a time, so a tick neither
+    takes every upstream slot from user requests nor lands hundreds of pages
+    on the parser (and their cache writes on Redis) at once.
     """
 
     tick_seconds = 5.0
     decay_every_seconds = 60.0
+    concurrency = 16
 
     def __init__(
         self,
@@ -171,8 +175,14 @@ class FeedRefresher:
         if not due:
             return 0
 
+        slots = asyncio.Semaphore(self.concurrency)
+
+        async def refresh(channel: str) -> JSONDict:
+            async with slots:
+                return await self._channels.refresh_page(channel)
+
         results = await asyncio.gather(
-            *(self._channels.refresh_page(channel) for channel in due), return_exceptions=True
+            *(refresh(channel) for channel in due), return_exceptions=True
         )
         refreshed = 0
         for channel, result in zip(due, results, strict=True):

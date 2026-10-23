@@ -3,6 +3,7 @@
 import asyncio
 import logging
 from collections.abc import AsyncIterator
+from concurrent.futures import ThreadPoolExecutor
 from contextlib import AsyncExitStack, asynccontextmanager, suppress
 from dataclasses import dataclass
 
@@ -24,6 +25,10 @@ from telegram_me.telegram.client import Fetcher, ReqwestFetcher, TelegramClient
 logger = logging.getLogger(__name__)
 
 _LEADER_TTL = 30.0
+# Threads that parse and render fetched pages off the event loop. The native
+# parser releases the GIL, so two keep up with a busy worker; more would only
+# contend with the event loop for the GIL and each add a malloc arena.
+_PARSE_THREADS = 2
 
 
 @dataclass(frozen=True, slots=True)
@@ -66,7 +71,10 @@ async def build_container(
             popularity = MemoryPopularity()
             leader_lock = LocalLeaderLock()
 
-        channels = ChannelService(client, cache, settings)
+        executor = stack.enter_context(
+            ThreadPoolExecutor(_PARSE_THREADS, thread_name_prefix="telegram-me-parse")
+        )
+        channels = ChannelService(client, cache, settings, executor)
         yield Container(
             settings=settings,
             cache=cache,

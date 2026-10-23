@@ -1,3 +1,4 @@
+import functools
 import gzip
 import json
 import os
@@ -37,6 +38,13 @@ def _key(method: str, path: str, query: Mapping[str, Any] | None) -> tuple[Any, 
     return method, _normalize_path(path), params
 
 
+@functools.cache
+def _body(file: str) -> str:
+    # Decoded once: reading and gunzipping a fixture on every fetch blocks the
+    # event loop, which would distort load measurements (`tests/workload.py`).
+    return gzip.decompress((FIXTURES_DIR / file).read_bytes()).decode("utf-8")
+
+
 class FixtureFetcher:
     """Serves recorded t.me responses; unrecorded requests fail the test."""
 
@@ -59,8 +67,7 @@ class FixtureFetcher:
         item = self._responses.get(_key(method, path, query))
         if item is None:
             pytest.fail(f"Unexpected upstream request in tests: {method} {path} {query}")
-        body = gzip.decompress((FIXTURES_DIR / item["file"]).read_bytes()).decode("utf-8")
-        return FetchResult(item["status"], body)
+        return FetchResult(item["status"], _body(item["file"]))
 
     async def close(self) -> None:
         return None
