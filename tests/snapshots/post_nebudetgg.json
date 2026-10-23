@@ -1,0 +1,73 @@
+{
+  "body": {
+    "content": {
+      "inline": null,
+      "media": null,
+      "poll": null,
+      "preview_link": null,
+      "reacts": [
+        {
+          "count": "3",
+          "emoji": "⭐",
+          "emoji_id": null,
+          "emoji_image": null,
+          "type": "telegram_stars"
+        },
+        {
+          "count": "2.08K",
+          "emoji": "❤",
+          "emoji_id": null,
+          "emoji_image": "https://telegram.org/img/emoji/40/E29DA4.png",
+          "type": "emoji"
+        },
+        {
+          "count": "270",
+          "emoji": "🤡",
+          "emoji_id": null,
+          "emoji_image": "https://telegram.org/img/emoji/40/F09FA4A1.png",
+          "type": "emoji"
+        },
+        {
+          "count": "127",
+          "emoji": "👍",
+          "emoji_id": null,
+          "emoji_image": "https://telegram.org/img/emoji/40/F09F918D.png",
+          "type": "emoji"
+        },
+        {
+          "count": "69",
+          "emoji": "💩",
+          "emoji_id": null,
+          "emoji_image": "https://telegram.org/img/emoji/40/F09F92A9.png",
+          "type": "emoji"
+        },
+        {
+          "count": "37",
+          "emoji": "🖕",
+          "emoji_id": null,
+          "emoji_image": "https://telegram.org/img/emoji/40/F09F9695.png",
+          "type": "emoji"
+        }
+      ],
+      "reply": null,
+      "text": {
+        "entities": null,
+        "html": "Щас у меня турик от Яндекса будет. С потными работягами с огромным количеством эло. Без вебки, хочу все до разобрать. Чтобы вы потом посмотрели новую локацию",
+        "string": "Щас у меня турик от Яндекса будет. С потными работягами с огромным количеством эло. Без вебки, хочу все до разобрать. Чтобы вы потом посмотрели новую локацию"
+      }
+    },
+    "footer": {
+      "author": null,
+      "date": {
+        "string": "2026-10-02T13:17:56+00:00",
+        "unix": 1790947076
+      },
+      "edited": false,
+      "views": "178K"
+    },
+    "forwarded": null,
+    "id": 6462,
+    "view": "eyJjIjotMTI1MDEyMjM5MCwicCI6NjQ2MiwidCI6MTc5MjcwOTIyNywiaCI6ImNkOTUyMTM0NTExNzAyZGU2YiJ9"
+  },
+  "status": 200
+}

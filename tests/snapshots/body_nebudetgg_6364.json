@@ -1,0 +1,1850 @@
+{
+  "body": {
+    "channel": {
+      "avatar": "https://cdn4.telesco.pe/file/Wg-X46eglp85BlMsn1GolEevPuwHNpY1ljHqBipkt9AuzX_5S94KpsE4yaGUMT8y0NeS66u1fVu24lC5B2d2H-3DbNK2X9IJ9Fm5fbAaZ6VbwNYdavA1fIw6VLZ-H6mb-Xd5yg5q5PkixLnWa2zlP8NlCeJHjpXQlFwdqYAwJG-l9UvMexjanOaNYTJxd2Ut9tgyKoxVXIE3n55BBJM7UUMiKGsx84Vh7zWukjbIv1iQBZ2p8mvwT0auyJJeNJdVm0NdIouRE9GBraY5yI0CcvRDRQdtrXKvsecfmhN8S164UWEzyscfZPKcykNFcW9VQ9T_RcvxiN_PXjf86LV1ag.jpg",
+      "counters": {
+        "files": "26",
+        "links": "1.25K",
+        "photos": "839",
+        "subscribers": "489K",
+        "videos": "235"
+      },
+      "description": {
+        "html": "№ 5089720928<br>Если у вас тг \"чат недоступен\" -  - <a href=\"https://t.me/nityetrxbot\" target=\"_blank\">@nityetrxbot</a>",
+        "string": "№ 5089720928\nЕсли у вас тг \"чат недоступен\" -  - @nityetrxbot"
+      },
+      "labels": [
+        "verified"
+      ],
+      "title": {
+        "html": "Логово Внизу",
+        "string": "Логово Внизу"
+      },
+      "username": "nebudetgg"
+    },
+    "content": {
+      "posts": [
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": null,
+                "thumb": null,
+                "type": "image",
+                "url": "https://cdn4.telesco.pe/file/rkbz4QY7vzqkI7GcKOXxtQIz1Jkuv8jsq8I6IhfOLuDhyTWDArp1CMJh9HaOzLkvjEn0sF78VybB6fIi3ncW1bxF4xUr9bZUZ4sYXuMYyGk6ObEMj8Rxv_huLYR4IQsvIHoVAyDSQePkzPjEAcVLU9kq6ypaapcxDuDJbY7r9Xe1s1TTs483zXvTfJiBR0-sist5T7JvSH9TKX-b_L5MkTnmefkeBzU2xAdvyK5cS_sjIriL4xzs-EXa3OcLX1Y3MvcWQ-1mYEufGbKnrwYfz8QSz6ns2sELahFKHetd0GBJmtZhorZYjal0SAxtpnBj0WcvIL0ENvTRtke_Uc0RrA.jpg",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": null,
+            "reacts": [
+              {
+                "count": "3",
+                "emoji": "⭐",
+                "emoji_id": null,
+                "emoji_image": null,
+                "type": "telegram_stars"
+              },
+              {
+                "count": "1.48K",
+                "emoji": "💩",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F92A9.png",
+                "type": "emoji"
+              },
+              {
+                "count": "283",
+                "emoji": "🤡",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09FA4A1.png",
+                "type": "emoji"
+              },
+              {
+                "count": "251",
+                "emoji": "❤",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/E29DA4.png",
+                "type": "emoji"
+              },
+              {
+                "count": "79",
+                "emoji": "🖕",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F9695.png",
+                "type": "emoji"
+              },
+              {
+                "count": "20",
+                "emoji": "😱",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F98B1.png",
+                "type": "emoji"
+              }
+            ],
+            "reply": null,
+            "text": {
+              "entities": [
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 0,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/F09F8EBE.png"
+                },
+                {
+                  "language": null,
+                  "length": 50,
+                  "offset": 2,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 54,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/F09F918D.png"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 55,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/F09F918D.png"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 56,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/F09F918D.png"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 57,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/F09F918D.png"
+                },
+                {
+                  "language": null,
+                  "length": 30,
+                  "offset": 95,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 16,
+                  "offset": 170,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 187,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/F09F8F86.png"
+                },
+                {
+                  "language": null,
+                  "length": 7,
+                  "offset": 190,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 2,
+                  "offset": 198,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/E29EA1.png"
+                },
+                {
+                  "language": null,
+                  "length": 2,
+                  "offset": 226,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/E29EA1.png"
+                },
+                {
+                  "language": null,
+                  "length": 2,
+                  "offset": 248,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/E29EA1.png"
+                },
+                {
+                  "language": null,
+                  "length": 68,
+                  "offset": 305,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 0,
+                  "offset": 373,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 20,
+                  "offset": 377,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 467,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/F09F92B5.png"
+                }
+              ],
+              "html": "<tg-emoji emoji-id=\"5249284625167055914\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F8EBE.png')\"><b>🎾</b></i></tg-emoji> <b>WINLINE KING PONG — ГЛАВНАЯ ЗАРУБА ЛЕТА НА ПОДХОДЕ</b><br><br><tg-emoji emoji-id=\"5211124673965749727\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F918D.png')\"><b>👍</b></i></tg-emoji><tg-emoji emoji-id=\"5210684173529937755\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F918D.png')\"><b>👍</b></i></tg-emoji><tg-emoji emoji-id=\"5211144374980736222\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F918D.png')\"><b>👍</b></i></tg-emoji><tg-emoji emoji-id=\"5208650064133654101\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F918D.png')\"><b>👍</b></i></tg-emoji> запускает большой турнир, в котором <b>Слава Бустер, Дима Ликс, Лимба</b> и другие сойдутся в битве за главный приз — <b>3 000 000 РУБЛЕЙ</b> <tg-emoji emoji-id=\"5231144139302662952\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F8F86.png')\"><b>🏆</b></i></tg-emoji><br><br><blockquote><b>Формат:</b><br><tg-emoji emoji-id=\"5231193505656759759\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/E29EA1.png')\"><b>➡️</b></i></tg-emoji> 16 популярных участников<br><tg-emoji emoji-id=\"5231193505656759759\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/E29EA1.png')\"><b>➡️</b></i></tg-emoji> Single Elimination<br><tg-emoji emoji-id=\"5231193505656759759\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/E29EA1.png')\"><b>➡️</b></i></tg-emoji> Матчи — Best of 3</blockquote><br><br>Кроме основной сетки зрителей ждет <b>особый шоу-матч: Buster vs Limba сразятся за НАСТОЯЩИЙ СЛИТОК ЗОЛОТА</b> <b><tg-emoji emoji-id=\"5397625210658642837\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F92B0.png')\"><b>💰</b></i></tg-emoji></b><br><br><b>Ракетки уже наготове</b> — скоро начнем знакомить вас с героями и завезем больше подробностей <tg-emoji emoji-id=\"5231465437216142915\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F92B5.png')\"><b>💵</b></i></tg-emoji>",
+              "string": "🎾 WINLINE KING PONG — ГЛАВНАЯ ЗАРУБА ЛЕТА НА ПОДХОДЕ\n\n👍👍👍👍 запускает большой турнир, в котором Слава Бустер, Дима Ликс, Лимба и другие сойдутся в битве за главный приз — 3 000 000 РУБЛЕЙ 🏆\n\n<blockquote>Формат:\n➡️ 16 популярных участников\n➡️ Single Elimination\n➡️ Матчи — Best of 3</blockquote>\n\nКроме основной сетки зрителей ждет особый шоу-матч: Buster vs Limba сразятся за НАСТОЯЩИЙ СЛИТОК ЗОЛОТА 💰\n\nРакетки уже наготове — скоро начнем знакомить вас с героями и завезем больше подробностей 💵"
+            }
+          },
+          "footer": {
+            "author": null,
+            "date": {
+              "string": "2026-07-30T09:07:30+00:00",
+              "unix": 1785402450
+            },
+            "edited": false,
+            "views": "175K"
+          },
+          "forwarded": {
+            "author": null,
+            "name": {
+              "html": "WINLINE KING PONG",
+              "string": "WINLINE KING PONG"
+            },
+            "url": "https://t.me/winlinekingpong/4"
+          },
+          "id": 6350,
+          "view": "eyJjIjotMTI1MDEyMjM5MCwicCI6NjM1MCwidCI6MTc5MjcxNzE2MSwiaCI6IjNhMTBhYmRmNDhmOGFhMmJkMiJ9"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": null,
+            "poll": null,
+            "preview_link": null,
+            "reacts": [
+              {
+                "count": "3",
+                "emoji": "⭐",
+                "emoji_id": null,
+                "emoji_image": null,
+                "type": "telegram_stars"
+              },
+              {
+                "count": "1.44K",
+                "emoji": "❤",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/E29DA4.png",
+                "type": "emoji"
+              },
+              {
+                "count": "214",
+                "emoji": "😱",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F98B1.png",
+                "type": "emoji"
+              },
+              {
+                "count": "110",
+                "emoji": "🤡",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09FA4A1.png",
+                "type": "emoji"
+              },
+              {
+                "count": "49",
+                "emoji": "🎉",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F8E89.png",
+                "type": "emoji"
+              },
+              {
+                "count": "30",
+                "emoji": "👍",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F918D.png",
+                "type": "emoji"
+              }
+            ],
+            "reply": null,
+            "text": {
+              "entities": null,
+              "html": "Бля, сегодня релиз трека чтоль",
+              "string": "Бля, сегодня релиз трека чтоль"
+            }
+          },
+          "footer": {
+            "author": null,
+            "date": {
+              "string": "2026-07-30T16:34:19+00:00",
+              "unix": 1785429259
+            },
+            "edited": false,
+            "views": "158K"
+          },
+          "forwarded": null,
+          "id": 6351,
+          "view": "eyJjIjotMTI1MDEyMjM5MCwicCI6NjM1MSwidCI6MTc5MjcxNzE2MSwiaCI6ImExMWQ0NGJkY2Y1M2UwZjYwZCJ9"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": null,
+            "poll": null,
+            "preview_link": null,
+            "reacts": [
+              {
+                "count": "19",
+                "emoji": "⭐",
+                "emoji_id": null,
+                "emoji_image": null,
+                "type": "telegram_stars"
+              },
+              {
+                "count": "1.47K",
+                "emoji": "❤",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/E29DA4.png",
+                "type": "emoji"
+              },
+              {
+                "count": "166",
+                "emoji": "😱",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F98B1.png",
+                "type": "emoji"
+              },
+              {
+                "count": "106",
+                "emoji": "👍",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F918D.png",
+                "type": "emoji"
+              },
+              {
+                "count": "56",
+                "emoji": "💩",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F92A9.png",
+                "type": "emoji"
+              },
+              {
+                "count": "28",
+                "emoji": "🤡",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09FA4A1.png",
+                "type": "emoji"
+              }
+            ],
+            "reply": null,
+            "text": {
+              "entities": null,
+              "html": "Нихуя себе",
+              "string": "Нихуя себе"
+            }
+          },
+          "footer": {
+            "author": null,
+            "date": {
+              "string": "2026-07-30T16:34:21+00:00",
+              "unix": 1785429261
+            },
+            "edited": false,
+            "views": "160K"
+          },
+          "forwarded": null,
+          "id": 6352,
+          "view": "eyJjIjotMTI1MDEyMjM5MCwicCI6NjM1MiwidCI6MTc5MjcxNzE2MSwiaCI6IjA0MDk4YTI1N2EwMTVhNDliZSJ9"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": {
+                  "formatted": "0:15",
+                  "raw": 15
+                },
+                "thumb": "https://cdn4.telesco.pe/file/HSqbzufmSAuzi4rKV73TSBp6MpjJoWQP9CwreeT-7sgrbyC1di49E0kCq7T3t08jE-7MZuggDnRQoPA6DJmAvQmw3m86k_wVHfgMP6ynK8WGAMJIGL0zelOw_8qkCBB_h_YFLkZ978YGt7DRZSD45wkdKOPGo-9BczXyyAyO0I0jIwo5IfZ82XVWuZSrOQeCzSmIwfrvdcfR2lA40Do03YyH_306ByH-_iUBaIY7BqEWM382ikN6JlvgdG_TOIz3nm8wcNiOCcZx8_vbZtx6OzL2_8Cu_KwMT3FC0d-jGrOCMzRTu80mPW-jnXz1XrkBM6PBN2_7P-OtuoCK9gzJDw",
+                "type": "video",
+                "url": "https://cdn4.telesco.pe/file/8287a82682.mp4?token=W2KQqfAdkeFMN7NLPWdq3srffFv-ml8Ani4xcHnRMVhNL7iUex59_H1c2mv1M48er55dd47bxJWthW_OTJ8wb2f_MpVVRyHhICI_J6EQEp0qf4xMxC1QDVYfdJepGLrV2h-Fml4OxREoTLuN0uCeJxXZpTzd32m2lMFUTqSF_adjlXg9s-VSCxKAw7jiMfHnXlWAzzuAcVo57SiSB_rSng-IQLYR2EUiaj_5EB-Lw5vnujqJAN7nw9gjxKOLA-VXlcGk-g6KiwnS0v2VpzrQl41qmfQCCJ3nLkMWw4wU3tbbPR_tG3aAclCanGyoCKVPc2aMXAHx68iOr5iotdH_eQ",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": null,
+            "reacts": [
+              {
+                "count": "3",
+                "emoji": "⭐",
+                "emoji_id": null,
+                "emoji_image": null,
+                "type": "telegram_stars"
+              },
+              {
+                "count": "1.84K",
+                "emoji": "❤",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/E29DA4.png",
+                "type": "emoji"
+              },
+              {
+                "count": "296",
+                "emoji": "🤡",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09FA4A1.png",
+                "type": "emoji"
+              },
+              {
+                "count": "177",
+                "emoji": "💩",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F92A9.png",
+                "type": "emoji"
+              },
+              {
+                "count": "53",
+                "emoji": "🎉",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F8E89.png",
+                "type": "emoji"
+              },
+              {
+                "count": "29",
+                "emoji": "💅",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F9285.png",
+                "type": "emoji"
+              }
+            ],
+            "reply": null,
+            "text": {
+              "entities": [
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 0,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/F09F989A.png"
+                },
+                {
+                  "language": null,
+                  "length": 31,
+                  "offset": 1,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 0,
+                  "offset": 32,
+                  "type": "text_link",
+                  "url": "https://vt.tiktok.com/ZS9h8kBc7a1TB-kSXQB/"
+                },
+                {
+                  "language": null,
+                  "length": 0,
+                  "offset": 32,
+                  "type": "text_link",
+                  "url": "https://vt.tiktok.com/ZS9h8kBc7a1TB-kSXQB/"
+                },
+                {
+                  "language": null,
+                  "length": 10,
+                  "offset": 85,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 7,
+                  "offset": 104,
+                  "type": "bold",
+                  "url": null
+                }
+              ],
+              "html": "<tg-emoji emoji-id=\"5244646777746908576\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F989A.png')\"><b>😚</b></i></tg-emoji><b> КОНКУРС НА ПРОСМОТРЫ В ТИКТОКЕ</b><br><br>Кто будет Топ-1 под <a href=\"https://vt.tiktok.com/ZS9h8kBc7a1TB-kSXQB/\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\"><b>нашим</b></a> <a href=\"https://vt.tiktok.com/ZS9h8kBc7a1TB-kSXQB/\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\"><b>звуком c новым треком</b></a> до <b>3.08 23:00</b> получит <b>50.000₽</b><br><br>Видео, выложенные до 30.07 21:00, — не участвуют",
+              "string": "😚 КОНКУРС НА ПРОСМОТРЫ В ТИКТОКЕ\n\nКто будет Топ-1 под нашим звуком c новым треком до 3.08 23:00 получит 50.000₽\n\nВидео, выложенные до 30.07 21:00, — не участвуют"
+            }
+          },
+          "footer": {
+            "author": null,
+            "date": {
+              "string": "2026-07-30T18:04:01+00:00",
+              "unix": 1785434641
+            },
+            "edited": false,
+            "views": "269K"
+          },
+          "forwarded": null,
+          "id": 6355,
+          "view": "eyJjIjotMTI1MDEyMjM5MCwicCI6NjM1NSwidCI6MTc5MjcxNzE2MSwiaCI6IjdjNjQwYWY5OTk2MzUzYTRjZiJ9"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": null,
+                "thumb": null,
+                "type": "image",
+                "url": "https://cdn4.telesco.pe/file/KW-C4ZI0cpRkYwBagPpW9NebPkaCCHs0hV5QegkrShFe2h9_gg6DdQHejr3Q1-bYaZCHZN7_Li2kRRY60O_dWaZ9q-ogBn--iNsPfnaMZOxySOjmy-1pOm66i6gJIB4DYrIJ78WgLc7kD-uR7XNTTJGNbb2C4qB3j492g_G2n3yN4CJKGQjsnnn-CMi8W0-paqzV9Uz5f9JWeSDEpTqS4bqfq8MTMhuw6_qF4HD63hcYtmAJYCcx-SpkjHhTr-YXsiRToJKc73nNT6iTbD_Qm2-RMp21TRK6G2aSWr3UbNK_abgQQvbCOma3nXmT27HXxpj6R3HyUXFYatl-QQQQKQ.jpg",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": null,
+            "reacts": [
+              {
+                "count": "39",
+                "emoji": "⭐",
+                "emoji_id": null,
+                "emoji_image": null,
+                "type": "telegram_stars"
+              },
+              {
+                "count": "2.46K",
+                "emoji": "❤",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/E29DA4.png",
+                "type": "emoji"
+              },
+              {
+                "count": "535",
+                "emoji": "💩",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F92A9.png",
+                "type": "emoji"
+              },
+              {
+                "count": "239",
+                "emoji": "🎉",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F8E89.png",
+                "type": "emoji"
+              },
+              {
+                "count": "84",
+                "emoji": "💅",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F9285.png",
+                "type": "emoji"
+              },
+              {
+                "count": "69",
+                "emoji": "🤡",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09FA4A1.png",
+                "type": "emoji"
+              }
+            ],
+            "reply": null,
+            "text": {
+              "entities": [
+                {
+                  "language": null,
+                  "length": 5,
+                  "offset": 0,
+                  "type": "text_link",
+                  "url": "https://t.me/thestint"
+                },
+                {
+                  "language": null,
+                  "length": 10,
+                  "offset": 7,
+                  "type": "text_link",
+                  "url": "https://t.me/nebudetgg"
+                },
+                {
+                  "language": null,
+                  "length": 27,
+                  "offset": 63,
+                  "type": "url",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 5,
+                  "offset": 99,
+                  "type": "text_link",
+                  "url": "https://t.me/envtn1"
+                },
+                {
+                  "language": null,
+                  "length": 7,
+                  "offset": 106,
+                  "type": "text_link",
+                  "url": "https://t.me/samseberepriza"
+                },
+                {
+                  "language": null,
+                  "length": 5,
+                  "offset": 123,
+                  "type": "text_link",
+                  "url": "https://t.me/envtn1"
+                },
+                {
+                  "language": null,
+                  "length": 9,
+                  "offset": 138,
+                  "type": "text_link",
+                  "url": "https://www.instagram.com/ivn_svrch?igsh=MXc3cjRwcWFjazdvZA=="
+                }
+              ],
+              "html": "<a href=\"https://t.me/thestint\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">СТИНТ</a>, <a href=\"https://t.me/nebudetgg\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">bratishkin</a> —  Пить / Тупить<br><br>Слушать на всех площадках: <a href=\"http://music.thefence.me/sbrffpitt\" target=\"_blank\" rel=\"noopener\">music.thefence.me/sbrffpitt</a><br><br>prod.: <a href=\"https://t.me/envtn1\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Envtn</a>, <a href=\"https://t.me/samseberepriza\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">реприза</a> / sound: <a href=\"https://t.me/envtn1\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Envtn</a> / cover: <a href=\"https://www.instagram.com/ivn_svrch?igsh=MXc3cjRwcWFjazdvZA==\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">ivn_svrch</a>",
+              "string": "СТИНТ, bratishkin —  Пить / Тупить\n\nСлушать на всех площадках: music.thefence.me/sbrffpitt\n\nprod.: Envtn, реприза / sound: Envtn / cover: ivn_svrch"
+            }
+          },
+          "footer": {
+            "author": null,
+            "date": {
+              "string": "2026-07-30T21:01:57+00:00",
+              "unix": 1785445317
+            },
+            "edited": false,
+            "views": "181K"
+          },
+          "forwarded": null,
+          "id": 6357,
+          "view": "eyJjIjotMTI1MDEyMjM5MCwicCI6NjM1NywidCI6MTc5MjcxNzE2MSwiaCI6IjdmOTE4NTBlYmViMDBlZWUzOCJ9"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": null,
+                "thumb": null,
+                "type": "image",
+                "url": "https://cdn4.telesco.pe/file/qEmsCQwbQwSeLs11LNyeFte3qIHYPPaBd6RAXKNiknrz_0ALsm1DrtJDv5bcjqfJDm0T9dmGgOGNAo869jbyypCSMC3BzB5s7d8h9jPYYWPCuR5EFX3gnhhrDaOC-OwAen9FYsXHLYvbkpVCO1kFUXyqt9JKjnYkNUW48fY7U7ZsXgpBcR53AGlmpyeCU77f3ea9nbQfrJgPTjpX8MhXUgUomc4VTaNoxOFh_i1h88-ET_WopUIihe6ndezm8R15nhuv6bqLN5QY7ytViP7hZMwv4WYkPzWQwUNwHNRSw_j-4UwRmMo53sC9IHxy9NptWiYnlQlg0A-QHQVEPazf8g.jpg",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": null,
+            "reacts": [
+              {
+                "count": "21",
+                "emoji": "⭐",
+                "emoji_id": null,
+                "emoji_image": null,
+                "type": "telegram_stars"
+              },
+              {
+                "count": "4.43K",
+                "emoji": "❤",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/E29DA4.png",
+                "type": "emoji"
+              },
+              {
+                "count": "498",
+                "emoji": "🎉",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F8E89.png",
+                "type": "emoji"
+              },
+              {
+                "count": "271",
+                "emoji": "👍",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F918D.png",
+                "type": "emoji"
+              },
+              {
+                "count": "84",
+                "emoji": "😭",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F98AD.png",
+                "type": "emoji"
+              },
+              {
+                "count": "50",
+                "emoji": "👎",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F918E.png",
+                "type": "emoji"
+              }
+            ],
+            "reply": null,
+            "text": {
+              "entities": null,
+              "html": "Завтра съебую от вас на два дня. Сегодня предлагаю посмотреть чёт, а потом ебануть в Майн.",
+              "string": "Завтра съебую от вас на два дня. Сегодня предлагаю посмотреть чёт, а потом ебануть в Майн."
+            }
+          },
+          "footer": {
+            "author": null,
+            "date": {
+              "string": "2026-07-31T10:55:30+00:00",
+              "unix": 1785495330
+            },
+            "edited": false,
+            "views": "206K"
+          },
+          "forwarded": null,
+          "id": 6358,
+          "view": "eyJjIjotMTI1MDEyMjM5MCwicCI6NjM1OCwidCI6MTc5MjcxNzE2MSwiaCI6IjA0NTNlMzZiODUyNjFiMDFiMiJ9"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": null,
+            "poll": null,
+            "preview_link": null,
+            "reacts": [
+              {
+                "count": "11",
+                "emoji": "⭐",
+                "emoji_id": null,
+                "emoji_image": null,
+                "type": "telegram_stars"
+              },
+              {
+                "count": "2.4K",
+                "emoji": "❤",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/E29DA4.png",
+                "type": "emoji"
+              },
+              {
+                "count": "383",
+                "emoji": "👎",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F918E.png",
+                "type": "emoji"
+              },
+              {
+                "count": "202",
+                "emoji": "💩",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F92A9.png",
+                "type": "emoji"
+              },
+              {
+                "count": "59",
+                "emoji": "👍",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F918D.png",
+                "type": "emoji"
+              },
+              {
+                "count": "45",
+                "emoji": "🎉",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F8E89.png",
+                "type": "emoji"
+              }
+            ],
+            "reply": null,
+            "text": {
+              "entities": null,
+              "html": "О вписка с нан майсами",
+              "string": "О вписка с нан майсами"
+            }
+          },
+          "footer": {
+            "author": null,
+            "date": {
+              "string": "2026-07-31T10:56:12+00:00",
+              "unix": 1785495372
+            },
+            "edited": false,
+            "views": "201K"
+          },
+          "forwarded": null,
+          "id": 6359,
+          "view": "eyJjIjotMTI1MDEyMjM5MCwicCI6NjM1OSwidCI6MTc5MjcxNzE2MSwiaCI6ImM5Y2ZjYzM3Mjg2NDY1YTQ5ZSJ9"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": null,
+            "poll": null,
+            "preview_link": null,
+            "reacts": [
+              {
+                "count": "111",
+                "emoji": "⭐",
+                "emoji_id": null,
+                "emoji_image": null,
+                "type": "telegram_stars"
+              },
+              {
+                "count": "1.4K",
+                "emoji": "❤",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/E29DA4.png",
+                "type": "emoji"
+              },
+              {
+                "count": "108",
+                "emoji": "🤡",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09FA4A1.png",
+                "type": "emoji"
+              },
+              {
+                "count": "85",
+                "emoji": "💩",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F92A9.png",
+                "type": "emoji"
+              },
+              {
+                "count": "17",
+                "emoji": "🖕",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F9695.png",
+                "type": "emoji"
+              },
+              {
+                "count": "16",
+                "emoji": "😱",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F98B1.png",
+                "type": "emoji"
+              }
+            ],
+            "reply": null,
+            "text": {
+              "entities": [
+                {
+                  "language": null,
+                  "length": 28,
+                  "offset": 25,
+                  "type": "url",
+                  "url": null
+                }
+              ],
+              "html": "Клипак дропнули наконец<br><br><a href=\"https://youtu.be/Y5L5qlSJ3Nc\" target=\"_blank\" rel=\"noopener\">https://youtu.be/Y5L5qlSJ3Nc</a>",
+              "string": "Клипак дропнули наконец\n\nhttps://youtu.be/Y5L5qlSJ3Nc"
+            }
+          },
+          "footer": {
+            "author": null,
+            "date": {
+              "string": "2026-07-31T12:06:54+00:00",
+              "unix": 1785499614
+            },
+            "edited": false,
+            "views": "215K"
+          },
+          "forwarded": null,
+          "id": 6360,
+          "view": "eyJjIjotMTI1MDEyMjM5MCwicCI6NjM2MCwidCI6MTc5MjcxNzE2MSwiaCI6IjIyNjliOWMzZjBiYTU4YjgwMyJ9"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": null,
+            "poll": null,
+            "preview_link": null,
+            "reacts": [
+              {
+                "count": "9",
+                "emoji": "⭐",
+                "emoji_id": null,
+                "emoji_image": null,
+                "type": "telegram_stars"
+              },
+              {
+                "count": "2.23K",
+                "emoji": "❤",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/E29DA4.png",
+                "type": "emoji"
+              },
+              {
+                "count": "241",
+                "emoji": "👍",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F918D.png",
+                "type": "emoji"
+              },
+              {
+                "count": "159",
+                "emoji": "🖕",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F9695.png",
+                "type": "emoji"
+              },
+              {
+                "count": "64",
+                "emoji": "💩",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F92A9.png",
+                "type": "emoji"
+              },
+              {
+                "count": "41",
+                "emoji": "🤡",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09FA4A1.png",
+                "type": "emoji"
+              }
+            ],
+            "reply": null,
+            "text": {
+              "entities": null,
+              "html": "Я напоминаю вам, кто под наш звук ебанет тикток и он будет самый популярны среди всех (с момента поста о розыгрыше выше). Естественно нас с Максом не учитываем.<br><br>Тому на карточку 50.000 рублей перешлю. Спс.<br><br>Но там уже 2600 тиктоков, что пиздец как дохуя, если че. Всем спасибо.",
+              "string": "Я напоминаю вам, кто под наш звук ебанет тикток и он будет самый популярны среди всех (с момента поста о розыгрыше выше). Естественно нас с Максом не учитываем.\n\nТому на карточку 50.000 рублей перешлю. Спс.\n\nНо там уже 2600 тиктоков, что пиздец как дохуя, если че. Всем спасибо."
+            }
+          },
+          "footer": {
+            "author": null,
+            "date": {
+              "string": "2026-07-31T12:21:36+00:00",
+              "unix": 1785500496
+            },
+            "edited": false,
+            "views": "251K"
+          },
+          "forwarded": null,
+          "id": 6361,
+          "view": "eyJjIjotMTI1MDEyMjM5MCwicCI6NjM2MSwidCI6MTc5MjcxNzE2MSwiaCI6ImY1NGExOTNkNTRjZmE5ODYyYiJ9"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": null,
+            "poll": null,
+            "preview_link": null,
+            "reacts": [
+              {
+                "count": "10",
+                "emoji": "⭐",
+                "emoji_id": null,
+                "emoji_image": null,
+                "type": "telegram_stars"
+              },
+              {
+                "count": "2.54K",
+                "emoji": "❤",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/E29DA4.png",
+                "type": "emoji"
+              },
+              {
+                "count": "259",
+                "emoji": "👍",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F918D.png",
+                "type": "emoji"
+              },
+              {
+                "count": "168",
+                "emoji": "😱",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F98B1.png",
+                "type": "emoji"
+              },
+              {
+                "count": "75",
+                "emoji": "💩",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F92A9.png",
+                "type": "emoji"
+              },
+              {
+                "count": "26",
+                "emoji": "👎",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F918E.png",
+                "type": "emoji"
+              }
+            ],
+            "reply": null,
+            "text": {
+              "entities": null,
+              "html": "Я в Балашихе в пятницу. Дай бог успею домой к стриму. Ебаный я додик",
+              "string": "Я в Балашихе в пятницу. Дай бог успею домой к стриму. Ебаный я додик"
+            }
+          },
+          "footer": {
+            "author": null,
+            "date": {
+              "string": "2026-07-31T14:40:22+00:00",
+              "unix": 1785508822
+            },
+            "edited": false,
+            "views": "244K"
+          },
+          "forwarded": null,
+          "id": 6362,
+          "view": "eyJjIjotMTI1MDEyMjM5MCwicCI6NjM2MiwidCI6MTc5MjcxNzE2MSwiaCI6ImQxN2QyYWQzOGYxMzk5NmQ4MyJ9"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": {
+                  "formatted": "0:31",
+                  "raw": 31
+                },
+                "thumb": null,
+                "type": "voice",
+                "url": "https://cdn4.telesco.pe/file/410aef4baa.ogg?token=BW4iYOzeljvYgBoD2VmmW7WQsUuSek-PMKaYNiACf-rL3hsk7YrSF8pwwz5KSOxus57PaBc9BDthKVwJYCa9BF6lGIPHddvzSBTZmWOrPiwaCrh-CtDYwgMMC7d5cIs98dsEL1ATK2UCJUtlw09iNlpVgVghqTsrPwrw0-jv8qZFw6u7AAfMQewt3Ct-43aLMLZq3bW3KMBzw2WsgJc-WdeibhX6A25jZLYNkr5Dj3z5BvSx4To7VrEXGEaydeGhGoNJA8PGT1UT7YW0UROqN9_q59gK_bssa7SzD1aVlDynR7Djwye2GRnVhEVWcVd22ZCvjK9OiLZnH4yv-T5qKg",
+                "waves": "20,1,14,31,31,24,28,17,13,25,13,6,0,13,20,2,1,21,31,19,17,29,27,28,19,31,4,22,18,26,18,11,9,17,1,17,0,16,7,24,31,31,31,31,31,27,31,25,3,31,30,4,31,31,24,7,3,1,22,0,0,0,7,24,28,2,1,16,18,3,23,24,28,0,1,23,1,16,8,7,3,28,28,15,0,0,8,4,28,2,1,16,18,12,23,24,20,0,0,16"
+              }
+            ],
+            "poll": null,
+            "preview_link": null,
+            "reacts": [
+              {
+                "count": "20",
+                "emoji": "⭐",
+                "emoji_id": null,
+                "emoji_image": null,
+                "type": "telegram_stars"
+              },
+              {
+                "count": "1.97K",
+                "emoji": "😭",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F98AD.png",
+                "type": "emoji"
+              },
+              {
+                "count": "414",
+                "emoji": "❤",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/E29DA4.png",
+                "type": "emoji"
+              },
+              {
+                "count": "221",
+                "emoji": "😱",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F98B1.png",
+                "type": "emoji"
+              },
+              {
+                "count": "72",
+                "emoji": "💩",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F92A9.png",
+                "type": "emoji"
+              },
+              {
+                "count": "53",
+                "emoji": "🎉",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F8E89.png",
+                "type": "emoji"
+              }
+            ],
+            "reply": null,
+            "text": null
+          },
+          "footer": {
+            "author": null,
+            "date": {
+              "string": "2026-08-02T18:00:31+00:00",
+              "unix": 1785693631
+            },
+            "edited": false,
+            "views": "199K"
+          },
+          "forwarded": null,
+          "id": 6364,
+          "view": "eyJjIjotMTI1MDEyMjM5MCwicCI6NjM2NCwidCI6MTc5MjcxNzE2MSwiaCI6IjE3M2E2ZThlMTZmODNlYTE4ZiJ9"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": {
+                  "formatted": "0:23",
+                  "raw": 23
+                },
+                "thumb": "https://cdn4.telesco.pe/file/aGV2-ldMght7rovOu9Nt08hqC1YRPiNGDpcL-tZ_cunXo92DQTNQwW84gxRVeK7PEEdlFCp7FI9zehj5YuTrla4Bv4Sz0xkiZMlcwWzhKQAGg9Ltsqpiw2fyU39ob3C1mkzpVrAh5xb-3q6lsRv78BvNPjvb0cMjMnRjFMBq4X9mEVHf2IBgYnyANNVlq7BFyk8cHy5KSr-j2vvNV6UFBfV4GdIv_D8t5Y1nGA67vVuiPYdOvn9sqYjYZcOUhCbHpuYn0-v9uQPpLX4gXgPv9zgobDyYh15rOe8RauxDS5Sj6oXSypfTHN5201CK6qlvfxKKznOb2_5kTO-cJKFspA",
+                "type": "roundvideo",
+                "url": "https://cdn4.telesco.pe/file/244d1670aa.mp4?token=HE54RTLbtUrf96ea1GoKnihiunaU8YCiGp4F9q1wiAZoD9ktlhsOB-z_5ZQAw5Z5s-YtvD4K8Vvd11lj2nFOkQ_2dwHofbAGHNtE8Z-kXoxu38MiRy57JQsiF_4huiw_s9fKw1v-y78MW0JSRCSeKmTlrI3Z7_m5vR7mEIUDgRYzA6vP6jWqHmiXzgTbYrsxclgxTSPy6aTWeUFOFGO5zAng1EnUVoLD4pjtTVe3JzYrOmKeBqtlSMuAKnydavi7hNHHnjKWYsbu-jwdP3ZxDrDBfJQ1aNbm_n3Ro1EVuCh1ODTbLhskpRnFCsuBI4JrZo3XuBeqASOctmM6k8qHSg",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": null,
+            "reacts": [
+              {
+                "count": "35",
+                "emoji": "⭐",
+                "emoji_id": null,
+                "emoji_image": null,
+                "type": "telegram_stars"
+              },
+              {
+                "count": "2.38K",
+                "emoji": "❤",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/E29DA4.png",
+                "type": "emoji"
+              },
+              {
+                "count": "914",
+                "emoji": "😭",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F98AD.png",
+                "type": "emoji"
+              },
+              {
+                "count": "313",
+                "emoji": "😱",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F98B1.png",
+                "type": "emoji"
+              },
+              {
+                "count": "52",
+                "emoji": "👎",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F918E.png",
+                "type": "emoji"
+              },
+              {
+                "count": "38",
+                "emoji": "🎉",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F8E89.png",
+                "type": "emoji"
+              }
+            ],
+            "reply": null,
+            "text": null
+          },
+          "footer": {
+            "author": null,
+            "date": {
+              "string": "2026-08-02T18:01:40+00:00",
+              "unix": 1785693700
+            },
+            "edited": false,
+            "views": "203K"
+          },
+          "forwarded": null,
+          "id": 6365,
+          "view": "eyJjIjotMTI1MDEyMjM5MCwicCI6NjM2NSwidCI6MTc5MjcxNzE2MSwiaCI6IjFmMjU3YjQ1ZDUwOGQ1NzQ1NiJ9"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": {
+                  "formatted": "0:17",
+                  "raw": 17
+                },
+                "thumb": "https://cdn4.telesco.pe/file/R_vIZpl2V7khC1P3Bn_AnmU_aObiWoO21OygYs5kJ1tiVRjoAqAM3dYWEvo7RWhdCp93TC4LYoDM5-c13gjYyUbPfFZMXtySXpwp6D43bIOz_nksERo-k_jeu-R5mxkOsglPDRLv4HoayeGZm45i4-ZzpX5q4_tCZSR0v34wmF5T974wUtYZNHIyqTo_BiP1CI7ZIxSGKzJyeeB3H9gv1j8sn6NSl-3KKHC6cKf7SpkyXeyhtDg46f087Q-_-1lK-nqzc8s5xWfqqAZt5A8a2GrWqddopEk6aKyhWexWJFnqB_MipAYPpnXPE4xvK1_ik0IicmZzuSSVBOWN7iSF_w",
+                "type": "roundvideo",
+                "url": "https://cdn4.telesco.pe/file/8dfece50fa.mp4?token=ZbB07Cm96rlsDmstu0Fx7hT6BoAM3hbu_YuuRPFEWWRRZvNnr19kvjYaRgcVRTCH4sgNpthYT65BCL5ObWuwDeKJDyzpQBpx_eb5hYr8t3bUNVKdTCRYwccf3-TmjRBeZpTfXhlzfn3uJB5kzs839v7VjPsBYoiALcBsfS2SVuRGFfltWIF41K8BgpnoCiwBKm0JXlSkW1KMZwsW-E4YPFrjNnOR1m5pNsClq57htuvjb3KF5RWuIUmzgzp6qWXWMeqfWOD0GnkF4iGZbXIyUOik7V7jXOTxsDBxmzYgrObupCao09-oZl5DdXbxNuUGWtM_0-DFjxgJwNwpJfZmgQ",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": null,
+            "reacts": [
+              {
+                "count": "21",
+                "emoji": "⭐",
+                "emoji_id": null,
+                "emoji_image": null,
+                "type": "telegram_stars"
+              },
+              {
+                "count": "2.28K",
+                "emoji": "❤",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/E29DA4.png",
+                "type": "emoji"
+              },
+              {
+                "count": "287",
+                "emoji": "🎉",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F8E89.png",
+                "type": "emoji"
+              },
+              {
+                "count": "133",
+                "emoji": "🤡",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09FA4A1.png",
+                "type": "emoji"
+              },
+              {
+                "count": "30",
+                "emoji": "💩",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F92A9.png",
+                "type": "emoji"
+              },
+              {
+                "count": "15",
+                "emoji": "🖕",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F9695.png",
+                "type": "emoji"
+              }
+            ],
+            "reply": null,
+            "text": null
+          },
+          "footer": {
+            "author": null,
+            "date": {
+              "string": "2026-08-05T09:15:03+00:00",
+              "unix": 1785921303
+            },
+            "edited": false,
+            "views": "194K"
+          },
+          "forwarded": null,
+          "id": 6368,
+          "view": "eyJjIjotMTI1MDEyMjM5MCwicCI6NjM2OCwidCI6MTc5MjcxNzE2MSwiaCI6IjM5YzZkZTA1NmEzNmE5YzRmMSJ9"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": {
+                  "formatted": "0:10",
+                  "raw": 10
+                },
+                "thumb": "https://cdn4.telesco.pe/file/barLsd5b3iBfTCjiORB1XoflNQVs3O-yHWtiXZvOm073bqS3d-N1PAUxBbyhEthlcpvlCq4L8Lj5kPumVg-K4qPR17k8ZpFX7Flf5ECppa28PpkIqqDmjqyR7xIwt0_U_PDSEiwrsgZ2aTV53eXLrkFsLDv2ZX_pczlX2UuoDTOaNn4sS44eECsuU7B3AGU280NOeXCstfVEAEXkSmLp3wQoTtQnuYiOKQaTs5pd6kh9CuAsmQ6wO4x1og3u9dl-JtUEXg9qth3-hyLUsXGi2ZVVnRtz5zeh5y3dAFHYj-SnkIR9ayUwjn6XAYHznM3B2PHxUPCep2uWWLAKlxokGA",
+                "type": "roundvideo",
+                "url": "https://cdn4.telesco.pe/file/48479ba5f5.mp4?token=W2ZHK6Dz3loXJBAxzdu332g2JwmTJLMzEFIGGuNozFXoGyg4j-IDllS194JMSxUm_gC4QQXBzuKpFE1S_Xf8P71-sukYGz4f69OSckm5NfdtTG5uEKPaDR4NGZmmQgD6hSSarPTxmqadWdJUqNxTxWFTajfdTytE_Ale3TQ1eMOa4pMgSYYFMZiD3vn2X0USfGUl-0yihB231JfIBM0J_uAoBlOyOgLLCvoLUsvANMD_vO1e9nrbH-sSQN6WFPZUK1y-exCt8YvRLYKg08Xj5EVCzwWdGMty2Y6MPsTWtfO13Vsa0snDGwRefqQz_U4lgJAE0GzeX6YPba259lgqjA",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": null,
+            "reacts": [
+              {
+                "count": "6",
+                "emoji": "⭐",
+                "emoji_id": null,
+                "emoji_image": null,
+                "type": "telegram_stars"
+              },
+              {
+                "count": "1.77K",
+                "emoji": "❤",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/E29DA4.png",
+                "type": "emoji"
+              },
+              {
+                "count": "203",
+                "emoji": "💅",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F9285.png",
+                "type": "emoji"
+              },
+              {
+                "count": "139",
+                "emoji": "👍",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F918D.png",
+                "type": "emoji"
+              },
+              {
+                "count": "32",
+                "emoji": "💩",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F92A9.png",
+                "type": "emoji"
+              },
+              {
+                "count": "26",
+                "emoji": "🤡",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09FA4A1.png",
+                "type": "emoji"
+              }
+            ],
+            "reply": null,
+            "text": null
+          },
+          "footer": {
+            "author": null,
+            "date": {
+              "string": "2026-08-05T10:08:14+00:00",
+              "unix": 1785924494
+            },
+            "edited": false,
+            "views": "183K"
+          },
+          "forwarded": null,
+          "id": 6369,
+          "view": "eyJjIjotMTI1MDEyMjM5MCwicCI6NjM2OSwidCI6MTc5MjcxNzE2MSwiaCI6Ijk1OWFiNTI0NTFmNTQ2ZWYyMiJ9"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": null,
+                "thumb": null,
+                "type": "image",
+                "url": "https://cdn4.telesco.pe/file/TRO9gqDDiyfRxOco7o8z0CYCq2P4_zcSTvUEE0TskcBJhKPXgUz8C9cLxU3y3KE65tYE-Yy2uG-AnYKym7wM0Ktx4gIM7FimiytIhNnDjphQwoCsoXJmTmwF_iTUWopPstJP46G9WSRy8uAUqjci-MfnGjS2Pe2wzt_X1TLsUc18I85AyBxy3FSXW3Cxdsku8BdAiuWnerDFeJMRauxnDYqrqa6pgwlZxCFZN2MSmGIZSiBaFaaTWjRqFmgfZxFcZCaXoO4YrT4ZhteRfuAp73gWtrr6zTZCoNYw_2aQw6-CciLzDVeHP575cQ_SHNML7pEZf5eOi27gy6FHTS5LFw.jpg",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": null,
+            "reacts": [
+              {
+                "count": "62",
+                "emoji": "⭐",
+                "emoji_id": null,
+                "emoji_image": null,
+                "type": "telegram_stars"
+              },
+              {
+                "count": "2.73K",
+                "emoji": "❤",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/E29DA4.png",
+                "type": "emoji"
+              },
+              {
+                "count": "268",
+                "emoji": "👍",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F918D.png",
+                "type": "emoji"
+              },
+              {
+                "count": "207",
+                "emoji": "😱",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F98B1.png",
+                "type": "emoji"
+              },
+              {
+                "count": "53",
+                "emoji": "🤡",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09FA4A1.png",
+                "type": "emoji"
+              },
+              {
+                "count": "21",
+                "emoji": "🎉",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F8E89.png",
+                "type": "emoji"
+              }
+            ],
+            "reply": null,
+            "text": {
+              "entities": null,
+              "html": "Нихуя себе электричка",
+              "string": "Нихуя себе электричка"
+            }
+          },
+          "footer": {
+            "author": null,
+            "date": {
+              "string": "2026-08-05T10:34:12+00:00",
+              "unix": 1785926052
+            },
+            "edited": false,
+            "views": "221K"
+          },
+          "forwarded": null,
+          "id": 6370,
+          "view": "eyJjIjotMTI1MDEyMjM5MCwicCI6NjM3MCwidCI6MTc5MjcxNzE2MSwiaCI6IjdkYjQzZjc3ZWE1OTRiODNkNyJ9"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": {
+                  "formatted": "0:29",
+                  "raw": 29
+                },
+                "thumb": "https://cdn4.telesco.pe/file/f55FnBOfDTw3p5R8OkwxhxOe5fcgnUVCdHdkj69Fklorjenr9odeGoDLGiMyXAtJvms0oLvP16VGf0cyfGzh2PDpiHMTdeezv4-8Hsko0glHRPwJfBwXLOgNOIZNzMz7w1yNzBwb46Ryhu17p2J-xyb37YTVmdFJcHGQRqsiE_hbOlV0mlP1TJc84C2XL32TJZv5HsL2ktTnqZzovly4SUpB3QXXRguNYASqVtpTsjNhQrWMgEnlbrQ_S6WUFE1yj5RUdSvUyufMiMRgfUnF6HSDg9acSRuWab1xn4kHLxGvpew1TfwOBy18dU9smWNU-OX_rPPG7M36DEo3Wvsr0g",
+                "type": "roundvideo",
+                "url": "https://cdn4.telesco.pe/file/379eb0e8bc.mp4?token=KAi6ZtPGBHRcVKVxoeFU1Z9fiT67yNatJsSLdmDCIbuMPUALXRL4zvqddJyhrRNo1CCzU_TdhAlllXPLSD3QVl-1XQdBHUnp7qQOuzeX2VPNTVGitEuT3SJMe3R1GtOJmcqFTY_0XQfA60HCemc0opYkTTF411E4BsKiACyBgDpJcJ0Oc069-IhtXNqqSl7df9ggWFhlZp-MuKpeZqx9IaTHph46reSxppHzS4Qa-wlOK01-6uhQA0L_Yp52IbIE5w-V8748wmj2F_9gMTHUU6CEeB0ODvJVuiWY2ntQWE7he-goclxZXPUwe2GRhQH8rxtEVHg32JTpyMiiDcLZtg",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": null,
+            "reacts": [
+              {
+                "count": "6",
+                "emoji": "⭐",
+                "emoji_id": null,
+                "emoji_image": null,
+                "type": "telegram_stars"
+              },
+              {
+                "count": "2.01K",
+                "emoji": "❤",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/E29DA4.png",
+                "type": "emoji"
+              },
+              {
+                "count": "206",
+                "emoji": "👍",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F918D.png",
+                "type": "emoji"
+              },
+              {
+                "count": "144",
+                "emoji": "🎉",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F8E89.png",
+                "type": "emoji"
+              },
+              {
+                "count": "41",
+                "emoji": "😱",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F98B1.png",
+                "type": "emoji"
+              },
+              {
+                "count": "29",
+                "emoji": "💩",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F92A9.png",
+                "type": "emoji"
+              }
+            ],
+            "reply": null,
+            "text": null
+          },
+          "footer": {
+            "author": null,
+            "date": {
+              "string": "2026-08-05T13:20:24+00:00",
+              "unix": 1785936024
+            },
+            "edited": false,
+            "views": "217K"
+          },
+          "forwarded": null,
+          "id": 6372,
+          "view": "eyJjIjotMTI1MDEyMjM5MCwicCI6NjM3MiwidCI6MTc5MjcxNzE2MSwiaCI6IjQwYWI1ODg1NzhlZGVjZmJmYyJ9"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": null,
+            "poll": null,
+            "preview_link": null,
+            "reacts": [
+              {
+                "count": "16",
+                "emoji": "⭐",
+                "emoji_id": null,
+                "emoji_image": null,
+                "type": "telegram_stars"
+              },
+              {
+                "count": "2.9K",
+                "emoji": "❤",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/E29DA4.png",
+                "type": "emoji"
+              },
+              {
+                "count": "356",
+                "emoji": "👍",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F918D.png",
+                "type": "emoji"
+              },
+              {
+                "count": "236",
+                "emoji": "🎉",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F8E89.png",
+                "type": "emoji"
+              },
+              {
+                "count": "51",
+                "emoji": "😭",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F98AD.png",
+                "type": "emoji"
+              },
+              {
+                "count": "36",
+                "emoji": "👎",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F918E.png",
+                "type": "emoji"
+              }
+            ],
+            "reply": null,
+            "text": {
+              "entities": null,
+              "html": "Все разрядилось. Стрим переподрубать уже не буду (не смогу). Кто бы что не говорил, но я обещал - сделал. Щас будем думать че делать с сетью, чтобы в следующий раз было ещё лучше. Пишите здесь что добавить, или наоборот убавить. Про лаги не писать, это уже само собой.<br><br>В целом как вам вайб? Стоит ли дальше развивать такое, или дропнуть на хуй проще. Потому что это нихуя не дёшево.",
+              "string": "Все разрядилось. Стрим переподрубать уже не буду (не смогу). Кто бы что не говорил, но я обещал - сделал. Щас будем думать че делать с сетью, чтобы в следующий раз было ещё лучше. Пишите здесь что добавить, или наоборот убавить. Про лаги не писать, это уже само собой.\n\nВ целом как вам вайб? Стоит ли дальше развивать такое, или дропнуть на хуй проще. Потому что это нихуя не дёшево."
+            }
+          },
+          "footer": {
+            "author": null,
+            "date": {
+              "string": "2026-08-05T14:40:08+00:00",
+              "unix": 1785940808
+            },
+            "edited": true,
+            "views": "240K"
+          },
+          "forwarded": null,
+          "id": 6373,
+          "view": "eyJjIjotMTI1MDEyMjM5MCwicCI6NjM3MywidCI6MTc5MjcxNzE2MSwiaCI6IjVlMTYwZDZmYjBlYmY2YzcyMCJ9"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": null,
+            "poll": null,
+            "preview_link": null,
+            "reacts": [
+              {
+                "count": "11",
+                "emoji": "⭐",
+                "emoji_id": null,
+                "emoji_image": null,
+                "type": "telegram_stars"
+              },
+              {
+                "count": "2.72K",
+                "emoji": "❤",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/E29DA4.png",
+                "type": "emoji"
+              },
+              {
+                "count": "321",
+                "emoji": "👍",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F918D.png",
+                "type": "emoji"
+              },
+              {
+                "count": "189",
+                "emoji": "🎉",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F8E89.png",
+                "type": "emoji"
+              },
+              {
+                "count": "23",
+                "emoji": "😱",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F98B1.png",
+                "type": "emoji"
+              },
+              {
+                "count": "16",
+                "emoji": "💅",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F9285.png",
+                "type": "emoji"
+              }
+            ],
+            "reply": null,
+            "text": {
+              "entities": null,
+              "html": "Точно, как домой доеду. Заведу на втором. Всем спс кто сегодня смотрел. Для меня важно было, что вы сегодня это смотрели. Стрим от третьего лица тачки была моя самая яркая идея. Видосы давно есть, а вот стрима… не было.",
+              "string": "Точно, как домой доеду. Заведу на втором. Всем спс кто сегодня смотрел. Для меня важно было, что вы сегодня это смотрели. Стрим от третьего лица тачки была моя самая яркая идея. Видосы давно есть, а вот стрима… не было."
+            }
+          },
+          "footer": {
+            "author": null,
+            "date": {
+              "string": "2026-08-05T14:41:52+00:00",
+              "unix": 1785940912
+            },
+            "edited": false,
+            "views": "261K"
+          },
+          "forwarded": null,
+          "id": 6374,
+          "view": "eyJjIjotMTI1MDEyMjM5MCwicCI6NjM3NCwidCI6MTc5MjcxNzE2MSwiaCI6IjBlYjA4ZmM2YTEwMDg4YjVmNCJ9"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": null,
+            "poll": null,
+            "preview_link": null,
+            "reacts": [
+              {
+                "count": "5",
+                "emoji": "⭐",
+                "emoji_id": null,
+                "emoji_image": null,
+                "type": "telegram_stars"
+              },
+              {
+                "count": "1.98K",
+                "emoji": "❤",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/E29DA4.png",
+                "type": "emoji"
+              },
+              {
+                "count": "194",
+                "emoji": "😱",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F98B1.png",
+                "type": "emoji"
+              },
+              {
+                "count": "152",
+                "emoji": "💅",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F9285.png",
+                "type": "emoji"
+              },
+              {
+                "count": "50",
+                "emoji": "👍",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F918D.png",
+                "type": "emoji"
+              },
+              {
+                "count": "36",
+                "emoji": "🎉",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F8E89.png",
+                "type": "emoji"
+              }
+            ],
+            "reply": {
+              "cover": "https://cdn4.telesco.pe/file/pq78sO6rFT3wo3IKuMFoLBnmvZuYzQyRSSQ3yqSmCfjUdsXeXtFqFkiik1bjASt89h_zQ49t2QljFMwhNLfA7R5OlmZufH7SOFMTnNgIOhjfruPfPwaEtubq8MAGIjpcj-rE05vukqTOkuyjffVYU7esvzl0klbQpLs9LJLYe_HSqebQKcDz_8UKZvx5QaHF-sN46qXU0iKABOQwbcyEtcwUcK6m6SV1byM1cmTRVt4y0RftjhqrENBOTOCT6rc7wTMLMA6-JTKhyWv70NimdYzFWELEWiDPhoeRw73zEORdO_Be4vgyminSmQEC0XgaqJyklodw2G_IyphI4BkNgw",
+              "name": {
+                "html": "Логово Внизу",
+                "string": "Логово Внизу"
+              },
+              "text": {
+                "html": "😚 КОНКУРС НА ПРОСМОТРЫ В ТИКТОКЕ  Кто будет Топ-1 под нашим звуком c новым треком до 3.08 23:00 получит 50.000₽  Видео, выложенные до 30.07 21:00, — не участвуют",
+                "string": "😚 КОНКУРС НА ПРОСМОТРЫ В ТИКТОКЕ  Кто будет Топ-1 под нашим звуком c новым треком до 3.08 23:00 получит 50.000₽  Видео, выложенные до 30.07 21:00, — не участвуют"
+              },
+              "to_message": 6355
+            },
+            "text": {
+              "entities": [
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 0,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/F09F989A.png"
+                }
+              ],
+              "html": "<tg-emoji emoji-id=\"5244646777746908576\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F989A.png')\"><b>😚</b></i></tg-emoji> КОНКУРС НА ПРОСМОТРЫ В ТИКТОКЕ  Кто будет Топ-1 под нашим звуком c новым треком до 3.08 23:00 получит 50.000₽  Видео, выложенные до 30.07 21:00, — не участвуют",
+              "string": "😚 КОНКУРС НА ПРОСМОТРЫ В ТИКТОКЕ  Кто будет Топ-1 под нашим звуком c новым треком до 3.08 23:00 получит 50.000₽  Видео, выложенные до 30.07 21:00, — не участвуют"
+            }
+          },
+          "footer": {
+            "author": null,
+            "date": {
+              "string": "2026-08-06T12:04:01+00:00",
+              "unix": 1786017841
+            },
+            "edited": true,
+            "views": "287K"
+          },
+          "forwarded": null,
+          "id": 6375,
+          "view": "eyJjIjotMTI1MDEyMjM5MCwicCI6NjM3NSwidCI6MTc5MjcxNzE2MSwiaCI6IjY3NjQyNTY2MTU4NDgxZWYzZSJ9"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": null,
+            "poll": null,
+            "preview_link": null,
+            "reacts": [
+              {
+                "count": "26",
+                "emoji": "⭐",
+                "emoji_id": null,
+                "emoji_image": null,
+                "type": "telegram_stars"
+              },
+              {
+                "count": "3.39K",
+                "emoji": "❤",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/E29DA4.png",
+                "type": "emoji"
+              },
+              {
+                "count": "544",
+                "emoji": "🤡",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09FA4A1.png",
+                "type": "emoji"
+              },
+              {
+                "count": "264",
+                "emoji": "👍",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F918D.png",
+                "type": "emoji"
+              },
+              {
+                "count": "74",
+                "emoji": "💩",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F92A9.png",
+                "type": "emoji"
+              },
+              {
+                "count": "51",
+                "emoji": "🎉",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F8E89.png",
+                "type": "emoji"
+              }
+            ],
+            "reply": null,
+            "text": {
+              "entities": [
+                {
+                  "language": null,
+                  "length": 26,
+                  "offset": 228,
+                  "type": "url",
+                  "url": null
+                }
+              ],
+              "html": "Значит так. Вчера я устроил пиздец в скваде и набрал витуб детей. Теперь можете тыкать на эту ссылку и смотреть на весь этот пиздец. <br>Один хуй сквад простаивал<br><br>Отборные фрикухи с разным характером. Вот это настоящий фрикленд.<br><br><a href=\"http://www.twitch.tv/team/89squad\" target=\"_blank\" rel=\"noopener\">www.twitch.tv/team/89squad</a>",
+              "string": "Значит так. Вчера я устроил пиздец в скваде и набрал витуб детей. Теперь можете тыкать на эту ссылку и смотреть на весь этот пиздец. \nОдин хуй сквад простаивал\n\nОтборные фрикухи с разным характером. Вот это настоящий фрикленд.\n\nwww.twitch.tv/team/89squad"
+            }
+          },
+          "footer": {
+            "author": null,
+            "date": {
+              "string": "2026-08-07T11:43:40+00:00",
+              "unix": 1786103020
+            },
+            "edited": true,
+            "views": "279K"
+          },
+          "forwarded": null,
+          "id": 6377,
+          "view": "eyJjIjotMTI1MDEyMjM5MCwicCI6NjM3NywidCI6MTc5MjcxNzE2MSwiaCI6IjUwZjUzYmI4MDJiZmM0MzQ4NiJ9"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": null,
+            "poll": null,
+            "preview_link": null,
+            "reacts": [
+              {
+                "count": "10",
+                "emoji": "⭐",
+                "emoji_id": null,
+                "emoji_image": null,
+                "type": "telegram_stars"
+              },
+              {
+                "count": "3.22K",
+                "emoji": "❤",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/E29DA4.png",
+                "type": "emoji"
+              },
+              {
+                "count": "372",
+                "emoji": "🎉",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F8E89.png",
+                "type": "emoji"
+              },
+              {
+                "count": "237",
+                "emoji": "👍",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F918D.png",
+                "type": "emoji"
+              },
+              {
+                "count": "60",
+                "emoji": "😭",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F98AD.png",
+                "type": "emoji"
+              },
+              {
+                "count": "41",
+                "emoji": "👎",
+                "emoji_id": null,
+                "emoji_image": "https://telegram.org/img/emoji/40/F09F918E.png",
+                "type": "emoji"
+              }
+            ],
+            "reply": null,
+            "text": {
+              "entities": null,
+              "html": "Слав, я просто решил дать вам шанс. <br>Судя по тому как вы сыграли - зря. Можно было приходить и второй кубок забирать получается",
+              "string": "Слав, я просто решил дать вам шанс. \nСудя по тому как вы сыграли - зря. Можно было приходить и второй кубок забирать получается"
+            }
+          },
+          "footer": {
+            "author": null,
+            "date": {
+              "string": "2026-08-09T21:43:01+00:00",
+              "unix": 1786311781
+            },
+            "edited": false,
+            "views": "209K"
+          },
+          "forwarded": null,
+          "id": 6379,
+          "view": "eyJjIjotMTI1MDEyMjM5MCwicCI6NjM3OSwidCI6MTc5MjcxNzE2MSwiaCI6ImYzNThmMDNhZjU4ZDA2ZDg2YyJ9"
+        }
+      ]
+    },
+    "meta": {
+      "offset": {
+        "after": 6379,
+        "before": 6350
+      }
+    }
+  },
+  "status": 200
+}

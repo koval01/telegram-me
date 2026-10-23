@@ -1,0 +1,47 @@
+# Tools run from the project environment (uv.lock), so hooks always use the
+# same versions as CI. Install with `make install`.
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: trailing-whitespace
+        exclude: ^tests/snapshots/
+      - id: end-of-file-fixer
+        # Snapshots are generated; static files are served byte for byte.
+        exclude: ^(tests/snapshots/|src/telegram_me/static/)
+      - id: check-yaml
+      - id: check-toml
+      - id: check-merge-conflict
+      - id: check-added-large-files
+        args: [--maxkb=1024]
+
+  - repo: local
+    hooks:
+      - id: ruff-check
+        name: ruff check
+        entry: uv run ruff check --fix
+        language: system
+        types_or: [python, pyi]
+      - id: ruff-format
+        name: ruff format
+        entry: uv run ruff format
+        language: system
+        types_or: [python, pyi]
+      - id: mypy
+        name: mypy
+        entry: uv run mypy
+        language: system
+        types_or: [python, pyi]
+        pass_filenames: false
+      - id: cargo-fmt
+        name: cargo fmt
+        entry: cargo fmt --manifest-path rust/telegram-me-native/Cargo.toml --
+        language: system
+        types: [rust]
+        pass_filenames: false
+      - id: cargo-clippy
+        name: cargo clippy
+        entry: cargo clippy --manifest-path rust/telegram-me-native/Cargo.toml --all-targets --features python -- -D warnings
+        language: system
+        types: [rust]
+        pass_filenames: false

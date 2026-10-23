@@ -1,1 +1,0 @@
-"""methods module of parser"""

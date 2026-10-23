@@ -1,0 +1,14 @@
+{
+  "body": {
+    "durov": {
+      "channel": {
+        "avatar": "https://cdn4.telesco.pe/file/TUoXCel1JUtqkYhxGtnSLrnpExFFvX9VIglnKkA-WVI84u2Gl-222WMuM1cFJH52KbyGe9-ohXEsA-RicwcXjhyvWmiZMHeH5d-M1gU8oN3iKnIx3MCbMHidV4T_AOPXm0Y2Vzz7AAI9Xrd8ILsD6V513hehdj7fVB1QXMHYb8veNncqG-CgF8vtHOabGYbaerPPCeV9Lo0KE-LD7ff4LPCenZ9rABOuFFzKtKNYaP32owLWZRU5clIvLaWeu882pVUgdXr2CR0APKGvRVofDT_V8mWWPFsgodsnHos3fQobSoqJIappBdif1hAPLvZwBekGd3ZA5FZrHaAh96B3NQ.jpg",
+        "description": "Founder of Telegram.",
+        "is_verified": true,
+        "subscribers": "10 281 023 subscribers",
+        "title": "Pavel Durov"
+      }
+    }
+  },
+  "status": 200
+}

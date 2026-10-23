@@ -49,11 +49,12 @@ def call(base_url: str, scenario: Scenario, timeout: float) -> ScenarioResult:
         data = json.dumps(scenario.payload).encode("utf-8")
         headers["Content-Type"] = "application/json"
 
-    req = request.Request(url, method=scenario.method, headers=headers, data=data)
+    # base_url is checked to be http(s) in main().
+    req = request.Request(url, method=scenario.method, headers=headers, data=data)  # noqa: S310
     started = time.time()
 
     try:
-        with request.urlopen(req, timeout=timeout) as response:
+        with request.urlopen(req, timeout=timeout) as response:  # noqa: S310
             raw = response.read()
             elapsed = int((time.time() - started) * 1000)
             preview = raw.decode("utf-8", errors="replace")[:200].replace("\n", " ")
@@ -114,7 +115,45 @@ def detect_feature_state(base_url: str, timeout: float) -> tuple[bool, bool]:
     return feed_enabled, previews_enabled
 
 
-def build_scenarios(feed_enabled: bool, previews_enabled: bool, exploratory_channels: list[str]) -> list[Scenario]:
+def detect_graphql(base_url: str, timeout: float) -> bool:
+    """Detect whether the GraphQL endpoint is mounted on the running instance."""
+    probe = Scenario(
+        name="probe_graphql",
+        method="POST",
+        path="/graphql",
+        payload={"query": "{ __typename }"},
+        expected_statuses={200, 404},
+    )
+    return call(base_url, probe, timeout).status == 200
+
+
+def graphql_scenarios(enabled: bool) -> list[Scenario]:
+    """GraphQL checks: 404 everywhere while the endpoint is disabled."""
+    body = '{ body(channel: "durov") { channel { username } meta { offset { before } } } }'
+    post = '{ post(channel: "stranaua", id: 252483) { id content { text { string } } } }'
+    return [
+        Scenario("graphql_body", "POST", "/graphql", {200 if enabled else 404}, {"query": body}),
+        Scenario(
+            "graphql_batch",
+            "POST",
+            "/graphql",
+            {200 if enabled else 404},
+            payload=[{"query": body}, {"query": post}],
+        ),
+        Scenario(
+            "graphql_batch_too_large",
+            "POST",
+            "/graphql",
+            {400 if enabled else 404},
+            payload=[{"query": "{ __typename }"}] * 11,
+        ),
+        Scenario("graphql_no_query", "POST", "/graphql", {400 if enabled else 404}, payload={}),
+    ]
+
+
+def build_scenarios(
+    feed_enabled: bool, previews_enabled: bool, exploratory_channels: list[str]
+) -> list[Scenario]:
     """Build strict and exploratory smoke scenarios."""
     strict_channels = ["durov", "telegram", "stranaua"]
 
@@ -136,9 +175,21 @@ def build_scenarios(feed_enabled: bool, previews_enabled: bool, exploratory_chan
             "/v1/preview/zzzzzznotexistingchannelzzzz",
             {404} if previews_enabled else {503},
         ),
-        Scenario("previews_invalid_array_legacy", "POST", "/v1/previews", {422}, payload=["durov", "stranaua"]),
+        Scenario(
+            "previews_invalid_array_legacy",
+            "POST",
+            "/v1/previews",
+            {422},
+            payload=["durov", "stranaua"],
+        ),
         Scenario("previews_invalid_empty", "POST", "/v1/previews", {422}, payload={"channels": []}),
-        Scenario("previews_invalid_item", "POST", "/v1/previews", {422}, payload={"channels": ["durov", "bad-name"]}),
+        Scenario(
+            "previews_invalid_item",
+            "POST",
+            "/v1/previews",
+            {422},
+            payload={"channels": ["durov", "bad-name"]},
+        ),
         Scenario(
             "previews_invalid_too_many",
             "POST",
@@ -147,13 +198,28 @@ def build_scenarios(feed_enabled: bool, previews_enabled: bool, exploratory_chan
             payload={"channels": [f"chan{i:03d}" for i in range(101)]},
         ),
         Scenario("feed_invalid_empty", "POST", "/v1/feed", {422}, payload={"channels": []}),
-        Scenario("feed_invalid_item", "POST", "/v1/feed", {422}, payload={"channels": ["durov", "bad-name"]}),
-        Scenario("feed_invalid_missing", "POST", "/v1/feed", {422}, payload={"not_channels": ["durov"]}),
+        Scenario(
+            "feed_invalid_item",
+            "POST",
+            "/v1/feed",
+            {422},
+            payload={"channels": ["durov", "bad-name"]},
+        ),
+        Scenario(
+            "feed_invalid_missing", "POST", "/v1/feed", {422}, payload={"not_channels": ["durov"]}
+        ),
     ]
 
     for channel in strict_channels:
         scenarios.append(Scenario(f"body_valid_{channel}", "GET", f"/v1/body/{channel}", {200}))
-        scenarios.append(Scenario(f"preview_valid_{channel}", "GET", f"/v1/preview/{channel}", {200 if previews_enabled else 503}))
+        scenarios.append(
+            Scenario(
+                f"preview_valid_{channel}",
+                "GET",
+                f"/v1/preview/{channel}",
+                {200 if previews_enabled else 503},
+            )
+        )
 
     scenarios.extend(
         [
@@ -167,6 +233,15 @@ def build_scenarios(feed_enabled: bool, previews_enabled: bool, exploratory_chan
                 {200 if previews_enabled else 503},
                 payload={"channels": ["durov", "stranaua", "nebudetafk"]},
             ),
+            Scenario(
+                "previews_partial_result",
+                "POST",
+                "/v1/previews",
+                {200 if previews_enabled else 503},
+                payload={"channels": ["durov", "zzzzzznotexistingchannelzzzz"]},
+            ),
+            Scenario("post_with_inline_button", "GET", "/v1/post/nebudetgg/6209", {200}),
+            Scenario("body_around_post", "GET", "/v1/body/stranaua?position=252483", {200}),
             Scenario(
                 "feed_valid",
                 "POST",
@@ -226,12 +301,17 @@ def main() -> int:
     """Run full smoke matrix and return process exit code."""
     args = parse_args()
     base_url = args.base_url.rstrip("/")
+    if not base_url.startswith(("http://", "https://")):
+        raise SystemExit("--base-url must start with http:// or https://")
     exploratory_channels = [c.strip() for c in args.exploratory_channels.split(",") if c.strip()]
 
     detected_feed_enabled, detected_previews_enabled = detect_feature_state(base_url, args.timeout)
 
     if args.preset == "auto":
-        expected_feed_enabled, expected_previews_enabled = detected_feed_enabled, detected_previews_enabled
+        expected_feed_enabled, expected_previews_enabled = (
+            detected_feed_enabled,
+            detected_previews_enabled,
+        )
     elif args.preset == "full":
         expected_feed_enabled, expected_previews_enabled = True, True
     else:
@@ -243,11 +323,14 @@ def main() -> int:
         detected_previews_enabled,
         exploratory_channels,
     )
+    scenarios.extend(graphql_scenarios(detect_graphql(base_url, args.timeout)))
     results = [call(base_url, scenario, args.timeout) for scenario in scenarios]
     print_results(results)
 
     strict_failures = [result for result in results if result.scenario.strict and not result.ok]
-    exploratory_failures = [result for result in results if (not result.scenario.strict) and not result.ok]
+    exploratory_failures = [
+        result for result in results if (not result.scenario.strict) and not result.ok
+    ]
 
     print("\nSUMMARY")
     print(f"  strict_total={len([r for r in results if r.scenario.strict])}")
@@ -259,12 +342,9 @@ def main() -> int:
     print(f"  expected_feed_enabled={expected_feed_enabled}")
     print(f"  expected_previews_enabled={expected_previews_enabled}")
 
-    preset_mismatch = (
-        args.preset != "auto"
-        and (
-            detected_feed_enabled != expected_feed_enabled
-            or detected_previews_enabled != expected_previews_enabled
-        )
+    preset_mismatch = args.preset != "auto" and (
+        detected_feed_enabled != expected_feed_enabled
+        or detected_previews_enabled != expected_previews_enabled
     )
     if preset_mismatch:
         print("\nPRESET MISMATCH")
@@ -272,12 +352,8 @@ def main() -> int:
             "  Runtime feature state does not match selected preset. "
             "Check ENV flags used to start the server."
         )
-        print(
-            f"  expected: feed={expected_feed_enabled}, previews={expected_previews_enabled}"
-        )
-        print(
-            f"  detected: feed={detected_feed_enabled}, previews={detected_previews_enabled}"
-        )
+        print(f"  expected: feed={expected_feed_enabled}, previews={expected_previews_enabled}")
+        print(f"  detected: feed={detected_feed_enabled}, previews={detected_previews_enabled}")
 
     if strict_failures:
         print("\nSTRICT FAILURES")

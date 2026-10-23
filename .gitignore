@@ -5,3 +5,14 @@ __pycache__/
 *.py[cod]
 .DS_Store
 .idea/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+dist/
+site/
+target/
+*.so
+*.pyd
+deploy/certs/

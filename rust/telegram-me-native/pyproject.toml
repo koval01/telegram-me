@@ -1,0 +1,17 @@
+[project]
+name = "telegram-me-native"
+version = "0.1.0"
+description = "Native (Rust) core of TelegramMe"
+requires-python = ">=3.13"
+license = "Apache-2.0"
+
+[build-system]
+requires = ["maturin>=1.15,<2"]
+build-backend = "maturin"
+
+[tool.maturin]
+module-name = "telegram_me_native._native"
+python-source = "python"
+features = ["python", "pyo3/extension-module"]
+# Editable installs (`uv sync`) would otherwise build the slow debug profile.
+profile = "release"

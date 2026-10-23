@@ -1,0 +1,2523 @@
+{
+  "body": {
+    "channel": {
+      "avatar": "https://cdn4.telesco.pe/file/TUoXCel1JUtqkYhxGtnSLrnpExFFvX9VIglnKkA-WVI84u2Gl-222WMuM1cFJH52KbyGe9-ohXEsA-RicwcXjhyvWmiZMHeH5d-M1gU8oN3iKnIx3MCbMHidV4T_AOPXm0Y2Vzz7AAI9Xrd8ILsD6V513hehdj7fVB1QXMHYb8veNncqG-CgF8vtHOabGYbaerPPCeV9Lo0KE-LD7ff4LPCenZ9rABOuFFzKtKNYaP32owLWZRU5clIvLaWeu882pVUgdXr2CR0APKGvRVofDT_V8mWWPFsgodsnHos3fQobSoqJIappBdif1hAPLvZwBekGd3ZA5FZrHaAh96B3NQ.jpg",
+      "counters": {
+        "files": null,
+        "links": "200",
+        "photos": "102",
+        "subscribers": "10.3M",
+        "videos": "47"
+      },
+      "description": {
+        "html": "Founder of Telegram.",
+        "string": "Founder of Telegram."
+      },
+      "labels": [
+        "verified"
+      ],
+      "title": {
+        "html": "Pavel Durov",
+        "string": "Pavel Durov"
+      },
+      "username": "durov"
+    },
+    "content": {
+      "posts": [
+        {
+          "content": {
+            "inline": null,
+            "media": null,
+            "poll": null,
+            "preview_link": null,
+            "reacts": [
+              {
+                "count": "6.76K",
+                "emoji": "⭐",
+                "emoji_id": null,
+                "emoji_image": null,
+                "type": "telegram_stars"
+              },
+              {
+                "count": "54.4K",
+                "emoji": null,
+                "emoji_id": "5265077361648368841",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              },
+              {
+                "count": "20.4K",
+                "emoji": null,
+                "emoji_id": "5465587407350942612",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              },
+              {
+                "count": "14.2K",
+                "emoji": null,
+                "emoji_id": "5399847211989246390",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              },
+              {
+                "count": "794",
+                "emoji": null,
+                "emoji_id": "5936157098181135162",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              },
+              {
+                "count": "272",
+                "emoji": null,
+                "emoji_id": "5373223594484587136",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              }
+            ],
+            "reply": null,
+            "text": {
+              "entities": [
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 0,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/F09F8EAD.png"
+                },
+                {
+                  "language": null,
+                  "length": 2,
+                  "offset": 41,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/F09F87BAF09F87B8.png"
+                },
+                {
+                  "language": null,
+                  "length": 9,
+                  "offset": 63,
+                  "type": "text_link",
+                  "url": "https://www.reuters.com/legal/government/texas-sues-meta-whatsapp-over-encryption-privacy-claims-2026-05-21/"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 307,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/F09F93B1.png"
+                }
+              ],
+              "html": "<tg-emoji emoji-id=\"5359441070201513074\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F8EAD.png')\"><b>🎭</b></i></tg-emoji> WhatsApp encryption is a giant fraud.<br><br><tg-emoji emoji-id=\"5202021044105257611\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F87BAF09F87B8.png')\"><b>🇺🇸</b></i></tg-emoji> The state of Texas <a href=\"https://www.reuters.com/legal/government/texas-sues-meta-whatsapp-over-encryption-privacy-claims-2026-05-21/\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">just sued</a> WhatsApp for lying to users about privacy — because WhatsApp employees have access to “virtually all” private messages.<br><br>Now we know what WhatsApp’s founder meant when he said he “sold his users’ privacy.”<br><br>Stay safe — stay Telegram! <tg-emoji emoji-id=\"5830262682338465584\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F93B1.png')\"><b>📱</b></i></tg-emoji>",
+              "string": "🎭 WhatsApp encryption is a giant fraud.\n\n🇺🇸 The state of Texas just sued WhatsApp for lying to users about privacy — because WhatsApp employees have access to “virtually all” private messages.\n\nNow we know what WhatsApp’s founder meant when he said he “sold his users’ privacy.”\n\nStay safe — stay Telegram! 📱"
+            }
+          },
+          "footer": {
+            "author": {
+              "html": "Pavel Durov",
+              "string": "Pavel Durov"
+            },
+            "date": {
+              "string": "2026-05-23T13:26:07+00:00",
+              "unix": 1779542767
+            },
+            "edited": false,
+            "views": "11.7M"
+          },
+          "forwarded": null,
+          "id": 520,
+          "view": "eyJjIjotMTAwNjUwMzEyMiwicCI6NTIwLCJ0IjoxNzkyNzA3ODYxLCJoIjoiNDRhM2Q0ZjkwNTdkYmI4NmEzIn0"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": null,
+                "thumb": null,
+                "type": "image",
+                "url": "https://cdn4.telesco.pe/file/MTbcDk5k3iV8Zq_Yo7ZGGBKMIytx9K0X0BXdrEfhCoVDBDdRBm_cnD_ZdXmnSZ5I9A8kRqTA_BkqiQQq5xt990a5NbsMFNi_eHoUwb1jbGQDlbYOoI_QWwLiuF9VsYQbfUZ2wznFMnP51aCfIVHaV3PGk3ANcXSXfdgpNr5ENgE9NOCDSIDaqVJRjbMtOCvRGGToHYADXp-YE-6Bb-2uoM1SmOcvYbi4PTU-5bomzW-QfcfFJDrql7g6yg5AvVNs6nG5S7N3QPc3wu8jqQjRkYRljRlp-ji5tkqC_Pnfhy6tbTi4BAAfZzK8FeLY9nMFpuP15fy8_-N1ZwSkOh97qw.jpg",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": {
+              "description": {
+                "html": "The native currency of TON",
+                "string": "The native currency of TON"
+              },
+              "site_name": "Gram",
+              "thumb": null,
+              "title": null,
+              "url": "https://gram.org/"
+            },
+            "reacts": [
+              {
+                "count": "3.28K",
+                "emoji": "⭐",
+                "emoji_id": null,
+                "emoji_image": null,
+                "type": "telegram_stars"
+              },
+              {
+                "count": "23.8K",
+                "emoji": null,
+                "emoji_id": "5265077361648368841",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              },
+              {
+                "count": "8.7K",
+                "emoji": null,
+                "emoji_id": "5465587407350942612",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              },
+              {
+                "count": "7.43K",
+                "emoji": null,
+                "emoji_id": "5399847211989246390",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              },
+              {
+                "count": "575",
+                "emoji": null,
+                "emoji_id": "5936157098181135162",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              },
+              {
+                "count": "176",
+                "emoji": null,
+                "emoji_id": "5373223594484587136",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              }
+            ],
+            "reply": null,
+            "text": {
+              "entities": [
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 0,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/F09F928E.png"
+                },
+                {
+                  "language": null,
+                  "length": 3,
+                  "offset": 2,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 4,
+                  "offset": 36,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 43,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/F09FA491.png"
+                },
+                {
+                  "language": null,
+                  "length": 4,
+                  "offset": 45,
+                  "type": "text_link",
+                  "url": "https://gram.org/"
+                },
+                {
+                  "language": null,
+                  "length": 3,
+                  "offset": 75,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 117,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/F09F8CB1.png"
+                },
+                {
+                  "language": null,
+                  "length": 2,
+                  "offset": 179,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/E29C88.png"
+                },
+                {
+                  "language": null,
+                  "length": 15,
+                  "offset": 220,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 238,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/E28FB3.png"
+                },
+                {
+                  "language": null,
+                  "length": 7,
+                  "offset": 272,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 283,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/F09F92AA.png"
+                },
+                {
+                  "language": null,
+                  "length": 3,
+                  "offset": 285,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 326,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/F09FAA99.png"
+                },
+                {
+                  "language": null,
+                  "length": 3,
+                  "offset": 340,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 346,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 20,
+                  "offset": 351,
+                  "type": "text_link",
+                  "url": "https://t.me/durov/482"
+                }
+              ],
+              "html": "<tg-emoji emoji-id=\"5471952986970267163\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F928E.png')\"><b>💎</b></i></tg-emoji> <b>TON</b>’s native currency is becoming <b>Gram</b>.<br><br><tg-emoji emoji-id=\"5350716797622442220\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09FA491.png')\"><b>🤑</b></i></tg-emoji> <a href=\"https://gram.org/\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Gram</a> was the original name of <b>TON</b>’s currency in the first white paper.<br><br><tg-emoji emoji-id=\"5449885771420934013\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F8CB1.png')\"><b>🌱</b></i></tg-emoji> We’re returning to our roots — and starting a new chapter.<br><br><tg-emoji emoji-id=\"5436069918191702409\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/E29C88.png')\"><b>✈️</b></i></tg-emoji> This rebranding will pave the way for <b>what comes next</b>.<br><br><tg-emoji emoji-id=\"5451732530048802485\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/E28FB3.png')\"><b>⏳</b></i></tg-emoji> The transition will take around <b>3 weeks</b>. <br><br><tg-emoji emoji-id=\"5242529655222720177\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F92AA.png')\"><b>💪</b></i></tg-emoji> <b>TON</b> remains the name of the blockchain.<br><br><tg-emoji emoji-id=\"5296339823005557585\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09FAA99.png')\"><b>🪙</b></i></tg-emoji> This is step<b> 4 </b>of <b>7</b> to <a href=\"https://t.me/durov/482\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Make TON Great Again</a>.",
+              "string": "💎 TON’s native currency is becoming Gram.\n\n🤑 Gram was the original name of TON’s currency in the first white paper.\n\n🌱 We’re returning to our roots — and starting a new chapter.\n\n✈️ This rebranding will pave the way for what comes next.\n\n⏳ The transition will take around 3 weeks. \n\n💪 TON remains the name of the blockchain.\n\n🪙 This is step 4 of 7 to Make TON Great Again."
+            }
+          },
+          "footer": {
+            "author": {
+              "html": "Pavel Durov",
+              "string": "Pavel Durov"
+            },
+            "date": {
+              "string": "2026-06-01T15:40:13+00:00",
+              "unix": 1780328413
+            },
+            "edited": false,
+            "views": "6.83M"
+          },
+          "forwarded": null,
+          "id": 521,
+          "view": "eyJjIjotMTAwNjUwMzEyMiwicCI6NTIxLCJ0IjoxNzkyNzA3ODYxLCJoIjoiYzY0ZmJlYjFhN2NjZDg4MTdjIn0"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": null,
+                "thumb": null,
+                "type": "image",
+                "url": "https://cdn4.telesco.pe/file/cZPTXb6aUWZIuEQvdW-SP93OGdbjlcqY0m25YwckT2zlshplRaqlCjvrXqYoabQm8yhMk2YhWgYZoF5GjEiRHB_N0izDtMv_MHmbD6dQQligofHlnJNxq3FNs83zJtUwkSwBGk8DlReQ4DsSP8Iy-8CE1NAOZBsb4sXtYYjP4dkZLoY8yUuejX7Aa0L0sOu9GM7hdL6oMGbHrWYMkTU31qRHRHBOTf4JzwoWalftfpjX7mOhn_nuvHNwRrSUnioYdl1azBPbjS-RaZ8TCThtPHk3NKcd3AYCkNod-n86jnB50fJ4gH9nRZCdC9qPesii2p5MadYWEa7yjCJU0m0NvQ.jpg",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": null,
+            "reacts": [
+              {
+                "count": "15K",
+                "emoji": "⭐",
+                "emoji_id": null,
+                "emoji_image": null,
+                "type": "telegram_stars"
+              },
+              {
+                "count": "40.8K",
+                "emoji": null,
+                "emoji_id": "5265077361648368841",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              },
+              {
+                "count": "14.7K",
+                "emoji": null,
+                "emoji_id": "5465587407350942612",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              },
+              {
+                "count": "10.5K",
+                "emoji": null,
+                "emoji_id": "5399847211989246390",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              },
+              {
+                "count": "715",
+                "emoji": null,
+                "emoji_id": "5936157098181135162",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              },
+              {
+                "count": "240",
+                "emoji": null,
+                "emoji_id": "5373223594484587136",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              }
+            ],
+            "reply": null,
+            "text": null
+          },
+          "footer": {
+            "author": {
+              "html": "Pavel Durov",
+              "string": "Pavel Durov"
+            },
+            "date": {
+              "string": "2026-06-01T15:46:12+00:00",
+              "unix": 1780328772
+            },
+            "edited": false,
+            "views": "7.3M"
+          },
+          "forwarded": null,
+          "id": 522,
+          "view": "eyJjIjotMTAwNjUwMzEyMiwicCI6NTIyLCJ0IjoxNzkyNzA3ODYxLCJoIjoiNjcxMDFlYjhlMmRmZmQ5YzAxIn0"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": null,
+                "thumb": "https://cdn4.telesco.pe/file/nTkaLKE6vlZqAERICHBn8vpg7PFBVPrJJochphMiFw5K9C3K1eqcnAhWoE7SfQ1F679mojdO5_2Ml34sN_MzGJl6MfARrwr-WIZb8qn3AYJimhtwZviZGahFlt4KO1xYYBeYexspdd8Dl2uXjPnXG4Ih8L6KjP0CNMFD31CaEmVCJGWh47c7zo8nM0Qc5DRWqD5JKUjpqFJhMMNcGraVNb1PTbUJ8EVTUv_0csGk-6GjPfj-gEByhpx_4_4c7fJ8k7ZpsCjcDptui4LxkYgLIpIjrIT111-j1JTXU0gGQS_AehVKZfTzX5HpfSwdmWVptm8l9bXVBlsEWSKzeTq7fA",
+                "type": "gif",
+                "url": "https://cdn4.telesco.pe/file/3d8e6da6a4.mp4?token=htMqS_911YB4aPkRVNtB1bXoxrJqngF-zWfIizfTq_tnmJg0LkkiPQqZIgsr93vWEzUg5pYwUuE6GfP9gS3kQItFPghpfCYtkGnDkDuP-JCKkxbyRObKURnXM2UjAyHfK-jDBdmNmEQr22NjoJv118e50oHCjSl4lyp8aR6Ss2W_oxW6sUAE-gsqZ32B9o9Qk3ZuDEBK8li2M1fc7RcWoWkyYdUOZuq0czKuCBx8HuZ7gD-bZ5KgTO5GKV2-MMzXUVZld9oCSl42kL_z5kB6hOA4A40ACoiRNl_iBsXxe1o9VbbRCQ96NNMX9IFluQ46UPj94kM52GPaKDEsILIc4A",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": null,
+            "reacts": [
+              {
+                "count": "7.05K",
+                "emoji": "⭐",
+                "emoji_id": null,
+                "emoji_image": null,
+                "type": "telegram_stars"
+              },
+              {
+                "count": "55.4K",
+                "emoji": null,
+                "emoji_id": "5465587407350942612",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              },
+              {
+                "count": "18.7K",
+                "emoji": null,
+                "emoji_id": "5265077361648368841",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              },
+              {
+                "count": "13.4K",
+                "emoji": null,
+                "emoji_id": "5399847211989246390",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              },
+              {
+                "count": "851",
+                "emoji": null,
+                "emoji_id": "5936157098181135162",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              },
+              {
+                "count": "261",
+                "emoji": null,
+                "emoji_id": "5373223594484587136",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              }
+            ],
+            "reply": null,
+            "text": {
+              "entities": [
+                {
+                  "language": null,
+                  "length": 2,
+                  "offset": 0,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/E28C9A.png"
+                },
+                {
+                  "language": null,
+                  "length": 28,
+                  "offset": 18,
+                  "type": "bold",
+                  "url": null
+                }
+              ],
+              "html": "<tg-emoji emoji-id=\"5389033296086709487\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/E28C9A.png')\"><b>⌚️</b></i></tg-emoji> A fully native <b>Telegram app for Apple Watch</b> is out.",
+              "string": "⌚️ A fully native Telegram app for Apple Watch is out."
+            }
+          },
+          "footer": {
+            "author": {
+              "html": "Pavel Durov",
+              "string": "Pavel Durov"
+            },
+            "date": {
+              "string": "2026-06-09T19:33:51+00:00",
+              "unix": 1781033631
+            },
+            "edited": false,
+            "views": "12.7M"
+          },
+          "forwarded": null,
+          "id": 523,
+          "view": "eyJjIjotMTAwNjUwMzEyMiwicCI6NTIzLCJ0IjoxNzkyNzA3ODYxLCJoIjoiOTZjY2IxOTgyYTc5MWNjNTUzIn0"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": null,
+                "thumb": "https://cdn4.telesco.pe/file/f-PyOISliztWG_7jHdRrK3ecnuel5oTxFGNjWUQo7Q5Oce7vKbhwkdT_SKwNtTwrnpb2TrxDbxpDf0kX82awlmDkmqDVlUzGQAmOEz8fH_EoYOgSlrf_RTTEUpYpBDrvDPUZOYXCNsYBnF9UsmgJ9WLSVIUcxAfbnBWuxKjdI1mSxgKkxwrK9R1Bo0b5uzXn3_yZrklAbGpK81gMVVw9MvlUprmMK1_DKDilqIDLqQ0DJv6by0a9qb0yxubQc-aVeBBUEQwaFDrFo4XgoBVUoDQL9bB8AR0UxHtAozMZvep3Q63MEJMWkGNeWLRKgebopWHRKmyzNXSBrQGRewYQlA",
+                "type": "gif",
+                "url": "https://cdn4.telesco.pe/file/2192a7c5b9.mp4?token=ebE3qFSW5zVWIQASQ9rXFKhY2LnkaYFI4LASLRmNTu7QMtH4aYTWNAJTrqaHCLcm30oKEntt9xmGYorCGpf7iBocbgZ9Fe-cm-zgaZkdQ8b-OMUlltdRNqJO4yEHJO_-t1UfCu5bdAupHfvTguVj9BZPmr6SIlyxovi3KoYs5MsCSKC-1EZL6kYTnwiI6djMh5e1u3nFo71w0eSE4OvDSngdJu9K4A4sF410mhwmTM4tOfBK6tPQaOe7mOMgZMIrUO0tSQfdj5vcu3Ln5kuahtjsO7LzGksEa5s2k3OPr_8uOIEpAWjI7IWj6zWcBoB91uj1B0PPmzQ_xgZA1HzoRg",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": null,
+            "reacts": [
+              {
+                "count": "5.48K",
+                "emoji": "⭐",
+                "emoji_id": null,
+                "emoji_image": null,
+                "type": "telegram_stars"
+              },
+              {
+                "count": "38.7K",
+                "emoji": null,
+                "emoji_id": "5465587407350942612",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              },
+              {
+                "count": "12.4K",
+                "emoji": null,
+                "emoji_id": "5399847211989246390",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              },
+              {
+                "count": "8.5K",
+                "emoji": null,
+                "emoji_id": "5265077361648368841",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              },
+              {
+                "count": "1.14K",
+                "emoji": null,
+                "emoji_id": "5936157098181135162",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              },
+              {
+                "count": "313",
+                "emoji": null,
+                "emoji_id": "5373223594484587136",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              }
+            ],
+            "reply": null,
+            "text": {
+              "entities": [
+                {
+                  "language": null,
+                  "length": 2,
+                  "offset": 0,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/E28C9A.png"
+                },
+                {
+                  "language": null,
+                  "length": 7,
+                  "offset": 22,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 2,
+                  "offset": 114,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/E29895.png"
+                }
+              ],
+              "html": "<tg-emoji emoji-id=\"5224615466890193456\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/E28C9A.png')\"><b>⌚️</b></i></tg-emoji> Telegram is now on <b>Wear OS</b>.<br><br>Owners of Galaxy Watch, Pixel Watch, Xiaomi Watch and other smartwatches — enjoy! <tg-emoji emoji-id=\"6132093145447404748\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/E29895.png')\"><b>☕️</b></i></tg-emoji>",
+              "string": "⌚️ Telegram is now on Wear OS.\n\nOwners of Galaxy Watch, Pixel Watch, Xiaomi Watch and other smartwatches — enjoy! ☕️"
+            }
+          },
+          "footer": {
+            "author": {
+              "html": "Pavel Durov",
+              "string": "Pavel Durov"
+            },
+            "date": {
+              "string": "2026-06-11T17:54:31+00:00",
+              "unix": 1781200471
+            },
+            "edited": false,
+            "views": "14.9M"
+          },
+          "forwarded": null,
+          "id": 524,
+          "view": "eyJjIjotMTAwNjUwMzEyMiwicCI6NTI0LCJ0IjoxNzkyNzA3ODYxLCJoIjoiMGVjZWM2NWQ0NzZlNTllNjBmIn0"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": null,
+                "thumb": null,
+                "type": "image",
+                "url": "https://cdn4.telesco.pe/file/jSEoUNJo9EGSjfjwWnhvCs2JK82L3yxivu0GZg9HlK-JJB_Tst88nBGEzm56wNdu240ODcqnkFkvCpUFl86VvoSF3VmCytyCFR5csORHJAoqHwV2BAxbEQ1Qgjjm2FvjYL-sUQVa6C9yahN64mQ80lZgKkepFL-WvzXjaQbuFnAIhquP1tlzYiYNJJU3JjKVl2Fb6PVvdi8Ilm1bDPYuBsmCWs24YUlqb7D764hPqrZcQHcjjOthrX03s7nHqSiaD7aUlqsGWQtAiXmPDyHKAbDk2VTmZyLbDWNR4Mzi9ZSKtQV9isR8ZHtc686LCjf6-jQMRxhrF6sW5ibIU70s6A.jpg",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": {
+              "description": {
+                "html": "Today’s update brings Telegram to Apple Watch and Android smartwatches, adds filthy rich text for bots, lets AI admins screen new group members, and introduces smarter polls, browser controls, and much more.",
+                "string": "Today’s update brings Telegram to Apple Watch and Android smartwatches, adds filthy rich text for bots, lets AI admins screen new group members, and introduces smarter polls, browser controls, and much more."
+              },
+              "site_name": "Telegram",
+              "thumb": null,
+              "title": "Smartwatch Apps, Rich Text for Bots, AI Guardians for Groups, and Much More",
+              "url": "https://telegram.org/blog/watch-apps-and-more"
+            },
+            "reacts": [
+              {
+                "count": "4.45K",
+                "emoji": "⭐",
+                "emoji_id": null,
+                "emoji_image": null,
+                "type": "telegram_stars"
+              },
+              {
+                "count": "20K",
+                "emoji": null,
+                "emoji_id": "5265077361648368841",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              },
+              {
+                "count": "8.1K",
+                "emoji": null,
+                "emoji_id": "5465587407350942612",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              },
+              {
+                "count": "6.1K",
+                "emoji": null,
+                "emoji_id": "5399847211989246390",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              },
+              {
+                "count": "1.19K",
+                "emoji": null,
+                "emoji_id": "5936157098181135162",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              },
+              {
+                "count": "281",
+                "emoji": null,
+                "emoji_id": "5373223594484587136",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              }
+            ],
+            "reply": null,
+            "text": {
+              "entities": [
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 0,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/F09F9484.png"
+                },
+                {
+                  "language": null,
+                  "length": 10,
+                  "offset": 13,
+                  "type": "text_link",
+                  "url": "https://telegram.org/blog/watch-apps-and-more"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 61,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/F09F9882.png"
+                }
+              ],
+              "html": "<tg-emoji emoji-id=\"5375338737028841420\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F9484.png')\"><b>🔄</b></i></tg-emoji> Telegram’s <a href=\"https://telegram.org/blog/watch-apps-and-more\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">new update</a> is out. Lots of great new features.<br><br><tg-emoji emoji-id=\"5325774161597967162\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F9882.png')\"><b>😂</b></i></tg-emoji> But most importantly: the announcement is actually fun to read.",
+              "string": "🔄 Telegram’s new update is out. Lots of great new features.\n\n😂 But most importantly: the announcement is actually fun to read."
+            }
+          },
+          "footer": {
+            "author": {
+              "html": "Pavel Durov",
+              "string": "Pavel Durov"
+            },
+            "date": {
+              "string": "2026-06-12T19:15:19+00:00",
+              "unix": 1781291719
+            },
+            "edited": false,
+            "views": "16.5M"
+          },
+          "forwarded": null,
+          "id": 525,
+          "view": "eyJjIjotMTAwNjUwMzEyMiwicCI6NTI1LCJ0IjoxNzkyNzA3ODYxLCJoIjoiMmQ3OTdhZTAwN2VmNmVlMWJmIn0"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": null,
+                "thumb": "https://cdn4.telesco.pe/file/vHna2oY3UxuvGTibYjN4N9jK0GRTq7_WfpfqitVPpCXBSJw1FDrbEc9lMwe_9pR0IA0hbwNbPZVkufrQUOimuTAliLG1WjwEoQhi9z-ipF2sNMk5gAAabPQhK1_61qedXOfJCPKmDR7Lt_pMcRQGeViXuC9Wq5LyYhnRgoxP5QrZd_pe4SF85ORPyPARHuO9whF2SIGkX_F57nuWpeh4PiCXqmF0wZMeISr9_qqd74RAtb8NxaHqIDpUcAMstiFMhe5Cjz_sZ0MmYNPgXxql62B-HupGkKczx9ixFqA9QqiFZlV2HSB-9SBvtekUHGXxcfi3mq28BhD4ZEjCE_Mi3w",
+                "type": "gif",
+                "url": "https://cdn4.telesco.pe/file/1fd3fed61d.mp4?token=CIROXuC-55PTaV0IDMIFIRl8l6HRU07LuPVf744rk4IOvg-H1pC_O_vEgw4ShQzrMfrBkEN_6zHuQFauUbv4mbi9V182JGoRPGC-EE9WzrwYEayFlK8WOjpzaVVMnUETcJNAod87XvLPztk6-iBCmRiGiCdN4nBoUbrjz2grb8_wajKTMhEOYS7Bfw7A8qiJCZOXVmJiHAiMR7GKb1lJosd0DAsYqOqRkrOQ0w2zM16RkP2euagHQgSGE77bwBe39z4vl0PnHbN-eBs0dpO-D55m3BIIG_7wp2a6FuviyrvJW6Md9zY7kOtpeGKz9UEkXxMB85LOYZwmBQYx_9R_YA",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": null,
+            "reacts": [
+              {
+                "count": "5.98K",
+                "emoji": "⭐",
+                "emoji_id": null,
+                "emoji_image": null,
+                "type": "telegram_stars"
+              },
+              {
+                "count": "46K",
+                "emoji": null,
+                "emoji_id": "5465587407350942612",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              },
+              {
+                "count": "20.2K",
+                "emoji": null,
+                "emoji_id": "5265077361648368841",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              },
+              {
+                "count": "17.2K",
+                "emoji": null,
+                "emoji_id": "5399847211989246390",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              },
+              {
+                "count": "6.06K",
+                "emoji": null,
+                "emoji_id": "5936157098181135162",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              },
+              {
+                "count": "375",
+                "emoji": null,
+                "emoji_id": "5373223594484587136",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              }
+            ],
+            "reply": null,
+            "text": {
+              "entities": [
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 0,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/F09F96A5.png"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 118,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/F09F9396.png"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 170,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/F09F94A8.png"
+                },
+                {
+                  "language": null,
+                  "length": 23,
+                  "offset": 188,
+                  "type": "text_link",
+                  "url": "https://core.telegram.org/bots/api#rich-message-formatting-options"
+                }
+              ],
+              "html": "<tg-emoji emoji-id=\"5282843764451195532\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F96A5.png')\"><b>🖥</b></i></tg-emoji> Don't be surprised if you see tables, nested lists, inline media, formulas, headers and more in Telegram messages.<br><br><tg-emoji emoji-id=\"5312047639393480586\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F9396.png')\"><b>📖</b></i></tg-emoji> We now support rich formatting for all chatbots.<br><br><tg-emoji emoji-id=\"5456312597273923475\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F94A8.png')\"><b>🔨</b></i></tg-emoji> Start building! <a href=\"https://core.telegram.org/bots/api#rich-message-formatting-options\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Docs for chatbot devs →</a>",
+              "string": "🖥 Don't be surprised if you see tables, nested lists, inline media, formulas, headers and more in Telegram messages.\n\n📖 We now support rich formatting for all chatbots.\n\n🔨 Start building! Docs for chatbot devs →"
+            }
+          },
+          "footer": {
+            "author": {
+              "html": "Pavel Durov",
+              "string": "Pavel Durov"
+            },
+            "date": {
+              "string": "2026-06-13T20:15:20+00:00",
+              "unix": 1781381720
+            },
+            "edited": false,
+            "views": "23.2M"
+          },
+          "forwarded": null,
+          "id": 526,
+          "view": "eyJjIjotMTAwNjUwMzEyMiwicCI6NTI2LCJ0IjoxNzkyNzA3ODYxLCJoIjoiOTRiYjg5YWYyMzg5NjdlOTM2In0"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": null,
+            "poll": null,
+            "preview_link": null,
+            "reacts": [
+              {
+                "count": "25.1K",
+                "emoji": "⭐",
+                "emoji_id": null,
+                "emoji_image": null,
+                "type": "telegram_stars"
+              },
+              {
+                "count": "322K",
+                "emoji": null,
+                "emoji_id": "5265077361648368841",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              },
+              {
+                "count": "89.2K",
+                "emoji": null,
+                "emoji_id": "5465587407350942612",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              },
+              {
+                "count": "58.9K",
+                "emoji": null,
+                "emoji_id": "5399847211989246390",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              },
+              {
+                "count": "25.3K",
+                "emoji": null,
+                "emoji_id": "5936157098181135162",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              },
+              {
+                "count": "504",
+                "emoji": null,
+                "emoji_id": "5373223594484587136",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              }
+            ],
+            "reply": null,
+            "text": {
+              "entities": [
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 0,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/F09F8F86.png"
+                },
+                {
+                  "language": null,
+                  "length": 8,
+                  "offset": 2,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 16,
+                  "offset": 26,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 66,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/F09F8EAC.png"
+                },
+                {
+                  "language": null,
+                  "length": 15,
+                  "offset": 89,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 11,
+                  "offset": 134,
+                  "type": "text_link",
+                  "url": "https://www.youtube.com/watch?v=1Yq_5aDdJ24"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 188,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/F09F9388.png"
+                },
+                {
+                  "language": null,
+                  "length": 7,
+                  "offset": 195,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 265,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/F09F93A3.png"
+                },
+                {
+                  "language": null,
+                  "length": 12,
+                  "offset": 267,
+                  "type": "text_link",
+                  "url": "https://t.me/contest/456"
+                },
+                {
+                  "language": null,
+                  "length": 8,
+                  "offset": 287,
+                  "type": "url",
+                  "url": null
+                }
+              ],
+              "html": "<tg-emoji emoji-id=\"5409008750893734809\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F8F86.png')\"><b>🏆</b></i></tg-emoji> <b>Telegram</b> is launching a <b>$200,000 contest</b> for content creators.<br><br><tg-emoji emoji-id=\"5375464961822695044\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F8EAC.png')\"><b>🎬</b></i></tg-emoji> Create a video about <b>digital freedom</b> using ideas and footage from <a href=\"https://www.youtube.com/watch?v=1Yq_5aDdJ24\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">this speech</a> — plus any content or ideas of your own.<br><br><tg-emoji emoji-id=\"5244837092042750681\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F9388.png')\"><b>📈</b></i></tg-emoji> Pass <b>10,000+</b> organic views for a chance to win a share of the prize fund.<br><br><tg-emoji emoji-id=\"5469903029144657419\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F93A3.png')\"><b>📣</b></i></tg-emoji> <a href=\"https://t.me/contest/456\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Full details</a> in the <a href=\"https://t.me/contest\" target=\"_blank\">@contest</a> channel.",
+              "string": "🏆 Telegram is launching a $200,000 contest for content creators.\n\n🎬 Create a video about digital freedom using ideas and footage from this speech — plus any content or ideas of your own.\n\n📈 Pass 10,000+ organic views for a chance to win a share of the prize fund.\n\n📣 Full details in the @contest channel."
+            }
+          },
+          "footer": {
+            "author": {
+              "html": "Pavel Durov",
+              "string": "Pavel Durov"
+            },
+            "date": {
+              "string": "2026-06-15T15:53:15+00:00",
+              "unix": 1781538795
+            },
+            "edited": false,
+            "views": "24.4M"
+          },
+          "forwarded": null,
+          "id": 527,
+          "view": "eyJjIjotMTAwNjUwMzEyMiwicCI6NTI3LCJ0IjoxNzkyNzA3ODYxLCJoIjoiZDlmMzIyMmRkOTkxYjgxNGQ2In0"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": null,
+            "poll": null,
+            "preview_link": null,
+            "reacts": [
+              {
+                "count": "14.3K",
+                "emoji": "⭐",
+                "emoji_id": null,
+                "emoji_image": null,
+                "type": "telegram_stars"
+              },
+              {
+                "count": "132K",
+                "emoji": null,
+                "emoji_id": "5265077361648368841",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              },
+              {
+                "count": "39.9K",
+                "emoji": null,
+                "emoji_id": "5465587407350942612",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              },
+              {
+                "count": "24.7K",
+                "emoji": null,
+                "emoji_id": "5936157098181135162",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              },
+              {
+                "count": "22.1K",
+                "emoji": null,
+                "emoji_id": "5399847211989246390",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              },
+              {
+                "count": "791",
+                "emoji": null,
+                "emoji_id": "5373223594484587136",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              }
+            ],
+            "reply": null,
+            "text": {
+              "entities": [
+                {
+                  "language": null,
+                  "length": 2,
+                  "offset": 0,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/E29B94.png"
+                },
+                {
+                  "language": null,
+                  "length": 4,
+                  "offset": 500,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/F09FA4A6E2808DE29982.png"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 752,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/F09F9AA8.png"
+                },
+                {
+                  "language": null,
+                  "length": 36,
+                  "offset": 911,
+                  "type": "italic",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 0,
+                  "offset": 947,
+                  "type": "text_link",
+                  "url": "https://www.youtube.com/watch?v=1Yq_5aDdJ24"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 949,
+                  "type": "italic",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 0,
+                  "offset": 950,
+                  "type": "text_link",
+                  "url": "https://t.me/contest/456"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 1012,
+                  "type": "italic",
+                  "url": null
+                }
+              ],
+              "html": "<tg-emoji emoji-id=\"5260293700088511294\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/E29B94.png')\"><b>⛔️</b></i></tg-emoji> The UK government wants to ban social media for children under 16.<br><br>But banning social media for kids only puts them in greater danger.<br><br>They will be pushed to use VPNs — and unlock far worse illegal content.<br><br>We’ve seen this before.<br><br>When the Russian government banned Telegram, 95% of Russian teenagers kept using it. They just moved to VPNs. Same in Iran.<br><br>Parents already have the tools to restrict their kids’ digital habits: parental controls, screen-time limits — or no smartphone at all.<br><br><tg-emoji emoji-id=\"5307819226910700816\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09FA4A6E2808DE29982.png')\"><b>🤦‍♂️</b></i></tg-emoji> Instead, many parents give toddlers iPads just to keep them quiet.<br><br>No amount of government regulation will fix that.<br><br>Under the new law, all social media users in the UK will have to “prove” they’re over 16 — with an ID, face scan or bank card.<br><br><tg-emoji emoji-id=\"5395695537687123235\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F9AA8.png')\"><b>🚨</b></i></tg-emoji> Thousands in the UK are already arrested for political posts every year. <br><br>Is this really about protecting children — or identifying more people to arrest?<br><br><i>P. S. More about digital freedom in </i><a href=\"https://www.youtube.com/watch?v=1Yq_5aDdJ24\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\"><i>my speech</i></a><i> — the source material for our <b>$200,000</b> </i><a href=\"https://t.me/contest/456\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\"><i>clipping contest</i></a><i>.</i>",
+              "string": "⛔️ The UK government wants to ban social media for children under 16.\n\nBut banning social media for kids only puts them in greater danger.\n\nThey will be pushed to use VPNs — and unlock far worse illegal content.\n\nWe’ve seen this before.\n\nWhen the Russian government banned Telegram, 95% of Russian teenagers kept using it. They just moved to VPNs. Same in Iran.\n\nParents already have the tools to restrict their kids’ digital habits: parental controls, screen-time limits — or no smartphone at all.\n\n🤦‍♂️ Instead, many parents give toddlers iPads just to keep them quiet.\n\nNo amount of government regulation will fix that.\n\nUnder the new law, all social media users in the UK will have to “prove” they’re over 16 — with an ID, face scan or bank card.\n\n🚨 Thousands in the UK are already arrested for political posts every year. \n\nIs this really about protecting children — or identifying more people to arrest?\n\nP. S. More about digital freedom in my speech — the source material for our $200,000 clipping contest."
+            }
+          },
+          "footer": {
+            "author": {
+              "html": "Pavel Durov",
+              "string": "Pavel Durov"
+            },
+            "date": {
+              "string": "2026-06-15T18:58:13+00:00",
+              "unix": 1781549893
+            },
+            "edited": false,
+            "views": "19M"
+          },
+          "forwarded": null,
+          "id": 528,
+          "view": "eyJjIjotMTAwNjUwMzEyMiwicCI6NTI4LCJ0IjoxNzkyNzA3ODYxLCJoIjoiYzU2NjA0ZDc0YmYyNzRhNTcxIn0"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": null,
+            "poll": null,
+            "preview_link": null,
+            "reacts": [
+              {
+                "count": "6.29K",
+                "emoji": "⭐",
+                "emoji_id": null,
+                "emoji_image": null,
+                "type": "telegram_stars"
+              },
+              {
+                "count": "69.7K",
+                "emoji": null,
+                "emoji_id": "5265077361648368841",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              },
+              {
+                "count": "19K",
+                "emoji": null,
+                "emoji_id": "5936157098181135162",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              },
+              {
+                "count": "16.6K",
+                "emoji": null,
+                "emoji_id": "5465587407350942612",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              },
+              {
+                "count": "8.77K",
+                "emoji": null,
+                "emoji_id": "5399847211989246390",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              },
+              {
+                "count": "1.01K",
+                "emoji": null,
+                "emoji_id": "5373223594484587136",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              }
+            ],
+            "reply": null,
+            "text": {
+              "entities": [
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 0,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/F09F9AAB.png"
+                },
+                {
+                  "language": null,
+                  "length": 11,
+                  "offset": 115,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 285,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/F09F9BA1.png"
+                },
+                {
+                  "language": null,
+                  "length": 2,
+                  "offset": 572,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/F09F8FB3.png"
+                }
+              ],
+              "html": "<tg-emoji emoji-id=\"5240241223632954241\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F9AAB.png')\"><b>🚫</b></i></tg-emoji> India’s IT ministry banned Telegram for one week because some users shared leaked exam questions.<br><br>This punishes <b>150 million</b> ordinary Telegram users in India — not the insiders who leaked the exam materials.<br><br>And the ban hasn't stopped anything. The leaks just moved to other apps.<br><br><tg-emoji emoji-id=\"5348230282140993341\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F9BA1.png')\"><b>🛡</b></i></tg-emoji> We’ve done a lot to help fix the problem — even though its source is not Telegram.<br><br>Over the past few weeks, we removed hundreds of channels sharing leaked exam materials and related scams in India.<br><br>We’ve also been making the “edited” label more visible to prevent backdating scams.<br><br><tg-emoji emoji-id=\"5395335069671910047\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F8FB3.png')\"><b>🏳️</b></i></tg-emoji> Telegram is a force for good. Banning it — even temporarily — is a mistake.",
+              "string": "🚫 India’s IT ministry banned Telegram for one week because some users shared leaked exam questions.\n\nThis punishes 150 million ordinary Telegram users in India — not the insiders who leaked the exam materials.\n\nAnd the ban hasn't stopped anything. The leaks just moved to other apps.\n\n🛡 We’ve done a lot to help fix the problem — even though its source is not Telegram.\n\nOver the past few weeks, we removed hundreds of channels sharing leaked exam materials and related scams in India.\n\nWe’ve also been making the “edited” label more visible to prevent backdating scams.\n\n🏳️ Telegram is a force for good. Banning it — even temporarily — is a mistake."
+            }
+          },
+          "footer": {
+            "author": {
+              "html": "Pavel Durov",
+              "string": "Pavel Durov"
+            },
+            "date": {
+              "string": "2026-06-16T15:05:29+00:00",
+              "unix": 1781622329
+            },
+            "edited": false,
+            "views": "9.8M"
+          },
+          "forwarded": null,
+          "id": 529,
+          "view": "eyJjIjotMTAwNjUwMzEyMiwicCI6NTI5LCJ0IjoxNzkyNzA3ODYxLCJoIjoiY2Q3YTE0OGQyYTdmNjMwYmQ2In0"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": null,
+                "thumb": "https://cdn4.telesco.pe/file/Dd57Twb7xLmOeIWI1ki0CHFsYYCvgGJdzHnEwFG1fO-vkJ18ZX7v7BTN12_Jq_VUNMgDMY4tCChW01b4lxD04GW-_Crf_C-6iOSKwUqWO9zBigI5UbHvv1k11O1fTV6LYjTOk8cWAnoHOj2H5cl3mhFaCkWPTMNHVlR0KZi9jvpLdgcUtgz67uLXX4OaMusx1vpfpVMq1OvXgvAD_5UwZsvpQ9iTsTEqioI93_C9g3srt9ZXfBCs1bhIrzq5Gxo5L2PoxXIz8f0BDbyHxtJlrzjF7mMP-za0uzWqL8G0lkRLZpQuq-ikVsGO6q50rLdVreEOqct79un_rNRwUK5JDQ",
+                "type": "gif",
+                "url": "https://cdn4.telesco.pe/file/b231b9b161.mp4?token=t9CdtSB2kdYkn4Ixy81V1DwtJ1AYKf9sI3qNMmzdrPibxwQriO45g80asbirS5xoc-wMh2q0WqZkd74Rb0MpFBGgnOU6TNPdTjg93vdSQtcswpQ2cO3cH96HpPow4PJno0woHaJ5mrswruJcEWIMLPe0F5RiNbRTfnu4ZYDTLVJMDvxUuMtGqklzl9n7vWr83wumWqnTekGOrZbhYazXu2oTlwZvlVIe5_ChCHCYeL6wmuX25UnHoaHu6j75pXDEhkz-9s-i3V7MqB1zWbur8AiW58YIgrsEkivuolMdiV1FAl9DsBQVWDUZY5IStTqPmrlr2GBxFoKINsF3FVAePjzoLYYGMqknLXWitR9ENcuYlvuH2_duRcW1gSNrDutwJRiNb4oohoOr2QiJZhWoYyGpijaw_6z9cGAq5qraeb67jIHbQJRGf3qFSIx1nXYKlYBH2IGEFbmyeDQT784STQ5YPI-eEt4U2NpNTzs5qqOhyJVQlX8AwFaoOXyE8JMF1U5N6F2kgYRk9lSL-fG7i4rS94h3rQJ8XKuOf9GXGF6tJT-wZRWgCS1AQJnzDxJQ0sz9GR52DM9Ho7mOsVJxsH0JrprSkZ-jLGCuNWz4izHcr0djjMAgjRxHVogYUkwXcmv5R27x7EdgEMGthHOr_gJwSqXM3BRMKCcD7HrBjy0",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": null,
+            "reacts": [
+              {
+                "count": "6.3K",
+                "emoji": "⭐",
+                "emoji_id": null,
+                "emoji_image": null,
+                "type": "telegram_stars"
+              },
+              {
+                "count": "54.6K",
+                "emoji": null,
+                "emoji_id": "5265077361648368841",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              },
+              {
+                "count": "16.4K",
+                "emoji": null,
+                "emoji_id": "5465587407350942612",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              },
+              {
+                "count": "9.57K",
+                "emoji": null,
+                "emoji_id": "5936157098181135162",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              },
+              {
+                "count": "6.58K",
+                "emoji": null,
+                "emoji_id": "5399847211989246390",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              },
+              {
+                "count": "1.66K",
+                "emoji": null,
+                "emoji_id": "5373223594484587136",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              }
+            ],
+            "reply": null,
+            "text": {
+              "entities": [
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 0,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/F09FA9B5.png"
+                },
+                {
+                  "language": null,
+                  "length": 16,
+                  "offset": 21,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 124,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/F09F9888.png"
+                }
+              ],
+              "html": "<tg-emoji emoji-id=\"5460865451586250451\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09FA9B5.png')\"><b>🩵</b></i></tg-emoji> Telegram now has a <b>Rich Text Editor</b>.<br><br>It supports tables, headings, inline media, lists, AI content, formulas, and more.<br><br><tg-emoji emoji-id=\"5357135183864667855\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F9888.png')\"><b>😈</b></i></tg-emoji> Messaging apps will never be the same!",
+              "string": "🩵 Telegram now has a Rich Text Editor.\n\nIt supports tables, headings, inline media, lists, AI content, formulas, and more.\n\n😈 Messaging apps will never be the same!"
+            }
+          },
+          "footer": {
+            "author": {
+              "html": "Pavel Durov",
+              "string": "Pavel Durov"
+            },
+            "date": {
+              "string": "2026-07-16T20:45:25+00:00",
+              "unix": 1784234725
+            },
+            "edited": false,
+            "views": "5.83M"
+          },
+          "forwarded": null,
+          "id": 531,
+          "view": "eyJjIjotMTAwNjUwMzEyMiwicCI6NTMxLCJ0IjoxNzkyNzA3ODYxLCJoIjoiMDU0N2FiODJiMDk0NWUyNTc4In0"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": null,
+                "thumb": "https://cdn4.telesco.pe/file/WvHFBNw7BI0C2f_z5OecYw6Aygc7aGs2EtAEC_gfe-sgjml5AV4c3yGqtRe4hnUCZsTx4bkPIW3C6SX4DHgFXfrV5KJWLoFsXbZ0JcTejYp-wSBzhBvBfqAqVPezy-9yDbkLNRA7aAwdDchiaX3NiWpk-ku7sK-Xq6KBRaVowzzo6NnSZQDJ07AiKPwlyrY-ylkST8jvj8O3pHCzDe__mIrUkeIs3UzRCD2OKFoVZrlEU_hZJlyoDsRDc00frrcFv2vT02WuF8k2UjXxyTteAAjtJM3T2idlasg7XW3KemoN6HM-4sRHPDV4rB9Io1D5wPE6cKH7M_KrsUAPSpHqBQ",
+                "type": "gif",
+                "url": "https://cdn4.telesco.pe/file/181642ae31.mp4?token=YhzthCtb55G-L7SVdzzmi1W60fYkTY_RMnyc89BfJ1SWdeClnouKjGFvOWoPUK294DXXwLQFeoTgV--zjp9YKAM9143D94ElZ0c7s_q_CUQzD7xJZwzN7_mx29Q7RokYDcB45JMS_ne96Ae6xG69iNkk-TqF2Z94k2b7y2m3LuIskI_0CzMLnIc2lSWiVwFBbmDDfMD_53VCzrpBCfA4vGbH_pBlyReCKm8MLqTPsPdnmvclGK8S_mSpd4sGWPUfSgJDX5iQ_yFN4iEdqJDkaldbL8JiS6q-zxuf_qjl-CHvkK-nqM19lzRQ_pxZ-_cIeu0lBh54x69sODAqLksyXw",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": null,
+            "reacts": [
+              {
+                "count": "5.81K",
+                "emoji": "⭐",
+                "emoji_id": null,
+                "emoji_image": null,
+                "type": "telegram_stars"
+              },
+              {
+                "count": "55.9K",
+                "emoji": null,
+                "emoji_id": "5373223594484587136",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              },
+              {
+                "count": "13.5K",
+                "emoji": null,
+                "emoji_id": "5399847211989246390",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              },
+              {
+                "count": "9.03K",
+                "emoji": null,
+                "emoji_id": "5936157098181135162",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              }
+            ],
+            "reply": null,
+            "text": {
+              "entities": [
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 0,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/F09F8EA0.png"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 134,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/F09F98BA.png"
+                }
+              ],
+              "html": "<tg-emoji emoji-id=\"5224362841208793190\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F8EA0.png')\"><b>🎠</b></i></tg-emoji> Telegram now supports carousels<br><br>One small step for messaging, one giant leap toward turning cat photos into keynote presentations. <tg-emoji emoji-id=\"5373223594484587136\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F98BA.png')\"><b>😺</b></i></tg-emoji>",
+              "string": "🎠 Telegram now supports carousels\n\nOne small step for messaging, one giant leap toward turning cat photos into keynote presentations. 😺"
+            }
+          },
+          "footer": {
+            "author": {
+              "html": "Pavel Durov",
+              "string": "Pavel Durov"
+            },
+            "date": {
+              "string": "2026-07-19T21:45:01+00:00",
+              "unix": 1784497501
+            },
+            "edited": false,
+            "views": "6.54M"
+          },
+          "forwarded": null,
+          "id": 532,
+          "view": "eyJjIjotMTAwNjUwMzEyMiwicCI6NTMyLCJ0IjoxNzkyNzA3ODYxLCJoIjoiNjRhODEwYWRmMDA1YTE2YWNkIn0"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": null,
+            "poll": null,
+            "preview_link": null,
+            "reacts": [
+              {
+                "count": "19.4K",
+                "emoji": "⭐",
+                "emoji_id": null,
+                "emoji_image": null,
+                "type": "telegram_stars"
+              },
+              {
+                "count": "46.6K",
+                "emoji": null,
+                "emoji_id": "5373223594484587136",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              },
+              {
+                "count": "17.9K",
+                "emoji": null,
+                "emoji_id": "5399847211989246390",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              },
+              {
+                "count": "12.5K",
+                "emoji": null,
+                "emoji_id": "5936157098181135162",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              }
+            ],
+            "reply": null,
+            "text": {
+              "entities": [
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 0,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/F09F8C8D.png"
+                },
+                {
+                  "language": null,
+                  "length": 19,
+                  "offset": 23,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 2,
+                  "offset": 95,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/E29AA1.png"
+                },
+                {
+                  "language": null,
+                  "length": 16,
+                  "offset": 97,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 15,
+                  "offset": 143,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 189,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/F09F928E.png"
+                },
+                {
+                  "language": null,
+                  "length": 6,
+                  "offset": 208,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 11,
+                  "offset": 229,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 18,
+                  "offset": 244,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 2,
+                  "offset": 264,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/F09F8FB3.png"
+                }
+              ],
+              "html": "<tg-emoji emoji-id=\"5399898266265475100\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F8C8D.png')\"><b>🌍</b></i></tg-emoji> This summer will see <b>the largest rollout</b> of a non-custodial crypto wallet in human history.<br><br><tg-emoji emoji-id=\"5456140674028019486\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/E29AA1.png')\"><b>⚡️</b></i></tg-emoji><b>Instant zero-fee</b> crypto transactions for over <b>a billion users</b> are about to become reality.<br><br><tg-emoji emoji-id=\"5235630047959727475\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F928E.png')\"><b>💎</b></i></tg-emoji> We're bringing a <b>native</b> non-custodial <b>Gram wallet</b> to <b>every Telegram app</b>! <tg-emoji emoji-id=\"5395335069671910047\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F8FB3.png')\"><b>🏳️</b></i></tg-emoji>",
+              "string": "🌍 This summer will see the largest rollout of a non-custodial crypto wallet in human history.\n\n⚡️Instant zero-fee crypto transactions for over a billion users are about to become reality.\n\n💎 We're bringing a native non-custodial Gram wallet to every Telegram app! 🏳️"
+            }
+          },
+          "footer": {
+            "author": {
+              "html": "Pavel Durov",
+              "string": "Pavel Durov"
+            },
+            "date": {
+              "string": "2026-07-21T14:36:55+00:00",
+              "unix": 1784644615
+            },
+            "edited": false,
+            "views": "6.96M"
+          },
+          "forwarded": null,
+          "id": 533,
+          "view": "eyJjIjotMTAwNjUwMzEyMiwicCI6NTMzLCJ0IjoxNzkyNzA3ODYxLCJoIjoiZGJmZDQ2YmM4YmZlN2Q5ODZiIn0"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": null,
+            "poll": null,
+            "preview_link": null,
+            "reacts": [
+              {
+                "count": "10K",
+                "emoji": "⭐",
+                "emoji_id": null,
+                "emoji_image": null,
+                "type": "telegram_stars"
+              },
+              {
+                "count": "85.7K",
+                "emoji": null,
+                "emoji_id": "5399847211989246390",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              },
+              {
+                "count": "23.3K",
+                "emoji": null,
+                "emoji_id": "5936157098181135162",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              },
+              {
+                "count": "21.6K",
+                "emoji": null,
+                "emoji_id": "5373223594484587136",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              }
+            ],
+            "reply": null,
+            "text": {
+              "entities": [
+                {
+                  "language": null,
+                  "length": 2,
+                  "offset": 0,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/F09F87ACF09F87AA.png"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 33,
+                  "type": "emoji",
+                  "url": "https://telegram.org/img/emoji/40/F09F8F94.png"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 156,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/F09F9388.png"
+                },
+                {
+                  "language": null,
+                  "length": 18,
+                  "offset": 235,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 2,
+                  "offset": 256,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/E29D8E.png"
+                },
+                {
+                  "language": null,
+                  "length": 7,
+                  "offset": 281,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 7,
+                  "offset": 292,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 8,
+                  "offset": 324,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 336,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/F09F92BC.png"
+                },
+                {
+                  "language": null,
+                  "length": 2,
+                  "offset": 371,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 15,
+                  "offset": 397,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 2,
+                  "offset": 522,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/E29C88.png"
+                }
+              ],
+              "html": "<tg-emoji emoji-id=\"5440371950708864925\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F87ACF09F87AA.png')\"><b>🇬🇪</b></i></tg-emoji> Very impressed with Georgia.<br><br><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F8F94.png')\"><b>🏔</b></i> The country is known for its warm people, ancient culture, local food and epic landscapes. <br><br>But it doesn’t stop there.<br><br><tg-emoji emoji-id=\"5244837092042750681\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F9388.png')\"><b>📈</b></i></tg-emoji> Thanks to its government’s business-friendly policies, Georgia is becoming a <b>major business hub</b>.<br><br><tg-emoji emoji-id=\"5204096496856733702\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/E29D8E.png')\"><b>❎️</b></i></tg-emoji> The country’s economy <b>doubled</b> in <b>5 years</b> and is still growing by <b>8% a yea</b>r.<br><br><tg-emoji emoji-id=\"6278480525841667186\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F92BC.png')\"><b>💼</b></i></tg-emoji> International tech companies pay <b>0%</b> corporate tax and just <b>5% on dividends</b> and salaries.<br><br>Georgia is seriously underrated as a place to visit and do business.<br><br>I'll be back very soon! <tg-emoji emoji-id=\"5436109324516607541\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/E29C88.png')\"><b>✈️</b></i></tg-emoji>",
+              "string": "🇬🇪 Very impressed with Georgia.\n\n🏔 The country is known for its warm people, ancient culture, local food and epic landscapes. \n\nBut it doesn’t stop there.\n\n📈 Thanks to its government’s business-friendly policies, Georgia is becoming a major business hub.\n\n❎️ The country’s economy doubled in 5 years and is still growing by 8% a year.\n\n💼 International tech companies pay 0% corporate tax and just 5% on dividends and salaries.\n\nGeorgia is seriously underrated as a place to visit and do business.\n\nI'll be back very soon! ✈️"
+            }
+          },
+          "footer": {
+            "author": {
+              "html": "Pavel Durov",
+              "string": "Pavel Durov"
+            },
+            "date": {
+              "string": "2026-07-23T15:15:33+00:00",
+              "unix": 1784819733
+            },
+            "edited": false,
+            "views": "6.72M"
+          },
+          "forwarded": null,
+          "id": 534,
+          "view": "eyJjIjotMTAwNjUwMzEyMiwicCI6NTM0LCJ0IjoxNzkyNzA3ODYxLCJoIjoiYjAzNjY1ZDk1ODY4YjVlODg1In0"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": null,
+            "poll": null,
+            "preview_link": null,
+            "reacts": [
+              {
+                "count": "16.9K",
+                "emoji": "⭐",
+                "emoji_id": null,
+                "emoji_image": null,
+                "type": "telegram_stars"
+              },
+              {
+                "count": "194K",
+                "emoji": null,
+                "emoji_id": "5373223594484587136",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              },
+              {
+                "count": "51.7K",
+                "emoji": null,
+                "emoji_id": "5399847211989246390",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              },
+              {
+                "count": "45.3K",
+                "emoji": null,
+                "emoji_id": "5936157098181135162",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              }
+            ],
+            "reply": null,
+            "text": {
+              "entities": [
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 0,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/F09F92A3.png"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 196,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/F09F988C.png"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 285,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/F09F9889.png"
+                }
+              ],
+              "html": "<tg-emoji emoji-id=\"5469654973308476699\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F92A3.png')\"><b>💣</b></i></tg-emoji> Russia has designated me as a “terrorist” for refusing its demands for mass surveillance and censorship on Telegram.<br><br>Under Russian law, I’m banned from “publishing information on the Internet” <tg-emoji emoji-id=\"5289880690408573973\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F988C.png')\"><b>😌</b></i></tg-emoji><br><br>Russian officials have clearly got confused about who can ban whom from the Internet  <tg-emoji emoji-id=\"5231150324055549453\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F9889.png')\"><b>😉</b></i></tg-emoji>",
+              "string": "💣 Russia has designated me as a “terrorist” for refusing its demands for mass surveillance and censorship on Telegram.\n\nUnder Russian law, I’m banned from “publishing information on the Internet” 😌\n\nRussian officials have clearly got confused about who can ban whom from the Internet  😉"
+            }
+          },
+          "footer": {
+            "author": {
+              "html": "Pavel Durov",
+              "string": "Pavel Durov"
+            },
+            "date": {
+              "string": "2026-07-30T16:52:37+00:00",
+              "unix": 1785430357
+            },
+            "edited": false,
+            "views": "5.97M"
+          },
+          "forwarded": null,
+          "id": 535,
+          "view": "eyJjIjotMTAwNjUwMzEyMiwicCI6NTM1LCJ0IjoxNzkyNzA3ODYxLCJoIjoiODgxOTJhZjAzZWJiNDE4NTZmIn0"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": null,
+                "thumb": null,
+                "type": "image",
+                "url": "https://cdn4.telesco.pe/file/PyyBIDR6v_-7o0FyhN0rGuqS9R0UqfNoLqucOJ8DALLs_JoppBZyy8HI7WbRm76liUuGEyW3EsvLFnU_3S6Ty-4aNHavcLQbpMzQdANCk2sxUcZXEgTgSOT0JMBCAabJ1RCfO12w2cgKpwemOlu6bW9sQjHiUB7tdnP9muPj_wwEkDcEsKwCRe7G_F-QMuxMgY2OSjbJ_heAvUZWO_5wgPqujyYuIC6gmpJMlKzWLYfPL_LfUQvNjlL801s86mCqnvLwvv8VVQeE9HJD-VbmX72ZLRpsTPLsdrsf1ERIKSCXmswjTT7Mekgz3w78vzpHsoLQzIdOs2GlVxQxgsHUGw.jpg",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": null,
+            "reacts": [
+              {
+                "count": "49.2K",
+                "emoji": "⭐",
+                "emoji_id": null,
+                "emoji_image": null,
+                "type": "telegram_stars"
+              },
+              {
+                "count": "274K",
+                "emoji": null,
+                "emoji_id": "5373223594484587136",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              },
+              {
+                "count": "69.8K",
+                "emoji": null,
+                "emoji_id": "5399847211989246390",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              },
+              {
+                "count": "61K",
+                "emoji": null,
+                "emoji_id": "5936157098181135162",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              }
+            ],
+            "reply": null,
+            "text": {
+              "entities": [
+                {
+                  "language": null,
+                  "length": 2,
+                  "offset": 0,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/F09F87A6F09F87AB.png"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 2,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/F09F9888.png"
+                }
+              ],
+              "html": "<tg-emoji emoji-id=\"5868454034045668476\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F87A6F09F87AB.png')\"><b>🇦🇫</b></i></tg-emoji><tg-emoji emoji-id=\"5246714546801875298\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F9888.png')\"><b>😈</b></i></tg-emoji>",
+              "string": "🇦🇫😈"
+            }
+          },
+          "footer": {
+            "author": {
+              "html": "Pavel Durov",
+              "string": "Pavel Durov"
+            },
+            "date": {
+              "string": "2026-07-30T16:55:01+00:00",
+              "unix": 1785430501
+            },
+            "edited": false,
+            "views": "6.2M"
+          },
+          "forwarded": null,
+          "id": 536,
+          "view": "eyJjIjotMTAwNjUwMzEyMiwicCI6NTM2LCJ0IjoxNzkyNzA3ODYxLCJoIjoiN2EwMDQyMmJkM2U0ODExODQzIn0"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": null,
+                "thumb": null,
+                "type": "image",
+                "url": "https://cdn4.telesco.pe/file/bzb--y9VfNJKFxkXp2pFx8Bq_4EhoodRJE7qtxpf6evMx3eu6e0xAFnF_AgWlxcO-FENpzfysJlwjKRedT0uYG0n7gJy3MUF3WudliEKYuBjuYNVxAvtl41HhDw3Yw5HK1HcD5eT1vva_Br0WRiXd6SnIg_EoUTlrsZCm230etg6FqUgBGzOVJFG5UiMp4uN1lZSHzxf6lJXOlR6HEzYOBZn2IABzqyEM7EafBWtWZkKOpeDiv6CI_m_9jm_V60OVlecX4T4zjkClZ7p_xkfbvmJkN-Or2_kxfNcryxrOwIbp5QExJkpbtz2zLlJ4XXOfceQ0KUFhKMJ5MDlW-jWEg.jpg",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": null,
+            "reacts": [
+              {
+                "count": "15.5K",
+                "emoji": "⭐",
+                "emoji_id": null,
+                "emoji_image": null,
+                "type": "telegram_stars"
+              },
+              {
+                "count": "39.6K",
+                "emoji": null,
+                "emoji_id": "5399847211989246390",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              },
+              {
+                "count": "11.3K",
+                "emoji": null,
+                "emoji_id": "5936157098181135162",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              },
+              {
+                "count": "9.07K",
+                "emoji": null,
+                "emoji_id": "5373223594484587136",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              }
+            ],
+            "reply": null,
+            "text": {
+              "entities": [
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 0,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/F09FA7A0.png"
+                },
+                {
+                  "language": null,
+                  "length": 23,
+                  "offset": 37,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 157,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/F09F8F86.png"
+                },
+                {
+                  "language": null,
+                  "length": 3,
+                  "offset": 159,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 17,
+                  "offset": 173,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 208,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/F09F92B5.png"
+                },
+                {
+                  "language": null,
+                  "length": 5,
+                  "offset": 248,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 8,
+                  "offset": 258,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 382,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/F09F8D80.png"
+                }
+              ],
+              "html": "<tg-emoji emoji-id=\"5927026418616636353\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09FA7A0.png')\"><b>🧠</b></i></tg-emoji> The 2026 International Olympiad in <b>Artificial Intelligence</b> starts today. <br><br>As a token of support for those who will reinvent our civilization, we'll issue <tg-emoji emoji-id=\"5409008750893734809\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F8F86.png')\"><b>🏆</b></i></tg-emoji> <b>240</b> exclusive <b>Intelligence Cups</b> to the winners.<br><br><tg-emoji emoji-id=\"5409048419211682843\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F92B5.png')\"><b>💵</b></i></tg-emoji> We guarantee minimum buyback prices ($<b>1,000</b> per <b>Gold Cup</b>, etc.), but the cups' limited supply may make them worth much more on the secondary market.<br><br>Good luck, AI coders! <tg-emoji emoji-id=\"5406595657878220722\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F8D80.png')\"><b>🍀</b></i></tg-emoji>",
+              "string": "🧠 The 2026 International Olympiad in Artificial Intelligence starts today. \n\nAs a token of support for those who will reinvent our civilization, we'll issue 🏆 240 exclusive Intelligence Cups to the winners.\n\n💵 We guarantee minimum buyback prices ($1,000 per Gold Cup, etc.), but the cups' limited supply may make them worth much more on the secondary market.\n\nGood luck, AI coders! 🍀"
+            }
+          },
+          "footer": {
+            "author": {
+              "html": "Pavel Durov",
+              "string": "Pavel Durov"
+            },
+            "date": {
+              "string": "2026-08-03T07:19:56+00:00",
+              "unix": 1785741596
+            },
+            "edited": false,
+            "views": "3.93M"
+          },
+          "forwarded": null,
+          "id": 537,
+          "view": "eyJjIjotMTAwNjUwMzEyMiwicCI6NTM3LCJ0IjoxNzkyNzA3ODYxLCJoIjoiZWIwYWNhNDM5MGRhZjk4ZTBmIn0"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": null,
+                "thumb": null,
+                "type": "image",
+                "url": "https://cdn4.telesco.pe/file/Dq-oup-pXkO1IfMBEGUpO09hmgUOWjviR_DwVv_qzu5EWTHQ3G79qU8Jll7_G8zHGNoPD3sN0xGhNl6cvCeESBpRbFXZGJy-d_NfY9a5tFIX0cvBO3_hzEpbkqk6CXVGZKJIHL9Iy7bxvEvxnHV34_6ka5uP-UM0NAzgNqVgv2_VIQRGhXmb-bSDQ-uI5W4dmo8xCf27n7MTkrcHMDVCRXCbEXiyUlI3uB8vJT4pYQtHjCPdaPnbJ6XuRY3auDpWJxWL4lu6MbsBIutxhep0OmWzsoicG0JVyxTY6iM0QhkRSPnkrUde58ZNMr-W52-IrQAO6v035TYlblpOGGcJeQ.jpg",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": {
+              "description": {
+                "html": "Discover how Telegram enforces safety through proactive moderation, AI tools, user reports, and collaborations with global organizations. Explore efforts against CSAM, terrorism, and illegal content with ongoing transparency.",
+                "string": "Discover how Telegram enforces safety through proactive moderation, AI tools, user reports, and collaborations with global organizations. Explore efforts against CSAM, terrorism, and illegal content with ongoing transparency."
+              },
+              "site_name": "Telegram",
+              "thumb": null,
+              "title": "Telegram Safety Overview",
+              "url": "https://telegram.org/safety"
+            },
+            "reacts": [
+              {
+                "count": "17.9K",
+                "emoji": "⭐",
+                "emoji_id": null,
+                "emoji_image": null,
+                "type": "telegram_stars"
+              },
+              {
+                "count": "45.9K",
+                "emoji": null,
+                "emoji_id": "5373223594484587136",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              },
+              {
+                "count": "17.2K",
+                "emoji": null,
+                "emoji_id": "5399847211989246390",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              },
+              {
+                "count": "13K",
+                "emoji": null,
+                "emoji_id": "5936157098181135162",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              }
+            ],
+            "reply": null,
+            "text": {
+              "entities": [
+                {
+                  "language": null,
+                  "length": 2,
+                  "offset": 150,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/E2AC85.png"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 315,
+                  "type": "emoji",
+                  "url": "https://telegram.org/img/emoji/40/F09FA7B9.png"
+                },
+                {
+                  "language": null,
+                  "length": 29,
+                  "offset": 390,
+                  "type": "text_link",
+                  "url": "https://telegram.org/safety"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 691,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/F09F92B0.png"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 1049,
+                  "type": "emoji",
+                  "url": "https://telegram.org/img/emoji/40/F09FA49D.png"
+                },
+                {
+                  "language": null,
+                  "length": 2,
+                  "offset": 1314,
+                  "type": "emoji",
+                  "url": "https://telegram.org/img/emoji/40/E29AA0.png"
+                },
+                {
+                  "language": null,
+                  "length": 69,
+                  "offset": 1409,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 109,
+                  "offset": 1759,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 2,
+                  "offset": 2146,
+                  "type": "emoji",
+                  "url": "https://telegram.org/img/emoji/40/E2989D.png"
+                }
+              ],
+              "html": "Last night, Apple briefly removed Telegram from the App Store because a single user had planted illegal pornographic content in a public group chat.<br><br><tg-emoji emoji-id=\"5983279327574233274\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/E2AC85.png')\"><b>⬅️</b></i></tg-emoji> Telegram was restored within hours. But I want to explain what happened — to warn other app developers and help protect online communities from similar attacks.<br><br><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09FA7B9.png')\"><b>🧹</b></i>Because Telegram quickly removes illegal content from public groups using <a href=\"https://telegram.org/safety\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">all kinds of moderation tools</a>, the attacker had to resort to a technical trick. He inserted AI-modified illegal content by editing an old message in an active group chat. As a result, the content was effectively hidden from the group’s members, preventing them from seeing and promptly reporting it.<br><br><tg-emoji emoji-id=\"5267239130357588007\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F92B0.png')\"><b>💰</b></i></tg-emoji>  The attacker was a takedown extortionist: someone who demands ransom from group owners in exchange for not targeting their communities. These extortionists use automated accounts  to plant illegal content in public groups and then report it directly to Apple, attempting to trigger the removal of legitimate communities whose owners refused to pay them.<br><br><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09FA49D.png')\"><b>🤝</b></i> From a practical standpoint, illegal pornographic content in Telegram’s public groups is not a systemic problem. Our moderation is effective. The fact that attackers must resort to backdated, effectively invisible content and other technical tricks proves this.<br><br><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/E29AA0.png')\"><b>⚠️</b></i> However, there are two important lessons here for app developers and online communities:<br><br>— <b>Extortionists have found a way to manipulate Apple into overreacting.</b> Apple removed Telegram from the App Store before contacting us. This creates a potential systemic risk for every mobile app that hosts user-generated content. If an app used by more than a billion people can be removed from the App Store without prior warning, any app can be.<br><br>— <b>The tactics used by takedown extortionists are evolving, putting communities across social platforms at risk.</b> Telegram has extensive experience identifying the tricks used by coordinated reporting gangs and protecting legitimate communities (even when doing so risks our own app being temporarily removed from the App Store). Other platforms may not be equally prepared.<br><br>Stay vigilant! <i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/E2989D.png')\"><b>☝️</b></i>",
+              "string": "Last night, Apple briefly removed Telegram from the App Store because a single user had planted illegal pornographic content in a public group chat.\n\n⬅️ Telegram was restored within hours. But I want to explain what happened — to warn other app developers and help protect online communities from similar attacks.\n\n🧹Because Telegram quickly removes illegal content from public groups using all kinds of moderation tools, the attacker had to resort to a technical trick. He inserted AI-modified illegal content by editing an old message in an active group chat. As a result, the content was effectively hidden from the group’s members, preventing them from seeing and promptly reporting it.\n\n💰  The attacker was a takedown extortionist: someone who demands ransom from group owners in exchange for not targeting their communities. These extortionists use automated accounts  to plant illegal content in public groups and then report it directly to Apple, attempting to trigger the removal of legitimate communities whose owners refused to pay them.\n\n🤝 From a practical standpoint, illegal pornographic content in Telegram’s public groups is not a systemic problem. Our moderation is effective. The fact that attackers must resort to backdated, effectively invisible content and other technical tricks proves this.\n\n⚠️ However, there are two important lessons here for app developers and online communities:\n\n— Extortionists have found a way to manipulate Apple into overreacting. Apple removed Telegram from the App Store before contacting us. This creates a potential systemic risk for every mobile app that hosts user-generated content. If an app used by more than a billion people can be removed from the App Store without prior warning, any app can be.\n\n— The tactics used by takedown extortionists are evolving, putting communities across social platforms at risk. Telegram has extensive experience identifying the tricks used by coordinated reporting gangs and protecting legitimate communities (even when doing so risks our own app being temporarily removed from the App Store). Other platforms may not be equally prepared.\n\nStay vigilant! ☝️"
+            }
+          },
+          "footer": {
+            "author": {
+              "html": "Pavel Durov",
+              "string": "Pavel Durov"
+            },
+            "date": {
+              "string": "2026-08-04T15:20:04+00:00",
+              "unix": 1785856804
+            },
+            "edited": false,
+            "views": "4.49M"
+          },
+          "forwarded": null,
+          "id": 538,
+          "view": "eyJjIjotMTAwNjUwMzEyMiwicCI6NTM4LCJ0IjoxNzkyNzA3ODYxLCJoIjoiMTE2NWZiYWE5Yzg1ZjRlMWIwIn0"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": null,
+                "thumb": null,
+                "type": "image",
+                "url": "https://cdn4.telesco.pe/file/aWZSNQO0_gk56Xp4E6eRtNUhpD5XAYS3Ak84J_GGrOCvPvIUipypqTcC2KALZojhsqL_NloH2f7EVZPIKLhlt5tOd3Fn8r8xxiwAucEa9sc2jQwgseuzja2oo-cBurRwiZKc7E_z3jt_a8XxV8YO3TBLgQg84NpISUgUousyirWSWLbhB7QM6vnVb3POYDmZRfjTCfukKtvAbAo37rNc_W7E8HQwvW_qFhu1qfQfMWbWc0Ucuxfgt-9xKF2lgmagahVOsz3O64s1vcMByrYnliOIAregfPk7xtLqt-aC-NZUbuyDmA9VWxq55fYI-9QKBBzAtv7_2cuWJOx2PskRzA.jpg",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": {
+              "description": {
+                "html": "<i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09FA7A0.png')\"><b>🧠</b></i> The 2026 International Olympiad in Artificial Intelligence starts today. <br><br>As a token of support for those who will reinvent our civilization, we'll issue <i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F8F86.png')\"><b>🏆</b></i> 240 exclusive Intelligence Cups to the winners.<br><br><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F92B5.png')\"><b>💵</b></i> We guarantee minimum buyback prices ($1,000 per…",
+                "string": "🧠 The 2026 International Olympiad in Artificial Intelligence starts today. As a token of support for those who will reinvent our civilization, we'll issue 🏆 240 exclusive Intelligence Cups to the winners.💵 We guarantee minimum buyback prices ($1,000 per…"
+              },
+              "site_name": "Telegram",
+              "thumb": null,
+              "title": "Pavel Durov",
+              "url": "https://t.me/durov/537"
+            },
+            "reacts": [
+              {
+                "count": "8.27K",
+                "emoji": "⭐",
+                "emoji_id": null,
+                "emoji_image": null,
+                "type": "telegram_stars"
+              },
+              {
+                "count": "41.6K",
+                "emoji": null,
+                "emoji_id": "5399847211989246390",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              },
+              {
+                "count": "11.2K",
+                "emoji": null,
+                "emoji_id": "5373223594484587136",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              },
+              {
+                "count": "9.1K",
+                "emoji": null,
+                "emoji_id": "5936157098181135162",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              }
+            ],
+            "reply": null,
+            "text": {
+              "entities": [
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 0,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/F09F8F86.png"
+                },
+                {
+                  "language": null,
+                  "length": 2,
+                  "offset": 32,
+                  "type": "text_link",
+                  "url": "https://ioai-official.org/republic-of-kazakhstan/"
+                },
+                {
+                  "language": null,
+                  "length": 2,
+                  "offset": 66,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/F09F87B7F09F87BA.png"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 202,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/F09F92AA.png"
+                },
+                {
+                  "language": null,
+                  "length": 2,
+                  "offset": 205,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/F09F87B0F09F87BF.png"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 323,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/F09F918F.png"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 326,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/F09F93A9.png"
+                },
+                {
+                  "language": null,
+                  "length": 10,
+                  "offset": 351,
+                  "type": "text_link",
+                  "url": "https://cpfed.kz/"
+                },
+                {
+                  "language": null,
+                  "length": 20,
+                  "offset": 386,
+                  "type": "text_link",
+                  "url": "https://t.me/durov/537"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 476,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/F09F8F86.png"
+                }
+              ],
+              "html": "<tg-emoji emoji-id=\"5449505439182007199\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F8F86.png')\"><b>🏆</b></i></tg-emoji> The International Olympiad in <a href=\"https://ioai-official.org/republic-of-kazakhstan/\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">AI</a> finished yesterday in Astana.<br><br><tg-emoji emoji-id=\"5449408995691341691\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F87B7F09F87BA.png')\"><b>🇷🇺</b></i></tg-emoji> The Russian team took first place in the team competition, and Artem Gorokhov from my home city won the individual event. Well done! <tg-emoji emoji-id=\"5388755604976186348\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F92AA.png')\"><b>💪</b></i></tg-emoji><br><br><tg-emoji emoji-id=\"5228718354658769982\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F87B0F09F87BF.png')\"><b>🇰🇿</b></i></tg-emoji> I'm equally happy for the host country, Kazakhstan, whose Dauzhan Beketov took the second-highest individual score.<tg-emoji emoji-id=\"6066868140002772910\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F918F.png')\"><b>👏</b></i></tg-emoji><br><br><tg-emoji emoji-id=\"5472239203590888751\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F93A9.png')\"><b>📩</b></i></tg-emoji>We're in touch with the <a href=\"https://Cpfed.kz/\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">organizers</a> to deliver the winners' <a href=\"https://t.me/durov/537\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">prizes from Telegram</a> ($106,500+) securely next week.<br><br>Congratulations to all the winners! <tg-emoji emoji-id=\"5454082031778572181\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F8F86.png')\"><b>🏆</b></i></tg-emoji>",
+              "string": "🏆 The International Olympiad in AI finished yesterday in Astana.\n\n🇷🇺 The Russian team took first place in the team competition, and Artem Gorokhov from my home city won the individual event. Well done! 💪\n\n🇰🇿 I'm equally happy for the host country, Kazakhstan, whose Dauzhan Beketov took the second-highest individual score.👏\n\n📩We're in touch with the organizers to deliver the winners' prizes from Telegram ($106,500+) securely next week.\n\nCongratulations to all the winners! 🏆"
+            }
+          },
+          "footer": {
+            "author": {
+              "html": "Pavel Durov",
+              "string": "Pavel Durov"
+            },
+            "date": {
+              "string": "2026-08-08T21:11:14+00:00",
+              "unix": 1786223474
+            },
+            "edited": false,
+            "views": "3.54M"
+          },
+          "forwarded": null,
+          "id": 539,
+          "view": "eyJjIjotMTAwNjUwMzEyMiwicCI6NTM5LCJ0IjoxNzkyNzA3ODYxLCJoIjoiZmNjYjMyYWYwNGJlNWMxMzFjIn0"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": null,
+                "thumb": null,
+                "type": "image",
+                "url": "https://cdn4.telesco.pe/file/CQWAIDRO7rCrphVpJErXBfZUg2_AOIZHgomCRuCEVIIA7Xjx6kg7scu_cSMdewwYIhyqO6KEq-8EoaGFk1K4t8oNE0qJqGSaHn2HoGH1RNnom9e6zY8KVoRIzR7K0NVdDZEyg4ka3UJwhap3gdGVDJEuwAc5ucGa5rT5zlRSmRjdTh1DHOjzgg-Y2P0P6nAC8EKh0gs-D9IapbHK2651dU-a97kjV_0RpuRcEVvFMHzZ920qvU8XwDEinNSL4Dk3eiuSw_zFM5i2CTcS_FRrf2p8T3oMxxcddCrfxmoNTtCocF8lbv1ZOJF9QRAXdrtITwZ4AbjLm5zLznBSOSf8Aw.jpg",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": null,
+            "reacts": [
+              {
+                "count": "9.12K",
+                "emoji": "⭐",
+                "emoji_id": null,
+                "emoji_image": null,
+                "type": "telegram_stars"
+              },
+              {
+                "count": "42.7K",
+                "emoji": null,
+                "emoji_id": "5373223594484587136",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              },
+              {
+                "count": "15.7K",
+                "emoji": null,
+                "emoji_id": "5399847211989246390",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              },
+              {
+                "count": "10.1K",
+                "emoji": null,
+                "emoji_id": "5936157098181135162",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              }
+            ],
+            "reply": null,
+            "text": {
+              "entities": [
+                {
+                  "language": null,
+                  "length": 2,
+                  "offset": 0,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/F09F87BAF09F87BF.png"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 77,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/F09F8F86.png"
+                },
+                {
+                  "language": null,
+                  "length": 3,
+                  "offset": 83,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 213,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/F09FA49D.png"
+                },
+                {
+                  "language": null,
+                  "length": 3,
+                  "offset": 291,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 15,
+                  "offset": 336,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 8,
+                  "offset": 368,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 388,
+                  "type": "emoji",
+                  "url": "https://telegram.org/img/emoji/40/F09F958C.png"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 559,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/F09F92AA.png"
+                }
+              ],
+              "html": "<tg-emoji emoji-id=\"5449829434334912605\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F87BAF09F87BF.png')\"><b>🇺🇿</b></i></tg-emoji> The 2026 International Olympiad in Informatics starts today in Tashkent.<br><br><tg-emoji emoji-id=\"5316979941181496594\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F8F86.png')\"><b>🏆</b></i></tg-emoji> The <b>IOI</b> is the ultimate coding competition for high-school students. Years ago, many members of the Telegram team won medals there. <br><br><tg-emoji emoji-id=\"5388584514953949249\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09FA49D.png')\"><b>🤝</b></i></tg-emoji> To support the best young programmers in the world, Telegram will award the <b>235</b> winners exclusive digital collectibles — <b>Algorithm Cups </b>— worth at least <b>$117,000</b> in total.<br><br><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F958C.png')\"><b>🕌</b></i> It’s fitting that IOI is hosted in Uzbekistan — the homeland of Al-Khwarizmi, the father of algebra whose name became the word “algorithm.\"<br><br>Let the best algorithm win! <tg-emoji emoji-id=\"5388755604976186348\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F92AA.png')\"><b>💪</b></i></tg-emoji>",
+              "string": "🇺🇿 The 2026 International Olympiad in Informatics starts today in Tashkent.\n\n🏆 The IOI is the ultimate coding competition for high-school students. Years ago, many members of the Telegram team won medals there. \n\n🤝 To support the best young programmers in the world, Telegram will award the 235 winners exclusive digital collectibles — Algorithm Cups — worth at least $117,000 in total.\n\n🕌 It’s fitting that IOI is hosted in Uzbekistan — the homeland of Al-Khwarizmi, the father of algebra whose name became the word “algorithm.\"\n\nLet the best algorithm win! 💪"
+            }
+          },
+          "footer": {
+            "author": {
+              "html": "Pavel Durov",
+              "string": "Pavel Durov"
+            },
+            "date": {
+              "string": "2026-08-10T09:29:58+00:00",
+              "unix": 1786354198
+            },
+            "edited": false,
+            "views": "4.73M"
+          },
+          "forwarded": null,
+          "id": 540,
+          "view": "eyJjIjotMTAwNjUwMzEyMiwicCI6NTQwLCJ0IjoxNzkyNzA3ODYxLCJoIjoiY2NiOTg3ZGI1M2Q0ZGQ5YWYzIn0"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": null,
+            "poll": null,
+            "preview_link": null,
+            "reacts": [
+              {
+                "count": "25.4K",
+                "emoji": "⭐",
+                "emoji_id": null,
+                "emoji_image": null,
+                "type": "telegram_stars"
+              },
+              {
+                "count": "139K",
+                "emoji": null,
+                "emoji_id": "5373223594484587136",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              },
+              {
+                "count": "48.1K",
+                "emoji": null,
+                "emoji_id": "5399847211989246390",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              },
+              {
+                "count": "33.7K",
+                "emoji": null,
+                "emoji_id": "5936157098181135162",
+                "emoji_image": null,
+                "type": "custom_emoji"
+              }
+            ],
+            "reply": null,
+            "text": {
+              "entities": [
+                {
+                  "language": null,
+                  "length": 3,
+                  "offset": 0,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/31E283A3.png"
+                },
+                {
+                  "language": null,
+                  "length": 3,
+                  "offset": 3,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/33E283A3.png"
+                },
+                {
+                  "language": null,
+                  "length": 2,
+                  "offset": 22,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 3,
+                  "offset": 69,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 43,
+                  "offset": 102,
+                  "type": "bold",
+                  "url": null
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 189,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/F09F92AA.png"
+                },
+                {
+                  "language": null,
+                  "length": 1,
+                  "offset": 192,
+                  "type": "animoji",
+                  "url": "https://telegram.org/img/emoji/40/F09F8E82.png"
+                }
+              ],
+              "html": "<tg-emoji emoji-id=\"5305763715692377402\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/31E283A3.png')\"><b>1️⃣</b></i></tg-emoji><tg-emoji emoji-id=\"5305783000095537258\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/33E283A3.png')\"><b>3️⃣</b></i></tg-emoji> Telegram turns <b>13</b> today. <br><br>For over half that time — the past <b>7,5</b> years — it's been one of the <b>10 most downloaded mobile apps in the world</b>. <br><br>A whole generation has grown up with it <tg-emoji emoji-id=\"5341801927279649934\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F92AA.png')\"><b>💪</b></i></tg-emoji><br><br><tg-emoji emoji-id=\"5452055425690123301\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F8E82.png')\"><b>🎂</b></i></tg-emoji> Happy birthday, Telegram!",
+              "string": "1️⃣3️⃣ Telegram turns 13 today. \n\nFor over half that time — the past 7,5 years — it's been one of the 10 most downloaded mobile apps in the world. \n\nA whole generation has grown up with it 💪\n\n🎂 Happy birthday, Telegram!"
+            }
+          },
+          "footer": {
+            "author": {
+              "html": "Pavel Durov",
+              "string": "Pavel Durov"
+            },
+            "date": {
+              "string": "2026-08-14T13:49:28+00:00",
+              "unix": 1786715368
+            },
+            "edited": false,
+            "views": "7.01M"
+          },
+          "forwarded": null,
+          "id": 541,
+          "view": "eyJjIjotMTAwNjUwMzEyMiwicCI6NTQxLCJ0IjoxNzkyNzA3ODYxLCJoIjoiY2NhMDczMTI5NDY5ODk0ZGVmIn0"
+        }
+      ]
+    },
+    "meta": {
+      "offset": {
+        "after": 541,
+        "before": 520
+      }
+    }
+  },
+  "status": 200
+}

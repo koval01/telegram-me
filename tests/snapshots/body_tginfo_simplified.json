@@ -1,0 +1,767 @@
+{
+  "body": {
+    "channel": {
+      "avatar": "https://cdn4.telesco.pe/file/U0RtXrdUxyXHIWShX1mFO8IKEtoWBw53ZRNbIeqg4mGwPC3WhOMOmhTCiZARe6Vaesi3f0gL5lw7oAH3TZLMWStCK_pYzn42oaIQ4Ubr7RQZoIuOogIo3EuxcILJoRUXCAP_Jm95QZRDKc8tAPKvG3PCB25VbsFZdgmRCUk5msQo4grsKQr7ZkPRD-lM4vuPZq8p-dYZqU7r9xSg0AqVtAFBC93WZ0id5jciDi0qsBo1c81WDAE5KF99SrhT4fE5Im_CpOgzuL1nfJ8BncW7DD13yebpTONfwyupi3f7N1Xq_laTc4pIoRVhgsjgf4X7tOgHOa4baLa87y_MvT2jRQ.jpg",
+      "counters": {
+        "files": "134",
+        "links": "2.96K",
+        "photos": "1.38K",
+        "subscribers": "83.3K",
+        "videos": "92"
+      },
+      "description": {
+        "html": "Новости о Telegram<br><br>Чат и ответы на вопросы: <a href=\"https://t.me/tginfochat\" target=\"_blank\">@tginfochat</a><br>Beta Info: <a href=\"https://t.me/betainfo\" target=\"_blank\">@betainfo</a><br>English mirror: <a href=\"https://t.me/tginfoen\" target=\"_blank\">@tginfoen</a><br>TON: <a href=\"https://t.me/infoton\" target=\"_blank\">@infoton</a><br>Редакция вещает: <a href=\"https://t.me/tginfolive\" target=\"_blank\">@tginfolive</a><br><br>Правила: <a href=\"http://t.me/tginfo/42\" target=\"_blank\" rel=\"noopener\">t.me/tginfo/42</a><br>Поддержать: <a href=\"http://donate.tginfo.me/\" target=\"_blank\" rel=\"noopener\">donate.tginfo.me</a><br><br>Партнёрство и предложка: <a href=\"https://t.me/infowritebot\" target=\"_blank\">@infowritebot</a><br><br>CC-BY 4.0",
+        "string": "Новости о Telegram\n\nЧат и ответы на вопросы: @tginfochat\nBeta Info: @betainfo\nEnglish mirror: @tginfoen\nTON: @infoton\nРедакция вещает: @tginfolive\n\nПравила: t.me/tginfo/42\nПоддержать: donate.tginfo.me\n\nПартнёрство и предложка: @infowritebot\n\nCC-BY 4.0"
+      },
+      "labels": null,
+      "title": {
+        "html": "Telegram Info",
+        "string": "Telegram Info"
+      },
+      "username": "tginfo"
+    },
+    "content": {
+      "posts": [
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": null,
+                "thumb": null,
+                "type": "image",
+                "url": "https://cdn4.telesco.pe/file/H3jkokFgUZUoLtxJTlf7dDt0APRHtjWCtr2pztIJteoDP1OKafwzQqkBAPZGGQdOPzu3nl5OwJoXEIHFsHEC_2KT4ek6EtNHw1jhRsHOrkZzLjDQtCXvp2CO3l7GGg9pJKPAvOCBujfx14-49gR9fqJiV_5N6Gs2-vn39umaza5bG2XnDmo-IOZDSpqOoCBfogMD3PHNMkAXQL2avysGfTMxU0AU826_gs8IHwvdJRVEE5P0eJM1UCoi5nGvq988ASJsdSBbjDX67ekeWmPiEjzyWs8YeVwaew_CW5DRrwgR32Ml7EDh9l-crb0kDsTHuEYIoBi7Ci5hB97tV8h2OQ.jpg",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": null,
+            "reacts": null,
+            "reply": null,
+            "text": {
+              "entities": null,
+              "html": "<b>Эксклюзивный доступ к новому Bot API</b><br><br>Команда мессенджера от лица официального бота <a href=\"https://t.me/ContestBot\" target=\"_blank\"><b>@ContestBot</b></a> начала рассылать служебные оповещения некоторым победителям и призёрам конкурсов от Telegram.<br><br>Бывшим конкурсантам предлагается присоединиться к закрытому тестированию нового Bot API — <a href=\"https://core.telegram.org/bots/serverless\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Telegram Serverless</a>. Благодаря нему пользователи смогут запускать бэкенд-код для своих ботов и поддерживать работу мини-приложений прямо на серверах Telegram, не разворачивая собственную инфраструктуру:<br><br><blockquote><i>«Как победитель предыдущего конкурса Telegram, вы приглашены принять участие в эксклюзивном тестировании нового API ботов Telegram. Он позволяет запускать ваши боты, включая их код и базы данных, непосредственно на инфраструктуре Telegram, без использования собственных серверов»,</i> — говорится в рассылке.</blockquote><br><br>Примечательно, что приглашения приходят не только разработчикам, принимавшим участие в технических конкурсах, но и тем участникам, кто занимал призовые места в творческих состязаниях.<br><br>Ознакомиться с документацией, связанной с Telegram Serverless, можно <a href=\"https://core.telegram.org/bots/serverless\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">по ссылке</a>. Обратите внимание: доступ к новому API ботов сейчас ограничен для широкого круга пользователей.<br><br><a href=\"?q=%23BotAPI\">#BotAPI</a>",
+              "string": "Эксклюзивный доступ к новому Bot API\n\nКоманда мессенджера от лица официального бота @ContestBot начала рассылать служебные оповещения некоторым победителям и призёрам конкурсов от Telegram.\n\nБывшим конкурсантам предлагается присоединиться к закрытому тестированию нового Bot API — Telegram Serverless. Благодаря нему пользователи смогут запускать бэкенд-код для своих ботов и поддерживать работу мини-приложений прямо на серверах Telegram, не разворачивая собственную инфраструктуру:\n\n<blockquote>«Как победитель предыдущего конкурса Telegram, вы приглашены принять участие в эксклюзивном тестировании нового API ботов Telegram. Он позволяет запускать ваши боты, включая их код и базы данных, непосредственно на инфраструктуре Telegram, без использования собственных серверов», — говорится в рассылке.</blockquote>\n\nПримечательно, что приглашения приходят не только разработчикам, принимавшим участие в технических конкурсах, но и тем участникам, кто занимал призовые места в творческих состязаниях.\n\nОзнакомиться с документацией, связанной с Telegram Serverless, можно по ссылке. Обратите внимание: доступ к новому API ботов сейчас ограничен для широкого круга пользователей.\n\n#BotAPI"
+            }
+          },
+          "footer": {
+            "author": null,
+            "date": {
+              "string": "2026-07-13T17:45:13+00:00",
+              "unix": 1783964713
+            },
+            "edited": false,
+            "views": "32.2K"
+          },
+          "forwarded": null,
+          "id": 4422,
+          "view": "eyJjIjotMTAwMzMwNzUyNywicCI6NDQyMiwidCI6MTc5MjcwNzg2MiwiaCI6ImM5MGQ1ZmU0ZTNkMzEwZWI0MyJ9"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": null,
+            "poll": null,
+            "preview_link": null,
+            "reacts": null,
+            "reply": null,
+            "text": {
+              "entities": null,
+              "html": "<b>Реестр .me заблокировал домен </b><a href=\"http://t.me/\" target=\"_blank\" rel=\"noopener\"><b>t.me</b></a><br><br><b>UPD</b> 14 июля 16:00 МСК: Домен <a href=\"https://telegram.me/tginfo/4426\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">восстановлен</a>.<br><br>Пользователи Telegram по всему миру столкнулись со сбоем: короткие ссылки <a href=\"http://t.me/\" target=\"_blank\" rel=\"noopener\">t.me</a> перестали открываться в обычных браузерах. Проблема затрагивает не только Россию, а весь мир.<br><br>При этом внутри самих мобильных и десктопных клиентов Telegram клики по ссылкам обрабатываются корректно, и переходы работают без проблем. В качестве временной альтернативы для размещения на внешних ресурсах можно использовать ссылки <a href=\"http://telegram.me/\" target=\"_blank\" rel=\"noopener\">telegram.me</a>.<br><br><b>Технические подробности</b><br><br>На данный момент <b>точные причины инцидента остаются неизвестными</b>.<br><br>Согласно <a href=\"https://www.whois.com/whois/t.me\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">данным WHOIS</a>, домен <a href=\"http://t.me/\" target=\"_blank\" rel=\"noopener\">t.me</a> полностью удалён из зоны DNS администрацией реестра доменов .me.<br><br>Важно отметить, что данный статус устанавливается не регистратором (GoDaddy), а непосредственно главным оператором доменной зоны — черногорской компанией doMEn d.o.o., управляющей всей зоной <code>.me</code>. Эта организация — совместное предприятие Identity Digital, GoDaddy и ME-net. <br><br><a href=\"?q=%23%D1%81%D0%B1%D0%BE%D0%B8\">#сбои</a> <a href=\"?q=%23%D0%B1%D0%BB%D0%BE%D0%BA%D0%B8%D1%80%D0%BE%D0%B2%D0%BA%D0%B8\">#блокировки</a>",
+              "string": "Реестр .me заблокировал домен t.me\n\nUPD 14 июля 16:00 МСК: Домен восстановлен.\n\nПользователи Telegram по всему миру столкнулись со сбоем: короткие ссылки t.me перестали открываться в обычных браузерах. Проблема затрагивает не только Россию, а весь мир.\n\nПри этом внутри самих мобильных и десктопных клиентов Telegram клики по ссылкам обрабатываются корректно, и переходы работают без проблем. В качестве временной альтернативы для размещения на внешних ресурсах можно использовать ссылки telegram.me.\n\nТехнические подробности\n\nНа данный момент точные причины инцидента остаются неизвестными.\n\nСогласно данным WHOIS, домен t.me полностью удалён из зоны DNS администрацией реестра доменов .me.\n\nВажно отметить, что данный статус устанавливается не регистратором (GoDaddy), а непосредственно главным оператором доменной зоны — черногорской компанией doMEn d.o.o., управляющей всей зоной .me. Эта организация — совместное предприятие Identity Digital, GoDaddy и ME-net. \n\n#сбои #блокировки"
+            }
+          },
+          "footer": {
+            "author": {
+              "html": "Sominemo",
+              "string": "Sominemo"
+            },
+            "date": {
+              "string": "2026-07-13T20:15:18+00:00",
+              "unix": 1783973718
+            },
+            "edited": false,
+            "views": "43K"
+          },
+          "forwarded": null,
+          "id": 4423,
+          "view": "eyJjIjotMTAwMzMwNzUyNywicCI6NDQyMywidCI6MTc5MjcwNzg2MiwiaCI6IjlmYmQxYmI0MmRjNzY5ZmFiZSJ9"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": null,
+            "poll": null,
+            "preview_link": null,
+            "reacts": null,
+            "reply": null,
+            "text": {
+              "entities": null,
+              "html": "Реестр .me заблокировал домен t.me  UPD 14 июля 16:00 МСК: Домен восстановлен.  Пользователи Telegram по всему миру столкнулись со сбоем: короткие ссылки t.me перестали открываться в обычных браузерах. Проблема затрагивает не только Россию, а весь мир.  При…",
+              "string": "Реестр .me заблокировал домен t.me  UPD 14 июля 16:00 МСК: Домен восстановлен.  Пользователи Telegram по всему миру столкнулись со сбоем: короткие ссылки t.me перестали открываться в обычных браузерах. Проблема затрагивает не только Россию, а весь мир.  При…"
+            }
+          },
+          "footer": {
+            "author": {
+              "html": "Sominemo",
+              "string": "Sominemo"
+            },
+            "date": {
+              "string": "2026-07-14T11:16:13+00:00",
+              "unix": 1784027773
+            },
+            "edited": false,
+            "views": "73K"
+          },
+          "forwarded": null,
+          "id": 4425,
+          "view": "eyJjIjotMTAwMzMwNzUyNywicCI6NDQyNSwidCI6MTc5MjcwNzg2MiwiaCI6Ijk2ZjJmZmNiNGQxYzY0NTYxOCJ9"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": null,
+            "poll": null,
+            "preview_link": null,
+            "reacts": null,
+            "reply": null,
+            "text": {
+              "entities": null,
+              "html": "Telegram всё ещё работает над восстановлением домена t.me  UPD 14 июля 16:00 МСК: Домен восстановлен.  Домен t.me по-прежнему не работает у пользователей по всему миру, так как он был заблокирован администрацией доменной зоны .me. Команда мессенджера не комментировала…",
+              "string": "Telegram всё ещё работает над восстановлением домена t.me  UPD 14 июля 16:00 МСК: Домен восстановлен.  Домен t.me по-прежнему не работает у пользователей по всему миру, так как он был заблокирован администрацией доменной зоны .me. Команда мессенджера не комментировала…"
+            }
+          },
+          "footer": {
+            "author": {
+              "html": "Sominemo",
+              "string": "Sominemo"
+            },
+            "date": {
+              "string": "2026-07-14T12:42:04+00:00",
+              "unix": 1784032924
+            },
+            "edited": false,
+            "views": "41.8K"
+          },
+          "forwarded": null,
+          "id": 4426,
+          "view": "eyJjIjotMTAwMzMwNzUyNywicCI6NDQyNiwidCI6MTc5MjcwNzg2MiwiaCI6ImQwNmE4YjU2MjM5YjNjY2Y1OSJ9"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": null,
+                "thumb": null,
+                "type": "image",
+                "url": "https://cdn4.telesco.pe/file/XzrCN2bi2nMrpkkuBX1qNQ4MszEYOrUnuJHIErpTVsDRyV951bFXE7NBS2qaLoT8DGuZST8hlxKQnOBbVNhLc0agA3NZwl9sD3k1LcWa2KVSeawnoSQTyLeHtjanHKdlgrmH_pC02KHfBcCUJ-_hbsy7JJcDZdDVxb4rpiF6wHif6cUCcKnKvSVQ89mrx9yp0lH_MQrtV4ZFqLNIYunjuP3rL7baDzEJIzWjT0EIjW3cJ-SDtKu7-AEc2esZw_J4Og7RjubxrpCoXq1E47PDh9ZxyL1DKBlTvFfWFfnSe7bafzkn18Urj-QhLm0RV3wJSnNZVHmFMd7eDQd7W6073Q.jpg",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": null,
+            "reacts": null,
+            "reply": null,
+            "text": {
+              "entities": null,
+              "html": "<b>Telegram для Android и iOS обновились до версии 12.9, а Telegram Desktop обновился до версии 7.0</b><br><br>В своём июльском обновлении Telegram пополнился редактором текста с расширенным форматированием, а также функцией сообществ и многим другим:<br><br> • <a href=\"https://t.me/betainfo/2343\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\"><b>Продвинутый текстовый редактор:</b></a> Пользователям стал доступен полноэкранный редактор текста с поддержкой заголовков, таблиц, списков, цитат, математических формул и блоков кода. С его помощью можно также добавлять&nbsp;фотографии и видеозаписи&nbsp;прямо в середину сообщения.<br><br>Редактор доступен в меню<b> </b><tg-emoji emoji-id=\"5877495434124988415\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F938E.png')\"><b>📎</b></i></tg-emoji><i>Прикрепить</i> › <i>Статья</i>. На телефоне открыть новый интерфейс можно также, нажав на иконку <tg-emoji emoji-id=\"5807456032334552310\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/E28696.png')\"><b>↖</b></i></tg-emoji>, которая появляется над кнопкой отправки сообщения. Расширенный редактор позволяет отправлять до&nbsp;32 768&nbsp;символов в одном сообщении.<br><br>Большинство ключевых возможностей продвинутого текстового редактора доступно <a href=\"https://t.me/betainfo/2353\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">только Premium-пользователям</a>, но сам полноэкранный интерфейс можно использовать бесплатно.<br><br> • <a href=\"https://t.me/betainfo/2345\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\"><b>Сообщества:</b></a> Появилась возможность организовывать сообщества, которые объединяют множество тематических групп, каналов и даже ботов. Добавить крупные ресурсы не получится: Telegram ограничивает чаты и каналы по количеству участников. Редакция <a href=\"https://t.me/tginfo\" target=\"_blank\">@tginfo</a> ещё выясняет лимиты этой функции.<br><br><b>Не следует путать сообщества с форумами</b>: каждый чат и канал остаётся независимым, а пользователь может просматривать список и вступать в каждый из них отдельно.<br><br>Чаты в сообществе могут быть&nbsp;видны&nbsp;всем участникам&nbsp;либо&nbsp;скрыты&nbsp;от всех, кроме&nbsp;администраторов сообщества&nbsp;и участников этих чатов. При этом они могут отображаться отдельно или объединяться в один элемент в списке диалогов — данное поведение контролируется участниками сообщества.<br><br> • <b>Исчезающие сообщения для ботов:</b> Теперь мессенджер позволяет пользователям и ботам обмениваться&nbsp;приватными командами и ответами на них&nbsp;внутри групповых чатов — такие сообщения видны лишь конкретному адресату и самому боту. «Эфемерные» команды и ответы помечаются&nbsp;специальным значком в виде перечёркнутого глаза.<br><br>Когда команда настроена в качестве временной, изначальное сообщение пользователя остается полностью невидимым для остальных участников группы и ботов, что позволяет осуществлять конфиденциальное взаимодействие в общественных местах. К тому же, такие сообщения будут невидимы, если вы войдёте в свой аккаунт с нового устройства.<br><br> • <b>Обновлённый ИИ-поиск среди GIF-анимаций:</b> В панели GIF стал доступен поиск по более чем&nbsp;350 миллионам GIF&nbsp;на&nbsp;36 языках. Обновлённый поиск работает благодаря&nbsp;индексации&nbsp;популярных общедоступных GIF с помощью&nbsp;ИИ <a href=\"https://cocoon.org/\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Cocoon</a>, однако откуда собираются «общедоступные» GIF-файлы, мессенджер не уточняет.<br><br>Изменения связано с тем, что Google закрывает доступ к своей GIF-библиотеке Tenor. Новый поиск по GIF-анимациям, как заявляется в блоге Telegram, полностью конфиденциален,&nbsp;не зависит&nbsp;от сторонних сервисов — а теперь ещё и работает&nbsp;намного быстрее, чем раньше.<br><br><b>Статья:</b> <a href=\"http://telegram.org/blog/communities-editor-invisible-messages/ru\" target=\"_blank\" rel=\"noopener\">telegram.org/blog/communities-editor-invisible-messages/ru</a><br><br><b>Скачать обновление</b><br> • Android: <a href=\"http://play.google.com/store/apps/details?id=org.telegram.messenger\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Google Play</a>, APK с <a href=\"http://telegram.org/dl/android/apk\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">официального сайта</a> или <a href=\"http://t.me/TAndroidAPK\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">верифицированного канала</a>.<br> • iOS: <a href=\"https://apps.apple.com/app/telegram-messenger/id686449807\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">App Store</a>.<br> • Windows/macOS/Linux: <a href=\"https://desktop.telegram.org/\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">официальный сайт</a> или <a href=\"https://github.com/telegramdesktop/tdesktop/releases\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">GitHub.</a> <br> • Windows: <a href=\"https://apps.microsoft.com/detail/9nztwsqntd0s\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Microsoft Store</a>.<br> • Linux: <a href=\"https://telegram.org/dl/desktop/flatpak\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Flathub</a>, <a href=\"https://telegram.org/dl/desktop/snap\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Snapcraft</a>.<br><br><a href=\"?q=%23%D0%BE%D0%B1%D0%BD%D0%BE%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5\">#обновление</a> <a href=\"?q=%23Android\">#Android</a> <a href=\"?q=%23iOS\">#iOS</a> <a href=\"?q=%23Desktop\">#Desktop</a>",
+              "string": "Telegram для Android и iOS обновились до версии 12.9, а Telegram Desktop обновился до версии 7.0\n\nВ своём июльском обновлении Telegram пополнился редактором текста с расширенным форматированием, а также функцией сообществ и многим другим:\n\n • Продвинутый текстовый редактор: Пользователям стал доступен полноэкранный редактор текста с поддержкой заголовков, таблиц, списков, цитат, математических формул и блоков кода. С его помощью можно также добавлять фотографии и видеозаписи прямо в середину сообщения.\n\nРедактор доступен в меню 📎Прикрепить › Статья. На телефоне открыть новый интерфейс можно также, нажав на иконку ↖, которая появляется над кнопкой отправки сообщения. Расширенный редактор позволяет отправлять до 32 768 символов в одном сообщении.\n\nБольшинство ключевых возможностей продвинутого текстового редактора доступно только Premium-пользователям, но сам полноэкранный интерфейс можно использовать бесплатно.\n\n • Сообщества: Появилась возможность организовывать сообщества, которые объединяют множество тематических групп, каналов и даже ботов. Добавить крупные ресурсы не получится: Telegram ограничивает чаты и каналы по количеству участников. Редакция @tginfo ещё выясняет лимиты этой функции.\n\nНе следует путать сообщества с форумами: каждый чат и канал остаётся независимым, а пользователь может просматривать список и вступать в каждый из них отдельно.\n\nЧаты в сообществе могут быть видны всем участникам либо скрыты от всех, кроме администраторов сообщества и участников этих чатов. При этом они могут отображаться отдельно или объединяться в один элемент в списке диалогов — данное поведение контролируется участниками сообщества.\n\n • Исчезающие сообщения для ботов: Теперь мессенджер позволяет пользователям и ботам обмениваться приватными командами и ответами на них внутри групповых чатов — такие сообщения видны лишь конкретному адресату и самому боту. «Эфемерные» команды и ответы помечаются специальным значком в виде перечёркнутого глаза.\n\nКогда команда настроена в качестве временной, изначальное сообщение пользователя остается полностью невидимым для остальных участников группы и ботов, что позволяет осуществлять конфиденциальное взаимодействие в общественных местах. К тому же, такие сообщения будут невидимы, если вы войдёте в свой аккаунт с нового устройства.\n\n • Обновлённый ИИ-поиск среди GIF-анимаций: В панели GIF стал доступен поиск по более чем 350 миллионам GIF на 36 языках. Обновлённый поиск работает благодаря индексации популярных общедоступных GIF с помощью ИИ Cocoon, однако откуда собираются «общедоступные» GIF-файлы, мессенджер не уточняет.\n\nИзменения связано с тем, что Google закрывает доступ к своей GIF-библиотеке Tenor. Новый поиск по GIF-анимациям, как заявляется в блоге Telegram, полностью конфиденциален, не зависит от сторонних сервисов — а теперь ещё и работает намного быстрее, чем раньше.\n\nСтатья: telegram.org/blog/communities-editor-invisible-messages/ru\n\nСкачать обновление\n • Android: Google Play, APK с официального сайта или верифицированного канала.\n • iOS: App Store.\n • Windows/macOS/Linux: официальный сайт или GitHub. \n • Windows: Microsoft Store.\n • Linux: Flathub, Snapcraft.\n\n#обновление #Android #iOS #Desktop"
+            }
+          },
+          "footer": {
+            "author": {
+              "html": "Полян",
+              "string": "Полян"
+            },
+            "date": {
+              "string": "2026-07-14T16:47:55+00:00",
+              "unix": 1784047675
+            },
+            "edited": false,
+            "views": "47.6K"
+          },
+          "forwarded": null,
+          "id": 4428,
+          "view": "eyJjIjotMTAwMzMwNzUyNywicCI6NDQyOCwidCI6MTc5MjcwNzg2MiwiaCI6IjUwNjk2MTdiYThkZDZjNzU1NSJ9"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": null,
+            "poll": null,
+            "preview_link": null,
+            "reacts": null,
+            "reply": null,
+            "text": {
+              "entities": null,
+              "html": "Работа домена t.me была восстановлена реестром .me  Проверки редакции @tginfo показывают, что главный сервер зоны .me вернул DNS‑записи домена t.me.  Поскольку DNS‑записи кэшируются на уровне разных DNS‑служб и провайдеров, восстановление работы на устройствах…",
+              "string": "Работа домена t.me была восстановлена реестром .me  Проверки редакции @tginfo показывают, что главный сервер зоны .me вернул DNS‑записи домена t.me.  Поскольку DNS‑записи кэшируются на уровне разных DNS‑служб и провайдеров, восстановление работы на устройствах…"
+            }
+          },
+          "footer": {
+            "author": {
+              "html": "Sominemo",
+              "string": "Sominemo"
+            },
+            "date": {
+              "string": "2026-07-14T18:33:04+00:00",
+              "unix": 1784053984
+            },
+            "edited": false,
+            "views": "59.6K"
+          },
+          "forwarded": null,
+          "id": 4429,
+          "view": "eyJjIjotMTAwMzMwNzUyNywicCI6NDQyOSwidCI6MTc5MjcwNzg2MiwiaCI6ImY1YzdlM2EzYmI2Njg1NjM3YyJ9"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": null,
+                "thumb": null,
+                "type": "image",
+                "url": "https://cdn4.telesco.pe/file/CCefIvrpm-37x6YeQUnXNEw7F0pkS_Dn1ZHftNs40DdwL1z_KvAAf5TcfBl_N_k6CAT7oe6gwfGMRVppNEu45a8oqn0hYksKtBfO-Xx-OejV1HXbtxkRke85jN3QdrqkL_CU_gxzTZVZCsZ8mk3s_Qtpa8TyDAk6oKl5EPVBZEG_O16upE0unoeTXNpQv8WiAYG4TqkkgEhNudWerG_6jX5CZ3D49kWY0zTv868ua4OYC0BJqiDAs4pKZoVJVSGFYAYj5K8i3CCiUQRPIdOlekSZG_ADA-JXaATSXQ3zRrFhTR4u_8waJu-RX1-4xi3VlELt_jH3jTu1HGpOapYCHA.jpg",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": null,
+            "reacts": null,
+            "reply": null,
+            "text": {
+              "entities": null,
+              "html": "<b>Австралийский регулятор по интернет-безопасности обратился в суд с иском против Telegram</b><br><br>Он <a href=\"https://www.rbc.ru/technology_and_media/30/07/2026/6a6b16639a7947f36a2b0e63\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">обвиняет</a> сервис в игнорировании законодательства страны из-за того, что мессенджер не удалял материалы с пропагандой терроризма; речь о блокировке пока не идет, но такие полномочия у австралийских властей есть.<br><br>Претензии австралийских властей связаны с жалобами пользователей на распространение в Telegram роликов с массовым убийством в мечети в Новой Зеландии в 2019 году и стрельбы в супермаркете в США в 2022 году.<br><br><blockquote><i>«Мы утверждаем, что Telegram не смог обнаружить, предотвратить и пресечь распространение материалов, пропагандирующих терроризм»,</i> — заявила комиссар по вопросам безопасности в интернете (eSafety) Джули Инман Грант.</blockquote><br><br>Обращение в суд стало итогом расследования, которое продолжалось год. eSafety заявляет, что пытался наладить контакт с Telegram, однако последний бездействовал в течение пяти месяцев, прежде чем ответить на запросы. Согласно австралийскому законодательству, мессенджеру не нужна лицензия для работы в стране, но интернет-регулятор может обратиться в суд с просьбой о запрете сервиса.<br><br><blockquote><i>«Мы никогда не задействовали эти полномочия. Посмотрим, чем всё это закончится»,</i> — указала Инман Грант.</blockquote><br><br>Telegram предпринимает необходимые усилия для борьбы с террористическим контентом и удаляет тысячи экстремистских сообществ, сообщили представители сервиса. Они добавили, что в суде будут оспаривать претензии властей Австралии.<br><br><b>Больше контекста</b><br><br> • В ноябре 2025 года Telegram <a href=\"https://t.me/tginfo/4351\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">инициировал</a> судебный процесс в Федеральном суде Австралии против местного регулятора eSafety. Мессенджер оспаривает законность «Online Safety Act 2021» и наложенный на него крупный штраф.<br><br> • В феврале 2025 года австралийский регулятор <a href=\"https://t.me/tginfo/4227\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">оштрафовал</a> Telegram на сумму более $600 тыс. за задержку предоставления информации о мерах по борьбе с терроризмом и материалами о жестоком обращении с детьми.<br><br> • Telegram утверждает, что как только компания узнала о запросе, она добровольно предоставила необходимую информацию. Редакция <a href=\"https://t.me/tginfo\" target=\"_blank\">@tginfo</a> подробно <a href=\"https://t.me/tginfo/4244\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">разбирала</a> детали этого ответа в отдельном материале — в нём раскрываются подробности о том, как работает модерация в Telegram.<br><br><a href=\"?q=%23%D0%90%D0%B2%D1%81%D1%82%D1%80%D0%B0%D0%BB%D0%B8%D1%8F\">#Австралия</a> <a href=\"?q=%23%D1%81%D1%83%D0%B4%D1%8B\">#суды</a>",
+              "string": "Австралийский регулятор по интернет-безопасности обратился в суд с иском против Telegram\n\nОн обвиняет сервис в игнорировании законодательства страны из-за того, что мессенджер не удалял материалы с пропагандой терроризма; речь о блокировке пока не идет, но такие полномочия у австралийских властей есть.\n\nПретензии австралийских властей связаны с жалобами пользователей на распространение в Telegram роликов с массовым убийством в мечети в Новой Зеландии в 2019 году и стрельбы в супермаркете в США в 2022 году.\n\n<blockquote>«Мы утверждаем, что Telegram не смог обнаружить, предотвратить и пресечь распространение материалов, пропагандирующих терроризм», — заявила комиссар по вопросам безопасности в интернете (eSafety) Джули Инман Грант.</blockquote>\n\nОбращение в суд стало итогом расследования, которое продолжалось год. eSafety заявляет, что пытался наладить контакт с Telegram, однако последний бездействовал в течение пяти месяцев, прежде чем ответить на запросы. Согласно австралийскому законодательству, мессенджеру не нужна лицензия для работы в стране, но интернет-регулятор может обратиться в суд с просьбой о запрете сервиса.\n\n<blockquote>«Мы никогда не задействовали эти полномочия. Посмотрим, чем всё это закончится», — указала Инман Грант.</blockquote>\n\nTelegram предпринимает необходимые усилия для борьбы с террористическим контентом и удаляет тысячи экстремистских сообществ, сообщили представители сервиса. Они добавили, что в суде будут оспаривать претензии властей Австралии.\n\nБольше контекста\n\n • В ноябре 2025 года Telegram инициировал судебный процесс в Федеральном суде Австралии против местного регулятора eSafety. Мессенджер оспаривает законность «Online Safety Act 2021» и наложенный на него крупный штраф.\n\n • В феврале 2025 года австралийский регулятор оштрафовал Telegram на сумму более $600 тыс. за задержку предоставления информации о мерах по борьбе с терроризмом и материалами о жестоком обращении с детьми.\n\n • Telegram утверждает, что как только компания узнала о запросе, она добровольно предоставила необходимую информацию. Редакция @tginfo подробно разбирала детали этого ответа в отдельном материале — в нём раскрываются подробности о том, как работает модерация в Telegram.\n\n#Австралия #суды"
+            }
+          },
+          "footer": {
+            "author": {
+              "html": "Полян",
+              "string": "Полян"
+            },
+            "date": {
+              "string": "2026-08-02T12:50:08+00:00",
+              "unix": 1785675008
+            },
+            "edited": false,
+            "views": "50.2K"
+          },
+          "forwarded": null,
+          "id": 4430,
+          "view": "eyJjIjotMTAwMzMwNzUyNywicCI6NDQzMCwidCI6MTc5MjcwNzg2MiwiaCI6IjEzNzQxYzA3NTJiOWMxZTJkZSJ9"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": null,
+                "thumb": null,
+                "type": "image",
+                "url": "https://cdn4.telesco.pe/file/thZUpx38LJJIz8IfufwOcgzdSyMqqPJtQJIauNBRd8qaqUTfeYiBmcFdVjl5bYP4huQZEhlZXqGgGO7iPpz53NFd8VpspT7uboQ2n8kDe831mehWBQbe2CEeMgebWu1OziK7t8tvsIF6kplCDijlJLDm95bBE_T1buuUDevnDoHeftxpxSmno4M4fsld8VdHfE6eMWpA1kXgnmj2LKZXZJFY4Wvvsns3D-fCpNgeWAjI3g8H_1V_smDILEkMm6lH_gyELpQd9cEafvUYXiyOqLmFLqrVAgKIfzdZIiTGxdCiMQu--CaJFJoThQYzZqwelHTMNgfH3rLGphj3tZZu4Q.jpg",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": null,
+            "reacts": null,
+            "reply": null,
+            "text": {
+              "entities": null,
+              "html": "<b>Telegram работает над экспериментальным WEB-прокси</b><br><br>В коде Telegram Desktop <a href=\"https://github.com/telegramdesktop/tdesktop/commit/96d63afc3f751162d17118fbfb1115163ca618d0\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">замечен</a> новый экспериментальный тип прокси — WEB. Первым на это изменение <a href=\"https://t.me/telelakel/1124\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">обратил</a> внимание канал teleLakel.<br><br>Код сервера для работы WEB-прокси пока не опубликован, поэтому испытать технологию сейчас нельзя.<br><br><b>Зачем это нужно и чем не угодил обычный MTProxy?</b><br><br>Классический MTProxy уже умеет маскироваться под обычный HTTPS-трафик с помощью надстройки FakeTLS. Однако современные системы глубокой фильтрации (DPI) научились распознавать такие подключения, так как внешне FakeTLS всё равно содержит отличия от настоящего HTTPS-трафика.<br><br>Новый WEB-транспорт усложняет обнаружение: для обмена данными мессенджер использует встроенный браузер (WebView). Он устанавливает настоящее TLS/HTTPS-соединение, используя стандартную криптографию браузера, что делает трафик Telegram менее отличимым от обычного веб-сёрфинга.<br><br><blockquote expandable=\"\"><b>Как это работает</b><br><br> • Мессенджер открывает специальную страницу на домене прокси-сервера через скрытый веб-браузер.<br> • Этот домен может параллельно работать как самый обычный сайт. Скрытый канал для Telegram активируется только если запрос содержит правильный секретный ключ.<br> • Внутри единого веб-канала упаковывается и передаётся стандартный зашифрованный трафик MTProxy. Сейчас это происходит при помощи WebSocket.<br> • HTTP/WebSocket-трафик переупаковывается и направляется в MTProxy-сервер, ничего при этом не расшифровывая.<br><br>Сейчас механизм находится в стадии активной разработки, поэтому к моменту официального релиза детали работы протокола могут измениться.</blockquote><br><br>Независимое сообщество <a href=\"https://github.com/telemt/telemt\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Telemt</a> разрабатывает протоколы, которые сложно поддаются обнаружению. Ранее, благодаря анализу сообщества работы российских DPI, разработчики Telegram <a href=\"https://t.me/tginfo/4401\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">обновили</a> MTProxy в своих клиентах, чтобы приспособить его к новым способам обнаружения.<br><br>Сообщество отмечает, что мессенджеру стоит серьёзнее заняться новыми методами обхода блокировок. Если мессенджер не будет постоянно улучшать новый WEB-прокси, он может перестать работать в будущем — обычный трафик Telegram может выглядеть нетипично даже внутри настоящего TLS-соединения, если не применять к нему дополнительные методы маскировки.<br><br><a href=\"?q=%23Desktop\">#Desktop</a> <a href=\"?q=%23%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8\">#прокси</a> <a href=\"?q=%23%D0%B1%D0%BB%D0%BE%D0%BA%D0%B8%D1%80%D0%BE%D0%B2%D0%BA%D0%B8\">#блокировки</a>",
+              "string": "Telegram работает над экспериментальным WEB-прокси\n\nВ коде Telegram Desktop замечен новый экспериментальный тип прокси — WEB. Первым на это изменение обратил внимание канал teleLakel.\n\nКод сервера для работы WEB-прокси пока не опубликован, поэтому испытать технологию сейчас нельзя.\n\nЗачем это нужно и чем не угодил обычный MTProxy?\n\nКлассический MTProxy уже умеет маскироваться под обычный HTTPS-трафик с помощью надстройки FakeTLS. Однако современные системы глубокой фильтрации (DPI) научились распознавать такие подключения, так как внешне FakeTLS всё равно содержит отличия от настоящего HTTPS-трафика.\n\nНовый WEB-транспорт усложняет обнаружение: для обмена данными мессенджер использует встроенный браузер (WebView). Он устанавливает настоящее TLS/HTTPS-соединение, используя стандартную криптографию браузера, что делает трафик Telegram менее отличимым от обычного веб-сёрфинга.\n\n<blockquote expandable=\"\">Как это работает\n\n • Мессенджер открывает специальную страницу на домене прокси-сервера через скрытый веб-браузер.\n • Этот домен может параллельно работать как самый обычный сайт. Скрытый канал для Telegram активируется только если запрос содержит правильный секретный ключ.\n • Внутри единого веб-канала упаковывается и передаётся стандартный зашифрованный трафик MTProxy. Сейчас это происходит при помощи WebSocket.\n • HTTP/WebSocket-трафик переупаковывается и направляется в MTProxy-сервер, ничего при этом не расшифровывая.\n\nСейчас механизм находится в стадии активной разработки, поэтому к моменту официального релиза детали работы протокола могут измениться.</blockquote>\n\nНезависимое сообщество Telemt разрабатывает протоколы, которые сложно поддаются обнаружению. Ранее, благодаря анализу сообщества работы российских DPI, разработчики Telegram обновили MTProxy в своих клиентах, чтобы приспособить его к новым способам обнаружения.\n\nСообщество отмечает, что мессенджеру стоит серьёзнее заняться новыми методами обхода блокировок. Если мессенджер не будет постоянно улучшать новый WEB-прокси, он может перестать работать в будущем — обычный трафик Telegram может выглядеть нетипично даже внутри настоящего TLS-соединения, если не применять к нему дополнительные методы маскировки.\n\n#Desktop #прокси #блокировки"
+            }
+          },
+          "footer": {
+            "author": {
+              "html": "Sominemo",
+              "string": "Sominemo"
+            },
+            "date": {
+              "string": "2026-08-22T09:30:53+00:00",
+              "unix": 1787391053
+            },
+            "edited": false,
+            "views": "40.8K"
+          },
+          "forwarded": null,
+          "id": 4432,
+          "view": "eyJjIjotMTAwMzMwNzUyNywicCI6NDQzMiwidCI6MTc5MjcwNzg2MiwiaCI6ImFkMzkxYzZhZGQ0OGY1NGE0OCJ9"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": null,
+                "thumb": null,
+                "type": "image",
+                "url": "https://cdn4.telesco.pe/file/RfkLtFj1WpzFqjxmgSdmPmfWtvMPU__1WITabLrnTFpDuH520Grn6aRA5y9jk9Ou7dYU4ZiXLvj6TAMMgKwx7KT7gO35frO7foeAb1BLZ90cZskr2FtFbCQAGZ7ZticTKxrePq9V3NLEJWCV3Il0yB3TbI9xxxjBRGqxsd_o0wMzjX0toZN6iIeDfcW21fHeQhwdTlwzJvN4vYf0Hq9CAGFnmfHbvfdctGckBsVE9TrWQUghkUBCFH5Xc-qhgvQ9e9xhMWAp4OCsKYo17qOqOCnE9C7PD_MruDyvq6hfuszMqeCLdavnLuCfeZMP1IFaduaBQgGxcVeZee_Q0q015A.jpg",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": null,
+            "reacts": null,
+            "reply": null,
+            "text": {
+              "entities": null,
+              "html": "<b>Telegram Desktop обновлён до версии 7.1.1</b><br><br><b>Что нового:</b><br> • Добавлены приветственные сообщения для групп и каналов.<br> • Добавлены кнопки и блоки для файлов в расширенных сообщениях.<br> • Улучшены списки, таблицы и вставка текста в формате Markdown в расширенном редакторе.<br> • Добавлены таймеры самоуничтожения и функция однократного просмотра для фотографий и видео.<br> • Добавлены видеопрофили для пользователей, чатов и каналов.<br> • Добавлен видеоредактор с возможностью обрезки ролика, изменения его качества и установки обложки.<br> • Добавлена функция восстановления открытых окон и чатов при перезапуске.<br> • Добавлены новые сочетания клавиш для восстановления закрытых окон (Ctrl + Shift + T), а также для открытия редактора статей (назначить можно в Настройках › Настройки чатов › Сочетания клавиш).<br> • Добавлена возможность отправки музыкальных файлов через меню вложений.<br> • Добавлен новый тип <a href=\"https://t.me/tginfo/4432\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">веб-прокси</a> в настройках подключения.<br> • Исправлены ошибки, приводившие к сбоям.<br><br><b>Скачать:</b><br> • Windows / macOS / Linux: <a href=\"https://desktop.telegram.org/\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">официальный сайт</a> или <a href=\"https://github.com/telegramdesktop/tdesktop/releases\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">GitHub.</a><br> • Windows: <a href=\"https://apps.microsoft.com/detail/9nztwsqntd0s\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Microsoft Store.</a><br> • macOS: <a href=\"https://apps.apple.com/us/app/telegram-lite/id946399090\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">App Store.</a><br> • Linux: <a href=\"https://telegram.org/dl/desktop/flatpak\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Flathub,</a> <a href=\"https://telegram.org/dl/desktop/snap\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Snapcraft.</a><br><br><a href=\"?q=%23%D0%BE%D0%B1%D0%BD%D0%BE%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5\">#обновление</a> <a href=\"?q=%23Desktop\">#Desktop</a>",
+              "string": "Telegram Desktop обновлён до версии 7.1.1\n\nЧто нового:\n • Добавлены приветственные сообщения для групп и каналов.\n • Добавлены кнопки и блоки для файлов в расширенных сообщениях.\n • Улучшены списки, таблицы и вставка текста в формате Markdown в расширенном редакторе.\n • Добавлены таймеры самоуничтожения и функция однократного просмотра для фотографий и видео.\n • Добавлены видеопрофили для пользователей, чатов и каналов.\n • Добавлен видеоредактор с возможностью обрезки ролика, изменения его качества и установки обложки.\n • Добавлена функция восстановления открытых окон и чатов при перезапуске.\n • Добавлены новые сочетания клавиш для восстановления закрытых окон (Ctrl + Shift + T), а также для открытия редактора статей (назначить можно в Настройках › Настройки чатов › Сочетания клавиш).\n • Добавлена возможность отправки музыкальных файлов через меню вложений.\n • Добавлен новый тип веб-прокси в настройках подключения.\n • Исправлены ошибки, приводившие к сбоям.\n\nСкачать:\n • Windows / macOS / Linux: официальный сайт или GitHub.\n • Windows: Microsoft Store.\n • macOS: App Store.\n • Linux: Flathub, Snapcraft.\n\n#обновление #Desktop"
+            }
+          },
+          "footer": {
+            "author": {
+              "html": "Полян",
+              "string": "Полян"
+            },
+            "date": {
+              "string": "2026-08-22T15:26:45+00:00",
+              "unix": 1787412405
+            },
+            "edited": false,
+            "views": "40.1K"
+          },
+          "forwarded": null,
+          "id": 4433,
+          "view": "eyJjIjotMTAwMzMwNzUyNywicCI6NDQzMywidCI6MTc5MjcwNzg2MiwiaCI6IjRkZGMxNDZmOWEzOTgzNTZiMSJ9"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": null,
+                "thumb": null,
+                "type": "image",
+                "url": "https://cdn4.telesco.pe/file/RxxJ_HdxkZnvavl_WcUqQjcdW6d7JGb94Nb8kms9ZYZ8-YVl9Qh0uq3ba91BnyOnJC0kmgfVHD4EIuDWRdpIl2QGHEuMr4oA46HZQoD_SdyYUqFcK64oHH8NWRwsBa00vAY6IXjJPcJK9YGS-LNe5t8LLqYZS6vsaay4YUxpbVqJtjcukCxVc-vbAi5VYm0r6DaiguLEaUHnuER_QI2Yo_uF-JeCIQzA_224BbBlW3c15nqB0AWf1t7e4pfVTNRYGdBKmmANrzYVI1b3AqmO7kEA3Bad9PZcn0-gRrXOqA6Km8UE6CD0vsWuOq5YYhwuzFUuKogFX0-PpZ4QpJ3CSw.jpg",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": null,
+            "reacts": null,
+            "reply": null,
+            "text": {
+              "entities": null,
+              "html": "<b>Приветственные сообщения, кнопки в статьях, новые опции для таблиц</b><br><br>Августовское обновление Telegram приурочено к 13-летию мессенджера: мобильные приложения обновились до версии 12.10, а Telegram Desktop — до версии 7.1. Это обновление включает в себя следующие ключевые изменения:<br><br> • <a href=\"https://t.me/betainfo/2374\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\"><b>Приветственные сообщения</b></a><b>:</b> Администраторы теперь могут добавлять и редактировать до 3-х приветственных сообщений в своих группах и каналах. Такие сообщения отображаются сразу после присоединения к чату, видны лишь конкретному пользователю и остаются полностью невидимыми для остальных участников.<br><br>Чтобы создать приветственное сообщение, зайдите в <i>Настройки группы или канала &gt; Приветственноe сообщение.</i> Только владелец и администраторы с новым отдельным разрешением «Управление приветствиями» могут изменять эту настройку. Даже если вы администратор, у которого ранее были полные права в чате или канале, это разрешение по умолчанию выключено.<br><br> • <a href=\"https://t.me/betainfo/2381\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\"><b>Кнопки в расширенных сообщениях</b></a><b>:</b> У пользователей появилась возможность превратить выделенный фрагмент текста в кнопку, стилизованную под ссылку. Опция доступна во встроенном текстовом редакторе на Android и Desktop, но не на iOS.<br><br>По своему предназначению кнопки подразделяются на три типа: «Ссылка», «Копировать» и «Профиль». После создания кнопки её можно настроить — к примеру, изменить окрас на красный и зелёный цвета, а также на акцентный оттенок темы приложения (на Android это делается это путём многоразового нажатия на кнопку до тех пор, пока она не станет нужного цвета).<br><br><blockquote><b>Обратите внимание:</b> Помимо кнопок в виде ссылок, Telegram добавил поддержку крупных кнопок. Такие кнопки добавляются в тех или иных клиентах по-разному:<br><br> • <b>Android</b>: Напечатайте символ / и выберите «Кнопка» в выпадающем меню.<br> • <b>iOS</b>: Нажмите «+» и выберите «Ряд кнопок».<br> • <b>Desktop</b>: Нажмите <tg-emoji emoji-id=\"5877465816030515018\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F9497.png')\"><b>🔗</b></i></tg-emoji> и выберите опцию «Кнопка».</blockquote><br><br> • <a href=\"https://t.me/betainfo/2380\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\"><b>Новые опции для таблиц</b></a><b>:</b> Функция таблиц во встроенном текстовом редакторе получила несколько надстроек, позволяющих удалять границы между ячейками, а также уменьшать внутренние отступы текста, чтобы таблица смотрелась более компактно.<br><br><b>Скачать обновление</b><br> • Android: <a href=\"http://play.google.com/store/apps/details?id=org.telegram.messenger\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Google Play</a>, APK с <a href=\"http://telegram.org/dl/android/apk\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">официального сайта</a> или <a href=\"http://t.me/TAndroidAPK\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">верифицированного канала</a>.<br> • iOS: <a href=\"https://apps.apple.com/app/telegram-messenger/id686449807\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">App Store</a>.<br> • Windows/macOS/Linux: <a href=\"https://desktop.telegram.org/\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">официальный сайт</a> или <a href=\"https://github.com/telegramdesktop/tdesktop/releases\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">GitHub.</a> <br> • Windows: <a href=\"https://apps.microsoft.com/detail/9nztwsqntd0s\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Microsoft Store</a>.<br> • Linux: <a href=\"https://telegram.org/dl/desktop/flatpak\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Flathub</a>, <a href=\"https://telegram.org/dl/desktop/snap\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Snapcraft</a>.<br><br><a href=\"?q=%23%D0%BE%D0%B1%D0%BD%D0%BE%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5\">#обновление</a> <a href=\"?q=%23Android\">#Android</a> <a href=\"?q=%23iOS\">#iOS</a> <a href=\"?q=%23Desktop\">#Desktop</a>",
+              "string": "Приветственные сообщения, кнопки в статьях, новые опции для таблиц\n\nАвгустовское обновление Telegram приурочено к 13-летию мессенджера: мобильные приложения обновились до версии 12.10, а Telegram Desktop — до версии 7.1. Это обновление включает в себя следующие ключевые изменения:\n\n • Приветственные сообщения: Администраторы теперь могут добавлять и редактировать до 3-х приветственных сообщений в своих группах и каналах. Такие сообщения отображаются сразу после присоединения к чату, видны лишь конкретному пользователю и остаются полностью невидимыми для остальных участников.\n\nЧтобы создать приветственное сообщение, зайдите в Настройки группы или канала &gt; Приветственноe сообщение. Только владелец и администраторы с новым отдельным разрешением «Управление приветствиями» могут изменять эту настройку. Даже если вы администратор, у которого ранее были полные права в чате или канале, это разрешение по умолчанию выключено.\n\n • Кнопки в расширенных сообщениях: У пользователей появилась возможность превратить выделенный фрагмент текста в кнопку, стилизованную под ссылку. Опция доступна во встроенном текстовом редакторе на Android и Desktop, но не на iOS.\n\nПо своему предназначению кнопки подразделяются на три типа: «Ссылка», «Копировать» и «Профиль». После создания кнопки её можно настроить — к примеру, изменить окрас на красный и зелёный цвета, а также на акцентный оттенок темы приложения (на Android это делается это путём многоразового нажатия на кнопку до тех пор, пока она не станет нужного цвета).\n\n<blockquote>Обратите внимание: Помимо кнопок в виде ссылок, Telegram добавил поддержку крупных кнопок. Такие кнопки добавляются в тех или иных клиентах по-разному:\n\n • Android: Напечатайте символ / и выберите «Кнопка» в выпадающем меню.\n • iOS: Нажмите «+» и выберите «Ряд кнопок».\n • Desktop: Нажмите 🔗 и выберите опцию «Кнопка».</blockquote>\n\n • Новые опции для таблиц: Функция таблиц во встроенном текстовом редакторе получила несколько надстроек, позволяющих удалять границы между ячейками, а также уменьшать внутренние отступы текста, чтобы таблица смотрелась более компактно.\n\nСкачать обновление\n • Android: Google Play, APK с официального сайта или верифицированного канала.\n • iOS: App Store.\n • Windows/macOS/Linux: официальный сайт или GitHub. \n • Windows: Microsoft Store.\n • Linux: Flathub, Snapcraft.\n\n#обновление #Android #iOS #Desktop"
+            }
+          },
+          "footer": {
+            "author": {
+              "html": "Полян",
+              "string": "Полян"
+            },
+            "date": {
+              "string": "2026-08-23T03:01:02+00:00",
+              "unix": 1787454062
+            },
+            "edited": false,
+            "views": "47.4K"
+          },
+          "forwarded": null,
+          "id": 4434,
+          "view": "eyJjIjotMTAwMzMwNzUyNywicCI6NDQzNCwidCI6MTc5MjcwNzg2MiwiaCI6IjRlOTI5NmFmYzliYzk1NmJkYSJ9"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": null,
+                "thumb": null,
+                "type": "image",
+                "url": "https://cdn4.telesco.pe/file/MS7GQBUptObPsiu9tkjfLHCzphfp1L2QRStLFL7u9CyHu6y5I4HDIeRM2lL0SVcfv1h39bILmC6GFaAUJuWK7Q7MT2NoNxtRhCFGyFURLwumXFtRzEeJGuPgTZcToYQ2O0JHMU2MEtWEolETUI3TTnjAtmrlMRwEJpGAFPDCn_4RI0hDtKaWl8MARAqU5tx9vjP14Qe336Om79eyjSGqLO1Y3RrUycnmJaJrus3dygJczSO4nhfCmvuIsEeB6pdWeloiKKsH-HRweliITHCbGMvsBr4Cjsek-693VEQwqLZ78Jg9VDQw4-mSbux7jwyBr7H9M7VMhL9UWQQCPS4UFQ.jpg",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": null,
+            "reacts": null,
+            "reply": null,
+            "text": {
+              "entities": null,
+              "html": "<b>Улучшения для видеосообщений на Android</b><br><br>В Beta-версии <b>Telegram для Android</b> под номером <b>12.10.4</b> появился новый раздел настроек — «Round Video (Experimental)».<br><br>Страница включает в себя несколько экспериментальных функций, которые позволяют настроить чёткость и плавность видеосообщений, записываемых на базе современного Camera2 API:<br><br>• <b>Разрешение</b> <b>видео:</b> 360p / 480p.<br>• <b>Разрешение камеры:</b> Низкое / Среднее / Высокое.<br>• <b>Частота кадров:</b> 30 FPS / 60 FPS.<br>• <b>Битрейт видео:</b> 750 kbps / 1 Mbps / 1,5 Mbps / 2 Mbps.<br><br><blockquote><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/E29AA0.png')\"><b>⚠️</b></i> <b>Обратите внимание:</b> Telegram отмечает, что 60 FPS используется только в том случае, если эту частоту поддерживают как фронтальная, так и основная камеры устройства. В противном случае запись автоматически переключается на 30 кадров в секунду.</blockquote><br><br>Помимо этого, пользователи могут отключить фирменную стилизацию для скачиваемых видеосообщений. В таком случае записанный «кружочек» будет сохраняться на устройство в виде необрезанного квадрата — без размытия и затемнения по краям, а также без символики Telegram.<br><br><blockquote><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/E29AA0.png')\"><b>⚠️</b></i> <b>Обратите внимание:</b> Эта опция не предусматривает изменения формы для отправляемых в чаты видеосообщений — «кружки» внутри мессенджера остаются круглой формы вне зависимости от того, отключили ли вы для них стилизацию при скачивании или нет.</blockquote><br><br><b>UPD:</b> Мессенджер запоминает последний выбор пользователя и начинает запись следующего видеосообщения с той камеры, на которую велась запись предыдущего ролика. Это избавляет от необходимости постоянно переключаться с фронтальной камеры на основную в начале съёмки новых «кружочков».<br><br>Вероятнее всего, этот раздел настроек не будет представлен в явном виде в стабильных версиях Telegram и останется эксклюзивом Beta-версии на период тестирования функций.<br><br><blockquote>Подписывайтесь на наш второй канал <a href=\"https://t.me/BetaInfo\" target=\"_blank\"><b>@BetaInfo</b></a>, чтобы одними из первых узнавать о будущих обновлениях Telegram.</blockquote><br><br><a href=\"?q=%23Android\">#Android</a> <a href=\"?q=%23Beta\">#Beta</a>",
+              "string": "Улучшения для видеосообщений на Android\n\nВ Beta-версии Telegram для Android под номером 12.10.4 появился новый раздел настроек — «Round Video (Experimental)».\n\nСтраница включает в себя несколько экспериментальных функций, которые позволяют настроить чёткость и плавность видеосообщений, записываемых на базе современного Camera2 API:\n\n• Разрешение видео: 360p / 480p.\n• Разрешение камеры: Низкое / Среднее / Высокое.\n• Частота кадров: 30 FPS / 60 FPS.\n• Битрейт видео: 750 kbps / 1 Mbps / 1,5 Mbps / 2 Mbps.\n\n<blockquote>⚠️ Обратите внимание: Telegram отмечает, что 60 FPS используется только в том случае, если эту частоту поддерживают как фронтальная, так и основная камеры устройства. В противном случае запись автоматически переключается на 30 кадров в секунду.</blockquote>\n\nПомимо этого, пользователи могут отключить фирменную стилизацию для скачиваемых видеосообщений. В таком случае записанный «кружочек» будет сохраняться на устройство в виде необрезанного квадрата — без размытия и затемнения по краям, а также без символики Telegram.\n\n<blockquote>⚠️ Обратите внимание: Эта опция не предусматривает изменения формы для отправляемых в чаты видеосообщений — «кружки» внутри мессенджера остаются круглой формы вне зависимости от того, отключили ли вы для них стилизацию при скачивании или нет.</blockquote>\n\nUPD: Мессенджер запоминает последний выбор пользователя и начинает запись следующего видеосообщения с той камеры, на которую велась запись предыдущего ролика. Это избавляет от необходимости постоянно переключаться с фронтальной камеры на основную в начале съёмки новых «кружочков».\n\nВероятнее всего, этот раздел настроек не будет представлен в явном виде в стабильных версиях Telegram и останется эксклюзивом Beta-версии на период тестирования функций.\n\n<blockquote>Подписывайтесь на наш второй канал @BetaInfo, чтобы одними из первых узнавать о будущих обновлениях Telegram.</blockquote>\n\n#Android #Beta"
+            }
+          },
+          "footer": {
+            "author": {
+              "html": "Полян",
+              "string": "Полян"
+            },
+            "date": {
+              "string": "2026-09-22T08:47:46+00:00",
+              "unix": 1790066866
+            },
+            "edited": false,
+            "views": "36.6K"
+          },
+          "forwarded": null,
+          "id": 4435,
+          "view": "eyJjIjotMTAwMzMwNzUyNywicCI6NDQzNSwidCI6MTc5MjcwNzg2MiwiaCI6IjRjOTIwNzBlOWE0ODcyOGNlNiJ9"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": null,
+                "thumb": null,
+                "type": "image",
+                "url": "https://cdn4.telesco.pe/file/SdApY_LWlxRPHaL897_QHXghDG8EWy7r4ySa4NxqC3q3lOZSHw2l5nyBMyqHDmgapYEJQl75tuGlvL2FEyoRiIxQpw3yKvBBtp0V0pWn_Yead2BCsP_asqEokFmoXa_FlQO3yZuuqtsjjjqAj68u9zO_2Ea0NtF3nORW5n862jp8W_6F5E5sprTD_2BkP_UoPO4zGsXGTkze2S4xIXoba2hfNet3FZMK9-B_DCtBp89KGPQR5f5wNYp1lZZl8EPSsyn_acUfVhPj_clsAMaaszFQdlZ5QjhKnx8rf_RGLD5QC0pzKLkpYn6QmQseFY_yb-R3TgRQBdXB8f2pzvbFzA.jpg",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": null,
+            "reacts": null,
+            "reply": null,
+            "text": {
+              "entities": null,
+              "html": "<b>Concierge — бот для взаимодействия с аудиторией и управления рекламными кампаниями</b><br><br>Инструмент предоставляет следующие функции для владельцев Telegram-каналов:<br><br><b> • Приветственные сообщения для новой аудитории</b><br>После подписки пользователь может получить сообщение от бота: это может быть рекламный оффер или ознакомительная информация. Администраторы также используют этот инструмент для перенаправления аудитории в другие каналы.<br><br><b> • Быстрая замена пригласительных ссылок</b><br>Бот меняет ссылки под разные выходы рекламы для отслеживания вступивших пользователей, чтобы администратор или закупщик не делали это вручную.<br><br><b> • Рассылки по базе бота</b><br>Функциональность позволяет отправлять сообщения всем пользователям, которые ранее взаимодействовали с ботом.<br><br>• <a href=\"https://t.me/ConciergeTGBot?start=tginfoo\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\"><b>Автоприём, чистка от ботов и многое другое</b></a><br><br>К <a href=\"https://t.me/ConciergeTGBot?start=tginfoo\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">@ConciergeTGBot</a> можно подключить администраторов или закупщиков. Сервис собирает статистику размещений в мини-приложении.<br><br>Новые пользователи получают 7 дней бесплатного доступа. <b>Ознакомиться с функциями сервиса можно в официальном канале: </b><a href=\"https://t.me/ConciergeTG/15\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\"><b>@ConciergeTG</b></a><br><br><a href=\"?q=%23%D0%BF%D1%80%D0%BE%D0%BC%D0%BE\">#промо</a>",
+              "string": "Concierge — бот для взаимодействия с аудиторией и управления рекламными кампаниями\n\nИнструмент предоставляет следующие функции для владельцев Telegram-каналов:\n\n • Приветственные сообщения для новой аудитории\nПосле подписки пользователь может получить сообщение от бота: это может быть рекламный оффер или ознакомительная информация. Администраторы также используют этот инструмент для перенаправления аудитории в другие каналы.\n\n • Быстрая замена пригласительных ссылок\nБот меняет ссылки под разные выходы рекламы для отслеживания вступивших пользователей, чтобы администратор или закупщик не делали это вручную.\n\n • Рассылки по базе бота\nФункциональность позволяет отправлять сообщения всем пользователям, которые ранее взаимодействовали с ботом.\n\n• Автоприём, чистка от ботов и многое другое\n\nК @ConciergeTGBot можно подключить администраторов или закупщиков. Сервис собирает статистику размещений в мини-приложении.\n\nНовые пользователи получают 7 дней бесплатного доступа. Ознакомиться с функциями сервиса можно в официальном канале: @ConciergeTG\n\n#промо"
+            }
+          },
+          "footer": {
+            "author": null,
+            "date": {
+              "string": "2026-09-28T08:34:56+00:00",
+              "unix": 1790584496
+            },
+            "edited": false,
+            "views": "33K"
+          },
+          "forwarded": null,
+          "id": 4436,
+          "view": "eyJjIjotMTAwMzMwNzUyNywicCI6NDQzNiwidCI6MTc5MjcwNzg2MiwiaCI6ImRiZGUwYWJhMmJhZGViZDhjMCJ9"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": null,
+            "poll": null,
+            "preview_link": null,
+            "reacts": null,
+            "reply": null,
+            "text": {
+              "entities": null,
+              "html": "<b>Бот Wallet переименован в Walt — и исчез из меню приложения, пока команда Telegram готовит собственную замену</b><br><br>28 сентября 2026 года пользователи заметили, что Telegram перестал продвигать Wallet, а сам бот был <a href=\"https://t.me/walt_news_cis/859\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">переименован</a> в Walt и получил новый логотип, который больше не создаёт впечатления официального сервиса Telegram.<br><br>В 2023 году Telegram и TON Foundation публично <a href=\"https://t.me/tginfo/3764\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">объявили</a> о партнёрстве — бот Wallet был тесно интегрирован в мессенджер. В частности, Telegram стал показывать кошелёк в меню мессенджера, тем самым продвигая его среди всех своих пользователей.<br><br>Бот Wallet был <a href=\"https://t.me/infoton/213\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">запущен</a> в 2022 году компанией, связанной с TON Foundation. Тогда же редакция <a href=\"https://t.me/tginfo\" target=\"_blank\">@tginfo</a> выразила <a href=\"https://t.me/tginfo/3301\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">мнение</a>, что Wallet разрабатывался в тесном сотрудничестве с Telegram. Сегодня компания-владелец бота Wallet известна как TOP (The Open Platform). <br><br>Редакция <a href=\"https://t.me/tginfo\" target=\"_blank\">@tginfo</a> связывает новые изменения с тем, что команда мессенджера <a href=\"https://t.me/infoton/426\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">готовит</a> к запуску собственный Gram Wallet, который станет основным кошельком для пользователей Telegram.<br><br><br><b>История Telegram Open Network (TON) и Gram</b><br><br>По мнению редакции <a href=\"https://t.me/tginfo\" target=\"_blank\">@tginfo</a>, TON Foundation и бот Wallet, который теперь известен как Walt, — результат гибридной стратегии Telegram, которой мессенджер придерживался из-за запрета на развитие TON, наложенного SEC в 2020 году. <br><br>Теперь мессенджер заменяет его на полностью интегрированный кошелёк Gram, согласно оригинальной задумке 2019 года. Telegram мог решиться вернуть себе прямой контроль над блокчейном благодаря значительной дерегуляции криптовалют в США в последние годы.<br><br><blockquote expandable=\"\"><b>Подготовка к запуску и инвестиции</b><br><br>Первые слухи о блокчейне Telegram Open Network (TON) и его криптовалюте Gram, которые разрабатывались командой Telegram, <a href=\"https://t.me/tginfo/1857\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">появились</a> в 2017 году. <br><br>В 2018 году Telegram <a href=\"https://t.me/tginfo/1269\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">провёл</a> закрытое ICO и собрал около $2 млрд. Тогда же бытовало <a href=\"https://www.forbes.ru/milliardery/357335-tektonicheskaya-platforma-forbes-priznal-pavla-durova-dollarovym-milliarderom\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">мнение</a>, что Telegram разрабатывал TON в том числе для того, чтобы провести ICO и получить средства на существование, избегая обязательств, связанных с выпуском ценных бумаг, а также появления монетизации через рекламу и платных подписок в мессенджере.<br><br>К началу 2019 года стало <a href=\"https://t.me/tginfo/1857\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">очевидно</a>, что криптовалюта готовится к запуску и интеграции с мессенджером в ближайшие месяцы, что соответствовало ранее утёкшим планам. В том же году в приложении появился экспериментальный встроенный <a href=\"https://t.me/tginfo/2252\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">кошелёк Gram</a>.<br><br><b>Суд с SEC и заморозка</b><br><br>В октябре 2019 года Комиссия по ценным бумагам и биржам США (SEC) подала иск против Telegram, в котором утверждала, что в ходе ICO Telegram продаёт не виртуальную валюту, а ценные бумаги. В 2020 году мессенджер подписал <a href=\"https://t.me/infoton/184\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">мировое соглашение</a> — из-за этого он был вынужден вернуть деньги инвесторам и официально прекратить работу над TON. Telegram заморозил разработку и удалил большинство упоминаний TON и Gram из мессенджера.<br><br>Оставшись без инвестиций, привлечённых в ходе ICO, Telegram начал финансироваться через <a href=\"https://t.me/tginfo/2939\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">евробонды</a> и другие виды облигаций. Свой первый пакет задолженности от 2021 года мессенджер <a href=\"https://t.me/tginfo/4392\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">погасил</a> только в 2026 году.<br><br>После ухода команды Дурова сообщество разработчиков разделилось на две параллельные ветки:<br><br> • <b>Free TON</b>: независимая группа во главе с валидатором TON Labs запустила отдельную сеть с токеном TON Crystal.<br> • <b>NewTON</b> (TON Community): другая группа независимых разработчиков продолжила поддержку исходной тестовой сети testnet2, созданной командой Дурова, и сосредоточилась на сохранении оригинальной архитектуры и концепции TON.<br><br><b>Рождение TON Foundation и гибридная эра</b><br><br>В августе 2021 года Telegram официально <a href=\"https://t.me/infoton/201\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">сделал выбор</a> в пользу команды NewTON: мессенджер передал ей официальный домен <a href=\"http://ton.org/\" target=\"_blank\" rel=\"noopener\">ton.org</a> и репозиторий проекта на GitHub. После этого команда NewTON переименовалась в The Open Network (TON Foundation), а нативный токен получил имя Toncoin.<br><br>Несмотря на то что Telegram и TON Foundation были независимыми, между ними, по мнению редакции <a href=\"https://t.me/tginfo\" target=\"_blank\">@tginfo</a>, прослеживалась неформальная взаимосвязь, благодаря которой Telegram продолжал работать над TON: сохраняя формальную независимость, мессенджер таким образом мог пытаться избежать внимания SEC и других регуляторов.<br><br>В 2022 году к TON Foundation <a href=\"https://t.me/tginfo/3221\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">присоединились</a> бывший топ-менеджер ВКонтакте Андрей Рогозов, долгое время работавший с Дуровым, и другие разработчики. В 2023 году Рогозов также стал главой The Open Platform (TOP). В пресс-релизе <a href=\"https://chainwire.org/2023/09/08/the-open-platform-aims-to-pioneer-web3-superapp-development-through-wallet-integration-in-telegram/\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">указывается</a>, что TOP стал результатом слияния компании First Stage Labs и команды Wallet внутри Telegram.<br><br>До 2024 года состав команды TON Foundation незаметно менялся, и, похоже, Рогозов в какой-то момент перестал активно участвовать в TF, сконцентрировавшись на на The Open Platform. При этом мессенджер <a href=\"https://youtu.be/PtGXruN_X2I?t=1275\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">поддерживал</a> с TOP более тесную связь, чем с TON Foundation. <br><br>Telegram начал осторожную <a href=\"https://t.me/tginfo/3221\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">интеграцию</a>: запустил <a href=\"https://t.me/tginfo/3461\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">аукционы</a> на базе TON на платформе Fragment, ввёл <a href=\"https://t.me/tginfo/3974\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">выплаты</a> в TON, регистрацию подарков как <a href=\"https://t.me/tginfo/4209\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">NFT</a>, добавил поддержку <a href=\"https://t.me/tginfo/4064\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">TON Sites</a> в мессенджер, <a href=\"https://t.me/tginfo/4216\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">обязал</a> Mini Apps использовать TON.<br><br>Именно в таких условиях появился Wallet, который, по мнению редакции <a href=\"https://t.me/tginfo\" target=\"_blank\">@tginfo</a>, мог стать одним из основных двигателей <a href=\"https://t.me/tginfo/3301\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">появления</a> платформы Web Bots / Mini Apps в 2022 году, а в 2023 году стал отображаться у всех пользователей Telegram как приложение-кошелёк по умолчанию. При этом де-юре им управляли не Telegram, а TON Foundation и со временем TOP Рогозова. <br><br><b>MTONGA</b><br><br>Весной 2026 года Павел Дуров <a href=\"https://t.me/durov/482\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">объявил</a> о запуске инициативы <b>Make TON Great Again (MTONGA)</b> — масштабной программы из семи шагов, призванной вернуть TON в Telegram, вновь превратив его из обособленного криптопроекта в нативный блокчейн мессенджера.<br><br>Telegram <a href=\"https://www.binance.com/en/square/post/320178370674002\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">вернул</a> себе <a href=\"https://x.com/durov/status/2051315383466897663\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">управление</a> блокчейном и статус главного валидатора, провёл его модернизацию, <a href=\"https://t.me/infoton/425\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">восстановил</a> историческое имя криптовалюты Gram и <a href=\"https://t.me/durov/533\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">анонсировал</a> внедрение нативного кошелька в приложения Telegram. При этом, похоже, кошелёк Walt команды Рогозова не входит в планы MTONGA.<br><br>TOP и его кошелёк Walt продолжат существовать независимо. В начале 2026 года TOP <a href=\"https://top.co/insights/TOP-acquires-Tonkeeper\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">планировала</a> выкупить популярный некастодиальный кошелёк Tonkeeper у его основателей. Полный выкуп акций <a href=\"https://top.co/insights/top-assumes-operational-leadership-of-tonkeeper\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">не состоялся</a>, но в августе 2026 года TOP взяла на себя операционное управление Tonkeeper. Tonkeeper также владеет обозревателем блокчейна Tonviewer, который использовался в официальных приложениях Telegram для просмотра операций в блокчейне. <br><br>В 2026 году этот обозреватель блокчейна, находившийся под контролем компании Рогозова, начал <a href=\"https://kod.ru/ton-viewer-reklamiruet-kazino-na-glavnoi\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">показывать</a> рекламу казино, поэтому Telegram заменил сервис на Tonscan. Мессенджер предпочёл не возвращаться к Tonviewer даже после того, как тот убрал рекламу.<br><br>Отметим, что новый кошелёк Telegram не разрабатывается с нуля: Gram Wallet <a href=\"https://t.me/infoton/426\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">создаётся</a> в сотрудничестве с командой My Wallet (ранее MyTonWallet). Разработка включает как нативную интеграцию прямо в приложениях Telegram, так и отдельное приложение для iOS/Android и веб-версию. Кошелёк от Telegram является полностью некастодиальным.</blockquote><br><br><a href=\"?q=%23TON\">#TON</a>",
+              "string": "Бот Wallet переименован в Walt — и исчез из меню приложения, пока команда Telegram готовит собственную замену\n\n28 сентября 2026 года пользователи заметили, что Telegram перестал продвигать Wallet, а сам бот был переименован в Walt и получил новый логотип, который больше не создаёт впечатления официального сервиса Telegram.\n\nВ 2023 году Telegram и TON Foundation публично объявили о партнёрстве — бот Wallet был тесно интегрирован в мессенджер. В частности, Telegram стал показывать кошелёк в меню мессенджера, тем самым продвигая его среди всех своих пользователей.\n\nБот Wallet был запущен в 2022 году компанией, связанной с TON Foundation. Тогда же редакция @tginfo выразила мнение, что Wallet разрабатывался в тесном сотрудничестве с Telegram. Сегодня компания-владелец бота Wallet известна как TOP (The Open Platform). \n\nРедакция @tginfo связывает новые изменения с тем, что команда мессенджера готовит к запуску собственный Gram Wallet, который станет основным кошельком для пользователей Telegram.\n\n\nИстория Telegram Open Network (TON) и Gram\n\nПо мнению редакции @tginfo, TON Foundation и бот Wallet, который теперь известен как Walt, — результат гибридной стратегии Telegram, которой мессенджер придерживался из-за запрета на развитие TON, наложенного SEC в 2020 году. \n\nТеперь мессенджер заменяет его на полностью интегрированный кошелёк Gram, согласно оригинальной задумке 2019 года. Telegram мог решиться вернуть себе прямой контроль над блокчейном благодаря значительной дерегуляции криптовалют в США в последние годы.\n\n<blockquote expandable=\"\">Подготовка к запуску и инвестиции\n\nПервые слухи о блокчейне Telegram Open Network (TON) и его криптовалюте Gram, которые разрабатывались командой Telegram, появились в 2017 году. \n\nВ 2018 году Telegram провёл закрытое ICO и собрал около $2 млрд. Тогда же бытовало мнение, что Telegram разрабатывал TON в том числе для того, чтобы провести ICO и получить средства на существование, избегая обязательств, связанных с выпуском ценных бумаг, а также появления монетизации через рекламу и платных подписок в мессенджере.\n\nК началу 2019 года стало очевидно, что криптовалюта готовится к запуску и интеграции с мессенджером в ближайшие месяцы, что соответствовало ранее утёкшим планам. В том же году в приложении появился экспериментальный встроенный кошелёк Gram.\n\nСуд с SEC и заморозка\n\nВ октябре 2019 года Комиссия по ценным бумагам и биржам США (SEC) подала иск против Telegram, в котором утверждала, что в ходе ICO Telegram продаёт не виртуальную валюту, а ценные бумаги. В 2020 году мессенджер подписал мировое соглашение — из-за этого он был вынужден вернуть деньги инвесторам и официально прекратить работу над TON. Telegram заморозил разработку и удалил большинство упоминаний TON и Gram из мессенджера.\n\nОставшись без инвестиций, привлечённых в ходе ICO, Telegram начал финансироваться через евробонды и другие виды облигаций. Свой первый пакет задолженности от 2021 года мессенджер погасил только в 2026 году.\n\nПосле ухода команды Дурова сообщество разработчиков разделилось на две параллельные ветки:\n\n • Free TON: независимая группа во главе с валидатором TON Labs запустила отдельную сеть с токеном TON Crystal.\n • NewTON (TON Community): другая группа независимых разработчиков продолжила поддержку исходной тестовой сети testnet2, созданной командой Дурова, и сосредоточилась на сохранении оригинальной архитектуры и концепции TON.\n\nРождение TON Foundation и гибридная эра\n\nВ августе 2021 года Telegram официально сделал выбор в пользу команды NewTON: мессенджер передал ей официальный домен ton.org и репозиторий проекта на GitHub. После этого команда NewTON переименовалась в The Open Network (TON Foundation), а нативный токен получил имя Toncoin.\n\nНесмотря на то что Telegram и TON Foundation были независимыми, между ними, по мнению редакции @tginfo, прослеживалась неформальная взаимосвязь, благодаря которой Telegram продолжал работать над TON: сохраняя формальную независимость, мессенджер таким образом мог пытаться избежать внимания SEC и других регуляторов.\n\nВ 2022 году к TON Foundation присоединились бывший топ-менеджер ВКонтакте Андрей Рогозов, долгое время работавший с Дуровым, и другие разработчики. В 2023 году Рогозов также стал главой The Open Platform (TOP). В пресс-релизе указывается, что TOP стал результатом слияния компании First Stage Labs и команды Wallet внутри Telegram.\n\nДо 2024 года состав команды TON Foundation незаметно менялся, и, похоже, Рогозов в какой-то момент перестал активно участвовать в TF, сконцентрировавшись на на The Open Platform. При этом мессенджер поддерживал с TOP более тесную связь, чем с TON Foundation. \n\nTelegram начал осторожную интеграцию: запустил аукционы на базе TON на платформе Fragment, ввёл выплаты в TON, регистрацию подарков как NFT, добавил поддержку TON Sites в мессенджер, обязал Mini Apps использовать TON.\n\nИменно в таких условиях появился Wallet, который, по мнению редакции @tginfo, мог стать одним из основных двигателей появления платформы Web Bots / Mini Apps в 2022 году, а в 2023 году стал отображаться у всех пользователей Telegram как приложение-кошелёк по умолчанию. При этом де-юре им управляли не Telegram, а TON Foundation и со временем TOP Рогозова. \n\nMTONGA\n\nВесной 2026 года Павел Дуров объявил о запуске инициативы Make TON Great Again (MTONGA) — масштабной программы из семи шагов, призванной вернуть TON в Telegram, вновь превратив его из обособленного криптопроекта в нативный блокчейн мессенджера.\n\nTelegram вернул себе управление блокчейном и статус главного валидатора, провёл его модернизацию, восстановил историческое имя криптовалюты Gram и анонсировал внедрение нативного кошелька в приложения Telegram. При этом, похоже, кошелёк Walt команды Рогозова не входит в планы MTONGA.\n\nTOP и его кошелёк Walt продолжат существовать независимо. В начале 2026 года TOP планировала выкупить популярный некастодиальный кошелёк Tonkeeper у его основателей. Полный выкуп акций не состоялся, но в августе 2026 года TOP взяла на себя операционное управление Tonkeeper. Tonkeeper также владеет обозревателем блокчейна Tonviewer, который использовался в официальных приложениях Telegram для просмотра операций в блокчейне. \n\nВ 2026 году этот обозреватель блокчейна, находившийся под контролем компании Рогозова, начал показывать рекламу казино, поэтому Telegram заменил сервис на Tonscan. Мессенджер предпочёл не возвращаться к Tonviewer даже после того, как тот убрал рекламу.\n\nОтметим, что новый кошелёк Telegram не разрабатывается с нуля: Gram Wallet создаётся в сотрудничестве с командой My Wallet (ранее MyTonWallet). Разработка включает как нативную интеграцию прямо в приложениях Telegram, так и отдельное приложение для iOS/Android и веб-версию. Кошелёк от Telegram является полностью некастодиальным.</blockquote>\n\n#TON"
+            }
+          },
+          "footer": {
+            "author": {
+              "html": "Sominemo",
+              "string": "Sominemo"
+            },
+            "date": {
+              "string": "2026-09-29T14:40:10+00:00",
+              "unix": 1790692810
+            },
+            "edited": false,
+            "views": "35.2K"
+          },
+          "forwarded": null,
+          "id": 4437,
+          "view": "eyJjIjotMTAwMzMwNzUyNywicCI6NDQzNywidCI6MTc5MjcwNzg2MiwiaCI6Ijk1MzgzOWU1YThlYzI5NTM2MyJ9"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": {
+                  "formatted": "3:25",
+                  "raw": 205
+                },
+                "thumb": "https://cdn4.telesco.pe/file/RoAamioVLFHPR_GeHSgdhktRPZicq4SHz5YMV_UxPr2ELCrUV8G1VPpDPZqP0zD0t8kyvrADAxSROhOayZeyRyKrwr9IRNA8ODT9Fpi373WxHD7MT7qN3M4odMPHGgYEC_wqqK0cs6qjiU9eJQ_LH31WcX7x_umzT4hXztjj8Ou_D59FP_c6KC_3j2e-HcbRsOwVMAQk1ovWI6L7e80cHco6ZLMiBMN51s2rvYEdOK1FDQSC4Kc-IkckJJsvtuXxfg5zm0vHnR6ofUZLwZVLI38rr-o8bwd-pVLl-YWvJ8sqiartqWrzLOqxslXyqOHRbVXpy3vWGyPb_crEMyRgiA",
+                "type": "video",
+                "url": "https://cdn4.telesco.pe/file/f3906f6b1a.mp4?token=KSJ0VUGgKuKbeqeX-yeUNVJE-XPNQxPNnZev9N_IY3CXwfiF8gxMsh7OgKF7fSD73GTfQSe3wXW9HmUSEZXxku0jJXxKeVNN1SVKCfBoyrbvkjqFkCW6qhapeJ8bNp3_I_OJrm3gcQvr4YIDsOFBA_R3svB2da2sJ0TEzDYItJ35oqc6df-K5NPC4WChh0GTHXd3EDb-uksjcNbs8JFQU5D1xbX8oKVQeCuobG6hwxKOgm1zO9heI5YtnIhVd1M52fr6xEr2DS8DV9XfD_lqZkurK-fhNNs4if6E5p_SxZLXVi1gpJYv-ZqYEi9oGGjVl0RN-3dzrQJFBaLqD9sUsyqJeDCVh_DJb5nURnW8lgrVerTzBWCy2tC1XMUdRdbd35za2AUyTtOQx5HtHS2wrx3-oiqaydDnbQK_rg68Obz9eNgwtclQMdKpdLrE-IM4t6c_MIiW1775KxivdW2rahXDRXSzfDVMGSXghkdxswFpnYPfuaneZsHlUEfVwqVmltsu0e4p30ueYyr5BKHxTe7nFju0w3IM1h-Rn2sQxHQA8seMYwPt1c1G4ByrgGjcNEi8rRpNiWkjZ4G59pVAQWwNNTQwMmoQc8pY5lmrtGYzEXG7Z6xTG6xFHFqz1ecxwEi72tyxxcihDZUq61fWMy3cunb35lO22mtDop-N8Zo",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": null,
+            "reacts": null,
+            "reply": null,
+            "text": {
+              "entities": null,
+              "html": "<b>Интерактивные Web-сообщения прямо в чате</b><br><br>Канал TBetaLeak <a href=\"https://t.me/TBetaLeak/43\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">обнаружил</a> в сборке <b>Telegram для macOS</b> версии 12.10.283300 масштабную экспериментальную подсистему — HTMLBubbles. <br><br>Согласно описанию, мессенджер тестирует интерактивные сообщения на базе HTML, CSS и JavaScript прямо в чате, без необходимости запускать отдельное окно Web Mini App.<br><br>Редакция <a href=\"https://t.me/tginfo\" target=\"_blank\"><b>@tginfo</b></a> поверхностно подтверждает появление данного модуля в коде указанной версии, однако описанное поведение и механика работы пока независимо не подтверждались.<br><br>Идея заключается в том, чтобы превратить обычные сообщения в виджеты: карточки товаров с переключением параметров, интерактивные посадочные талоны или живые графики. <br><br>По данным источника, для отрисовки используется компактный движок litehtml, а скрипты работают в крайне жёсткой песочнице с лимитами по CPU, блокировкой сетевых запросов и запретом на внешние медиа. Со всеми техническими подробностями ограничений можно ознакомиться в <a href=\"https://t.me/TBetaLeak/43\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">публикации</a> авторов.<br><br><b>Опасения редакции</b> <br><br>Несмотря на внушительный список ограничений, у редакции <a href=\"https://t.me/tginfo\" target=\"_blank\"><b>@tginfo</b></a> есть <b>серьезные опасения насчет безопасности</b> подобного нововведения. Интеграция веб-движков с поддержкой исполнения JavaScript, даже сильно урезанного, непосредственно в интерфейс переписки — это огромный риск. <br><br>Практика показывает, что как бы разработчики ни изолировали среду, в системах рендеринга регулярно находят уязвимости. Риск исполнения вредоносного кода просто при просмотре чата вызывает большие вопросы к целесообразности таких виджетов.<br><br>Сейчас HTMLBubbles — это ранний экспериментальный концепт, который тестируется внутри команды Telegram. Функцию могут сильно изменить в процессе разработки, либо полностью отменить.<br><br><a href=\"?q=%23macOS\">#macOS</a> <a href=\"?q=%23beta\">#beta</a>",
+              "string": "Интерактивные Web-сообщения прямо в чате\n\nКанал TBetaLeak обнаружил в сборке Telegram для macOS версии 12.10.283300 масштабную экспериментальную подсистему — HTMLBubbles. \n\nСогласно описанию, мессенджер тестирует интерактивные сообщения на базе HTML, CSS и JavaScript прямо в чате, без необходимости запускать отдельное окно Web Mini App.\n\nРедакция @tginfo поверхностно подтверждает появление данного модуля в коде указанной версии, однако описанное поведение и механика работы пока независимо не подтверждались.\n\nИдея заключается в том, чтобы превратить обычные сообщения в виджеты: карточки товаров с переключением параметров, интерактивные посадочные талоны или живые графики. \n\nПо данным источника, для отрисовки используется компактный движок litehtml, а скрипты работают в крайне жёсткой песочнице с лимитами по CPU, блокировкой сетевых запросов и запретом на внешние медиа. Со всеми техническими подробностями ограничений можно ознакомиться в публикации авторов.\n\nОпасения редакции \n\nНесмотря на внушительный список ограничений, у редакции @tginfo есть серьезные опасения насчет безопасности подобного нововведения. Интеграция веб-движков с поддержкой исполнения JavaScript, даже сильно урезанного, непосредственно в интерфейс переписки — это огромный риск. \n\nПрактика показывает, что как бы разработчики ни изолировали среду, в системах рендеринга регулярно находят уязвимости. Риск исполнения вредоносного кода просто при просмотре чата вызывает большие вопросы к целесообразности таких виджетов.\n\nСейчас HTMLBubbles — это ранний экспериментальный концепт, который тестируется внутри команды Telegram. Функцию могут сильно изменить в процессе разработки, либо полностью отменить.\n\n#macOS #beta"
+            }
+          },
+          "footer": {
+            "author": {
+              "html": "Sominemo",
+              "string": "Sominemo"
+            },
+            "date": {
+              "string": "2026-10-08T16:30:55+00:00",
+              "unix": 1791477055
+            },
+            "edited": false,
+            "views": "28.1K"
+          },
+          "forwarded": null,
+          "id": 4438,
+          "view": "eyJjIjotMTAwMzMwNzUyNywicCI6NDQzOCwidCI6MTc5MjcwNzg2MiwiaCI6ImYxYmJmNTYzZjcwMWZiNjdiYiJ9"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": null,
+                "thumb": null,
+                "type": "image",
+                "url": "https://cdn4.telesco.pe/file/k9OB17ruzK4xkZ6dGDP0tfCsh6__aIKTAZTPtVY9bjK1_WRWohnXh8B8bqSijyNRSVOxgJQ47hUf6DcGBfGupkKfTh5AU8ppEH89Rw5PVnqjEQ24nO8VtsQSJmqBCtlu9CCRuMPBIK_gXugH1NjdvRCK8PkNYpQCdm4KgtYiNFrMABWUyy7vMtV5tH-HRFle-n8Ktgd5xAGNHpDfGgJWcsbcTM-fgjuffMToosFEGX1V6zj8c770pa6v52HKzWPgGrp8Y5ZOA7LILxjzMHp6AlbqKQJaZQfQrRTGvU8bISz7E5KEvw29iSpOwln_mNLafY9iTPKfrsDrZMSQI0RYdw.jpg",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": null,
+            "reacts": null,
+            "reply": null,
+            "text": {
+              "entities": null,
+              "html": "<b>Опасная уязвимость в Telegram Desktop: кража любых файлов в один клик</b><br><br><b>Чего делать НЕЛЬЗЯ и как защититься:</b><br>• <b>Не оставайтесь на версиях ниже 7.2.9</b> — срочно обновите клиент. Если вы используете неофициальный клиент, временно перейдите на официальный, пока не выйдет обновление.<br><br><b>Скачать:</b><br> • Windows / macOS / Linux: <a href=\"https://desktop.telegram.org/\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">официальный сайт</a> или <a href=\"https://github.com/telegramdesktop/tdesktop/releases\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">GitHub.</a><br> • Windows: <a href=\"https://apps.microsoft.com/detail/9nztwsqntd0s\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Microsoft Store.</a><br> • macOS: <a href=\"https://apps.apple.com/us/app/telegram/id747648890\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">App Store.</a><br> • Linux: <a href=\"https://telegram.org/dl/desktop/flatpak\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Flathub,</a><a href=\"https://telegram.org/dl/desktop/snap\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Snapcraft.</a><br><br><b>Совет</b> <b>для пользователей старых клиентов:</b><br><br>• Ссылки опасны: кликая по любым ссылкам, внимательно <b>читайте всплывающее окно</b> — если Telegram показывает в ссылке странную структуру (например, начинается с tg://), не переходите по ней.<br><br>• <b>Не держите клиент без локального код-пароля</b>: его включение шифрует файлы сессии в каталоге <code>tdata</code>, предотвращая мгновенный захват аккаунта даже при их утечке.<br><br><b>В чём суть проблемы?</b><br><br>В клиентах Telegram Desktop до версии 7.2.9 обнаружена уязвимость (<a href=\"https://opennet.me/66431/\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">CVE-2026-107181</a>). Из-за отсутствия экранирования разделителя <code>;</code> параметры в ссылках схемы <code>tg://</code> распознавались как отдельные IPC-команды. С помощью служебного обработчика <code>interpret:</code> атакующий мог при клике на подготовленную ссылку незаметно отправить файлы с системы в свой канал без подтверждения со стороны пользователя.<br><br><b>Главный риск</b><br><br>Опасность не ограничивается только перехватом файлов сессии <code>tdata</code> и угоном аккаунта. Эксплуатация позволяет скрытно украсть <b>абсолютно любые файлы на компьютере</b>, к которым у пользователя есть доступ: документы, сохранённые сессии браузеров, SSH-ключи, системные конфигурации или кошельки с криптовалютой.<br><br><a href=\"?q=%23%D0%B1%D0%B5%D0%B7%D0%BE%D0%BF%D0%B0%D1%81%D0%BD%D0%BE%D1%81%D1%82%D1%8C\">#безопасность</a> <a href=\"?q=%23desktop\">#desktop</a> <a href=\"?q=%23%D1%83%D1%8F%D0%B7%D0%B2%D0%B8%D0%BC%D0%BE%D1%81%D1%82%D0%B8\">#уязвимости</a>",
+              "string": "Опасная уязвимость в Telegram Desktop: кража любых файлов в один клик\n\nЧего делать НЕЛЬЗЯ и как защититься:\n• Не оставайтесь на версиях ниже 7.2.9 — срочно обновите клиент. Если вы используете неофициальный клиент, временно перейдите на официальный, пока не выйдет обновление.\n\nСкачать:\n • Windows / macOS / Linux: официальный сайт или GitHub.\n • Windows: Microsoft Store.\n • macOS: App Store.\n • Linux: Flathub,Snapcraft.\n\nСовет для пользователей старых клиентов:\n\n• Ссылки опасны: кликая по любым ссылкам, внимательно читайте всплывающее окно — если Telegram показывает в ссылке странную структуру (например, начинается с tg://), не переходите по ней.\n\n• Не держите клиент без локального код-пароля: его включение шифрует файлы сессии в каталоге tdata, предотвращая мгновенный захват аккаунта даже при их утечке.\n\nВ чём суть проблемы?\n\nВ клиентах Telegram Desktop до версии 7.2.9 обнаружена уязвимость (CVE-2026-107181). Из-за отсутствия экранирования разделителя ; параметры в ссылках схемы tg:// распознавались как отдельные IPC-команды. С помощью служебного обработчика interpret: атакующий мог при клике на подготовленную ссылку незаметно отправить файлы с системы в свой канал без подтверждения со стороны пользователя.\n\nГлавный риск\n\nОпасность не ограничивается только перехватом файлов сессии tdata и угоном аккаунта. Эксплуатация позволяет скрытно украсть абсолютно любые файлы на компьютере, к которым у пользователя есть доступ: документы, сохранённые сессии браузеров, SSH-ключи, системные конфигурации или кошельки с криптовалютой.\n\n#безопасность #desktop #уязвимости"
+            }
+          },
+          "footer": {
+            "author": {
+              "html": "Sominemo",
+              "string": "Sominemo"
+            },
+            "date": {
+              "string": "2026-10-09T09:37:35+00:00",
+              "unix": 1791538655
+            },
+            "edited": false,
+            "views": "68.9K"
+          },
+          "forwarded": null,
+          "id": 4439,
+          "view": "eyJjIjotMTAwMzMwNzUyNywicCI6NDQzOSwidCI6MTc5MjcwNzg2MiwiaCI6IjhjMGYzZTBhNTA4MjUzZDJiZSJ9"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": null,
+                "thumb": null,
+                "type": "image",
+                "url": "https://cdn4.telesco.pe/file/ZiFwO1Z5PuLwcW9DX3efV919CFE-hOzLcYJbJ5KFW8vv7tDPUAGb5L8bwiQPl7fcykjqBfyKyTfvanY9cVpU9MVw1MBAGvNnhFvvfQQLjjT-KM4BopiYah0ccXEwSTBUPblcCxJk7WVwT3v_ylYS_LIfgn9j7iIm114zjmydJpU2oVuBlyEI_buAHtk8GVO94OiTYaVGjQmDcbf5n8PLQFrcrNoHSasPLgZz8fKKv-R__1wr0EH6911qj8Q7JE4p1LR2ce3L1gnm3E2-tmNOY5-XBgJ8vMfVu3B72bi6RF5W898k3ufNS1WLaWNA5N6lKug11vpWF-kNlUCB55CFnA.jpg",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": null,
+            "reacts": null,
+            "reply": null,
+            "text": {
+              "entities": null,
+              "html": "<b>Telegram обновился до версии 13.0: нативный кошелёк и мгновенные переводы Gram</b><br><br>Telegram <a href=\"https://t.me/infoton/435\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">приступил</a> к поэтапному развёртыванию собственного некастодиального кошелька — <b>Gram Wallet</b>. На данный момент сервис поддерживает только криптовалюту Gram, а также NFT, связанные с мессенджером: уникальные подарки, коллекционные имена пользователей и анонимные номера.<br><br>Сейчас Gram Wallet доступен <b>ограниченному числу пользователей</b>. Чтобы разблокировать доступ к кошельку до того, как он распространится на всю аудиторию мессенджера, потребуется обновить приложение до актуальной версии и получить перевод от другого пользователя на сумму от 0.1 Gram.<br><br>После активации кошелька его баланс отобразится в разделе настроек «Деньги», на месте бота Wallet, который <a href=\"https://t.me/tginfo/4437\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">был переименован в Walt</a> и скрыт из основного меню незадолго до запуска нативного кошелька. Вместе с тем, вы сможете мгновенно переводить Gram своим собеседникам через одноимённую вкладку в меню вложений личного чата.<br><br>Одна из особенностей интегрируемого кошелька — это возможность ежедневно совершать до пяти переводов Gram другим пользователям Telegram или на адреса кошельков без комиссии блокчейна TON. При этом первая транзакция облагается комиссией за инициализацию смарт-контракта.<br><br><blockquote>Подписывайтесь на наш канал <a href=\"https://t.me/infoton\" target=\"_blank\"><b>@infoton</b></a>, чтобы быть в курсе событий вокруг блокчейна TON и криптовалюты Gram.</blockquote><br><br><b>Скачать обновление</b><br> • Android: <a href=\"http://play.google.com/store/apps/details?id=org.telegram.messenger\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Google Play</a>, APK с <a href=\"http://telegram.org/dl/android/apk\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">официального сайта</a> или <a href=\"http://t.me/TAndroidAPK\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">верифицированного канала</a>.<br> • iOS: <a href=\"https://apps.apple.com/app/telegram-messenger/id686449807\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">App Store</a>.<br> • Windows / macOS / Linux: <a href=\"https://desktop.telegram.org/\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">официальный сайт</a> или <a href=\"https://github.com/telegramdesktop/tdesktop/releases\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">GitHub.</a> <br> • Windows: <a href=\"https://apps.microsoft.com/detail/9nztwsqntd0s\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Microsoft Store</a>.<br> • Linux: <a href=\"https://telegram.org/dl/desktop/flatpak\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Flathub</a>, <a href=\"https://telegram.org/dl/desktop/snap\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Snapcraft</a>.<br> • macOS: <a href=\"https://apps.apple.com/us/app/telegram/id747648890\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">App Store </a>или с <a href=\"https://t.me/macos_stable_updates_files\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">верифицированного канала</a>.<br><br><a href=\"?q=%23%D0%BE%D0%B1%D0%BD%D0%BE%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5\">#обновление</a> <a href=\"?q=%23Android\">#Android</a> <a href=\"?q=%23iOS\">#iOS</a> <a href=\"?q=%23Desktop\">#Desktop</a> <a href=\"?q=%23macOS\">#macOS</a>",
+              "string": "Telegram обновился до версии 13.0: нативный кошелёк и мгновенные переводы Gram\n\nTelegram приступил к поэтапному развёртыванию собственного некастодиального кошелька — Gram Wallet. На данный момент сервис поддерживает только криптовалюту Gram, а также NFT, связанные с мессенджером: уникальные подарки, коллекционные имена пользователей и анонимные номера.\n\nСейчас Gram Wallet доступен ограниченному числу пользователей. Чтобы разблокировать доступ к кошельку до того, как он распространится на всю аудиторию мессенджера, потребуется обновить приложение до актуальной версии и получить перевод от другого пользователя на сумму от 0.1 Gram.\n\nПосле активации кошелька его баланс отобразится в разделе настроек «Деньги», на месте бота Wallet, который был переименован в Walt и скрыт из основного меню незадолго до запуска нативного кошелька. Вместе с тем, вы сможете мгновенно переводить Gram своим собеседникам через одноимённую вкладку в меню вложений личного чата.\n\nОдна из особенностей интегрируемого кошелька — это возможность ежедневно совершать до пяти переводов Gram другим пользователям Telegram или на адреса кошельков без комиссии блокчейна TON. При этом первая транзакция облагается комиссией за инициализацию смарт-контракта.\n\n<blockquote>Подписывайтесь на наш канал @infoton, чтобы быть в курсе событий вокруг блокчейна TON и криптовалюты Gram.</blockquote>\n\nСкачать обновление\n • Android: Google Play, APK с официального сайта или верифицированного канала.\n • iOS: App Store.\n • Windows / macOS / Linux: официальный сайт или GitHub. \n • Windows: Microsoft Store.\n • Linux: Flathub, Snapcraft.\n • macOS: App Store или с верифицированного канала.\n\n#обновление #Android #iOS #Desktop #macOS"
+            }
+          },
+          "footer": {
+            "author": {
+              "html": "Полян",
+              "string": "Полян"
+            },
+            "date": {
+              "string": "2026-10-09T22:15:17+00:00",
+              "unix": 1791584117
+            },
+            "edited": false,
+            "views": "27.9K"
+          },
+          "forwarded": null,
+          "id": 4440,
+          "view": "eyJjIjotMTAwMzMwNzUyNywicCI6NDQ0MCwidCI6MTc5MjcwNzg2MiwiaCI6IjY0ZmNkYmJiZjJlNzg2OTA4NCJ9"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": {
+                  "formatted": "0:18",
+                  "raw": 18
+                },
+                "thumb": "https://cdn4.telesco.pe/file/lROxslwcTyi9rOs0gwbPqS0PXfjiEKbPMGCoIf0-nKC7PiSGQhF1gSu7rJuutEkf_A7RyFDlkRjlukz-49daGJBKTZ6vm32r4hpV36NHToNwneFAkM5N8GU3sRfxJ2gh7KmGrDXHGpYNG2ml_hosEkuufqJ5IGnzChzVEwYlckCjHZ4YmuoxiyKXLfeiUTxMqAx10jIsLoX3Y5h8CIGoLScnW0N4yuyOCGszwgBtQCWqyNxKs4VkyxPjwKCfqEMTub77bfx9pu4-50T-vjeM4Dxq44jccjyJML1gMcnpbr59NvP9GbG_IpqHB74qvxq15YKsF_JjftW6BiNES5pp3g",
+                "type": "video",
+                "url": "https://cdn4.telesco.pe/file/69a3d427fd.mp4?token=quFEk71jdSRTrc3Ftd7j7BuVW087_GLrwqT56qw6lJr4mREyzPAhJw2BFGbvNNTW1yeNLukbIKCnCJ5YKZTnqEesBk16B2PQT5Pq99qM9u9j18QtyCM7SGqpBp2Crj0fJd0j6xmsD_t-zm7Zid66fIcxYXUTdre4SrVlRlGBXL4n0bbX2jY3rsjPL9s4GyXmuSi2XG43WuMOC25PG0Dv2xVHs9IpUnQDDhgy8xh5RcH3wrQrE8dW0i2oJzj_W9IPnSteGwiC2_vLwsqjeHpBcN_gMiBy4OX2997cL5pWoGeClO3FgCuwX9iYg0HkJF98H_i2WT7aYx9a7cIwdwjmNQ",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": null,
+            "reacts": null,
+            "reply": null,
+            "text": {
+              "entities": null,
+              "html": "<b>Telegram снова тестирует новостную ленту и персональные рекомендации</b><br><br>В Beta-версии <b>Telegram для macOS</b> под номером <b>13.0 (283318)</b> появилась отдельная вкладка «News» для просмотра публикаций из каналов в формате единой ленты. О находке <a href=\"https://t.me/telelakel/1199\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">сообщил</a> канал <a href=\"https://t.me/telelakel\" target=\"_blank\">@telelakel</a>.<br><br><b>Как устроена новостная лента</b><br><br>Текущая реализация ленты с постами имеет несколько особенностей:<br><br> • <b>Два раздела:</b> Вкладка «News» разделена на две секции — «Added» («Добавленные») и «For You» («Для вас»).<br><br> • <b>Собственная подборка:</b> В разделе «Added» пользователи смогут вручную формировать свою ленту, добавляя и удаляя выбранные каналы с помощью отдельных действий в интерфейсе.<br><br> • <b>Персональные рекомендации:</b> Секция «For You» будет подбирать публикации на основе интересов пользователя. Интересующие категории (у каждой будут свои название и эмодзи) можно выбирать самостоятельно и менять со временем. При этом пока неизвестно, по какому алгоритму будет формироваться эта выдача и попадут ли в неё посты из тех каналов, на которые пользователь не подписан.<br><br> • <b>Навигация и скорость:</b> Интерфейс ленты включает строку поиска, обновление потягиванием вниз (pull-to-refresh), индикатор новых постов и кнопку для пометки их прочитанными. Прямо из ленты можно открывать сами публикации и каналы, переходить к чатам и копировать ссылки. Для быстрого просмотра контента предусмотрена фоновая предзагрузка медиафайлов, аватарок и историй.<br><br><b>История вопроса и контекст</b><br><br>Команда мессенджера подступается к созданию единой ленты на протяжении восьми лет:<br><br> • Впервые возможность собирать каналы в единую новостную ленту <a href=\"https://t.me/tginfo/1208\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">появилась</a> в Beta-версии Telegram для macOS ещё в январе 2018 года, но вскоре была отключена на стороне сервера.<br><br> • В апреле 2022 года коммит, подтверждающий разработку новостной ленты, был <a href=\"https://t.me/tginfo/3307\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">замечен</a> в официальном репозитории Telegram для iOS, однако функция так и не добралась до релиза.<br><br> • Параллельно в 2019-2021 годах Telegram провёл серию масштабных конкурсов по <a href=\"https://t.me/tginfo/2685\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">ранжированию и кластеризации новостей</a>, а также по <a href=\"https://t.me/tginfo/2977\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">определению языка и тематики каналов</a>.<br><br> • До сих пор главным способом последовательного чтения подписок в мессенджере оставался жест <a href=\"https://t.me/tginfo/3078\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">перехода к следующему непрочитанному каналу</a>, а алгоритмические рекомендации ограничивались списком <a href=\"https://t.me/tginfo/3856\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">«Похожих каналов»</a> и вкладкой «Каналы» в <a href=\"https://t.me/tginfo/3991\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">глобальном поиске</a>.<br><br>Редакция <a href=\"https://t.me/tginfo\" target=\"_blank\"><b>@tginfo</b></a> отмечает, что появление алгоритмической ленты в духе платформы X (бывший Twitter) может серьёзно изменить потребление контента в мессенджере. Для авторов это потенциальный источник бесплатного органического трафика без закупки рекламы, а для самого Telegram — способ повысить вовлечённость аудитории и увеличить количество показов <a href=\"https://t.me/tginfo/3974\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">официальной рекламы</a>.<br><br>Сейчас новостная лента отключена на стороне сервера и находится в разработке — к моменту релиза её механика и внешний вид могут измениться.<br><br><blockquote>Больше о новинках из тестовых сборок мы рассказываем в нашем канале <a href=\"https://t.me/betainfo\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\"><b>Beta Info</b></a>.</blockquote><br><br><a href=\"?q=%23Beta\">#Beta</a> <a href=\"?q=%23macOS\">#macOS</a> <a href=\"?q=%23%D0%BA%D0%B0%D0%BD%D0%B0%D0%BB%D1%8B\">#каналы</a>",
+              "string": "Telegram снова тестирует новостную ленту и персональные рекомендации\n\nВ Beta-версии Telegram для macOS под номером 13.0 (283318) появилась отдельная вкладка «News» для просмотра публикаций из каналов в формате единой ленты. О находке сообщил канал @telelakel.\n\nКак устроена новостная лента\n\nТекущая реализация ленты с постами имеет несколько особенностей:\n\n • Два раздела: Вкладка «News» разделена на две секции — «Added» («Добавленные») и «For You» («Для вас»).\n\n • Собственная подборка: В разделе «Added» пользователи смогут вручную формировать свою ленту, добавляя и удаляя выбранные каналы с помощью отдельных действий в интерфейсе.\n\n • Персональные рекомендации: Секция «For You» будет подбирать публикации на основе интересов пользователя. Интересующие категории (у каждой будут свои название и эмодзи) можно выбирать самостоятельно и менять со временем. При этом пока неизвестно, по какому алгоритму будет формироваться эта выдача и попадут ли в неё посты из тех каналов, на которые пользователь не подписан.\n\n • Навигация и скорость: Интерфейс ленты включает строку поиска, обновление потягиванием вниз (pull-to-refresh), индикатор новых постов и кнопку для пометки их прочитанными. Прямо из ленты можно открывать сами публикации и каналы, переходить к чатам и копировать ссылки. Для быстрого просмотра контента предусмотрена фоновая предзагрузка медиафайлов, аватарок и историй.\n\nИстория вопроса и контекст\n\nКоманда мессенджера подступается к созданию единой ленты на протяжении восьми лет:\n\n • Впервые возможность собирать каналы в единую новостную ленту появилась в Beta-версии Telegram для macOS ещё в январе 2018 года, но вскоре была отключена на стороне сервера.\n\n • В апреле 2022 года коммит, подтверждающий разработку новостной ленты, был замечен в официальном репозитории Telegram для iOS, однако функция так и не добралась до релиза.\n\n • Параллельно в 2019-2021 годах Telegram провёл серию масштабных конкурсов по ранжированию и кластеризации новостей, а также по определению языка и тематики каналов.\n\n • До сих пор главным способом последовательного чтения подписок в мессенджере оставался жест перехода к следующему непрочитанному каналу, а алгоритмические рекомендации ограничивались списком «Похожих каналов» и вкладкой «Каналы» в глобальном поиске.\n\nРедакция @tginfo отмечает, что появление алгоритмической ленты в духе платформы X (бывший Twitter) может серьёзно изменить потребление контента в мессенджере. Для авторов это потенциальный источник бесплатного органического трафика без закупки рекламы, а для самого Telegram — способ повысить вовлечённость аудитории и увеличить количество показов официальной рекламы.\n\nСейчас новостная лента отключена на стороне сервера и находится в разработке — к моменту релиза её механика и внешний вид могут измениться.\n\n<blockquote>Больше о новинках из тестовых сборок мы рассказываем в нашем канале Beta Info.</blockquote>\n\n#Beta #macOS #каналы"
+            }
+          },
+          "footer": {
+            "author": {
+              "html": "Полян",
+              "string": "Полян"
+            },
+            "date": {
+              "string": "2026-10-15T15:41:58+00:00",
+              "unix": 1792078918
+            },
+            "edited": false,
+            "views": "88.4K"
+          },
+          "forwarded": null,
+          "id": 4441,
+          "view": "eyJjIjotMTAwMzMwNzUyNywicCI6NDQ0MSwidCI6MTc5MjcwNzg2MiwiaCI6IjMwMTM3ZTE0M2JjNzVmODk4YyJ9"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": null,
+                "thumb": null,
+                "type": "image",
+                "url": "https://cdn4.telesco.pe/file/Aie5f-YgouUXVZSnTWRE1eE6BIK-XgRRhtXIWCgpo9IvR15En_2azlyQYLI_rexBHcMq5-UayRU82nmzeeTN29skyWBG0IjWWgkj3O5mYVCt-cnboegha4mVRzs4rJdbHCiwAEwYfNCXW7ekEGzzw7e05kv4FvXBOiwuxF4ikYF28S5I7y3I5MK256TKQN6tpwrJmUNs7xsNHxCiKHPt_JCZEKN6j-L5SPKHrEJozDcX-IXR3QffzIidg28nKlNz-mABEh65iSXZnc8pqI9G6xu00riz0dLCjs-zBCsKLqyj3clBCe16pY0Lcakg6Cdq2fW5kxAef-zekHD0IXFZAw.jpg",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": null,
+            "reacts": null,
+            "reply": null,
+            "text": {
+              "entities": null,
+              "html": "<b>В Telegram появились ссылки для бесплатных сообщений и обновлённый редактор QR-кодов</b><br><br>В Beta-версиях <b>Telegram для iOS 13.0.1</b>, <b>Telegram для macOS 13.0</b> и <b>Telegram для Android 13.1</b> обновился экран создания QR-кода для личного профиля. Помимо новых настроек оформления, в мессенджере появилась возможность генерировать специальные ссылки и QR-коды, позволяющие писать вам бесплатно даже при включённых <a href=\"https://t.me/tginfo/4228\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">платных сообщениях</a>.<br><br><b>Как это работает</b><br><br>Если у вас настроена плата за входящие сообщения в звёздах, под QR-кодом профиля отображается кнопка <b>«Remove message fee»</b> («Убрать плату за сообщения»).<br><br>При её активации к ссылке на профиль добавляется случайно сгенерированный токен доступа. Обычная ссылка продолжит требовать оплату, а бесплатная отправка сообщений окажется доступна только тем, кто перешёл по ссылке или отсканировал QR-код с действительным токеном.<br><br>По умолчанию создаваемый QR-код является временным и действует <b>1 минуту</b> — это удобно, если нужно показать его собеседнику с экрана телефона при личной встрече.<br><br>В меню управления кодом можно переключить параметры: сделать ссылку бессрочной (<i>Disable timer</i>), снова ограничить её действие одной минутой (<i>Expire after 1 minute</i>), сбросить токен, сделав старую ссылку недействительной (<i>Reset Code</i>) или полностью вернуть плату за сообщения (<i>Restore message fee</i>).<br><br>Функция полезна, если вы хотите защититься от спама и непрошенных личных сообщений, но при этом хотите разместить «бесплатную» точку входа на своём сайте, визитке или в закрытом сообществе, где вас будут искать знакомые или потенциальные клиенты, либо автоматизировать выдачу ссылки через бота.<br><br><b>Новое оформление QR-кодов</b><br><br>Настройка внешнего вида кода больше не ограничивается стандартными темами: теперь пользователи могут выбирать оттенки из широкой палитры, использовать в качестве фонового узора произвольные эмодзи или уникальные <a href=\"https://t.me/tginfo/4209\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">улучшенные подарки</a> из своего профиля (последние — только с подпиской Telegram Premium).<br><br>В связи с этим теперь только сам владелец аккаунта может управлять внешним видом экрана своего QR-кода. Украшения, добавленные в оформление ссылки, видны остальным пользователям.<br><br><blockquote>Больше о новинках из тестовых сборок мы рассказываем в нашем канале <a href=\"https://t.me/betainfo\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\"><b>Beta Info</b></a>.</blockquote><br><br><a href=\"?q=%23Beta\">#Beta</a> <a href=\"?q=%23iOS\">#iOS</a> <a href=\"?q=%23macOS\">#macOS</a> <a href=\"?q=%23Android\">#Android</a> <a href=\"?q=%23%D0%B7%D0%B2%D1%91%D0%B7%D0%B4%D1%8B\">#звёзды</a> <a href=\"?q=%23%D0%BF%D0%BE%D0%B4%D0%B0%D1%80%D0%BA%D0%B8\">#подарки</a>",
+              "string": "В Telegram появились ссылки для бесплатных сообщений и обновлённый редактор QR-кодов\n\nВ Beta-версиях Telegram для iOS 13.0.1, Telegram для macOS 13.0 и Telegram для Android 13.1 обновился экран создания QR-кода для личного профиля. Помимо новых настроек оформления, в мессенджере появилась возможность генерировать специальные ссылки и QR-коды, позволяющие писать вам бесплатно даже при включённых платных сообщениях.\n\nКак это работает\n\nЕсли у вас настроена плата за входящие сообщения в звёздах, под QR-кодом профиля отображается кнопка «Remove message fee» («Убрать плату за сообщения»).\n\nПри её активации к ссылке на профиль добавляется случайно сгенерированный токен доступа. Обычная ссылка продолжит требовать оплату, а бесплатная отправка сообщений окажется доступна только тем, кто перешёл по ссылке или отсканировал QR-код с действительным токеном.\n\nПо умолчанию создаваемый QR-код является временным и действует 1 минуту — это удобно, если нужно показать его собеседнику с экрана телефона при личной встрече.\n\nВ меню управления кодом можно переключить параметры: сделать ссылку бессрочной (Disable timer), снова ограничить её действие одной минутой (Expire after 1 minute), сбросить токен, сделав старую ссылку недействительной (Reset Code) или полностью вернуть плату за сообщения (Restore message fee).\n\nФункция полезна, если вы хотите защититься от спама и непрошенных личных сообщений, но при этом хотите разместить «бесплатную» точку входа на своём сайте, визитке или в закрытом сообществе, где вас будут искать знакомые или потенциальные клиенты, либо автоматизировать выдачу ссылки через бота.\n\nНовое оформление QR-кодов\n\nНастройка внешнего вида кода больше не ограничивается стандартными темами: теперь пользователи могут выбирать оттенки из широкой палитры, использовать в качестве фонового узора произвольные эмодзи или уникальные улучшенные подарки из своего профиля (последние — только с подпиской Telegram Premium).\n\nВ связи с этим теперь только сам владелец аккаунта может управлять внешним видом экрана своего QR-кода. Украшения, добавленные в оформление ссылки, видны остальным пользователям.\n\n<blockquote>Больше о новинках из тестовых сборок мы рассказываем в нашем канале Beta Info.</blockquote>\n\n#Beta #iOS #macOS #Android #звёзды #подарки"
+            }
+          },
+          "footer": {
+            "author": {
+              "html": "Полян",
+              "string": "Полян"
+            },
+            "date": {
+              "string": "2026-10-17T17:00:53+00:00",
+              "unix": 1792256453
+            },
+            "edited": false,
+            "views": "19.7K"
+          },
+          "forwarded": null,
+          "id": 4442,
+          "view": "eyJjIjotMTAwMzMwNzUyNywicCI6NDQ0MiwidCI6MTc5MjcwNzg2MiwiaCI6IjVlNGRiY2NjODc5ZmYyNjg1YiJ9"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": null,
+                "thumb": null,
+                "type": "image",
+                "url": "https://cdn4.telesco.pe/file/k8Bgd3VI8oY1yYEKxGHDpqY8v5DkTmRXRtUdY0Q-XCwOtVVQhzhn6zMqVAW19cFPWUz7XePUd2IHLbZ9Qou-lKG9ImlxqTkLd4Jo8Y-Sp16kczMUdOh9PiBZCP3SONLerjgfSYwdW8evfIF-fm1vVYGUxYBuiuqGsRZp6Ske34uN_Z6zsvu4Qrh8gOKadk5uIzIgMqPvQ6ksnhXtqQDq0PjotAHijBxmHQUmduH5S4fsWwWDRwsviUD6mlgMISLKR4pWjxZJpYy1nSnAcwGzgRCVFhrKmRecPVB9RNLDI5H1_0BJ4BASGStUX3tXsYfTGphhJ59eaT21xtIk4hHHWg.jpg",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": null,
+            "reacts": null,
+            "reply": null,
+            "text": {
+              "entities": null,
+              "html": "<b>Обман при продаже подарка</b><br><br>В последние дни участились случаи обмана пользователей, владеющих подарками. <br><br><b>Схема мошенничества</b><br>Пользователь получает сообщение в личном чате, похожее на официальное предложение купить его подарок. В этом сообщении злоумышленник предлагает жертве нажать кнопку для передачи подарка покупателю и обещает, что сразу после этого жертва получит вознаграждение в виде звёзд. Однако на самом деле кнопка содержит ссылку для безвозмездной передачи подарка другому пользователю. <br><br><b>Как проверить предложение покупки?</b><br>Вот как можно отличить настоящее предложение покупки подарка от мошеннического: <br><br> • Настоящее предложение отображается в середине экрана, а мошенническое – слева (там же, где и остальные сообщения собеседника). <br><br> • Настоящее предложение содержит небольшое изображение подарка, который у вас хотят купить, текст \"Пользователь предлагает вам <i>xxx </i><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/E2AD90.png')\"><b>⭐️</b></i> за &lt;<i>название_подарка_с_номером</i>&gt;\", время действия предложения и кнопки \"Отклонить\" и \"Принять\". Содержание мошеннического сообщения может отличаться. <br><br> • Если изменить язык интерфейса приложения на английский, то текст настоящего предложения начнёт отображаться также на английском языке. Язык мошеннического сообщения не изменится. <br><br> • Если нажать и подержать кнопку \"Принять\" в настоящем сообщении, ничего не произойдет. Если же сделать то же самое на кнопке в мошенническом сообщении, приложение Telegram покажет ссылку, скрытую в этой кнопке: как правило, эта ссылка начинается с <code>tg://send_gift</code>. <br><br>Будьте внимательны, получая предложения о покупке подарков: тщательно проверяйте их, чтобы не лишиться своих подарков. <br><br><b>Как обезопасить себя от риска?</b><br>Если подарок скрыт в вашем профиле, то никто не сможет отправить вам официальное предложение о его покупке. Чтобы скрыть подарок из профиля, откройте список своих подарков, нажмите на нужный подарок, а потом - на кнопку «Скрыть».<br><br><b>Что делать, если уже передал подарок?</b><br>1. Вернуть подарок не получится. Вы не сможете доказать поддержке Telegram, что вас ввели в заблуждение. Предоставлять ей скриншоты бесполезно: они могут быть «нарисованы», а доступа к личным чатам у модераторов Telegram нет. <br><br>2. В Telegram можно пожаловаться на мошенников: см. раздел №1.2 нашей статьи «<a href=\"https://tginfo.me/how-to-contact-telegram\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Как обратиться в Telegram?</a>». Но, к сожалению, одной жалобы обычно недостаточно, чтобы модераторы Telegram заблокировали аккаунт мошенника. Кроме того, у мошенников обычно есть много запасных аккаунтов. <br><br><a href=\"?q=%23%D0%B1%D0%B5%D0%B7%D0%BE%D0%BF%D0%B0%D1%81%D0%BD%D0%BE%D1%81%D1%82%D1%8C\">#безопасность</a>",
+              "string": "Обман при продаже подарка\n\nВ последние дни участились случаи обмана пользователей, владеющих подарками. \n\nСхема мошенничества\nПользователь получает сообщение в личном чате, похожее на официальное предложение купить его подарок. В этом сообщении злоумышленник предлагает жертве нажать кнопку для передачи подарка покупателю и обещает, что сразу после этого жертва получит вознаграждение в виде звёзд. Однако на самом деле кнопка содержит ссылку для безвозмездной передачи подарка другому пользователю. \n\nКак проверить предложение покупки?\nВот как можно отличить настоящее предложение покупки подарка от мошеннического: \n\n • Настоящее предложение отображается в середине экрана, а мошенническое – слева (там же, где и остальные сообщения собеседника). \n\n • Настоящее предложение содержит небольшое изображение подарка, который у вас хотят купить, текст \"Пользователь предлагает вам xxx ⭐️ за &lt;название_подарка_с_номером&gt;\", время действия предложения и кнопки \"Отклонить\" и \"Принять\". Содержание мошеннического сообщения может отличаться. \n\n • Если изменить язык интерфейса приложения на английский, то текст настоящего предложения начнёт отображаться также на английском языке. Язык мошеннического сообщения не изменится. \n\n • Если нажать и подержать кнопку \"Принять\" в настоящем сообщении, ничего не произойдет. Если же сделать то же самое на кнопке в мошенническом сообщении, приложение Telegram покажет ссылку, скрытую в этой кнопке: как правило, эта ссылка начинается с tg://send_gift. \n\nБудьте внимательны, получая предложения о покупке подарков: тщательно проверяйте их, чтобы не лишиться своих подарков. \n\nКак обезопасить себя от риска?\nЕсли подарок скрыт в вашем профиле, то никто не сможет отправить вам официальное предложение о его покупке. Чтобы скрыть подарок из профиля, откройте список своих подарков, нажмите на нужный подарок, а потом - на кнопку «Скрыть».\n\nЧто делать, если уже передал подарок?\n1. Вернуть подарок не получится. Вы не сможете доказать поддержке Telegram, что вас ввели в заблуждение. Предоставлять ей скриншоты бесполезно: они могут быть «нарисованы», а доступа к личным чатам у модераторов Telegram нет. \n\n2. В Telegram можно пожаловаться на мошенников: см. раздел №1.2 нашей статьи «Как обратиться в Telegram?». Но, к сожалению, одной жалобы обычно недостаточно, чтобы модераторы Telegram заблокировали аккаунт мошенника. Кроме того, у мошенников обычно есть много запасных аккаунтов. \n\n#безопасность"
+            }
+          },
+          "footer": {
+            "author": null,
+            "date": {
+              "string": "2026-10-19T09:48:50+00:00",
+              "unix": 1792403330
+            },
+            "edited": true,
+            "views": "14.6K"
+          },
+          "forwarded": null,
+          "id": 4443,
+          "view": "eyJjIjotMTAwMzMwNzUyNywicCI6NDQ0MywidCI6MTc5MjcwNzg2MiwiaCI6IjMxMDdkMDM5MmE0Mjc3YzlhMCJ9"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": null,
+                "thumb": null,
+                "type": "image",
+                "url": "https://cdn4.telesco.pe/file/DTpmHbDmFr-tH2GeBmJNQ5A5EwDF7TkgqHxdxzIMj_Lg-rebxg06S2SbTn6f2XfxkqvxBUjojM8TwB3oq6FS65U_5UxwJiKRLXJ0hd3nL1NbqdHv1Rp0jBsMBbmIUazfyb0kRwGPlWVSJ5JWkeMyltOoKyCr1MXIhrZVplG0YfkAGlAqBCTPzUenlUmxrlVn2befwrOTCHqvZBfMxBZCF1WEkz_vZ8WdOS7D8CtL0ytZ4BEha2pbjatQvAVqLb8zx0kVXoYhsY8i_n7VhXMXPk1_4nKIUz34nTY5nP0NZecHf5HChOD-8qBOI5xRPL55gv-ySGLzwP2jhcfw88TwjA.jpg",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": null,
+            "reacts": null,
+            "reply": null,
+            "text": {
+              "entities": null,
+              "html": "<b>Telegram для Android, iOS и macOS обновились до версии 13.1, а Telegram Desktop — до версии 7.3.2</b><br><br>Октябрьское обновление мессенджера принесло новые возможности, связанные с оформлением Gram Wallet, персонализацией профиля и управлением подарками.<br><br><a href=\"https://t.me/betainfo/2451\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\"> • <b>Оформление карты Gram Wallet:</b> </a>Пользователи получили возможность украшать карту своего криптокошелька коллекционными подарками. Их можно размещать в виде наклеек, а также использовать для оформления фона.<br><br>При этом в качестве фона доступны только подарки из коллекций Plush Pepe и Resistance Dog.<br><br><a href=\"https://t.me/betainfo/2452\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\"> • <b>Баланс Gram Wallet в профиле</b></a><b>:</b> В профилях пользователей появилась карта криптокошелька с отображением баланса. Другие пользователи могут нажать на неё, чтобы посмотреть выбранное оформление.<br><br>Баланс отображается только при наличии 0,01 Gram в кошельке. Если средств меньше, то он будет скрыт из профиля.<br><br> •<a href=\"https://t.me/betainfo/2454\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\"> <b>Персонализация QR-кодов</b></a><b>:</b> Telegram обновил редактор QR-кодов профиля, добавив возможность изменять фон, украшать его эмодзи и применять оформление коллекционных подарков.<br><br>Выбранный дизайн будет виден и другим пользователям. Большинство новых настроек доступно только подписчикам Telegram Premium, тогда как изменение цвета остаётся бесплатным.<br><br> •<a href=\"https://t.me/tginfo/4442\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\"> <b>Ссылки для бесплатных сообщений</b></a><b>:</b> Пользователи, включившие плату за входящие сообщения, теперь могут создавать специальные ссылки, позволяющие другим людям писать им бесплатно.<br><br>При необходимости предоставленное конкретному пользователю право на бесплатную отправку сообщений можно отозвать.<br><br><a href=\"https://t.me/betainfo/2455\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">  • <b>Упрощённый перенос NFT-подарков:</b> </a>При отправке подарка появилась опция для переноса его в собственный кошелёк в блокчейне TON без необходимости использовать Fragment.<br><br> <b>•</b><a href=\"https://t.me/betainfo/2460\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\"><b> Удаление неуникальных подарков: </b></a>Появилась возможность удалять подарки с неограниченным тиражом.<br><br><b>Прочие нововведения</b><br>• Добавлена поддержка цитирования расширенных сообщений (Rich Messages). Ранее цитировать можно было только обычные сообщения.<br>• Telegram Desktop для Windows перешёл на Qt 6 — новую основную версию кроссплатформенного фреймворка, на котором построен интерфейс приложения.<br><br><b>Скачать обновление</b><br> • Android: <a href=\"http://play.google.com/store/apps/details?id=org.telegram.messenger\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Google Play</a>, APK с <a href=\"http://telegram.org/dl/android/apk\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">официального сайта</a> или <a href=\"http://t.me/TAndroidAPK\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">верифицированного канала</a>.<br> • iOS: <a href=\"https://apps.apple.com/app/telegram-messenger/id686449807\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">App Store</a>.<br> • Windows / macOS / Linux: <a href=\"https://desktop.telegram.org/\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">официальный сайт</a> или <a href=\"https://github.com/telegramdesktop/tdesktop/releases\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">GitHub</a>. <br> • Windows: <a href=\"https://apps.microsoft.com/detail/9nztwsqntd0s\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Microsoft Store</a>.<br> • Linux: <a href=\"https://telegram.org/dl/desktop/flatpak\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Flathub</a>, <a href=\"https://telegram.org/dl/desktop/snap\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Snapcraft</a>.<br> • macOS: <a href=\"https://apps.apple.com/us/app/telegram/id747648890\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">App Store или</a> с <a href=\"https://t.me/macos_stable_updates_files\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">верифицированного канала</a>.<br><br><a href=\"?q=%23%D0%BE%D0%B1%D0%BD%D0%BE%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5\">#обновление</a> <a href=\"?q=%23Android\">#Android</a> <a href=\"?q=%23iOS\">#iOS</a> <a href=\"?q=%23Desktop\">#Desktop</a> <a href=\"?q=%23macOS\">#macOS</a>",
+              "string": "Telegram для Android, iOS и macOS обновились до версии 13.1, а Telegram Desktop — до версии 7.3.2\n\nОктябрьское обновление мессенджера принесло новые возможности, связанные с оформлением Gram Wallet, персонализацией профиля и управлением подарками.\n\n • Оформление карты Gram Wallet: Пользователи получили возможность украшать карту своего криптокошелька коллекционными подарками. Их можно размещать в виде наклеек, а также использовать для оформления фона.\n\nПри этом в качестве фона доступны только подарки из коллекций Plush Pepe и Resistance Dog.\n\n • Баланс Gram Wallet в профиле: В профилях пользователей появилась карта криптокошелька с отображением баланса. Другие пользователи могут нажать на неё, чтобы посмотреть выбранное оформление.\n\nБаланс отображается только при наличии 0,01 Gram в кошельке. Если средств меньше, то он будет скрыт из профиля.\n\n • Персонализация QR-кодов: Telegram обновил редактор QR-кодов профиля, добавив возможность изменять фон, украшать его эмодзи и применять оформление коллекционных подарков.\n\nВыбранный дизайн будет виден и другим пользователям. Большинство новых настроек доступно только подписчикам Telegram Premium, тогда как изменение цвета остаётся бесплатным.\n\n • Ссылки для бесплатных сообщений: Пользователи, включившие плату за входящие сообщения, теперь могут создавать специальные ссылки, позволяющие другим людям писать им бесплатно.\n\nПри необходимости предоставленное конкретному пользователю право на бесплатную отправку сообщений можно отозвать.\n\n  • Упрощённый перенос NFT-подарков: При отправке подарка появилась опция для переноса его в собственный кошелёк в блокчейне TON без необходимости использовать Fragment.\n\n • Удаление неуникальных подарков: Появилась возможность удалять подарки с неограниченным тиражом.\n\nПрочие нововведения\n• Добавлена поддержка цитирования расширенных сообщений (Rich Messages). Ранее цитировать можно было только обычные сообщения.\n• Telegram Desktop для Windows перешёл на Qt 6 — новую основную версию кроссплатформенного фреймворка, на котором построен интерфейс приложения.\n\nСкачать обновление\n • Android: Google Play, APK с официального сайта или верифицированного канала.\n • iOS: App Store.\n • Windows / macOS / Linux: официальный сайт или GitHub. \n • Windows: Microsoft Store.\n • Linux: Flathub, Snapcraft.\n • macOS: App Store или с верифицированного канала.\n\n#обновление #Android #iOS #Desktop #macOS"
+            }
+          },
+          "footer": {
+            "author": {
+              "html": "Antonio Marreti",
+              "string": "Antonio Marreti"
+            },
+            "date": {
+              "string": "2026-10-21T12:30:29+00:00",
+              "unix": 1792585829
+            },
+            "edited": false,
+            "views": "8.97K"
+          },
+          "forwarded": null,
+          "id": 4444,
+          "view": "eyJjIjotMTAwMzMwNzUyNywicCI6NDQ0NCwidCI6MTc5MjcwNzg2MiwiaCI6Ijc4NGZmNTg2Yjk5ODhjMGQ0NCJ9"
+        }
+      ]
+    },
+    "meta": {
+      "offset": {
+        "after": null,
+        "before": 4422
+      }
+    }
+  },
+  "status": 200
+}

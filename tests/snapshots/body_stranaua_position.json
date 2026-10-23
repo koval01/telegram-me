@@ -1,0 +1,1106 @@
+{
+  "body": {
+    "channel": {
+      "avatar": "https://cdn4.telesco.pe/file/AfZZ119jFDcfhC1L1dHpGDRmf8_AYko0DawkVDa_irTZlCOQeSyz7_Z7szjGLNjxfLnbZ8z1go3FVzJbqgZ4KFXmfGDeIi0wyN6AFMCbYgfc2CpRA0ZqJQiS9uxWvmYB5TBbJIhTBYvfVX9tfzmBc5cxB_kZZfrMRDZ8ZnZh4TzHRbw2Rf1yxrCLAOeZJ_8t_r2IRxKOu2KQQtHtpeZrqRArRAnJob0ks8M_gzv8LrubP6l_qcEh6TGMqRewmMmAfYEIhoI427HF6JXzwWA3a4c3Xf3p9fNTOcWkeDisYzNqwLOo_5eILX4mS4CBO50FO9EbepaMHrLtrwR7VqgxgA.jpg",
+      "counters": {
+        "files": "22",
+        "links": "123K",
+        "photos": "119K",
+        "subscribers": "334K",
+        "videos": "55.2K"
+      },
+      "description": {
+        "html": "Новости и аналитика по ситуации в Украине от интернет-газеты \"Страна\".<br><br>Наш сайт:<br><br><a href=\"http://www.stranaua.media/\" target=\"_blank\" rel=\"noopener\">www.stranaua.media</a><br><br>Наш YouTube-канал:<br><br><a href=\"https://www.youtube.com/c/stranaua\" target=\"_blank\" rel=\"noopener\">https://www.youtube.com/c/stranaua</a><br><br>Наш Facebook:<br><br><a href=\"https://www.facebook.com/gazetastranaua\" target=\"_blank\" rel=\"noopener\">https://www.facebook.com/gazetastranaua</a>",
+        "string": "Новости и аналитика по ситуации в Украине от интернет-газеты \"Страна\".\n\nНаш сайт:\n\nwww.stranaua.media\n\nНаш YouTube-канал:\n\nhttps://www.youtube.com/c/stranaua\n\nНаш Facebook:\n\nhttps://www.facebook.com/gazetastranaua"
+      },
+      "labels": null,
+      "title": {
+        "html": "Политика Страны",
+        "string": "Политика Страны"
+      },
+      "username": "stranaua"
+    },
+    "content": {
+      "posts": [
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": null,
+                "thumb": null,
+                "type": "image",
+                "url": "https://cdn4.telesco.pe/file/WHICm6UTrm9syqo4PTCNSCVoCkWWWvfeJA3jm4Rr48XDJeFQQ7LHtHZsQyz2LJl0PB5vOoUYdY7Hvy1eBsrdgg4Iy8dNuqAVi6A_ZYilpwXUPaMf0T3Tj7c6Bi_yhIG2R8vYMKXdtpc42IEaFO4BcpjA-IgrxVy4uimADENqm5hNiZF65Ys5wJQB14pFgrBfjFcUIU9avhGMnJp5RaIVoXHhdHoxJgadAUNN2k_fJg7GxUJEA7DLV0GY_ttb7fk7D3NWPde4YvC_ifdJCnsp8TDU6oSaG2p6A8Lx7KNdDeN9m2oFMagBXHuFB1T3vd3NkmhaMp2Pg_C6HopPY94LNg.jpg",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": null,
+            "reacts": null,
+            "reply": null,
+            "text": {
+              "entities": [
+                {
+                  "language": null,
+                  "length": 12,
+                  "offset": 1332,
+                  "type": "text_link",
+                  "url": "https://stranaua.media/"
+                },
+                {
+                  "language": null,
+                  "length": 9,
+                  "offset": 1348,
+                  "type": "text_link",
+                  "url": "https://x.com/stranaua?s=21"
+                },
+                {
+                  "language": null,
+                  "length": 27,
+                  "offset": 1360,
+                  "type": "text_link",
+                  "url": "http://t.me/strana_send_bot"
+                },
+                {
+                  "language": null,
+                  "length": 17,
+                  "offset": 1390,
+                  "type": "text_link",
+                  "url": "https://t.me/@strana_ad_bot"
+                },
+                {
+                  "language": null,
+                  "length": 6,
+                  "offset": 1410,
+                  "type": "text_link",
+                  "url": "https://t.me/stranaua/137068"
+                }
+              ],
+              "html": "Армии Украины и РФ все чаще воюют под землей, используя старые советские трубопроводы, пишет The Wall Street Journal.<br><br>\"Несмотря на опасность и всепроникающее чувство клаустрофобии, украинские солдаты говорили своим офицерам, что зачастую предпочитают эти подземные бои войне на поверхности, где дроны представляют постоянную угрозу\", - говорится в статье.<br><br>Издание сравнивает это с войнами против ХАМАС и во Вьетнаме, где также активно использовались подземные туннели.<br><br>По данным украинских военных, РФ готовит целые подразделения, специализирующиеся на подземных боевых действиях. Россияне используют подземные трубы, чтобы незаметно преодолевать километры, выходить в тыл ВСУ и запускать оттуда дроны. <br><br>Сначала украинские военные пытались уничтожать выходы из труб артиллерией и авиацией, но россияне просто проделывали новые отверстия. Тогда украинские бойцы начали полноценную войну под землёй.<br><br>Внутри труб диаметром около 1,2 метра россияне оборудовали пулемётные позиции, баррикады из мешков с песком и даже жилые помещения, где солдаты проводили месяцы. Украинцы отправляют туда наземные дроны со взрывчаткой и дистанционно управляемыми пулемётами. <br><br>В WSJ отмечают, что подобные бои могут распространиться и на другие участки фронта, а советские трубопроводные сети тянутся в том числе в сторону Польши и стран Балтии.<br><br><a href=\"https://stranaua.media/\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Сайт \"Страна</a>\" | <a href=\"https://x.com/stranaua?s=21\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">X/Twitter</a> | <a href=\"http://t.me/strana_send_bot\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Прислать новость/фото/видео</a> | <a href=\"https://t.me/@strana_ad_bot\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Реклама на канале</a> | <a href=\"https://t.me/stranaua/137068\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Помощь</a>",
+              "string": "Армии Украины и РФ все чаще воюют под землей, используя старые советские трубопроводы, пишет The Wall Street Journal.\n\n\"Несмотря на опасность и всепроникающее чувство клаустрофобии, украинские солдаты говорили своим офицерам, что зачастую предпочитают эти подземные бои войне на поверхности, где дроны представляют постоянную угрозу\", - говорится в статье.\n\nИздание сравнивает это с войнами против ХАМАС и во Вьетнаме, где также активно использовались подземные туннели.\n\nПо данным украинских военных, РФ готовит целые подразделения, специализирующиеся на подземных боевых действиях. Россияне используют подземные трубы, чтобы незаметно преодолевать километры, выходить в тыл ВСУ и запускать оттуда дроны. \n\nСначала украинские военные пытались уничтожать выходы из труб артиллерией и авиацией, но россияне просто проделывали новые отверстия. Тогда украинские бойцы начали полноценную войну под землёй.\n\nВнутри труб диаметром около 1,2 метра россияне оборудовали пулемётные позиции, баррикады из мешков с песком и даже жилые помещения, где солдаты проводили месяцы. Украинцы отправляют туда наземные дроны со взрывчаткой и дистанционно управляемыми пулемётами. \n\nВ WSJ отмечают, что подобные бои могут распространиться и на другие участки фронта, а советские трубопроводные сети тянутся в том числе в сторону Польши и стран Балтии.\n\nСайт \"Страна\" | X/Twitter | Прислать новость/фото/видео | Реклама на канале | Помощь"
+            }
+          },
+          "footer": {
+            "author": null,
+            "date": {
+              "string": "2026-10-22T15:21:01+00:00",
+              "unix": 1792682461
+            },
+            "edited": false,
+            "views": "79.7K"
+          },
+          "forwarded": null,
+          "id": 252473,
+          "view": "eyJjIjotMTA5MjQxMzgzNCwicCI6MjUyNDczLCJ0IjoxNzkyNzA3ODYyLCJoIjoiZTUyNjA3YWE0MjE1YjY2NWE0In0"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": null,
+                "thumb": null,
+                "type": "image",
+                "url": "https://cdn4.telesco.pe/file/WjN_d-vZqON07ObgvlaG_G9k08-uREd3SmkBufCxrKfLdy2cC0RnDFc8VHumKGbfuv8pLVneBRQjWAdsT7UEH5yQsHF5E0dj2L4ty13F-W-wxk3Q6J6UwOCB9Av1ImiX12_duFb4b9mXWl8v-Dum4yWL44ZFcnKTach1YKjap4qyQFBWTGAw2NL_DhpxDa649GlXbXadruohLeBFJFPvHLw0UVidhWQRhGeaq6gAvtn8AuwzLuoV_UOzlPVinQUJURF482EZV31yquu1kzXVLuYQ8iub3SWxDE1Rdb13D9Ajdzg10fthOh3trZm2rGc8WQmZisAwU3kmdghveHaeYg.jpg",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": {
+              "description": {
+                "html": "Что изменилось в Украине 22 октября 2026 года",
+                "string": "Что изменилось в Украине 22 октября 2026 года"
+              },
+              "site_name": "stranaua.media",
+              "thumb": null,
+              "title": "Баллистический удар по Киеву, Зеленский критикует Трампа, готовилась ли Украина к вторжению РФ. Итоги",
+              "url": "https://stranaua.media/news/514108-itohi-1702-dnja-vojny-v-ukraine.html"
+            },
+            "reacts": null,
+            "reply": null,
+            "text": {
+              "entities": [
+                {
+                  "language": null,
+                  "length": 71,
+                  "offset": 24,
+                  "type": "url",
+                  "url": null
+                }
+              ],
+              "html": "Анализируем итоги дня.<br><br><a href=\"https://stranaua.media/news/514108-itohi-1702-dnja-vojny-v-ukraine.html\" target=\"_blank\" rel=\"noopener\">https://stranaua.media/news/514108-itohi-1702-dnja-vojny-v-ukraine.html</a>",
+              "string": "Анализируем итоги дня.\n\nhttps://stranaua.media/news/514108-itohi-1702-dnja-vojny-v-ukraine.html"
+            }
+          },
+          "footer": {
+            "author": null,
+            "date": {
+              "string": "2026-10-22T15:40:16+00:00",
+              "unix": 1792683616
+            },
+            "edited": false,
+            "views": "79.5K"
+          },
+          "forwarded": null,
+          "id": 252474,
+          "view": "eyJjIjotMTA5MjQxMzgzNCwicCI6MjUyNDc0LCJ0IjoxNzkyNzA3ODYyLCJoIjoiZDAwOTAzMjFhNzliNWQ5OWQzIn0"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": null,
+            "poll": null,
+            "preview_link": null,
+            "reacts": null,
+            "reply": null,
+            "text": {
+              "entities": null,
+              "html": "Взрыв в Виннице.",
+              "string": "Взрыв в Виннице."
+            }
+          },
+          "footer": {
+            "author": null,
+            "date": {
+              "string": "2026-10-22T15:53:59+00:00",
+              "unix": 1792684439
+            },
+            "edited": false,
+            "views": "78.1K"
+          },
+          "forwarded": null,
+          "id": 252475,
+          "view": "eyJjIjotMTA5MjQxMzgzNCwicCI6MjUyNDc1LCJ0IjoxNzkyNzA3ODYyLCJoIjoiNGI4MDJlMzE5MDhlYzhhMDdhIn0"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": null,
+                "thumb": null,
+                "type": "image",
+                "url": "https://cdn4.telesco.pe/file/eJNmQKbUxrmXW97xa6LC6yDTxdQqGapzSGF8p4RC3dHGMyl-pgtoTHD2QiUlCYduVj4OVv2T6KZA_ZdXriB1Mi7edEXz1OO3VbTfzbqNfmDQ-8YaKbI6I00z8GXJ72a2UFRh69IVY5CiJsBz4H-e8xCvHU3vrNW4bNjt1zPC2g_nmY7sJ8Z7psxF87y6p9AJ_b4Pr1SHTqOa-uNje3FSTI8UBa93pePO2GbqJs7DwFAKBehCrmb_-rAFRWbc0vLkvFNINIsqXJ6GtxSFiTdR-U-IALE6p8M-or2BXgwD6sUGAXGD_vLXkkBKnQC3WGP4LfgZBq-tEckPzR8Ucm1Xqw.jpg",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": null,
+            "reacts": null,
+            "reply": null,
+            "text": {
+              "entities": null,
+              "html": "Графики отключений завтра будут действовать в части регионов с 6 утра до полуночи – в объеме от 1 до 2 очередей, сообщает Укрэнерго.",
+              "string": "Графики отключений завтра будут действовать в части регионов с 6 утра до полуночи – в объеме от 1 до 2 очередей, сообщает Укрэнерго."
+            }
+          },
+          "footer": {
+            "author": null,
+            "date": {
+              "string": "2026-10-22T15:55:22+00:00",
+              "unix": 1792684522
+            },
+            "edited": false,
+            "views": "80.4K"
+          },
+          "forwarded": null,
+          "id": 252476,
+          "view": "eyJjIjotMTA5MjQxMzgzNCwicCI6MjUyNDc2LCJ0IjoxNzkyNzA3ODYyLCJoIjoiOWNmOWNiN2MzNzlkZWExYTZiIn0"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": null,
+            "poll": null,
+            "preview_link": null,
+            "reacts": null,
+            "reply": null,
+            "text": {
+              "entities": null,
+              "html": "В части Винницы исчезло электричество после прилета, сообщают местные паблики.",
+              "string": "В части Винницы исчезло электричество после прилета, сообщают местные паблики."
+            }
+          },
+          "footer": {
+            "author": null,
+            "date": {
+              "string": "2026-10-22T15:56:49+00:00",
+              "unix": 1792684609
+            },
+            "edited": false,
+            "views": "79.8K"
+          },
+          "forwarded": null,
+          "id": 252477,
+          "view": "eyJjIjotMTA5MjQxMzgzNCwicCI6MjUyNDc3LCJ0IjoxNzkyNzA3ODYyLCJoIjoiNzk0Yjk4M2MzZjVlNmZjMWMzIn0"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": null,
+            "poll": null,
+            "preview_link": null,
+            "reacts": null,
+            "reply": null,
+            "text": {
+              "entities": null,
+              "html": "У части Винницы после прилета также исчезла вода, пишут местные паблики.",
+              "string": "У части Винницы после прилета также исчезла вода, пишут местные паблики."
+            }
+          },
+          "footer": {
+            "author": null,
+            "date": {
+              "string": "2026-10-22T16:30:16+00:00",
+              "unix": 1792686616
+            },
+            "edited": false,
+            "views": "76.3K"
+          },
+          "forwarded": null,
+          "id": 252478,
+          "view": "eyJjIjotMTA5MjQxMzgzNCwicCI6MjUyNDc4LCJ0IjoxNzkyNzA3ODYyLCJoIjoiOTRlNzJjMmU2N2FjMWY3NTBmIn0"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": null,
+            "poll": null,
+            "preview_link": null,
+            "reacts": null,
+            "reply": null,
+            "text": {
+              "entities": null,
+              "html": "Взрыв в Николаеве, сообщает мэр Сенкевич.",
+              "string": "Взрыв в Николаеве, сообщает мэр Сенкевич."
+            }
+          },
+          "footer": {
+            "author": null,
+            "date": {
+              "string": "2026-10-22T16:36:06+00:00",
+              "unix": 1792686966
+            },
+            "edited": false,
+            "views": "75K"
+          },
+          "forwarded": null,
+          "id": 252479,
+          "view": "eyJjIjotMTA5MjQxMzgzNCwicCI6MjUyNDc5LCJ0IjoxNzkyNzA3ODYyLCJoIjoiMzM0NmExZDMyMWMzMDc0ZWNmIn0"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": null,
+                "thumb": null,
+                "type": "image",
+                "url": "https://cdn4.telesco.pe/file/GGiFObk8NGhBeCir2naFiffspKjWu41xhToBvJ2qCMlQpPpdushxKrFf7SFGn0Y4nyFoHS0uII2nR58D3dqM_f9sz_BHohTcotcP_4IaSEk_zeWTXVGBYJsB1fpCUhvCPDsfJVpIydYBZzVWQtCHWGd-czhqsOvQHgXLk81ltjoJdmD9E5RrJH-jXfpxrPovMilHtCz4a6E9r0XuTXhyD9mPnQnMSANP4R3LhohLJ0vyimVJ2bsKi_ZIGHQ5mhhDCBTRjkW4OW-JYD4EdtyShd8hgun2J-g4T_OMcUbAY27ZqF3EWHJl0m7JGyHXj5fUVr-iQR1-9YLOX01xTf_zmA.jpg",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": null,
+            "reacts": null,
+            "reply": null,
+            "text": {
+              "entities": [
+                {
+                  "language": null,
+                  "length": 12,
+                  "offset": 731,
+                  "type": "text_link",
+                  "url": "https://stranaua.media/"
+                },
+                {
+                  "language": null,
+                  "length": 9,
+                  "offset": 747,
+                  "type": "text_link",
+                  "url": "https://x.com/stranaua?s=21"
+                },
+                {
+                  "language": null,
+                  "length": 27,
+                  "offset": 759,
+                  "type": "text_link",
+                  "url": "http://t.me/strana_send_bot"
+                },
+                {
+                  "language": null,
+                  "length": 17,
+                  "offset": 789,
+                  "type": "text_link",
+                  "url": "https://t.me/@strana_ad_bot"
+                },
+                {
+                  "language": null,
+                  "length": 6,
+                  "offset": 809,
+                  "type": "text_link",
+                  "url": "https://t.me/stranaua/137068"
+                }
+              ],
+              "html": "Еврокомиссия подтвердила приостановку санкций на импорт меха российского соболя, сообщает Euractiv.<br><br>Это изменение было включено в последний пакет санкций Брюсселя против Москвы, согласованный на прошлой неделе.<br><br>\"Ряд членов ЕС заявили, что их промышленность зависит от этого очень специфического продукта, не имея альтернативных источников поставок. В результате все 27 стран единогласно договорились о введении целевых изъятий для шкурок соболя\",<br> – заявил евродепутат Сикел.<br><br>Европейская комиссия заявила, что исключение необходимо, поскольку Россия доминирует в мировой торговле соболями, оставляя европейским производителям мало альтернативных поставщиков.<br><br>Сообщается, что инициаторами отмены санкций стали Италия и Греция.<br><br><a href=\"https://stranaua.media/\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Сайт \"Страна</a>\" | <a href=\"https://x.com/stranaua?s=21\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">X/Twitter</a> | <a href=\"http://t.me/strana_send_bot\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Прислать новость/фото/видео</a> | <a href=\"https://t.me/@strana_ad_bot\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Реклама на канале</a> | <a href=\"https://t.me/stranaua/137068\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Помощь</a>",
+              "string": "Еврокомиссия подтвердила приостановку санкций на импорт меха российского соболя, сообщает Euractiv.\n\nЭто изменение было включено в последний пакет санкций Брюсселя против Москвы, согласованный на прошлой неделе.\n\n\"Ряд членов ЕС заявили, что их промышленность зависит от этого очень специфического продукта, не имея альтернативных источников поставок. В результате все 27 стран единогласно договорились о введении целевых изъятий для шкурок соболя\",\n – заявил евродепутат Сикел.\n\nЕвропейская комиссия заявила, что исключение необходимо, поскольку Россия доминирует в мировой торговле соболями, оставляя европейским производителям мало альтернативных поставщиков.\n\nСообщается, что инициаторами отмены санкций стали Италия и Греция.\n\nСайт \"Страна\" | X/Twitter | Прислать новость/фото/видео | Реклама на канале | Помощь"
+            }
+          },
+          "footer": {
+            "author": null,
+            "date": {
+              "string": "2026-10-22T16:52:44+00:00",
+              "unix": 1792687964
+            },
+            "edited": false,
+            "views": "77.2K"
+          },
+          "forwarded": null,
+          "id": 252480,
+          "view": "eyJjIjotMTA5MjQxMzgzNCwicCI6MjUyNDgwLCJ0IjoxNzkyNzA3ODYyLCJoIjoiOWQyNmU4Y2IxMDk2MDQzY2M4In0"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": null,
+            "poll": null,
+            "preview_link": null,
+            "reacts": null,
+            "reply": null,
+            "text": {
+              "entities": null,
+              "html": "Взрыв в Днепре.",
+              "string": "Взрыв в Днепре."
+            }
+          },
+          "footer": {
+            "author": null,
+            "date": {
+              "string": "2026-10-22T16:54:45+00:00",
+              "unix": 1792688085
+            },
+            "edited": false,
+            "views": "73.6K"
+          },
+          "forwarded": null,
+          "id": 252481,
+          "view": "eyJjIjotMTA5MjQxMzgzNCwicCI6MjUyNDgxLCJ0IjoxNzkyNzA3ODYyLCJoIjoiMDQ3MmI1ZTYwYWEyZjk5NDhhIn0"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": null,
+            "poll": null,
+            "preview_link": null,
+            "reacts": null,
+            "reply": null,
+            "text": {
+              "entities": null,
+              "html": "Также взрыв в Запорожье.",
+              "string": "Также взрыв в Запорожье."
+            }
+          },
+          "footer": {
+            "author": null,
+            "date": {
+              "string": "2026-10-22T17:00:58+00:00",
+              "unix": 1792688458
+            },
+            "edited": false,
+            "views": "72.1K"
+          },
+          "forwarded": null,
+          "id": 252482,
+          "view": "eyJjIjotMTA5MjQxMzgzNCwicCI6MjUyNDgyLCJ0IjoxNzkyNzA3ODYyLCJoIjoiMDRhMDIzZDE4Y2QxZDA0NzUwIn0"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": null,
+            "poll": null,
+            "preview_link": null,
+            "reacts": null,
+            "reply": null,
+            "text": {
+              "entities": [
+                {
+                  "language": null,
+                  "length": 12,
+                  "offset": 427,
+                  "type": "text_link",
+                  "url": "https://stranaua.media/"
+                },
+                {
+                  "language": null,
+                  "length": 9,
+                  "offset": 443,
+                  "type": "text_link",
+                  "url": "https://x.com/stranaua?s=21"
+                },
+                {
+                  "language": null,
+                  "length": 27,
+                  "offset": 455,
+                  "type": "text_link",
+                  "url": "http://t.me/strana_send_bot"
+                },
+                {
+                  "language": null,
+                  "length": 17,
+                  "offset": 485,
+                  "type": "text_link",
+                  "url": "https://t.me/@strana_ad_bot"
+                },
+                {
+                  "language": null,
+                  "length": 6,
+                  "offset": 505,
+                  "type": "text_link",
+                  "url": "https://t.me/stranaua/137068"
+                }
+              ],
+              "html": "РФ и Китай начинают совместную марсианскую миссию, сообщает пресс-служба Роскосмоса.<br><br>«У нас совместная лунная миссия «Чанъэ-7». Также мы начинаем совместную марсианскую миссию – изготовление приборов и техники для изучения Марса», – сообщил глава Роскосмоса Дмитрий Баканов.<br><br>Он также отметил, что страны обмениваются данными дистанционного зондирования Земли и совместно используют навигационные системы ГЛОНАСС и «Бэйдоу».<br><br><a href=\"https://stranaua.media/\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Сайт \"Страна</a>\" | <a href=\"https://x.com/stranaua?s=21\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">X/Twitter</a> | <a href=\"http://t.me/strana_send_bot\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Прислать новость/фото/видео</a> | <a href=\"https://t.me/@strana_ad_bot\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Реклама на канале</a> | <a href=\"https://t.me/stranaua/137068\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Помощь</a>",
+              "string": "РФ и Китай начинают совместную марсианскую миссию, сообщает пресс-служба Роскосмоса.\n\n«У нас совместная лунная миссия «Чанъэ-7». Также мы начинаем совместную марсианскую миссию – изготовление приборов и техники для изучения Марса», – сообщил глава Роскосмоса Дмитрий Баканов.\n\nОн также отметил, что страны обмениваются данными дистанционного зондирования Земли и совместно используют навигационные системы ГЛОНАСС и «Бэйдоу».\n\nСайт \"Страна\" | X/Twitter | Прислать новость/фото/видео | Реклама на канале | Помощь"
+            }
+          },
+          "footer": {
+            "author": null,
+            "date": {
+              "string": "2026-10-22T17:02:01+00:00",
+              "unix": 1792688521
+            },
+            "edited": false,
+            "views": "74K"
+          },
+          "forwarded": null,
+          "id": 252483,
+          "view": "eyJjIjotMTA5MjQxMzgzNCwicCI6MjUyNDgzLCJ0IjoxNzkyNzA3ODYyLCJoIjoiM2Y1NWY5MmMwNTgyYzI2MDJkIn0"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": null,
+                "thumb": null,
+                "type": "image",
+                "url": "https://cdn4.telesco.pe/file/ViWmRLnK1RyBep15Gnvs1jWi2DTkffIs3MLTeluxiBP1p-mCYqdjsMxM-fETdB5slJUHh_bv4SXj7ExYw-2OaBUpmSVWuMzzQPK6XQsrvvr8qdTqY9ut61umYcCFhgFDF9VRCpNXDyFPDMVOJzugKddznoVNybTLtafv6MhNnztv_SQ41SGS7BymVwFE1Wmuf-dHoJEfZRiujqqC2YljJRxmsWanjtnXS0qBF2k-BtQCbTSBs6vT8CaHQCU9uleLOv3TwftLo3WnylHCYF3SAb79KGxmNzX7P7WT_l9LFKIA_Xf1WKVlChnOvXHCsKq0VhpTKZnufCCBRnRCnTzvMg.jpg",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": null,
+            "reacts": null,
+            "reply": null,
+            "text": {
+              "entities": [
+                {
+                  "language": null,
+                  "length": 12,
+                  "offset": 226,
+                  "type": "text_link",
+                  "url": "https://stranaua.media/"
+                },
+                {
+                  "language": null,
+                  "length": 9,
+                  "offset": 242,
+                  "type": "text_link",
+                  "url": "https://x.com/stranaua?s=21"
+                },
+                {
+                  "language": null,
+                  "length": 27,
+                  "offset": 254,
+                  "type": "text_link",
+                  "url": "http://t.me/strana_send_bot"
+                },
+                {
+                  "language": null,
+                  "length": 17,
+                  "offset": 284,
+                  "type": "text_link",
+                  "url": "https://t.me/@strana_ad_bot"
+                },
+                {
+                  "language": null,
+                  "length": 6,
+                  "offset": 304,
+                  "type": "text_link",
+                  "url": "https://t.me/stranaua/137068"
+                }
+              ],
+              "html": "Законопроекты о налогах на продажи на электронных платформах и о налоге на посылки до 150 евро подписаны Зеленским, сообщил нардеп Гетманцев.<br><br>Он назвал эти законы «очень важными государственными решениями в пользу бизнеса».<br><br><a href=\"https://stranaua.media/\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Сайт \"Страна</a>\" | <a href=\"https://x.com/stranaua?s=21\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">X/Twitter</a> | <a href=\"http://t.me/strana_send_bot\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Прислать новость/фото/видео</a> | <a href=\"https://t.me/@strana_ad_bot\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Реклама на канале</a> | <a href=\"https://t.me/stranaua/137068\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Помощь</a>",
+              "string": "Законопроекты о налогах на продажи на электронных платформах и о налоге на посылки до 150 евро подписаны Зеленским, сообщил нардеп Гетманцев.\n\nОн назвал эти законы «очень важными государственными решениями в пользу бизнеса».\n\nСайт \"Страна\" | X/Twitter | Прислать новость/фото/видео | Реклама на канале | Помощь"
+            }
+          },
+          "footer": {
+            "author": null,
+            "date": {
+              "string": "2026-10-22T17:20:21+00:00",
+              "unix": 1792689621
+            },
+            "edited": false,
+            "views": "71.8K"
+          },
+          "forwarded": null,
+          "id": 252484,
+          "view": "eyJjIjotMTA5MjQxMzgzNCwicCI6MjUyNDg0LCJ0IjoxNzkyNzA3ODYyLCJoIjoiOWIzOTYxMjBkNWY5ZDUwNzhhIn0"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": null,
+                "thumb": null,
+                "type": "image",
+                "url": "https://cdn4.telesco.pe/file/uATwaG3whONYz0C3nc45V7ayj-FWQHqjZoeCpizefOn552RMwSA6nXi7etWMvlCPFDGsZwzg0DqA82W4ZR9iByKDduX1y3wzcM8GlsqTZNo8fXOvm1N1UxNqd0NV56OPOZzoRVUqtd0N1TrKa5iiQoq-hYTTVrjdDSIsD782fkz6qJsFC3Vk7ao_UMsylk8X_ITeXg-oCcvYCEVN6LmKliJ_4jNR7OtPsrRuU1CbG08PxsXFAt3D2giBf5OVrxl7NDBroCcrny06XhWv7m1gQnVezUEcdYjsU22MyHjheKwMOhBHWQ4DSYyue4b_yBtjtRQ9bQfAeHO0ueeLNNzYrg.jpg",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": null,
+            "reacts": null,
+            "reply": null,
+            "text": {
+              "entities": [
+                {
+                  "language": null,
+                  "length": 12,
+                  "offset": 168,
+                  "type": "text_link",
+                  "url": "https://stranaua.media/"
+                },
+                {
+                  "language": null,
+                  "length": 9,
+                  "offset": 184,
+                  "type": "text_link",
+                  "url": "https://x.com/stranaua?s=21"
+                },
+                {
+                  "language": null,
+                  "length": 27,
+                  "offset": 196,
+                  "type": "text_link",
+                  "url": "http://t.me/strana_send_bot"
+                },
+                {
+                  "language": null,
+                  "length": 17,
+                  "offset": 226,
+                  "type": "text_link",
+                  "url": "https://t.me/@strana_ad_bot"
+                },
+                {
+                  "language": null,
+                  "length": 6,
+                  "offset": 246,
+                  "type": "text_link",
+                  "url": "https://t.me/stranaua/137068"
+                }
+              ],
+              "html": "В Славянске и Краматорске объявлена обязательная принудительная эвакуация семей с детьми, сообщил глава Донецкой ОВА Филашкин.<br><br>К эвакуации привлечены полиция и ГСЧС.<br><br><a href=\"https://stranaua.media/\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Сайт \"Страна</a>\" | <a href=\"https://x.com/stranaua?s=21\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">X/Twitter</a> | <a href=\"http://t.me/strana_send_bot\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Прислать новость/фото/видео</a> | <a href=\"https://t.me/@strana_ad_bot\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Реклама на канале</a> | <a href=\"https://t.me/stranaua/137068\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Помощь</a>",
+              "string": "В Славянске и Краматорске объявлена обязательная принудительная эвакуация семей с детьми, сообщил глава Донецкой ОВА Филашкин.\n\nК эвакуации привлечены полиция и ГСЧС.\n\nСайт \"Страна\" | X/Twitter | Прислать новость/фото/видео | Реклама на канале | Помощь"
+            }
+          },
+          "footer": {
+            "author": null,
+            "date": {
+              "string": "2026-10-22T17:24:58+00:00",
+              "unix": 1792689898
+            },
+            "edited": false,
+            "views": "73.2K"
+          },
+          "forwarded": null,
+          "id": 252485,
+          "view": "eyJjIjotMTA5MjQxMzgzNCwicCI6MjUyNDg1LCJ0IjoxNzkyNzA3ODYyLCJoIjoiYWM2ZWMwMzJlOGNkODQ3YWE0In0"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": {
+                  "formatted": "1:24",
+                  "raw": 84
+                },
+                "thumb": "https://cdn4.telesco.pe/file/LVYOVIuxXezzpOsDYQVVEis278O8KMZ4VXzc2gmWA4adCwSvoqaNEahbyHhU3DovwU0ijjimo5t_7AcH1QihRjUcPcfLhHTRkI1TBuYtpvFJqMaYiteOs9uJDAliaygg-ixfTVL_tWYeEXoxVuCngeHNLG2SnfYJPs9UZGRLidPWSxTVm8TO0P-bVQL1ZxwuyOIIIiHy0CLzgerRmYMaRhZgNgFc23sL5PlDDWFA-fBq1upTxluXIsZP31MYAtrQ43BjqcQcDJxkpxF7yFumNFF7MeqqVJdap1vh9hWPcPG6TiPtzAuOu5qokWbGXG8GnSTuD4_tKDPLgZ-ETn5YHQ",
+                "type": "video",
+                "url": "https://cdn4.telesco.pe/file/1eaca1633f.mp4?token=YnCI5OebQqPkRhFMfd6xeNtwXJCjXXyxy8eAXXWJsG3rLeuD4tvPfDJxOGowj2iCYu2lJi0U5mqGyyVhXRq30RLRbJbQcocuKYMah_u9bci9FaULAv8v2muY7x1C1d5RBFhBVcCR6iTkEkbSHKxsZUL-r0aY_vunNDD_r8xG5aRV-tTvtRMxEkieYQXP7o2XBAXbED4ZUCKAgTzpaAbw29qyeNdx_I56mioM6_VlaFBC2qKEe1YDOEI80AJ2rt8hCGHxP1uzMzgkL73zdKJrW15WwXjzrTk2pYCSmdM_O4lqfCEhg80rJeo2mStAWh3tIj1x_fj54zEfhvVLqX2G1RohxmrVzcrZS5klJ3qSG7gIYQ_o7Mz5VQNtjdTJZ2RRbMda1DP92l2ZepKao22rl2QSsgbWUMewraEwpDhC6I29vGdPn0wNEa4grJpZ7eoN6Vlca1fjaX_pw8O6MbWBAWwGdW0zFG-9352kuFCOokiYBFSqiFfpNnGidG75Q8WJxEGr_NGT--MQLDcW4STNm0lLV_rRignP1Qo64keXLnkzGWgEUHFwVg-W0HgE0QJp7J2vVKfs9OdbuH9zSM3E0FJ5CpPib4fOPu_NTd9Am8fKIx3fj5CkI4FzyMEIHbeDx3qC14O8skYdbGcpkwKr26OmoiriIXdC_m9KGSF5mkQ",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": null,
+            "reacts": null,
+            "reply": null,
+            "text": {
+              "entities": [
+                {
+                  "language": null,
+                  "length": 12,
+                  "offset": 726,
+                  "type": "text_link",
+                  "url": "https://stranaua.media/"
+                },
+                {
+                  "language": null,
+                  "length": 9,
+                  "offset": 742,
+                  "type": "text_link",
+                  "url": "https://x.com/stranaua?s=21"
+                },
+                {
+                  "language": null,
+                  "length": 27,
+                  "offset": 754,
+                  "type": "text_link",
+                  "url": "http://t.me/strana_send_bot"
+                },
+                {
+                  "language": null,
+                  "length": 17,
+                  "offset": 784,
+                  "type": "text_link",
+                  "url": "https://t.me/@strana_ad_bot"
+                },
+                {
+                  "language": null,
+                  "length": 6,
+                  "offset": 804,
+                  "type": "text_link",
+                  "url": "https://t.me/stranaua/137068"
+                }
+              ],
+              "html": "Зеленский рассчитывает завтра получить от спецпосланника Трампа Стива Уиткоффа детальную информацию о результатах переговоров с российской стороной.<br><br>Затем, по его словам, состоится совместная встреча украинской, американской и европейской команд.<br><br>\"Кушнер мне сказал по дороге в Киев, что они поговорили с Россией, и те поддерживают встречу в трёхстороннем формате - Америка, Украина, Россия - в ноябре на высоком уровне технических команд\", - отметил президент.<br><br>Также Зеленский ожидает в ближайшие два дня сигналов от госсекретаря США Марко Рубио по вопросам, которые обсуждались во время их предыдущего разговора (тогда они говорили о работе Starlink, поставках ракет для ПВО и предоставлении американских разведданных).<br><br><a href=\"https://stranaua.media/\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Сайт \"Страна</a>\" | <a href=\"https://x.com/stranaua?s=21\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">X/Twitter</a> | <a href=\"http://t.me/strana_send_bot\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Прислать новость/фото/видео</a> | <a href=\"https://t.me/@strana_ad_bot\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Реклама на канале</a> | <a href=\"https://t.me/stranaua/137068\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Помощь</a>",
+              "string": "Зеленский рассчитывает завтра получить от спецпосланника Трампа Стива Уиткоффа детальную информацию о результатах переговоров с российской стороной.\n\nЗатем, по его словам, состоится совместная встреча украинской, американской и европейской команд.\n\n\"Кушнер мне сказал по дороге в Киев, что они поговорили с Россией, и те поддерживают встречу в трёхстороннем формате - Америка, Украина, Россия - в ноябре на высоком уровне технических команд\", - отметил президент.\n\nТакже Зеленский ожидает в ближайшие два дня сигналов от госсекретаря США Марко Рубио по вопросам, которые обсуждались во время их предыдущего разговора (тогда они говорили о работе Starlink, поставках ракет для ПВО и предоставлении американских разведданных).\n\nСайт \"Страна\" | X/Twitter | Прислать новость/фото/видео | Реклама на канале | Помощь"
+            }
+          },
+          "footer": {
+            "author": null,
+            "date": {
+              "string": "2026-10-22T17:35:25+00:00",
+              "unix": 1792690525
+            },
+            "edited": false,
+            "views": "72.5K"
+          },
+          "forwarded": null,
+          "id": 252486,
+          "view": "eyJjIjotMTA5MjQxMzgzNCwicCI6MjUyNDg2LCJ0IjoxNzkyNzA3ODYyLCJoIjoiNDE4NDM2YTNmYmU4NzVjMjg5In0"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": null,
+                "thumb": null,
+                "type": "image",
+                "url": "https://cdn4.telesco.pe/file/I4qOZk5bV6tDPRHX6ElvxQ9n5lHzMN7dfCs0IEbGuRCJgmLpFblLi97zUfHVG2TwLgCRgSeOBIEJR4-nwPNw0M-1LlnORkB50xQ2_TDWy1vctrFS53R488F72j6k--kGry_t1ltiF2PkFeWKPXGWSZ7uFG0F8E8lYuvTYr04-6YREveMImotN1e5B1uYIwjkDXOoQWitnRDWsM16EelwCQIG7nmwAGoSGaqEx63ZlkCBJ3uiSaVsF79y-VP2e8JUdSk-FN4VU5df_5ullJa_b5t5z0ZceATZSkk1MiguBIRDWArANm8U3YJz3GMnuYpNW4_NtmFQdNq06oDwM1inkA.jpg",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": null,
+            "reacts": null,
+            "reply": null,
+            "text": {
+              "entities": [
+                {
+                  "language": null,
+                  "length": 12,
+                  "offset": 520,
+                  "type": "text_link",
+                  "url": "https://stranaua.media/"
+                },
+                {
+                  "language": null,
+                  "length": 9,
+                  "offset": 536,
+                  "type": "text_link",
+                  "url": "https://x.com/stranaua?s=21"
+                },
+                {
+                  "language": null,
+                  "length": 27,
+                  "offset": 548,
+                  "type": "text_link",
+                  "url": "http://t.me/strana_send_bot"
+                },
+                {
+                  "language": null,
+                  "length": 17,
+                  "offset": 578,
+                  "type": "text_link",
+                  "url": "https://t.me/@strana_ad_bot"
+                },
+                {
+                  "language": null,
+                  "length": 6,
+                  "offset": 598,
+                  "type": "text_link",
+                  "url": "https://t.me/stranaua/137068"
+                }
+              ],
+              "html": "Противоположные сообщения приходят в отношении работы Starlink в Украине.<br><br>Зеленский заявил, что скорость подключения к Starlink для Украины пока не восстановлена.<br><br>\"Мы работаем над решением этой проблемы\", – добавил он.<br><br>Параллельно с этим журналист The Economist Оливер Кэролл написал в Х, что скорость восстановлена.<br><br>«Мне сообщили фронтовые командиры дронов в Украине, что ограничения скорости Starlink, вероятно, были сняты. Они всё ещё проводят тесты, но «выглядит так, что это действительно так»», – сообщил он.<br><br><a href=\"https://stranaua.media/\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Сайт \"Страна</a>\" | <a href=\"https://x.com/stranaua?s=21\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">X/Twitter</a> | <a href=\"http://t.me/strana_send_bot\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Прислать новость/фото/видео</a> | <a href=\"https://t.me/@strana_ad_bot\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Реклама на канале</a> | <a href=\"https://t.me/stranaua/137068\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Помощь</a>",
+              "string": "Противоположные сообщения приходят в отношении работы Starlink в Украине.\n\nЗеленский заявил, что скорость подключения к Starlink для Украины пока не восстановлена.\n\n\"Мы работаем над решением этой проблемы\", – добавил он.\n\nПараллельно с этим журналист The Economist Оливер Кэролл написал в Х, что скорость восстановлена.\n\n«Мне сообщили фронтовые командиры дронов в Украине, что ограничения скорости Starlink, вероятно, были сняты. Они всё ещё проводят тесты, но «выглядит так, что это действительно так»», – сообщил он.\n\nСайт \"Страна\" | X/Twitter | Прислать новость/фото/видео | Реклама на канале | Помощь"
+            }
+          },
+          "footer": {
+            "author": null,
+            "date": {
+              "string": "2026-10-22T17:43:24+00:00",
+              "unix": 1792691004
+            },
+            "edited": false,
+            "views": "73.7K"
+          },
+          "forwarded": null,
+          "id": 252487,
+          "view": "eyJjIjotMTA5MjQxMzgzNCwicCI6MjUyNDg3LCJ0IjoxNzkyNzA3ODYyLCJoIjoiN2Y3NjdkNmY2OTgxZTkxODg2In0"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": null,
+            "poll": null,
+            "preview_link": null,
+            "reacts": null,
+            "reply": null,
+            "text": {
+              "entities": null,
+              "html": "\"Красная\" тревога из-за угрозы баллистики из Брянска объявлена в большинстве регионов.",
+              "string": "\"Красная\" тревога из-за угрозы баллистики из Брянска объявлена в большинстве регионов."
+            }
+          },
+          "footer": {
+            "author": null,
+            "date": {
+              "string": "2026-10-22T17:57:47+00:00",
+              "unix": 1792691867
+            },
+            "edited": false,
+            "views": "70.3K"
+          },
+          "forwarded": null,
+          "id": 252488,
+          "view": "eyJjIjotMTA5MjQxMzgzNCwicCI6MjUyNDg4LCJ0IjoxNzkyNzA3ODYyLCJoIjoiMzQ1MzEyOTE5YThkZWM1MTFlIn0"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": null,
+            "poll": null,
+            "preview_link": null,
+            "reacts": null,
+            "reply": null,
+            "text": {
+              "entities": [
+                {
+                  "language": null,
+                  "length": 12,
+                  "offset": 396,
+                  "type": "text_link",
+                  "url": "https://stranaua.media/"
+                },
+                {
+                  "language": null,
+                  "length": 9,
+                  "offset": 412,
+                  "type": "text_link",
+                  "url": "https://x.com/stranaua?s=21"
+                },
+                {
+                  "language": null,
+                  "length": 27,
+                  "offset": 424,
+                  "type": "text_link",
+                  "url": "http://t.me/strana_send_bot"
+                },
+                {
+                  "language": null,
+                  "length": 17,
+                  "offset": 454,
+                  "type": "text_link",
+                  "url": "https://t.me/@strana_ad_bot"
+                },
+                {
+                  "language": null,
+                  "length": 6,
+                  "offset": 474,
+                  "type": "text_link",
+                  "url": "https://t.me/stranaua/137068"
+                }
+              ],
+              "html": "РФ будет наращивать производство баллистических ракет, а США сократили поставки Patriot, заявил Зеленский.<br><br>По его словам, Украина договаривается с европейскими партнёрами о получении ракет-перехватчиков. Однако для их передачи необходимо согласие американской стороны.<br><br>Также Зеленский добавил, что часть ракет Украина уже получила, но важно, чтобы остальная помощь поступила как можно скорее.<br><br><a href=\"https://stranaua.media/\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Сайт \"Страна</a>\" | <a href=\"https://x.com/stranaua?s=21\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">X/Twitter</a> | <a href=\"http://t.me/strana_send_bot\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Прислать новость/фото/видео</a> | <a href=\"https://t.me/@strana_ad_bot\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Реклама на канале</a> | <a href=\"https://t.me/stranaua/137068\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Помощь</a>",
+              "string": "РФ будет наращивать производство баллистических ракет, а США сократили поставки Patriot, заявил Зеленский.\n\nПо его словам, Украина договаривается с европейскими партнёрами о получении ракет-перехватчиков. Однако для их передачи необходимо согласие американской стороны.\n\nТакже Зеленский добавил, что часть ракет Украина уже получила, но важно, чтобы остальная помощь поступила как можно скорее.\n\nСайт \"Страна\" | X/Twitter | Прислать новость/фото/видео | Реклама на канале | Помощь"
+            }
+          },
+          "footer": {
+            "author": null,
+            "date": {
+              "string": "2026-10-22T17:59:39+00:00",
+              "unix": 1792691979
+            },
+            "edited": false,
+            "views": "71.5K"
+          },
+          "forwarded": null,
+          "id": 252489,
+          "view": "eyJjIjotMTA5MjQxMzgzNCwicCI6MjUyNDg5LCJ0IjoxNzkyNzA3ODYyLCJoIjoiMzMxMGVlMjEzYWQ3NzkzMGQyIn0"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": [
+              {
+                "available": null,
+                "duration": null,
+                "thumb": null,
+                "type": "image",
+                "url": "https://cdn4.telesco.pe/file/BZFhvVAFZ7wQXHoLDtqE5as5K-Cv9qt_OjgGpClnPUqyVIN9FbmhpKbdRy0oinlV0EAf50qniTSJ80ptqSWXhf8-rQcz4wBXtUEGzMmw6SppgLp4jL0Wnnp9k3mhMAmgTXnunAIM80TTsEqd4-x88ZrqYam2N8yejI5NRO85b8vOlZTWhqZC9fAD_QriOFXAxkPREQpT76lsJV43Td5a_JhCntUgUdBhYFhyPn_AxDsviLaXnltPUrFgnb5eHoayOxhuYeA4fy_P2T3FSg6Iy18rYVHZwjtoEXl-9tTJGjjjeHgxCBtZJ4O9peseMaCbXM9pcFW7pM75ypiCdeqK-Q.jpg",
+                "waves": null
+              }
+            ],
+            "poll": null,
+            "preview_link": null,
+            "reacts": null,
+            "reply": null,
+            "text": {
+              "entities": [
+                {
+                  "language": null,
+                  "length": 7,
+                  "offset": 187,
+                  "type": "text_link",
+                  "url": "https://t.me/stranaua/252487"
+                },
+                {
+                  "language": null,
+                  "length": 12,
+                  "offset": 252,
+                  "type": "text_link",
+                  "url": "https://stranaua.media/"
+                },
+                {
+                  "language": null,
+                  "length": 9,
+                  "offset": 268,
+                  "type": "text_link",
+                  "url": "https://x.com/stranaua?s=21"
+                },
+                {
+                  "language": null,
+                  "length": 27,
+                  "offset": 280,
+                  "type": "text_link",
+                  "url": "http://t.me/strana_send_bot"
+                },
+                {
+                  "language": null,
+                  "length": 17,
+                  "offset": 310,
+                  "type": "text_link",
+                  "url": "https://t.me/@strana_ad_bot"
+                },
+                {
+                  "language": null,
+                  "length": 6,
+                  "offset": 330,
+                  "type": "text_link",
+                  "url": "https://t.me/stranaua/137068"
+                }
+              ],
+              "html": "Дональд Трамп позвонил Илону Маску и попросил снять ограничения на работу Starlink в Украине, сообщает The Wall Street Journal со ссылкой на американских чиновников.<br><br>Ранее The Economist <a href=\"https://t.me/stranaua/252487\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">сообщил</a>, что ограничения уже сняты, а Зеленский - что не сняты.<br><br><a href=\"https://stranaua.media/\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Сайт \"Страна</a>\" | <a href=\"https://x.com/stranaua?s=21\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">X/Twitter</a> | <a href=\"http://t.me/strana_send_bot\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Прислать новость/фото/видео</a> | <a href=\"https://t.me/@strana_ad_bot\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Реклама на канале</a> | <a href=\"https://t.me/stranaua/137068\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Помощь</a>",
+              "string": "Дональд Трамп позвонил Илону Маску и попросил снять ограничения на работу Starlink в Украине, сообщает The Wall Street Journal со ссылкой на американских чиновников.\n\nРанее The Economist сообщил, что ограничения уже сняты, а Зеленский - что не сняты.\n\nСайт \"Страна\" | X/Twitter | Прислать новость/фото/видео | Реклама на канале | Помощь"
+            }
+          },
+          "footer": {
+            "author": null,
+            "date": {
+              "string": "2026-10-22T18:05:13+00:00",
+              "unix": 1792692313
+            },
+            "edited": true,
+            "views": "74K"
+          },
+          "forwarded": null,
+          "id": 252490,
+          "view": "eyJjIjotMTA5MjQxMzgzNCwicCI6MjUyNDkwLCJ0IjoxNzkyNzA3ODYyLCJoIjoiZThhMjY3ODNkNzM1MWUzOGU5In0"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": null,
+            "poll": null,
+            "preview_link": null,
+            "reacts": null,
+            "reply": null,
+            "text": {
+              "entities": [
+                {
+                  "language": null,
+                  "length": 12,
+                  "offset": 305,
+                  "type": "text_link",
+                  "url": "https://stranaua.media/"
+                },
+                {
+                  "language": null,
+                  "length": 9,
+                  "offset": 321,
+                  "type": "text_link",
+                  "url": "https://x.com/stranaua?s=21"
+                },
+                {
+                  "language": null,
+                  "length": 27,
+                  "offset": 333,
+                  "type": "text_link",
+                  "url": "http://t.me/strana_send_bot"
+                },
+                {
+                  "language": null,
+                  "length": 17,
+                  "offset": 363,
+                  "type": "text_link",
+                  "url": "https://t.me/@strana_ad_bot"
+                },
+                {
+                  "language": null,
+                  "length": 6,
+                  "offset": 383,
+                  "type": "text_link",
+                  "url": "https://t.me/stranaua/137068"
+                }
+              ],
+              "html": "Путин заявил Уиткоффу о готовности возобновить трехсторонние контакты с Украиной - для обсуждения безопасности Киева и Москвы после окончательного выхода на урегулирование.<br><br>Об этом сообщил сам российский президент.<br><br>По его словам, целью переговоров РФ с США и Украиной будет выход на окончательный мир.<br><br><a href=\"https://stranaua.media/\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Сайт \"Страна</a>\" | <a href=\"https://x.com/stranaua?s=21\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">X/Twitter</a> | <a href=\"http://t.me/strana_send_bot\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Прислать новость/фото/видео</a> | <a href=\"https://t.me/@strana_ad_bot\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Реклама на канале</a> | <a href=\"https://t.me/stranaua/137068\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Помощь</a>",
+              "string": "Путин заявил Уиткоффу о готовности возобновить трехсторонние контакты с Украиной - для обсуждения безопасности Киева и Москвы после окончательного выхода на урегулирование.\n\nОб этом сообщил сам российский президент.\n\nПо его словам, целью переговоров РФ с США и Украиной будет выход на окончательный мир.\n\nСайт \"Страна\" | X/Twitter | Прислать новость/фото/видео | Реклама на канале | Помощь"
+            }
+          },
+          "footer": {
+            "author": null,
+            "date": {
+              "string": "2026-10-22T18:41:42+00:00",
+              "unix": 1792694502
+            },
+            "edited": true,
+            "views": "64K"
+          },
+          "forwarded": null,
+          "id": 252491,
+          "view": "eyJjIjotMTA5MjQxMzgzNCwicCI6MjUyNDkxLCJ0IjoxNzkyNzA3ODYyLCJoIjoiYjNiNzYxMGRkNjU0MWU5N2MzIn0"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": null,
+            "poll": null,
+            "preview_link": null,
+            "reacts": null,
+            "reply": null,
+            "text": {
+              "entities": null,
+              "html": "Взрыв в Запорожье.",
+              "string": "Взрыв в Запорожье."
+            }
+          },
+          "footer": {
+            "author": null,
+            "date": {
+              "string": "2026-10-22T18:42:04+00:00",
+              "unix": 1792694524
+            },
+            "edited": false,
+            "views": "63.5K"
+          },
+          "forwarded": null,
+          "id": 252492,
+          "view": "eyJjIjotMTA5MjQxMzgzNCwicCI6MjUyNDkyLCJ0IjoxNzkyNzA3ODYyLCJoIjoiMjZkNzM5YzUxOGU3NmUyNTk2In0"
+        },
+        {
+          "content": {
+            "inline": null,
+            "media": null,
+            "poll": null,
+            "preview_link": null,
+            "reacts": null,
+            "reply": null,
+            "text": {
+              "entities": [
+                {
+                  "language": null,
+                  "length": 12,
+                  "offset": 157,
+                  "type": "text_link",
+                  "url": "https://stranaua.media/"
+                },
+                {
+                  "language": null,
+                  "length": 9,
+                  "offset": 173,
+                  "type": "text_link",
+                  "url": "https://x.com/stranaua?s=21"
+                },
+                {
+                  "language": null,
+                  "length": 27,
+                  "offset": 185,
+                  "type": "text_link",
+                  "url": "http://t.me/strana_send_bot"
+                },
+                {
+                  "language": null,
+                  "length": 17,
+                  "offset": 215,
+                  "type": "text_link",
+                  "url": "https://t.me/@strana_ad_bot"
+                },
+                {
+                  "language": null,
+                  "length": 6,
+                  "offset": 235,
+                  "type": "text_link",
+                  "url": "https://t.me/stranaua/137068"
+                }
+              ],
+              "html": "Россия не готовится ни к какой войне с Европой, заявил Путин<br><br>«Воевать с Россией народы Европы не хотят, как и РФ не хочет воевать с Европой», – сказал он.<br><br><a href=\"https://stranaua.media/\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Сайт \"Страна</a>\" | <a href=\"https://x.com/stranaua?s=21\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">X/Twitter</a> | <a href=\"http://t.me/strana_send_bot\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Прислать новость/фото/видео</a> | <a href=\"https://t.me/@strana_ad_bot\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Реклама на канале</a> | <a href=\"https://t.me/stranaua/137068\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Помощь</a>",
+              "string": "Россия не готовится ни к какой войне с Европой, заявил Путин\n\n«Воевать с Россией народы Европы не хотят, как и РФ не хочет воевать с Европой», – сказал он.\n\nСайт \"Страна\" | X/Twitter | Прислать новость/фото/видео | Реклама на канале | Помощь"
+            }
+          },
+          "footer": {
+            "author": null,
+            "date": {
+              "string": "2026-10-22T18:43:51+00:00",
+              "unix": 1792694631
+            },
+            "edited": false,
+            "views": "63.9K"
+          },
+          "forwarded": null,
+          "id": 252493,
+          "view": "eyJjIjotMTA5MjQxMzgzNCwicCI6MjUyNDkzLCJ0IjoxNzkyNzA3ODYyLCJoIjoiNTFmZDVhN2M3NGFiZjg4OTkyIn0"
+        }
+      ]
+    },
+    "meta": {
+      "offset": {
+        "after": 252493,
+        "before": 252473
+      }
+    }
+  },
+  "status": 200
+}

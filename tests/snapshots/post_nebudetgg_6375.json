@@ -1,0 +1,92 @@
+{
+  "body": {
+    "content": {
+      "inline": null,
+      "media": null,
+      "poll": null,
+      "preview_link": null,
+      "reacts": [
+        {
+          "count": "5",
+          "emoji": "⭐",
+          "emoji_id": null,
+          "emoji_image": null,
+          "type": "telegram_stars"
+        },
+        {
+          "count": "1.98K",
+          "emoji": "❤",
+          "emoji_id": null,
+          "emoji_image": "https://telegram.org/img/emoji/40/E29DA4.png",
+          "type": "emoji"
+        },
+        {
+          "count": "194",
+          "emoji": "😱",
+          "emoji_id": null,
+          "emoji_image": "https://telegram.org/img/emoji/40/F09F98B1.png",
+          "type": "emoji"
+        },
+        {
+          "count": "152",
+          "emoji": "💅",
+          "emoji_id": null,
+          "emoji_image": "https://telegram.org/img/emoji/40/F09F9285.png",
+          "type": "emoji"
+        },
+        {
+          "count": "50",
+          "emoji": "👍",
+          "emoji_id": null,
+          "emoji_image": "https://telegram.org/img/emoji/40/F09F918D.png",
+          "type": "emoji"
+        },
+        {
+          "count": "36",
+          "emoji": "🎉",
+          "emoji_id": null,
+          "emoji_image": "https://telegram.org/img/emoji/40/F09F8E89.png",
+          "type": "emoji"
+        }
+      ],
+      "reply": {
+        "cover": "https://cdn4.telesco.pe/file/pq78sO6rFT3wo3IKuMFoLBnmvZuYzQyRSSQ3yqSmCfjUdsXeXtFqFkiik1bjASt89h_zQ49t2QljFMwhNLfA7R5OlmZufH7SOFMTnNgIOhjfruPfPwaEtubq8MAGIjpcj-rE05vukqTOkuyjffVYU7esvzl0klbQpLs9LJLYe_HSqebQKcDz_8UKZvx5QaHF-sN46qXU0iKABOQwbcyEtcwUcK6m6SV1byM1cmTRVt4y0RftjhqrENBOTOCT6rc7wTMLMA6-JTKhyWv70NimdYzFWELEWiDPhoeRw73zEORdO_Be4vgyminSmQEC0XgaqJyklodw2G_IyphI4BkNgw",
+        "name": {
+          "html": "Логово Внизу",
+          "string": "Логово Внизу"
+        },
+        "text": {
+          "html": "😚 КОНКУРС НА ПРОСМОТРЫ В ТИКТОКЕ  Кто будет Топ-1 под нашим звуком c новым треком до 3.08 23:00 получит 50.000₽  Видео, выложенные до 30.07 21:00, — не участвуют",
+          "string": "😚 КОНКУРС НА ПРОСМОТРЫ В ТИКТОКЕ  Кто будет Топ-1 под нашим звуком c новым треком до 3.08 23:00 получит 50.000₽  Видео, выложенные до 30.07 21:00, — не участвуют"
+        },
+        "to_message": 6355
+      },
+      "text": {
+        "entities": [
+          {
+            "language": null,
+            "length": 1,
+            "offset": 0,
+            "type": "animoji",
+            "url": "https://telegram.org/img/emoji/40/F09F989A.png"
+          }
+        ],
+        "html": "<tg-emoji emoji-id=\"5244646777746908576\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F989A.png')\"><b>😚</b></i></tg-emoji> КОНКУРС НА ПРОСМОТРЫ В ТИКТОКЕ  Кто будет Топ-1 под нашим звуком c новым треком до 3.08 23:00 получит 50.000₽  Видео, выложенные до 30.07 21:00, — не участвуют",
+        "string": "😚 КОНКУРС НА ПРОСМОТРЫ В ТИКТОКЕ  Кто будет Топ-1 под нашим звуком c новым треком до 3.08 23:00 получит 50.000₽  Видео, выложенные до 30.07 21:00, — не участвуют"
+      }
+    },
+    "footer": {
+      "author": null,
+      "date": {
+        "string": "2026-08-06T12:04:01+00:00",
+        "unix": 1786017841
+      },
+      "edited": true,
+      "views": "287K"
+    },
+    "forwarded": null,
+    "id": 6375,
+    "view": "eyJjIjotMTI1MDEyMjM5MCwicCI6NjM3NSwidCI6MTc5MjcxNzE2MCwiaCI6IjdhNDQxODliNGRlMWYwMDk0OSJ9"
+  },
+  "status": 200
+}

@@ -1,0 +1,138 @@
+[project]
+name = "telegram-me"
+version = "2.0.0"
+description = "REST API for public Telegram channels, built on top of t.me web previews"
+readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE"]
+authors = [{ name = "Koval Yaroslav" }]
+requires-python = ">=3.13"
+classifiers = [
+    "Framework :: FastAPI",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Typing :: Typed",
+]
+dependencies = [
+    "fastapi>=0.161.1",
+    "pydantic>=2.14.1",
+    "pydantic-settings>=2.16.1",
+    "pyreqwest>=0.15.0",
+    "redis[hiredis]>=8.1.0",
+    "telegram-me-native",
+    "granian[pname,uvloop]>=2.8.5",
+    "strawberry-graphql>=0.336.2",
+]
+
+[project.scripts]
+telegram-me = "telegram_me.__main__:main"
+
+[project.urls]
+Repository = "https://github.com/koval01/telegram-me"
+Changelog = "https://github.com/koval01/telegram-me/blob/main/CHANGELOG.md"
+
+[dependency-groups]
+dev = [
+    "fakeredis[lua]>=2.40.0",
+    "granian[reload]>=2.8.5",
+    "httpx2>=2.16.0",
+    "mypy>=2.4.0",
+    "pre-commit>=4.7.0",
+    "pytest>=9.1.1",
+    "pytest-asyncio>=1.4.0",
+    "pytest-cov>=7.1.0",
+    "ruff>=0.17.2",
+    "time-machine>=3.5.1",
+]
+docs = [
+    "zensical>=0.0.71",
+]
+
+[build-system]
+requires = ["uv_build>=0.13.5,<0.14"]
+build-backend = "uv_build"
+
+[tool.uv.workspace]
+members = ["rust/telegram-me-native"]
+
+[tool.uv.sources]
+telegram-me-native = { workspace = true }
+
+[tool.uv.build-backend]
+module-name = "telegram_me"
+
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+src = ["src", "tests", "scripts"]
+
+[tool.ruff.lint]
+select = [
+    "A",     # builtins shadowing
+    "ASYNC", # async pitfalls
+    "B",     # bugbear
+    "C4",    # comprehensions
+    "D",     # docstrings
+    "E", "W",
+    "F",
+    "FAST",  # FastAPI
+    "FURB",
+    "I",     # isort
+    "LOG", "G",
+    "N",
+    "PERF",
+    "PIE",
+    "PL",
+    "PT",    # pytest
+    "PTH",
+    "RET",
+    "RUF",
+    "S",     # bandit
+    "SIM",
+    "T20",   # print
+    "TC",    # type-checking imports
+    "UP",
+]
+ignore = [
+    "D105", "D107",   # magic methods / __init__ are self-explanatory
+    "PLR0913",        # parsers legitimately take many fields
+    "PLR2004",        # magic numbers in small parsing helpers
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["D", "S101", "PLR2004", "RUF001"]  # Cyrillic test data is intended
+"scripts/**" = ["T201", "D103", "S101"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.flake8-type-checking]
+runtime-evaluated-base-classes = ["pydantic.BaseModel", "pydantic_settings.BaseSettings"]
+
+[tool.mypy]
+python_version = "3.13"
+strict = true
+plugins = ["pydantic.mypy"]
+mypy_path = "src"
+files = ["src", "tests"]
+
+[[tool.mypy.overrides]]
+module = ["time_machine.*"]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = ["--strict-markers", "--strict-config", "-ra"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+filterwarnings = ["error"]
+markers = ["memory: memory regression guards (part of the default run and CI)"]
+
+[tool.coverage.run]
+source = ["telegram_me"]
+branch = true
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+exclude_also = ["if TYPE_CHECKING:", "raise NotImplementedError"]

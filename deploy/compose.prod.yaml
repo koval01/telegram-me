@@ -1,0 +1,82 @@
+# Production stack used by deploy/remote-deploy.sh on each server.
+# Redis is external (REDIS_URL in .env) so all servers share one cache.
+
+name: telegram-me
+
+x-app: &app
+  image: ${APP_IMAGE:?APP_IMAGE must be set}
+  env_file:
+    - path: .env
+      required: true
+  restart: unless-stopped
+  read_only: true
+  tmpfs:
+    - /tmp
+  cap_drop:
+    - ALL
+  security_opt:
+    - no-new-privileges:true
+  stop_grace_period: 15s
+  logging:
+    driver: json-file
+    options:
+      max-size: 50m
+      max-file: "5"
+
+services:
+  api:
+    <<: *app
+    ports:
+      # APP_BIND=127.0.0.1 when the `proxy` service is the only way in.
+      - "${APP_BIND:-0.0.0.0}:${APP_PORT:-8000}:3000"
+
+  worker:
+    <<: *app
+    command: ["worker"]
+    profiles: ["worker"]
+    healthcheck:
+      disable: true
+
+  # TLS for Cloudflare in front of the API (see Caddyfile).
+  proxy:
+    image: caddy:2.11.7-alpine
+    profiles: ["proxy"]
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped
+    ports:
+      - "443:443"
+    environment:
+      PUBLIC_HOST: ${PUBLIC_HOST:-localhost}
+      CADDY_TLS: ${CADDY_TLS:-internal}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./certs:/certs:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_BIND_SERVICE
+    security_opt:
+      - no-new-privileges:true
+    logging:
+      driver: json-file
+      options:
+        max-size: 20m
+        max-file: "3"
+
+networks:
+  default:
+    ipam:
+      config:
+        # Fixed, so FORWARDED_ALLOW_IPS can trust the proxy's address.
+        - subnet: 172.29.53.0/24
+
+volumes:
+  caddy-data:
+  caddy-config:

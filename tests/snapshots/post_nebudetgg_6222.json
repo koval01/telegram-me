@@ -1,0 +1,90 @@
+{
+  "body": {
+    "content": {
+      "inline": null,
+      "media": null,
+      "poll": null,
+      "preview_link": {
+        "description": {
+          "html": "ЗАПУСКАЕМ ГУСЯ, РАБОТЯГИ! И СТРИМЫ — yandex streams live on Twitch! Check out their videos, sign up to chat, and join their community.",
+          "string": "ЗАПУСКАЕМ ГУСЯ, РАБОТЯГИ! И СТРИМЫ — yandex streams live on Twitch! Check out their videos, sign up to chat, and join their community."
+        },
+        "site_name": "Twitch",
+        "thumb": "https://cdn4.telesco.pe/file/jhRoFxVgwxEMTlez7---XyrqWf0O1njeYHK5Ku7z-MjypDH_4q9J4YsY6toImAEM2Pz7k-Jp9yLYPpkvlBn30ZRwzp3b44os-R2y177odyeaquLx9CLY690qHQBJU5V7g-0W8YTYTL7EJtKcsKmbHavlZ5xR5PLcwoe3ol4Nt-Y0wKS9GikyX2vzoKB8V9wN1wDIYQTcsNDLWwGRIW6X8OEjhdo4EMGuqqCYTr5wv1XPfPxPNlz0qnwwyp22F7sGgesMfiFzndwdPDnmsV9qNGsmOKVgzhtjpMGDlmipk9J3Zc-UcnPRF5ErVdIGwUKkrc2ZK7YxPmXeSrAWkP41_Q.jpg",
+        "title": "yandex - Twitch",
+        "url": "https://twitch.tv/yandex"
+      },
+      "reacts": [
+        {
+          "count": "2",
+          "emoji": "⭐",
+          "emoji_id": null,
+          "emoji_image": null,
+          "type": "telegram_stars"
+        },
+        {
+          "count": "1.35K",
+          "emoji": "❤",
+          "emoji_id": null,
+          "emoji_image": "https://telegram.org/img/emoji/40/E29DA4.png",
+          "type": "emoji"
+        },
+        {
+          "count": "436",
+          "emoji": "🤡",
+          "emoji_id": null,
+          "emoji_image": "https://telegram.org/img/emoji/40/F09FA4A1.png",
+          "type": "emoji"
+        },
+        {
+          "count": "189",
+          "emoji": "💩",
+          "emoji_id": null,
+          "emoji_image": "https://telegram.org/img/emoji/40/F09F92A9.png",
+          "type": "emoji"
+        },
+        {
+          "count": "60",
+          "emoji": "👎",
+          "emoji_id": null,
+          "emoji_image": "https://telegram.org/img/emoji/40/F09F918E.png",
+          "type": "emoji"
+        },
+        {
+          "count": "48",
+          "emoji": "🖕",
+          "emoji_id": null,
+          "emoji_image": "https://telegram.org/img/emoji/40/F09F9695.png",
+          "type": "emoji"
+        }
+      ],
+      "reply": null,
+      "text": {
+        "entities": [
+          {
+            "language": null,
+            "length": 16,
+            "offset": 8,
+            "type": "url",
+            "url": null
+          }
+        ],
+        "html": "Погнали <a href=\"http://twitch.tv/yandex\" target=\"_blank\" rel=\"noopener\">twitch.tv/yandex</a>",
+        "string": "Погнали twitch.tv/yandex"
+      }
+    },
+    "footer": {
+      "author": null,
+      "date": {
+        "string": "2026-05-19T13:59:42+00:00",
+        "unix": 1779199182
+      },
+      "edited": false,
+      "views": "227K"
+    },
+    "forwarded": null,
+    "id": 6222,
+    "view": "eyJjIjotMTI1MDEyMjM5MCwicCI6NjIyMiwidCI6MTc5MjcxNzE2MCwiaCI6ImI0ZTgwYWJlNWM5NjVkMzNkNyJ9"
+  },
+  "status": 200
+}
