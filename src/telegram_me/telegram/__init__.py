@@ -1,8 +1,1 @@
-"""
-Telegram module
-"""
-
-from . import models
-from . import parser
-from . import request
-from . import telegram
+"""Integration with t.me: HTTP client, errors and HTML parsers."""

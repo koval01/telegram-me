@@ -49,11 +49,12 @@ def call(base_url: str, scenario: Scenario, timeout: float) -> ScenarioResult:
         data = json.dumps(scenario.payload).encode("utf-8")
         headers["Content-Type"] = "application/json"
 
-    req = request.Request(url, method=scenario.method, headers=headers, data=data)
+    # base_url is checked to be http(s) in main().
+    req = request.Request(url, method=scenario.method, headers=headers, data=data)  # noqa: S310
     started = time.time()
 
     try:
-        with request.urlopen(req, timeout=timeout) as response:
+        with request.urlopen(req, timeout=timeout) as response:  # noqa: S310
             raw = response.read()
             elapsed = int((time.time() - started) * 1000)
             preview = raw.decode("utf-8", errors="replace")[:200].replace("\n", " ")
@@ -114,7 +115,9 @@ def detect_feature_state(base_url: str, timeout: float) -> tuple[bool, bool]:
     return feed_enabled, previews_enabled
 
 
-def build_scenarios(feed_enabled: bool, previews_enabled: bool, exploratory_channels: list[str]) -> list[Scenario]:
+def build_scenarios(
+    feed_enabled: bool, previews_enabled: bool, exploratory_channels: list[str]
+) -> list[Scenario]:
     """Build strict and exploratory smoke scenarios."""
     strict_channels = ["durov", "telegram", "stranaua"]
 
@@ -136,9 +139,21 @@ def build_scenarios(feed_enabled: bool, previews_enabled: bool, exploratory_chan
             "/v1/preview/zzzzzznotexistingchannelzzzz",
             {404} if previews_enabled else {503},
         ),
-        Scenario("previews_invalid_array_legacy", "POST", "/v1/previews", {422}, payload=["durov", "stranaua"]),
+        Scenario(
+            "previews_invalid_array_legacy",
+            "POST",
+            "/v1/previews",
+            {422},
+            payload=["durov", "stranaua"],
+        ),
         Scenario("previews_invalid_empty", "POST", "/v1/previews", {422}, payload={"channels": []}),
-        Scenario("previews_invalid_item", "POST", "/v1/previews", {422}, payload={"channels": ["durov", "bad-name"]}),
+        Scenario(
+            "previews_invalid_item",
+            "POST",
+            "/v1/previews",
+            {422},
+            payload={"channels": ["durov", "bad-name"]},
+        ),
         Scenario(
             "previews_invalid_too_many",
             "POST",
@@ -147,13 +162,28 @@ def build_scenarios(feed_enabled: bool, previews_enabled: bool, exploratory_chan
             payload={"channels": [f"chan{i:03d}" for i in range(101)]},
         ),
         Scenario("feed_invalid_empty", "POST", "/v1/feed", {422}, payload={"channels": []}),
-        Scenario("feed_invalid_item", "POST", "/v1/feed", {422}, payload={"channels": ["durov", "bad-name"]}),
-        Scenario("feed_invalid_missing", "POST", "/v1/feed", {422}, payload={"not_channels": ["durov"]}),
+        Scenario(
+            "feed_invalid_item",
+            "POST",
+            "/v1/feed",
+            {422},
+            payload={"channels": ["durov", "bad-name"]},
+        ),
+        Scenario(
+            "feed_invalid_missing", "POST", "/v1/feed", {422}, payload={"not_channels": ["durov"]}
+        ),
     ]
 
     for channel in strict_channels:
         scenarios.append(Scenario(f"body_valid_{channel}", "GET", f"/v1/body/{channel}", {200}))
-        scenarios.append(Scenario(f"preview_valid_{channel}", "GET", f"/v1/preview/{channel}", {200 if previews_enabled else 503}))
+        scenarios.append(
+            Scenario(
+                f"preview_valid_{channel}",
+                "GET",
+                f"/v1/preview/{channel}",
+                {200 if previews_enabled else 503},
+            )
+        )
 
     scenarios.extend(
         [
@@ -226,12 +256,17 @@ def main() -> int:
     """Run full smoke matrix and return process exit code."""
     args = parse_args()
     base_url = args.base_url.rstrip("/")
+    if not base_url.startswith(("http://", "https://")):
+        raise SystemExit("--base-url must start with http:// or https://")
     exploratory_channels = [c.strip() for c in args.exploratory_channels.split(",") if c.strip()]
 
     detected_feed_enabled, detected_previews_enabled = detect_feature_state(base_url, args.timeout)
 
     if args.preset == "auto":
-        expected_feed_enabled, expected_previews_enabled = detected_feed_enabled, detected_previews_enabled
+        expected_feed_enabled, expected_previews_enabled = (
+            detected_feed_enabled,
+            detected_previews_enabled,
+        )
     elif args.preset == "full":
         expected_feed_enabled, expected_previews_enabled = True, True
     else:
@@ -247,7 +282,9 @@ def main() -> int:
     print_results(results)
 
     strict_failures = [result for result in results if result.scenario.strict and not result.ok]
-    exploratory_failures = [result for result in results if (not result.scenario.strict) and not result.ok]
+    exploratory_failures = [
+        result for result in results if (not result.scenario.strict) and not result.ok
+    ]
 
     print("\nSUMMARY")
     print(f"  strict_total={len([r for r in results if r.scenario.strict])}")
@@ -259,12 +296,9 @@ def main() -> int:
     print(f"  expected_feed_enabled={expected_feed_enabled}")
     print(f"  expected_previews_enabled={expected_previews_enabled}")
 
-    preset_mismatch = (
-        args.preset != "auto"
-        and (
-            detected_feed_enabled != expected_feed_enabled
-            or detected_previews_enabled != expected_previews_enabled
-        )
+    preset_mismatch = args.preset != "auto" and (
+        detected_feed_enabled != expected_feed_enabled
+        or detected_previews_enabled != expected_previews_enabled
     )
     if preset_mismatch:
         print("\nPRESET MISMATCH")
@@ -272,12 +306,8 @@ def main() -> int:
             "  Runtime feature state does not match selected preset. "
             "Check ENV flags used to start the server."
         )
-        print(
-            f"  expected: feed={expected_feed_enabled}, previews={expected_previews_enabled}"
-        )
-        print(
-            f"  detected: feed={detected_feed_enabled}, previews={detected_previews_enabled}"
-        )
+        print(f"  expected: feed={expected_feed_enabled}, previews={expected_previews_enabled}")
+        print(f"  detected: feed={detected_feed_enabled}, previews={detected_previews_enabled}")
 
     if strict_failures:
         print("\nSTRICT FAILURES")

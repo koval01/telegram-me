@@ -14,14 +14,14 @@ classifiers = [
     "Typing :: Typed",
 ]
 dependencies = [
-    "fastapi>=0.142.2",
-    "httpx[http2]>=0.28.1",
-    "pydantic>=2.14",
-    "pydantic-settings>=2.15.0",
-    "redis>=8.1.0",
-    "selectolax>=0.4.11",
+    "fastapi>=0.161.1",
+    "pydantic>=2.14.1",
+    "pydantic-settings>=2.16.1",
+    "pyreqwest>=0.15.0",
+    "redis[hiredis]>=8.1.0",
+    "selectolax>=1.0.2",
     "uvicorn>=0.54.0",
-    "httptools>=0.6.4",
+    "httptools>=0.9.0",
     "uvloop>=0.23.0; sys_platform != 'win32'",
 ]
 
@@ -31,18 +31,19 @@ Changelog = "https://github.com/koval01/telegram-me/blob/main/CHANGELOG.md"
 
 [dependency-groups]
 dev = [
-    "httpx2>=0.1",
-    "mypy>=1.18",
-    "pre-commit>=4.3",
-    "pytest>=9.1",
-    "pytest-cov>=7.0",
-    "respx>=0.23.1",
-    "ruff>=0.14",
-    "time-machine>=3.5",
+    "fakeredis[lua]>=2.40.0",
+    "httpx2>=2.16.0",
+    "mypy>=2.4.0",
+    "pre-commit>=4.7.0",
+    "pytest>=9.1.1",
+    "pytest-asyncio>=1.4.0",
+    "pytest-cov>=7.1.0",
+    "ruff>=0.17.2",
+    "time-machine>=3.5.1",
 ]
 
 [build-system]
-requires = ["uv_build>=0.9,<1"]
+requires = ["uv_build>=0.13.5,<0.14"]
 build-backend = "uv_build"
 
 [tool.uv.build-backend]
@@ -104,12 +105,14 @@ mypy_path = "src"
 files = ["src", "tests"]
 
 [[tool.mypy.overrides]]
-module = ["respx.*", "time_machine.*"]
+module = ["time_machine.*"]
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = ["--strict-markers", "--strict-config", "-ra"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
 filterwarnings = ["error"]
 
 [tool.coverage.run]

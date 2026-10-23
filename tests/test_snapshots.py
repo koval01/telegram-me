@@ -5,92 +5,63 @@ they did not change the public contract. Intentional changes are made by
 re-running with UPDATE_SNAPSHOTS=1 and reviewing the snapshot diff.
 """
 
-from collections.abc import Callable, Iterator
 from typing import Any
 
 import pytest
-import time_machine
 from fastapi.testclient import TestClient
+from httpx2 import Response
 
-from telegram_me.main import app
-from telegram_me.routes.v1 import telegram_routes
-from telegram_me.utils.config import settings
+from tests.conftest import ClientFactory, Snapshot
 
-CHANNELS = ["durov", "telegram", "stranaua", "tginfo", "nebudetafk"]
+CHANNELS = ["durov", "telegram", "stranaua", "tginfo", "nebudetafk", "nebudetgg"]
 PREVIEW_CHANNELS = ["durov", "telegram", "stranaua"]
-# Shortly after the fixtures were recorded; feed scoring depends on "now".
-FROZEN_NOW = "2026-10-23T00:00:00+00:00"
-
-Snapshot = Callable[[str, Any], None]
 
 
-class FakeRedis:
-    """Minimal async stand-in for the preview cache."""
-
-    def __init__(self) -> None:
-        self.data: dict[str, str] = {}
-
-    async def get(self, key: str) -> str | None:
-        return self.data.get(key)
-
-    async def setex(self, key: str, _ttl: int, value: str) -> None:
-        self.data[key] = value
-
-
-@pytest.fixture
-def client(
-    telegram_fixtures: dict[str, Any], monkeypatch: pytest.MonkeyPatch
-) -> Iterator[TestClient]:
-    monkeypatch.setattr(settings, "ENABLE_FEED", True)
-    monkeypatch.setattr(settings, "ENABLE_PREVIEWS", True)
-    monkeypatch.setattr(settings, "PARSER_MODE", "full")
-    monkeypatch.setattr(telegram_routes.telegram, "_redis_client", FakeRedis())
-    with time_machine.travel(FROZEN_NOW, tick=False), TestClient(app) as test_client:
-        yield test_client
-
-
-def _result(response: Any) -> dict[str, Any]:
+def _result(response: Response) -> dict[str, Any]:
     return {"status": response.status_code, "body": response.json()}
 
 
 def _post_id(manifest: dict[str, Any], channel: str) -> int:
-    return manifest["channels"][channel]["post_id"]
+    post_id: int = manifest["channels"][channel]["post_id"]
+    return post_id
 
 
 @pytest.mark.parametrize("parser_mode", ["full", "simplified"])
 @pytest.mark.parametrize("channel", CHANNELS)
 def test_body(
-    client: TestClient, snapshot: Snapshot, monkeypatch: pytest.MonkeyPatch,
-    channel: str, parser_mode: str,
+    make_client: ClientFactory, snapshot: Snapshot, channel: str, parser_mode: str
 ) -> None:
-    monkeypatch.setattr(settings, "PARSER_MODE", parser_mode)
+    client = make_client(parser_mode=parser_mode)
     snapshot(f"body_{channel}_{parser_mode}", _result(client.get(f"/v1/body/{channel}")))
 
 
 @pytest.mark.parametrize("channel", CHANNELS)
 def test_body_with_position(
-    client: TestClient, snapshot: Snapshot, telegram_fixtures: dict[str, Any], channel: str
+    client: TestClient, snapshot: Snapshot, manifest: dict[str, Any], channel: str
 ) -> None:
-    position = _post_id(telegram_fixtures, channel)
+    position = _post_id(manifest, channel)
     response = client.get(f"/v1/body/{channel}", params={"position": position})
     snapshot(f"body_{channel}_position", _result(response))
 
 
 @pytest.mark.parametrize("channel", CHANNELS)
 def test_post(
-    client: TestClient, snapshot: Snapshot, telegram_fixtures: dict[str, Any], channel: str
+    client: TestClient, snapshot: Snapshot, manifest: dict[str, Any], channel: str
 ) -> None:
-    post_id = _post_id(telegram_fixtures, channel)
+    post_id = _post_id(manifest, channel)
     snapshot(f"post_{channel}", _result(client.get(f"/v1/post/{channel}/{post_id}")))
 
 
 @pytest.mark.parametrize("direction", ["before", "after"])
 @pytest.mark.parametrize("channel", CHANNELS)
 def test_more(
-    client: TestClient, snapshot: Snapshot, telegram_fixtures: dict[str, Any],
-    channel: str, direction: str,
+    client: TestClient,
+    snapshot: Snapshot,
+    manifest: dict[str, Any],
+    channel: str,
+    direction: str,
 ) -> None:
-    position = _post_id(telegram_fixtures, channel)
+    position = _post_id(manifest, channel)
     response = client.get(f"/v1/more/{channel}/{direction}/{position}")
     snapshot(f"more_{channel}_{direction}", _result(response))
 
@@ -105,10 +76,8 @@ def test_previews(client: TestClient, snapshot: Snapshot) -> None:
     snapshot("previews", _result(response))
 
 
-def test_missing_channel(
-    client: TestClient, snapshot: Snapshot, telegram_fixtures: dict[str, Any]
-) -> None:
-    missing = telegram_fixtures["missing"]
+def test_missing_channel(client: TestClient, snapshot: Snapshot, manifest: dict[str, Any]) -> None:
+    missing = manifest["missing"]
     snapshot("missing_body", _result(client.get(f"/v1/body/{missing}")))
     snapshot("missing_preview", _result(client.get(f"/v1/preview/{missing}")))
     response = client.post("/v1/previews", json={"channels": ["durov", missing]})
@@ -116,9 +85,15 @@ def test_missing_channel(
 
 
 @pytest.mark.parametrize("parser_mode", ["full", "simplified"])
-def test_feed(
-    client: TestClient, snapshot: Snapshot, monkeypatch: pytest.MonkeyPatch, parser_mode: str
-) -> None:
-    monkeypatch.setattr(settings, "PARSER_MODE", parser_mode)
+def test_feed(make_client: ClientFactory, snapshot: Snapshot, parser_mode: str) -> None:
+    client = make_client(parser_mode=parser_mode)
     response = client.post("/v1/feed", json={"channels": CHANNELS})
     snapshot(f"feed_{parser_mode}", _result(response))
+
+
+def test_extra_posts(client: TestClient, snapshot: Snapshot, manifest: dict[str, Any]) -> None:
+    for channel, post_id in manifest["extra_posts"].items():
+        response = client.get(f"/v1/post/{channel}/{post_id}")
+        snapshot(f"post_{channel}_{post_id}", _result(response))
+        response = client.get(f"/v1/body/{channel}", params={"position": post_id})
+        snapshot(f"body_{channel}_{post_id}", _result(response))
