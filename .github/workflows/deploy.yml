@@ -133,7 +133,14 @@ jobs:
 
       - name: Public health check
         if: vars.PUBLIC_HEALTHCHECK_URL != ''
-        run: curl -fsS --retry 5 --retry-delay 5 "${{ vars.PUBLIC_HEALTHCHECK_URL }}"
+        env:
+          URL: ${{ vars.PUBLIC_HEALTHCHECK_URL }}
+          # Key of a Cloudflare WAF skip rule, so bot protection lets the check through.
+          BYPASS_KEY: ${{ secrets.CF_BYPASS_KEY }}
+        run: |
+          headers=()
+          if [ -n "$BYPASS_KEY" ]; then headers=(-H "x-bypass-key: $BYPASS_KEY"); fi
+          curl -fsS --retry 5 --retry-delay 5 "${headers[@]}" "$URL"
 
       - name: Clean up secrets
         if: always()

@@ -93,6 +93,7 @@ sequenceDiagram
 | `SSH_KEY` | yes | Private key for `SSH_USER` |
 | `SSH_KNOWN_HOSTS` | recommended | `ssh-keyscan` output for the servers; without it host keys are trusted on first use (with a warning) |
 | `REDIS_URL` | yes | Shared Redis for all servers |
+| `CF_BYPASS_KEY` | no | Sent as `x-bypass-key` by the public health check, for a Cloudflare WAF rule that skips bot protection for it |
 | `TLS_CERT`, `TLS_KEY` | with `PUBLIC_HOST` | Cloudflare Origin CA certificate and key (PEM) for Caddy; without them Caddy uses a self-signed certificate |
 | `DOCKER_USERNAME`, `DOCKERHUB_TOKEN` | yes | Push to Docker Hub (`DOCKER_PASSWORD` is accepted instead of the token) |
 
@@ -135,6 +136,16 @@ deployment then also runs the `proxy` service of `compose.prod.yaml`: Caddy
   self-signed certificate, which works with SSL mode **Full** only.
 - Let only Cloudflare's ranges reach port 443 in the cloud firewall (security
   list or group), and nothing reach port 8000.
+
+API clients are programs, not browsers. Cloudflare's bot protection (Bot
+Fight Mode, the "I'm Under Attack" level, Managed Challenge rules) answers
+them with a challenge page (`403`) instead of JSON, and that includes the
+deployment's public health check. Keep it off for the API hostname. For
+requests of your own, you can instead add a WAF custom rule that skips it
+when a header matches a long random key, for example
+`any(http.request.headers["x-bypass-key"][*] eq "<key>")`. Store the key as
+the `CF_BYPASS_KEY` secret for the health check, and pass it to the smoke
+test with `--header "x-bypass-key:$KEY"`.
 
 Cloudflare picks one of the DNS records per connection. While one server
 restarts during a rolling deployment, some requests to it can fail for a few
