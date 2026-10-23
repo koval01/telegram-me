@@ -1575,7 +1575,7 @@
         },
         "forwarded": {
           "name": {
-            "html": "<span dir=\"auto\">",
+            "html": "",
             "string": ""
           }
         },
@@ -3065,7 +3065,7 @@
         },
         "forwarded": {
           "name": {
-            "html": "<span dir=\"auto\">",
+            "html": "",
             "string": ""
           }
         },

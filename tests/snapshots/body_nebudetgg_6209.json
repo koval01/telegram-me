@@ -904,8 +904,12 @@
             "views": "207K"
           },
           "forwarded": {
+            "author": {
+              "html": "RandomGodBot<i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/E29AA1.png')\"><b>⚡️</b></i> [Рандомайзер]",
+              "string": "RandomGodBot⚡️ [Рандомайзер]"
+            },
             "name": {
-              "html": "<span dir=\"auto\">",
+              "html": "",
               "string": ""
             },
             "url": null

@@ -138,3 +138,21 @@ def test_channel_validation() -> None:
     assert validate_channel_or_raise(" durov ") == "durov"
     with pytest.raises(ValueError, match="Invalid Telegram username format"):
         validate_channel_or_raise("___")
+
+
+def test_forwarded_name_and_author() -> None:
+    message = _MESSAGE.format(id=1, date=_DATE).replace(
+        '<div class="tgme_widget_message_bubble">',
+        '<div class="tgme_widget_message_bubble">'
+        '<div class="tgme_widget_message_forwarded_from">Forwarded from '
+        '<a class="tgme_widget_message_forwarded_from_name" href="https://t.me/source">'
+        '<span dir="auto">Source <b>Name</b></span></a>'
+        ' (<span class="tgme_widget_message_forwarded_from_author" dir="auto">Bot</span>)'
+        "</div>",
+    )
+    [post] = parse_posts(_page(message).body)  # type: ignore[arg-type]
+    assert post["forwarded"] == {
+        "name": {"string": "Source Name", "html": "Source <b>Name</b>"},
+        "url": "https://t.me/source",
+        "author": {"string": "Bot", "html": "Bot"},
+    }

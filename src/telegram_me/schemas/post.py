@@ -141,7 +141,10 @@ class Forwarded(BaseModel):
     """Original source of a forwarded post."""
 
     name: ParsedAndRaw
+    """Source channel or user; empty when the sender hides their name."""
     url: HttpUrl | None = None
+    author: ParsedAndRaw | None = None
+    """Signature shown next to the source, e.g. the bot that posted it."""
 
 
 class Post(BaseModel):

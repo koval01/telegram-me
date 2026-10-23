@@ -43,6 +43,9 @@ dev = [
     "ruff>=0.17.2",
     "time-machine>=3.5.1",
 ]
+docs = [
+    "zensical>=0.0.71",
+]
 
 [build-system]
 requires = ["uv_build>=0.13.5,<0.14"]

@@ -160,9 +160,14 @@ def _forwarded(message: LexborNode) -> JSONDict | None:
     node = message.css_first(".tgme_widget_message_forwarded_from_name")
     if node is None:
         return None
-    forwarded: JSONDict = {"name": _name(node)}
+    # The visible name sits in a nested <span dir="auto">; reading it directly
+    # keeps `html` well-formed (it is empty for senders who hide their name).
+    label = node.css_first("span[dir=auto]") or node
+    forwarded: JSONDict = {"name": {"string": node.text(), "html": inner_html(label, "span") or ""}}
     if url := node.attributes.get("href"):
         forwarded["url"] = url
+    if author := message.css_first(".tgme_widget_message_forwarded_from_author"):
+        forwarded["author"] = {"string": author.text(), "html": inner_html(author, "span") or ""}
     return forwarded
 
 

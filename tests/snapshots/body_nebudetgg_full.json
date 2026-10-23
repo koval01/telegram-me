@@ -1679,8 +1679,9 @@
             "views": "79.6K"
           },
           "forwarded": {
+            "author": null,
             "name": {
-              "html": "<span dir=\"auto\">",
+              "html": "",
               "string": ""
             },
             "url": null
