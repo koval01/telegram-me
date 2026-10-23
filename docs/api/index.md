@@ -5,6 +5,10 @@ no authentication. An OpenAPI 3.1 document is served at `/openapi.json` and
 rendered as Swagger UI at `/` (both can be turned off with
 [`DISABLE_DOCS`](../configuration.md#disable_docs)).
 
+The same data is also available through a [GraphQL API](graphql.md) at
+`/graphql`, where clients select only the fields they need and can combine
+several requests into one.
+
 ## Conventions
 
 **Channels** are public usernames without `@`: 5–32 characters, starting with

@@ -16,7 +16,7 @@ test: ## Run the test suite with coverage
 	uv run pytest --cov
 
 snapshots: ## Re-generate contract snapshots (review the diff afterwards!)
-	UPDATE_SNAPSHOTS=1 uv run pytest tests/test_snapshots.py
+	UPDATE_SNAPSHOTS=1 uv run pytest tests/test_snapshots.py tests/test_graphql_contract.py
 
 lint: ## Lint and check formatting
 	uv run ruff check .
