@@ -59,5 +59,8 @@ if ! APP_IMAGE="$image" compose up -d --wait --wait-timeout "$wait_timeout" --re
 fi
 
 echo "$image" > "$state_file"
-log "healthy: $(curl -fsS "http://127.0.0.1:${APP_PORT:-8000}/healthz")"
+# Let plain `docker compose -f compose.prod.yaml ps|logs|...` work on the server.
+sed -i '/^APP_IMAGE=/d; /^COMPOSE_PROFILES=/d' .env
+printf 'APP_IMAGE=%s\nCOMPOSE_PROFILES=%s\n' "$image" "${COMPOSE_PROFILES:-}" >> .env
+log "healthy:$(curl -fsS "http://127.0.0.1:${APP_PORT:-8000}/healthz")"
 docker image prune --force --filter "until=168h" >/dev/null || true
