@@ -6,7 +6,7 @@ site_url = "https://koval01.github.io/telegram-me/"
 repo_url = "https://github.com/koval01/telegram-me"
 repo_name = "koval01/telegram-me"
 edit_uri = "edit/main/docs/"
-copyright = "Copyright &copy; 2024–2026 Koval Yaroslav · MIT License"
+copyright = "Copyright &copy; 2024–2026 Koval Yaroslav · GPL-3.0 License"
 
 nav = [
   { "Home" = "index.md" },
@@ -109,6 +109,8 @@ tables = {}
 toc.permalink = true
 pymdownx.betterem = {}
 pymdownx.details = {}
+pymdownx.emoji.emoji_generator = "zensical.extensions.emoji.to_svg"
+pymdownx.emoji.emoji_index = "zensical.extensions.emoji.twemoji"
 pymdownx.highlight.anchor_linenums = true
 pymdownx.highlight.line_spans = "__span"
 pymdownx.highlight.pygments_lang_class = true

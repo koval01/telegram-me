@@ -38,11 +38,11 @@ A [`ChannelBody`](models.md#channelbody):
   "content": {
     "posts": [
       {
-        "id": 551,
+        "id": 552,
         "content": {
           "text": {
-            "string": "✨ Telegram Update ✨ …",
-            "html": "<i class=\"emoji\" …><b>✨</b></i> <b>Telegram Update</b> …",
+            "string": "✨ Designers × AI\n\n🆕 The mockup era is over …",
+            "html": "<tg-emoji emoji-id=\"5325547803936572038\"><i class=\"emoji\" …><b>✨</b></i></tg-emoji> <b>Designers × AI<br/><br/></b> …",
             "entities": [
               {"offset": 0, "length": 1, "type": "animoji", "url": "https://telegram.org/img/emoji/40/E29CA8.png", "language": null},
               {"offset": 2, "length": 16, "type": "bold", "url": null, "language": null}
@@ -68,13 +68,13 @@ A [`ChannelBody`](models.md#channelbody):
           ]
         },
         "footer": {
-          "views": "2.1M",
+          "views": "1.34M",
           "edited": false,
-          "author": null,
-          "date": {"string": "2026-10-20T14:00:12+00:00", "unix": 1792504812}
+          "author": {"string": "Pavel Durov", "html": "Pavel Durov"},
+          "date": {"string": "2026-10-11T14:52:40+00:00", "unix": 1791730360}
         },
         "forwarded": null,
-        "view": "eyJjIjotMTAwNjUwMzEyMiwicCI6NTUxLCJ0IjoxNzky…"
+        "view": "eyJjIjotMTAwNjUwMzEyMiwicCI6NTUyLCJ0IjoxNzky…"
       }
     ]
   },

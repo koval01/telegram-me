@@ -37,7 +37,11 @@ its surrounding page costs a single request to t.me.
     "reacts": [ … ]
   },
   "footer": {"views": "207K", "edited": false, "author": null, "date": {"string": "2026-05-12T09:39:25+00:00", "unix": 1778578765}},
-  "forwarded": { … },
+  "forwarded": {
+    "name": {"string": "", "html": ""},
+    "url": null,
+    "author": {"string": "RandomGodBot⚡️ [Рандомайзер]", "html": "RandomGodBot<i class=\"emoji\" …><b>⚡️</b></i> [Рандомайзер]"}
+  },
   "view": "…"
 }
 ```

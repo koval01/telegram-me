@@ -37,7 +37,7 @@ ARG REVISION=unknown
 LABEL org.opencontainers.image.title="telegram-me" \
       org.opencontainers.image.description="REST API for public Telegram channels" \
       org.opencontainers.image.source="https://github.com/koval01/telegram-me" \
-      org.opencontainers.image.licenses="MIT" \
+      org.opencontainers.image.licenses="GPL-3.0-only" \
       org.opencontainers.image.version="${VERSION}" \
       org.opencontainers.image.revision="${REVISION}"
 

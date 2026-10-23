@@ -18,12 +18,13 @@ scrolling the channel on t.me. The anchor post itself is not included.
 ## Response
 
 A [`More`](models.md#more): `posts` (same shape as in the channel page) and
-`meta.offset` with the next cursors.
+`meta.offset` with the next cursors. For example `GET /v1/more/durov/before/531`
+returns posts 510…529:
 
 ```json
 {
-  "posts": [ { "id": 511, "content": { … }, "footer": { … }, "forwarded": null, "view": "…" } ],
-  "meta": {"offset": {"before": 511, "after": 530}}
+  "posts": [ { "id": 510, "content": { … }, "footer": { … }, "forwarded": null, "view": "…" }, … ],
+  "meta": {"offset": {"before": 510, "after": null}}
 }
 ```
 

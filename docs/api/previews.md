@@ -50,7 +50,7 @@ curl -X POST http://localhost:8000/v1/previews \
 ```json
 {
   "durov":    {"channel": {"title": "Pavel Durov", "subscribers": "10 281 023 subscribers", "description": "Founder of Telegram.", "avatar": "https://…", "is_verified": true}},
-  "telegram": {"channel": {"title": "Telegram News", "subscribers": "…", "description": "…", "avatar": "https://…", "is_verified": true}}
+  "telegram": {"channel": {"title": "Telegram News", "subscribers": "9 257 928 subscribers", "description": "The official Telegram on Telegram. Much recursion. …", "avatar": "https://…", "is_verified": true}}
 }
 ```
 

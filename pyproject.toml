@@ -3,7 +3,7 @@ name = "telegram-me"
 version = "2.0.0"
 description = "REST API for public Telegram channels, built on top of t.me web previews"
 readme = "README.md"
-license = "MIT"
+license = "GPL-3.0-only"
 license-files = ["LICENSE"]
 authors = [{ name = "Koval Yaroslav" }]
 requires-python = ">=3.13"
