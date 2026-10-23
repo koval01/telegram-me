@@ -1,17 +1,28 @@
 # syntax=docker/dockerfile:1.10
 ARG PYTHON_VERSION=3.14
 ARG UV_VERSION=0.13.5
+ARG RUST_VERSION=1.99
 
 FROM ghcr.io/astral-sh/uv:${UV_VERSION} AS uv
+FROM rust:${RUST_VERSION}-slim-trixie AS rust
 
 # ---------------------------------------------------------------------------
-# Build: resolve the locked dependencies into a virtualenv, then install the
-# project itself. Dependencies get their own layer so code changes rebuild fast.
+# Build: locked Python dependencies, then the native Rust extension, then the
+# project. Each step is its own layer: Python-only changes do not recompile Rust.
 # ---------------------------------------------------------------------------
 FROM python:${PYTHON_VERSION}-slim-trixie AS build
 COPY --from=uv /uv /usr/local/bin/uv
+COPY --from=rust /usr/local/cargo /usr/local/cargo
+COPY --from=rust /usr/local/rustup /usr/local/rustup
+RUN apt-get update \
+    && apt-get install --yes --no-install-recommends gcc libc6-dev \
+    && rm -rf /var/lib/apt/lists/*
 
-ENV UV_COMPILE_BYTECODE=1 \
+ENV PATH="/usr/local/cargo/bin:${PATH}" \
+    RUSTUP_HOME=/usr/local/rustup \
+    CARGO_HOME=/usr/local/cargo \
+    CARGO_TARGET_DIR=/cargo-target \
+    UV_COMPILE_BYTECODE=1 \
     UV_LINK_MODE=copy \
     UV_PYTHON_DOWNLOADS=never \
     UV_PROJECT_ENVIRONMENT=/app/.venv
@@ -20,9 +31,16 @@ WORKDIR /src
 RUN --mount=type=cache,target=/root/.cache/uv \
     --mount=type=bind,source=uv.lock,target=uv.lock \
     --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
-    uv sync --locked --no-dev --no-install-project
+    --mount=type=bind,source=rust/telegram-me-native/pyproject.toml,target=rust/telegram-me-native/pyproject.toml \
+    uv sync --locked --no-dev --no-install-workspace
 
 COPY pyproject.toml uv.lock README.md LICENSE ./
+COPY rust ./rust
+RUN --mount=type=cache,target=/root/.cache/uv \
+    --mount=type=cache,target=/usr/local/cargo/registry \
+    --mount=type=cache,target=/cargo-target \
+    uv sync --locked --no-dev --no-editable --no-install-project
+
 COPY src ./src
 RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --locked --no-dev --no-editable

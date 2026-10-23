@@ -9,6 +9,14 @@ updates:
         patterns: ["*"]
         update-types: [minor, patch]
 
+  - package-ecosystem: cargo
+    directory: /rust/telegram-me-native
+    schedule:
+      interval: weekly
+    groups:
+      rust:
+        patterns: ["*"]
+
   - package-ecosystem: github-actions
     directory: /
     schedule:

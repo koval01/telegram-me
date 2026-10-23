@@ -25,10 +25,14 @@ Coverage includes six channels (`durov`, `telegram`, `stranaua`, `tginfo`,
 previews, a missing channel, the feed, and individual posts with an inline
 button, a poll, a sticker, a reply, a link preview and a voice message.
 
+`tests/test_graphql_contract.py` does the same for GraphQL: the full schema
+(SDL) in `tests/snapshots/graphql/schema.graphql`, a snapshot per query, and
+parity checks that every GraphQL result equals the matching REST response.
+
 ### Changing the output on purpose
 
 ```bash
-make snapshots                 # UPDATE_SNAPSHOTS=1 pytest tests/test_snapshots.py
+make snapshots                 # UPDATE_SNAPSHOTS=1 pytest tests/test_snapshots.py tests/test_graphql_contract.py
 git diff --stat tests/snapshots
 git diff tests/snapshots        # review every change
 ```
@@ -57,7 +61,10 @@ rare post type, add its ID to `EXTRA_POSTS` in `scripts/record_fixtures.py`.
 | `test_coalesce.py` | Single-flight sharing, error propagation, cancellation safety |
 | `test_popularity.py` | Popularity decay and leader election on Redis (fakeredis with Lua) |
 | `test_services.py` | Page and response caches, previews, stale-while-revalidate feed, refresher scheduling |
-| `test_parsing.py` | Entities, media, forwards, broken-post isolation, scoring |
+| `test_parsing.py` | The native page parser seen from Python: entities, media, forwards, broken-post isolation |
+| `test_feed_ranking.py` | Feed signals and the native ranker: relative engagement, freshness, duplicates, topics, diversity |
+| `test_graphql.py` | GraphQL schema shape, resolvers, errors |
+| `test_graphql_limits.py` | GraphQL depth, cost, alias, token and batch limits |
 | `test_api.py` | Validation, feature flags, headers, rate limiting, CORS, docs |
 | `test_runtime.py` | Embedded refresher lifecycle, JSON logging |
 

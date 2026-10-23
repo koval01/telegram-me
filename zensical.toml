@@ -21,6 +21,7 @@ nav = [
     "api/post.md",
     "api/previews.md",
     "api/feed.md",
+    "api/graphql.md",
     "api/service.md",
     "api/models.md",
     "api/errors.md",

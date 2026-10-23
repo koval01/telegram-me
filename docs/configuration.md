@@ -32,6 +32,12 @@ The source of truth is
 | [`ENABLE_FEED`](#enable_feed) | `false` | Features |
 | [`ENABLE_RATE_LIMIT`](#enable_rate_limit) | `false` | Features |
 | [`RATE_LIMIT_RPM`](#rate_limit_rpm) | `120` | Features |
+| [`ENABLE_GRAPHQL`](#enable_graphql) | `true` | GraphQL |
+| [`GRAPHQL_MAX_DEPTH`](#graphql_max_depth) | `10` | GraphQL |
+| [`GRAPHQL_MAX_COMPLEXITY`](#graphql_max_complexity) | `1500` | GraphQL |
+| [`GRAPHQL_MAX_ALIASES`](#graphql_max_aliases) | `15` | GraphQL |
+| [`GRAPHQL_MAX_TOKENS`](#graphql_max_tokens) | `2000` | GraphQL |
+| [`GRAPHQL_MAX_BATCH_SIZE`](#graphql_max_batch_size) | `10` | GraphQL |
 | [`CACHE_MODE`](#cache_mode) | `normal` | Performance |
 | [`PARSER_MODE`](#parser_mode) | `full` | Performance |
 | [`MEMORY_TRIM_INTERVAL`](#memory_trim_interval) | `10` | Performance |
@@ -48,6 +54,9 @@ The source of truth is
 | [`FEED_REFRESH_MAX_INTERVAL`](#feed_refresh_max_interval) | `600` | Feed |
 | [`FEED_REFRESH_TOP`](#feed_refresh_top) | `200` | Feed |
 | [`FEED_POPULARITY_HALF_LIFE`](#feed_popularity_half_life) | `3600` | Feed |
+| [`FEED_HALF_LIFE_HOURS`](#feed_half_life_hours) | `24` | Feed |
+| [`FEED_DIVERSITY`](#feed_diversity) | `0.5` | Feed |
+| [`FEED_COLLAPSE_DUPLICATES`](#feed_collapse_duplicates) | `true` | Feed |
 | [`LOG_LEVEL`](#log_level) | `INFO` | Logging |
 | [`LOG_FORMAT`](#log_format) | `text` | Logging |
 
@@ -103,7 +112,8 @@ Expose Prometheus metrics of the server on this port at `/metrics`. See
 
 ### `DISABLE_DOCS`
 
-Hide the Swagger UI (`/`) and `/openapi.json`.
+Hide the Swagger UI (`/`) and `/openapi.json`, and on `/graphql` the GraphiQL
+IDE, `GET` queries and schema introspection.
 
 ### `CORS_ALLOW_ORIGINS`
 
@@ -133,6 +143,39 @@ in the reverse proxy or CDN instead.
 
 Requests per minute per IP when the rate limit is enabled. Exceeding it
 returns `429` with `Retry-After: 60`.
+
+## GraphQL
+
+See [GraphQL](api/graphql.md#limits) for how the limits are applied.
+
+### `ENABLE_GRAPHQL`
+
+Serve the [GraphQL API](api/graphql.md) at `/graphql`. When disabled the
+path answers `404`. GraphiQL, `GET` queries and introspection additionally
+follow [`DISABLE_DOCS`](#disable_docs).
+
+### `GRAPHQL_MAX_DEPTH`
+
+Deepest allowed nesting of selections below a root field (the root field is
+depth 0; introspection fields are not counted).
+
+### `GRAPHQL_MAX_COMPLEXITY`
+
+Highest allowed operation cost: 1 per selected field plus 10 per channel a
+root field may fetch from t.me.
+
+### `GRAPHQL_MAX_ALIASES`
+
+Most aliases allowed in one document.
+
+### `GRAPHQL_MAX_TOKENS`
+
+Longest accepted document, in GraphQL lexer tokens; bounds parsing work.
+
+### `GRAPHQL_MAX_BATCH_SIZE`
+
+Most operations accepted in one batched request (a JSON array). Larger
+batches are rejected with `400`.
 
 ## Performance
 
@@ -245,6 +288,21 @@ How many of the most popular channels the refresher looks after.
 
 Half-life in seconds of a channel's popularity: a feed request counts half as
 much after this time. Channels whose score drops below 0.05 are forgotten.
+
+### `FEED_HALF_LIFE_HOURS`
+
+Hours after which a post's freshness halves in the ranking. Lower values
+favour the newest posts more strongly.
+
+### `FEED_DIVERSITY`
+
+From `0` (pure score order) to `1` (strongest spreading of channels and
+subjects). See [Internals → Feed](internals/feed.md#diversity).
+
+### `FEED_COLLAPSE_DUPLICATES`
+
+Merge the same story posted by several channels into its best post, listing
+the others in `_duplicates`.
 
 ## Logging
 

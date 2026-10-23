@@ -12,3 +12,6 @@ __pycache__/
 htmlcov/
 dist/
 site/
+target/
+*.so
+*.pyd

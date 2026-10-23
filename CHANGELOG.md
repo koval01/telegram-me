@@ -31,9 +31,20 @@ working; see the upgrade guide for the few behaviour changes.
   longer uses `start.sh`. The `Server` header is now `granian`.
 - `REDIS_URL` has no default; without it an in-process cache is used.
 - Cache keys moved to the `tme:v2:` prefix.
+- The feed is ranked natively in Rust (`telegram-me-native`, PyO3):
+  engagement relative to each channel, freshness half-life, duplicate stories
+  collapsed across channels, topics inferred from the texts and diversity
+  re-ranking. `_score` values and the feed order differ from 1.x.
 
 ### Added
 
+- GraphQL API at `/graphql` next to REST `/v1`, so clients can select only the
+  fields they need: the same data and services as REST, per-request page
+  memoization, batching, GraphiQL, stable `extensions.code` errors and
+  configurable depth, cost, alias, token and batch limits. Enabled by default
+  (`ENABLE_GRAPHQL`); see the GraphQL API docs.
+- `/v1/feed` items may carry `_duplicates` (collapsed reposts) and `_topic`
+  (shared subject with keywords).
 - `forwarded.author`: the signature Telegram shows next to a forward's source.
 - Stale-while-revalidate page cache for the feed, parallel fetching of missing
   channels, popularity ranking with decay and a background refresher (embedded
@@ -79,6 +90,10 @@ working; see the upgrade guide for the few behaviour changes.
   of a new httpx client per request: about 9× less CPU per request.
 - HTML is parsed once per page instead of twice; responses are validated once
   and serialized by pydantic-core.
+- t.me pages are parsed in Rust (`telegram-me-native`: html5ever, selectors,
+  regex) with the GIL released, instead of Python over selectolax. The output
+  is byte-for-byte identical to the Python parser; it is 1.3–2× faster per page
+  and runs in parallel under load.
 - Cached `/v1/body` responses take about 1 ms; a cached 6-channel feed about
   6 ms (82 ms for 5 channels in 1.x).
 

@@ -14,14 +14,26 @@ then reported as `404`.
 
 ## Extraction
 
-The HTML is parsed once with lexbor (via selectolax) and walked with CSS
-selectors. Per post (`.tgme_widget_message_wrap > .tgme_widget_message`):
+Parsing is implemented in Rust
+([`rust/telegram-me-native/src/parse`](https://github.com/koval01/telegram-me/tree/main/rust/telegram-me-native/src/parse))
+and runs with the GIL released: the HTML is parsed once with html5ever (the
+WHATWG-compliant parser of the Servo project) and walked with CSS selectors.
+Python only decodes the resulting JSON (pydantic-core) and logs skipped posts.
+
+The Rust port reproduces the original Python/selectolax parser byte for byte:
+selectors match the node itself as well as its descendants, text is
+concatenated exactly like lexbor's `text()`, HTML is re-serialised with
+lexbor's escaping rules and attribute order, and formatting tags unwrapped for
+the plain text stay unwrapped for later reads of the same subtree, as with
+selectolax's in-place `unwrap_tags`. The contract snapshots pin the result.
+
+Per post (`.tgme_widget_message_wrap > .tgme_widget_message`):
 
 | Field | Source |
 |---|---|
 | `id` | `data-post="<channel>/<id>"` |
 | `text` | `.tgme_widget_message_text` — `html` is the inner markup; `string` the text with formatting tags unwrapped and `<br>` as `\n` |
-| `entities` | regular expressions over the text markup (bold, italic, underline, strikethrough, code, spoiler, hashtags, links, emoji, custom emoji) |
+| `entities` | regular expressions over the text markup (bold, italic, underline, strikethrough, code, spoiler, hashtags, links, emoji, custom emoji); alternatives without look-ahead run on the `regex` DFA engine, the three with look-ahead are checked cheaply and fall back to `fancy-regex` only when needed |
 | `media` | photo wraps, video/round video players, voice players, stickers (`picture`, `i`, `video` variants), link preview images |
 | `poll` | `.tgme_widget_message_poll` question, type, options with percentages, voters |
 | `inline` | every `.tgme_widget_message_inline_button` in the inline keyboard |
@@ -45,6 +57,7 @@ selectors. Per post (`.tgme_widget_message_wrap > .tgme_widget_message`):
 
 1. Reproduce with `uv run python scripts/record_fixtures.py <channel>` to
    record the new markup.
-2. Fix the parser in `src/telegram_me/telegram/parsing/`.
+2. Fix the parser in `rust/telegram-me-native/src/parse/` and run
+   `make rust` and `make native`.
 3. Run `make snapshots` and review the snapshot diff — it shows exactly which
    responses changed.

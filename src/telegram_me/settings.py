@@ -63,6 +63,18 @@ class Settings(BaseSettings):
     enable_rate_limit: bool = False
     rate_limit_rpm: PositiveInt = 120
 
+    # GraphQL (`/graphql`); limits apply to every operation of a request
+    enable_graphql: bool = True
+    graphql_max_depth: PositiveInt = 10
+    """Deepest allowed field nesting (introspection fields excepted)."""
+    graphql_max_complexity: PositiveInt = 1500
+    """Highest allowed operation cost: 1 per field plus 10 per channel fetched."""
+    graphql_max_aliases: PositiveInt = 15
+    graphql_max_tokens: PositiveInt = 2000
+    """Longest accepted query document, in lexer tokens."""
+    graphql_max_batch_size: PositiveInt = 10
+    """Most operations accepted in one batched (JSON array) request."""
+
     # Performance
     cache_mode: CacheMode = "normal"
     parser_mode: ParserMode = "full"
@@ -87,6 +99,12 @@ class Settings(BaseSettings):
     feed_refresh_max_interval: PositiveInt = 600
     feed_refresh_top: PositiveInt = 200
     feed_popularity_half_life: PositiveInt = 3600
+    feed_half_life_hours: PositiveFloat = 24.0
+    """Hours after which a post's freshness halves in the ranking."""
+    feed_diversity: float = Field(default=0.5, ge=0.0, le=1.0)
+    """0 = pure score order; higher values spread channels and subjects."""
+    feed_collapse_duplicates: bool = True
+    """Merge the same story posted by several channels into one entry."""
 
     # Logging
     log_level: Literal["DEBUG", "INFO", "WARNING", "ERROR"] = "INFO"

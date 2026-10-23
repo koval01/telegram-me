@@ -1,5 +1,5 @@
 .DEFAULT_GOAL := help
-.PHONY: help install dev test snapshots lint format typecheck check fixtures smoke \
+.PHONY: help install dev test snapshots lint format typecheck check rust native fixtures smoke \
         docker up down logs docs docs-serve
 
 help: ## Show this help
@@ -16,7 +16,7 @@ test: ## Run the test suite with coverage
 	uv run pytest --cov
 
 snapshots: ## Re-generate contract snapshots (review the diff afterwards!)
-	UPDATE_SNAPSHOTS=1 uv run pytest tests/test_snapshots.py
+	UPDATE_SNAPSHOTS=1 uv run pytest tests/test_snapshots.py tests/test_graphql_contract.py
 
 lint: ## Lint and check formatting
 	uv run ruff check .
@@ -29,7 +29,16 @@ format: ## Format and autofix
 typecheck: ## Static type checking
 	uv run mypy
 
-check: lint typecheck test ## Everything CI runs before building the image
+rust: ## Rust: fmt check, clippy (pedantic, both feature sets), tests
+	cd rust/telegram-me-native && cargo fmt --check \
+		&& cargo clippy --all-targets -- -D warnings \
+		&& cargo clippy --all-targets --features python -- -D warnings \
+		&& cargo test
+
+native: ## Rebuild the Rust extension into the virtualenv after editing rust/
+	uv sync --reinstall-package telegram-me-native
+
+check: rust lint typecheck test ## Everything CI runs before building the image
 
 fixtures: ## Re-record t.me fixtures (CHANNELS="a b" for some only)
 	uv run python scripts/record_fixtures.py $(CHANNELS)

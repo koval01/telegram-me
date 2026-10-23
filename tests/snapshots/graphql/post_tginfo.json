@@ -1,0 +1,161 @@
+{
+  "data": {
+    "post": {
+      "content": {
+        "inline": null,
+        "media": [
+          {
+            "available": null,
+            "duration": null,
+            "thumb": null,
+            "type": "image",
+            "url": "https://cdn4.telesco.pe/file/H3jkokFgUZUoLtxJTlf7dDt0APRHtjWCtr2pztIJteoDP1OKafwzQqkBAPZGGQdOPzu3nl5OwJoXEIHFsHEC_2KT4ek6EtNHw1jhRsHOrkZzLjDQtCXvp2CO3l7GGg9pJKPAvOCBujfx14-49gR9fqJiV_5N6Gs2-vn39umaza5bG2XnDmo-IOZDSpqOoCBfogMD3PHNMkAXQL2avysGfTMxU0AU826_gs8IHwvdJRVEE5P0eJM1UCoi5nGvq988ASJsdSBbjDX67ekeWmPiEjzyWs8YeVwaew_CW5DRrwgR32Ml7EDh9l-crb0kDsTHuEYIoBi7Ci5hB97tV8h2OQ.jpg",
+            "waves": null
+          }
+        ],
+        "poll": null,
+        "preview_link": null,
+        "reacts": [
+          {
+            "count": "2",
+            "emoji": "⭐",
+            "emoji_id": null,
+            "emoji_image": null,
+            "type": "telegram_stars"
+          },
+          {
+            "count": "166",
+            "emoji": "👍",
+            "emoji_id": null,
+            "emoji_image": "https://telegram.org/img/emoji/40/F09F918D.png",
+            "type": "emoji"
+          },
+          {
+            "count": "66",
+            "emoji": "🎉",
+            "emoji_id": null,
+            "emoji_image": "https://telegram.org/img/emoji/40/F09F8E89.png",
+            "type": "emoji"
+          },
+          {
+            "count": "42",
+            "emoji": "👏",
+            "emoji_id": null,
+            "emoji_image": "https://telegram.org/img/emoji/40/F09F918F.png",
+            "type": "emoji"
+          },
+          {
+            "count": "34",
+            "emoji": "🤡",
+            "emoji_id": null,
+            "emoji_image": "https://telegram.org/img/emoji/40/F09FA4A1.png",
+            "type": "emoji"
+          },
+          {
+            "count": "32",
+            "emoji": "😍",
+            "emoji_id": null,
+            "emoji_image": "https://telegram.org/img/emoji/40/F09F988D.png",
+            "type": "emoji"
+          },
+          {
+            "count": "26",
+            "emoji": "🆒",
+            "emoji_id": null,
+            "emoji_image": "https://telegram.org/img/emoji/40/F09F8692.png",
+            "type": "emoji"
+          },
+          {
+            "count": "23",
+            "emoji": "🥰",
+            "emoji_id": null,
+            "emoji_image": "https://telegram.org/img/emoji/40/F09FA5B0.png",
+            "type": "emoji"
+          },
+          {
+            "count": "20",
+            "emoji": "😱",
+            "emoji_id": null,
+            "emoji_image": "https://telegram.org/img/emoji/40/F09F98B1.png",
+            "type": "emoji"
+          },
+          {
+            "count": "17",
+            "emoji": "🍾",
+            "emoji_id": null,
+            "emoji_image": "https://telegram.org/img/emoji/40/F09F8DBE.png",
+            "type": "emoji"
+          },
+          {
+            "count": "13",
+            "emoji": "👎",
+            "emoji_id": null,
+            "emoji_image": "https://telegram.org/img/emoji/40/F09F918E.png",
+            "type": "emoji"
+          }
+        ],
+        "reply": null,
+        "text": {
+          "entities": [
+            {
+              "language": null,
+              "length": 36,
+              "offset": 0,
+              "type": "bold",
+              "url": null
+            },
+            {
+              "language": null,
+              "length": 11,
+              "offset": 84,
+              "type": "bold",
+              "url": null
+            },
+            {
+              "language": null,
+              "length": 19,
+              "offset": 281,
+              "type": "text_link",
+              "url": "https://core.telegram.org/bots/serverless"
+            },
+            {
+              "language": null,
+              "length": 280,
+              "offset": 485,
+              "type": "italic",
+              "url": null
+            },
+            {
+              "language": null,
+              "length": 9,
+              "offset": 1045,
+              "type": "text_link",
+              "url": "https://core.telegram.org/bots/serverless"
+            },
+            {
+              "language": null,
+              "length": 7,
+              "offset": 1153,
+              "type": "hashtag",
+              "url": null
+            }
+          ],
+          "html": "<b>Эксклюзивный доступ к новому Bot API</b><br><br>Команда мессенджера от лица официального бота <a href=\"https://t.me/ContestBot\" target=\"_blank\"><b>@ContestBot</b></a> начала рассылать служебные оповещения некоторым победителям и призёрам конкурсов от Telegram.<br><br>Бывшим конкурсантам предлагается присоединиться к закрытому тестированию нового Bot API — <a href=\"https://core.telegram.org/bots/serverless\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Telegram Serverless</a>. Благодаря нему пользователи смогут запускать бэкенд-код для своих ботов и поддерживать работу мини-приложений прямо на серверах Telegram, не разворачивая собственную инфраструктуру:<br><br><blockquote><i>«Как победитель предыдущего конкурса Telegram, вы приглашены принять участие в эксклюзивном тестировании нового API ботов Telegram. Он позволяет запускать ваши боты, включая их код и базы данных, непосредственно на инфраструктуре Telegram, без использования собственных серверов»,</i> — говорится в рассылке.</blockquote><br><br>Примечательно, что приглашения приходят не только разработчикам, принимавшим участие в технических конкурсах, но и тем участникам, кто занимал призовые места в творческих состязаниях.<br><br>Ознакомиться с документацией, связанной с Telegram Serverless, можно <a href=\"https://core.telegram.org/bots/serverless\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">по ссылке</a>. Обратите внимание: доступ к новому API ботов сейчас ограничен для широкого круга пользователей.<br><br><a href=\"?q=%23BotAPI\">#BotAPI</a>",
+          "string": "Эксклюзивный доступ к новому Bot API\n\nКоманда мессенджера от лица официального бота @ContestBot начала рассылать служебные оповещения некоторым победителям и призёрам конкурсов от Telegram.\n\nБывшим конкурсантам предлагается присоединиться к закрытому тестированию нового Bot API — Telegram Serverless. Благодаря нему пользователи смогут запускать бэкенд-код для своих ботов и поддерживать работу мини-приложений прямо на серверах Telegram, не разворачивая собственную инфраструктуру:\n\n<blockquote>«Как победитель предыдущего конкурса Telegram, вы приглашены принять участие в эксклюзивном тестировании нового API ботов Telegram. Он позволяет запускать ваши боты, включая их код и базы данных, непосредственно на инфраструктуре Telegram, без использования собственных серверов», — говорится в рассылке.</blockquote>\n\nПримечательно, что приглашения приходят не только разработчикам, принимавшим участие в технических конкурсах, но и тем участникам, кто занимал призовые места в творческих состязаниях.\n\nОзнакомиться с документацией, связанной с Telegram Serverless, можно по ссылке. Обратите внимание: доступ к новому API ботов сейчас ограничен для широкого круга пользователей.\n\n#BotAPI"
+        }
+      },
+      "footer": {
+        "author": null,
+        "date": {
+          "string": "2026-07-13T17:45:13+00:00",
+          "unix": 1783964713
+        },
+        "edited": false,
+        "views": "32.2K"
+      },
+      "forwarded": null,
+      "id": 4422,
+      "view": "eyJjIjotMTAwMzMwNzUyNywicCI6NDQyMiwidCI6MTc5MjcwNzg2MywiaCI6ImNlYzE3OTc3ZjA3ZTk2M2IwMiJ9"
+    }
+  }
+}

@@ -55,7 +55,7 @@ async def feed_parts(
     durov_html: str,
 ) -> tuple[PageFetcher, ChannelService, FeedService, MemoryPopularity]:
     fetcher = PageFetcher(durov_html)
-    settings = make_settings(feed_fresh_ttl=60, feed_stale_ttl=900)
+    settings = make_settings(feed_fresh_ttl=60, feed_stale_ttl=900, feed_diversity=0.0)
     channels = _service(fetcher, settings)
     popularity = MemoryPopularity()
     return fetcher, channels, FeedService(channels, popularity, settings), popularity
