@@ -115,6 +115,42 @@ def detect_feature_state(base_url: str, timeout: float) -> tuple[bool, bool]:
     return feed_enabled, previews_enabled
 
 
+def detect_graphql(base_url: str, timeout: float) -> bool:
+    """Detect whether the GraphQL endpoint is mounted on the running instance."""
+    probe = Scenario(
+        name="probe_graphql",
+        method="POST",
+        path="/graphql",
+        payload={"query": "{ __typename }"},
+        expected_statuses={200, 404},
+    )
+    return call(base_url, probe, timeout).status == 200
+
+
+def graphql_scenarios(enabled: bool) -> list[Scenario]:
+    """GraphQL checks: 404 everywhere while the endpoint is disabled."""
+    body = '{ body(channel: "durov") { channel { username } meta { offset { before } } } }'
+    post = '{ post(channel: "stranaua", id: 252483) { id content { text { string } } } }'
+    return [
+        Scenario("graphql_body", "POST", "/graphql", {200 if enabled else 404}, {"query": body}),
+        Scenario(
+            "graphql_batch",
+            "POST",
+            "/graphql",
+            {200 if enabled else 404},
+            payload=[{"query": body}, {"query": post}],
+        ),
+        Scenario(
+            "graphql_batch_too_large",
+            "POST",
+            "/graphql",
+            {400 if enabled else 404},
+            payload=[{"query": "{ __typename }"}] * 11,
+        ),
+        Scenario("graphql_no_query", "POST", "/graphql", {400 if enabled else 404}, payload={}),
+    ]
+
+
 def build_scenarios(
     feed_enabled: bool, previews_enabled: bool, exploratory_channels: list[str]
 ) -> list[Scenario]:
@@ -287,6 +323,7 @@ def main() -> int:
         detected_previews_enabled,
         exploratory_channels,
     )
+    scenarios.extend(graphql_scenarios(detect_graphql(base_url, args.timeout)))
     results = [call(base_url, scenario, args.timeout) for scenario in scenarios]
     print_results(results)
 

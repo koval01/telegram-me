@@ -63,6 +63,18 @@ class Settings(BaseSettings):
     enable_rate_limit: bool = False
     rate_limit_rpm: PositiveInt = 120
 
+    # GraphQL (`/graphql`); limits apply to every operation of a request
+    enable_graphql: bool = True
+    graphql_max_depth: PositiveInt = 10
+    """Deepest allowed field nesting (introspection fields excepted)."""
+    graphql_max_complexity: PositiveInt = 1500
+    """Highest allowed operation cost: 1 per field plus 10 per channel fetched."""
+    graphql_max_aliases: PositiveInt = 15
+    graphql_max_tokens: PositiveInt = 2000
+    """Longest accepted query document, in lexer tokens."""
+    graphql_max_batch_size: PositiveInt = 10
+    """Most operations accepted in one batched (JSON array) request."""
+
     # Performance
     cache_mode: CacheMode = "normal"
     parser_mode: ParserMode = "full"

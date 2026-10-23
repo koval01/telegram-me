@@ -1,0 +1,82 @@
+{
+  "data": {
+    "post": {
+      "content": {
+        "inline": null,
+        "media": [
+          {
+            "available": null,
+            "duration": {
+              "formatted": "0:31",
+              "raw": 31
+            },
+            "thumb": null,
+            "type": "voice",
+            "url": "https://cdn4.telesco.pe/file/410aef4baa.ogg?token=BW4iYOzeljvYgBoD2VmmW7WQsUuSek-PMKaYNiACf-rL3hsk7YrSF8pwwz5KSOxus57PaBc9BDthKVwJYCa9BF6lGIPHddvzSBTZmWOrPiwaCrh-CtDYwgMMC7d5cIs98dsEL1ATK2UCJUtlw09iNlpVgVghqTsrPwrw0-jv8qZFw6u7AAfMQewt3Ct-43aLMLZq3bW3KMBzw2WsgJc-WdeibhX6A25jZLYNkr5Dj3z5BvSx4To7VrEXGEaydeGhGoNJA8PGT1UT7YW0UROqN9_q59gK_bssa7SzD1aVlDynR7Djwye2GRnVhEVWcVd22ZCvjK9OiLZnH4yv-T5qKg",
+            "waves": "20,1,14,31,31,24,28,17,13,25,13,6,0,13,20,2,1,21,31,19,17,29,27,28,19,31,4,22,18,26,18,11,9,17,1,17,0,16,7,24,31,31,31,31,31,27,31,25,3,31,30,4,31,31,24,7,3,1,22,0,0,0,7,24,28,2,1,16,18,3,23,24,28,0,1,23,1,16,8,7,3,28,28,15,0,0,8,4,28,2,1,16,18,12,23,24,20,0,0,16"
+          }
+        ],
+        "poll": null,
+        "preview_link": null,
+        "reacts": [
+          {
+            "count": "20",
+            "emoji": "⭐",
+            "emoji_id": null,
+            "emoji_image": null,
+            "type": "telegram_stars"
+          },
+          {
+            "count": "1.97K",
+            "emoji": "😭",
+            "emoji_id": null,
+            "emoji_image": "https://telegram.org/img/emoji/40/F09F98AD.png",
+            "type": "emoji"
+          },
+          {
+            "count": "414",
+            "emoji": "❤",
+            "emoji_id": null,
+            "emoji_image": "https://telegram.org/img/emoji/40/E29DA4.png",
+            "type": "emoji"
+          },
+          {
+            "count": "221",
+            "emoji": "😱",
+            "emoji_id": null,
+            "emoji_image": "https://telegram.org/img/emoji/40/F09F98B1.png",
+            "type": "emoji"
+          },
+          {
+            "count": "72",
+            "emoji": "💩",
+            "emoji_id": null,
+            "emoji_image": "https://telegram.org/img/emoji/40/F09F92A9.png",
+            "type": "emoji"
+          },
+          {
+            "count": "53",
+            "emoji": "🎉",
+            "emoji_id": null,
+            "emoji_image": "https://telegram.org/img/emoji/40/F09F8E89.png",
+            "type": "emoji"
+          }
+        ],
+        "reply": null,
+        "text": null
+      },
+      "footer": {
+        "author": null,
+        "date": {
+          "string": "2026-08-02T18:00:31+00:00",
+          "unix": 1785693631
+        },
+        "edited": false,
+        "views": "199K"
+      },
+      "forwarded": null,
+      "id": 6364,
+      "view": "eyJjIjotMTI1MDEyMjM5MCwicCI6NjM2NCwidCI6MTc5MjcxNzE2MSwiaCI6IjE3M2E2ZThlMTZmODNlYTE4ZiJ9"
+    }
+  }
+}
