@@ -6,7 +6,7 @@ site_url = "https://koval01.github.io/telegram-me/"
 repo_url = "https://github.com/koval01/telegram-me"
 repo_name = "koval01/telegram-me"
 edit_uri = "edit/main/docs/"
-copyright = "Copyright &copy; 2024–2026 Koval Yaroslav · GPL-3.0 License"
+copyright = "Copyright &copy; 2024–2026 Koval Yaroslav · Apache-2.0 License"
 
 nav = [
   { "Home" = "index.md" },

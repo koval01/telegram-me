@@ -34,7 +34,7 @@ RUN --mount=type=cache,target=/root/.cache/uv \
     --mount=type=bind,source=rust/telegram-me-native/pyproject.toml,target=rust/telegram-me-native/pyproject.toml \
     uv sync --locked --no-dev --no-install-workspace
 
-COPY pyproject.toml uv.lock README.md LICENSE ./
+COPY pyproject.toml uv.lock README.md LICENSE NOTICE ./
 COPY rust ./rust
 RUN --mount=type=cache,target=/root/.cache/uv \
     --mount=type=cache,target=/usr/local/cargo/registry \
@@ -55,7 +55,7 @@ ARG REVISION=unknown
 LABEL org.opencontainers.image.title="telegram-me" \
       org.opencontainers.image.description="REST API for public Telegram channels" \
       org.opencontainers.image.source="https://github.com/koval01/telegram-me" \
-      org.opencontainers.image.licenses="GPL-3.0-only" \
+      org.opencontainers.image.licenses="Apache-2.0" \
       org.opencontainers.image.version="${VERSION}" \
       org.opencontainers.image.revision="${REVISION}"
 

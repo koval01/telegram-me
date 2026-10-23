@@ -99,3 +99,13 @@ curl https://telegram-me-gliv.onrender.com/v1/body/durov
   workers and servers; an in-process cache otherwise.
 
 See [Performance](internals/performance.md) for measured numbers.
+
+## License and data
+
+telegram-me is licensed under
+[Apache-2.0](https://github.com/koval01/telegram-me/blob/main/LICENSE). It is an
+independent project, not affiliated with Telegram. It reads public t.me pages:
+the posts, media and channel details it returns belong to their authors and
+are not covered by the license. If you run an instance, you are responsible
+for following Telegram's terms of service and the laws that apply to you,
+including data protection law.

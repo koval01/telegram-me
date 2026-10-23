@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/koval01/telegram-me/actions/workflows/ci.yml/badge.svg)](https://github.com/koval01/telegram-me/actions/workflows/ci.yml)
 [![Docs](https://img.shields.io/badge/docs-koval01.github.io-blue)](https://koval01.github.io/telegram-me/)
-[![License: GPL-3.0](https://img.shields.io/badge/license-GPL--3.0-blue)](LICENSE)
+[![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue)](LICENSE)
 
 REST API for public Telegram channels. It turns `t.me/s/<channel>` into typed
 JSON — channel profiles, posts with text entities, media, polls, reactions,
@@ -47,4 +47,7 @@ Requires [uv](https://docs.astral.sh/uv/). See the
 
 ## License
 
-[GPL-3.0](LICENSE)
+[Apache-2.0](LICENSE). telegram-me is not affiliated with Telegram. It reads
+public t.me pages; the content it returns belongs to its authors, and whoever
+runs it is responsible for following Telegram's terms and applicable law. See
+[NOTICE](NOTICE).

@@ -25,4 +25,4 @@ Bugs and ideas: [open an issue](https://github.com/koval01/telegram-me/issues).
 Security problems: see [SECURITY.md](SECURITY.md).
 
 By contributing you agree that your contributions are licensed under the
-project's [GPL-3.0 License](LICENSE).
+project's [Apache-2.0 License](LICENSE).

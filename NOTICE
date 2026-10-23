@@ -1,0 +1,14 @@
+telegram-me
+Copyright 2024-2026 Koval Yaroslav
+
+This product is licensed under the Apache License, Version 2.0 (see LICENSE).
+
+telegram-me is an independent project. It is not affiliated with, endorsed
+by or sponsored by Telegram. "Telegram" is a trademark of its owner and is
+used here only to describe what the software reads.
+
+The software reads publicly available pages of t.me. The content it returns
+(posts, media, channel names and descriptions) belongs to its respective
+authors and is not covered by this license. Whoever runs the software is
+responsible for complying with Telegram's terms of service and with the laws
+that apply to them, including data protection law.

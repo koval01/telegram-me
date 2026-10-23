@@ -22,6 +22,9 @@ working; see the upgrade guide for the few behaviour changes.
   longer uses `start.sh`. The `Server` header is now `granian`.
 - `REDIS_URL` has no default; without it an in-process cache is used.
 - Cache keys moved to the `tme:v2:` prefix.
+- The license is now Apache-2.0 (was GPL-3.0). `NOTICE` states that the
+  project is not affiliated with Telegram and that returned content belongs to
+  its authors.
 - The feed is ranked natively in Rust (`telegram-me-native`, PyO3):
   engagement relative to each channel, freshness half-life, duplicate stories
   collapsed across channels, topics inferred from the texts and diversity
