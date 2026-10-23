@@ -170,3 +170,13 @@ async def test_refresher_refreshes_popular_channels_when_due(durov_html: str) ->
     assert await refresher.tick() == 0  # not due again yet
     assert fetcher.paths == ["/s/durov"]
     assert await channels.cached_page("durov") is not None
+
+
+async def test_rendered_body_cache_is_identical_to_fresh_render(durov_html: str) -> None:
+    fetcher = PageFetcher(durov_html)
+    service = _service(fetcher, make_settings(cache_mode="normal"))
+    first = await service.body_json("durov")
+    cached = await service.body_json("durov")
+    assert cached == first
+    assert cached == (await service.body("durov")).model_dump_json()
+    assert fetcher.paths == ["/s/durov"]

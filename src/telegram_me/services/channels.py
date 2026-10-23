@@ -31,6 +31,11 @@ logger = logging.getLogger(__name__)
 # channels that do not exist.
 _MISSING_PREVIEW_TTL = 60
 _MISSING = "null"
+_BODY_POSTS = ("content", "posts")
+
+
+def _rendered(page_key: str) -> str:
+    return f"json:body:{page_key}"
 
 
 class ChannelService:
@@ -43,6 +48,7 @@ class ChannelService:
         self._simplified = settings.parser_mode == "simplified"
         self._pages: SingleFlight[JSONDict] = SingleFlight()
         self._previews: SingleFlight[JSONDict | None] = SingleFlight()
+        self._rendered: SingleFlight[str] = SingleFlight()
 
     # Raw (parsed, unvalidated) pages -------------------------------------------------
 
@@ -75,11 +81,21 @@ class ChannelService:
     async def _load_page(self, key: str, channel: str, position: int | None) -> JSONDict:
         html = await self._client.channel_page(channel, position)
         data = _parse(parse_channel_page, html, simplified=self._simplified)
+        page_ttl = self._settings.page_cache_ttl
         # Latest pages stay long enough for the feed's stale-while-revalidate window.
-        ttl = self._settings.page_cache_ttl
+        raw_ttl = page_ttl
         if position is None and self._settings.enable_feed:
-            ttl = max(ttl, self._settings.feed_stale_ttl)
-        await self._cache.set(key, encode(data), ttl)
+            raw_ttl = max(raw_ttl, self._settings.feed_stale_ttl)
+        await self._cache.set(key, encode(data), raw_ttl)
+        if page_ttl:
+            # Pre-render the /v1/body response: cache hits are then served as
+            # bytes without decoding, validating or serializing the page again.
+            try:
+                rendered = validate_with_posts(ChannelBody, data, _BODY_POSTS).model_dump_json()
+            except TelegramParseError:
+                logger.warning("Channel page of %s does not match the schema", channel)
+            else:
+                await self._cache.set(_rendered(key), rendered, page_ttl)
         return data
 
     # Endpoints -----------------------------------------------------------------------
@@ -87,7 +103,16 @@ class ChannelService:
     async def body(self, channel: str, position: int | None = None) -> ChannelBody:
         """Channel profile, posts and pagination."""
         data = await self.page(channel, position)
-        return validate_with_posts(ChannelBody, data, ("content", "posts"))
+        return validate_with_posts(ChannelBody, data, _BODY_POSTS)
+
+    async def body_json(self, channel: str, position: int | None = None) -> str:
+        """`body()` rendered as JSON, served from the response cache when fresh."""
+        ttl = self._settings.page_cache_ttl
+        if ttl:
+            entry = await self._cache.get(_rendered(self.page_key(channel, position)))
+            if entry is not None and entry.age < ttl:
+                return entry.value
+        return (await self.body(channel, position)).model_dump_json()
 
     async def post(self, channel: str, identifier: int) -> Post:
         """A single post."""
@@ -102,28 +127,28 @@ class ChannelService:
         msg = "Requested post was not found"
         raise TelegramNotFoundError(msg)
 
-    async def more(
+    async def more_json(
         self, channel: str, position: int, direction: Literal["before", "after"]
-    ) -> More:
-        """Posts before or after `position` (the anchor post itself is excluded)."""
+    ) -> str:
+        """Posts before or after `position` (anchor excluded), rendered as JSON."""
         key = f"more:{self._settings.parser_mode}:{channel.lower()}:{direction}:{position}"
         ttl = self._settings.page_cache_ttl
-        if ttl and (entry := await self._cache.get(key)) and entry.age < ttl:
-            data = decode(entry.value)
-        else:
-            data = await self._pages.run(
-                key, lambda: self._load_more(key, channel, position, direction)
-            )
-        data = {**data, "posts": [p for p in data["posts"] if p.get("id") != position]}
-        return validate_with_posts(More, data, ("posts",))
+        entry = await self._cache.get(key) if ttl else None
+        if entry is not None and entry.age < ttl:
+            return entry.value
+        return await self._rendered.run(
+            key, lambda: self._load_more(key, channel, position, direction)
+        )
 
     async def _load_more(
         self, key: str, channel: str, position: int, direction: Literal["before", "after"]
-    ) -> JSONDict:
+    ) -> str:
         html = await self._client.more_page(channel, position, direction)
         data = _parse(parse_more_page, html, simplified=self._simplified)
-        await self._cache.set(key, encode(data), self._settings.page_cache_ttl)
-        return data
+        data = {**data, "posts": [p for p in data["posts"] if p.get("id") != position]}
+        rendered = validate_with_posts(More, data, ("posts",)).model_dump_json()
+        await self._cache.set(key, rendered, self._settings.page_cache_ttl)
+        return rendered
 
     async def preview(self, channel: str) -> Preview:
         """Channel preview from its landing page (cached for PREVIEW_CACHE_TTL)."""

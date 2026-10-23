@@ -48,6 +48,10 @@ class Settings(BaseSettings):
     forwarded_allow_ips: str = "127.0.0.1"
     access_log: bool = False
     graceful_timeout: PositiveInt = 10
+    workers_max_rss_mb: PositiveInt | None = None
+    """Recycle a worker whose memory exceeds this many MiB."""
+    metrics_port: PositiveInt | None = None
+    """Expose granian's Prometheus metrics on this port."""
 
     # API surface
     disable_docs: bool = False

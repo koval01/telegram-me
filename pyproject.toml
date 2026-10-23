@@ -20,10 +20,11 @@ dependencies = [
     "pyreqwest>=0.15.0",
     "redis[hiredis]>=8.1.0",
     "selectolax>=1.0.2",
-    "uvicorn>=0.54.0",
-    "httptools>=0.9.0",
-    "uvloop>=0.23.0; sys_platform != 'win32'",
+    "granian[pname,uvloop]>=2.8.5",
 ]
+
+[project.scripts]
+telegram-me = "telegram_me.__main__:main"
 
 [project.urls]
 Repository = "https://github.com/koval01/telegram-me"
@@ -32,6 +33,7 @@ Changelog = "https://github.com/koval01/telegram-me/blob/main/CHANGELOG.md"
 [dependency-groups]
 dev = [
     "fakeredis[lua]>=2.40.0",
+    "granian[reload]>=2.8.5",
     "httpx2>=2.16.0",
     "mypy>=2.4.0",
     "pre-commit>=4.7.0",

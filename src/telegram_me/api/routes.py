@@ -33,10 +33,14 @@ _ERRORS: dict[int | str, dict[str, Any]] = {
 }
 
 
-def _json(model: ChannelBody | More | Post | Preview | PreviewsModel | FeedResponse) -> Response:
+def _json(model: Post | Preview | PreviewsModel | FeedResponse) -> Response:
     # Models are validated once and serialized by pydantic-core directly;
     # returning a Response skips FastAPI's second validation pass.
     return Response(model.model_dump_json(), media_type="application/json")
+
+
+def _raw_json(content: str) -> Response:
+    return Response(content, media_type="application/json")
 
 
 service = APIRouter(tags=["Service"])
@@ -60,7 +64,7 @@ async def body(
     channel: ChannelName, service: Channels, position: OptionalPosition = None
 ) -> Response:
     """Channel profile, its latest posts (or posts around `position`) and pagination."""
-    return _json(await service.body(channel, position))
+    return _raw_json(await service.body_json(channel, position))
 
 
 @channels.get(
@@ -73,7 +77,7 @@ async def more(
     channel: ChannelName, direction: Direction, position: Position, service: Channels
 ) -> Response:
     """Posts newer or older than `position`; use `meta.offset` to keep paginating."""
-    return _json(await service.more(channel, position, direction))
+    return _raw_json(await service.more_json(channel, position, direction))
 
 
 @channels.get(
