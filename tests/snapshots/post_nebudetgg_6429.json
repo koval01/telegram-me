@@ -1,0 +1,83 @@
+{
+  "body": {
+    "content": {
+      "inline": null,
+      "media": null,
+      "poll": {
+        "options": [
+          {
+            "name": "Майнкрафт хоррор 2.0",
+            "percent": 74
+          },
+          {
+            "name": "Гта 5 дальше (я подтянул там нейронку)",
+            "percent": 32
+          }
+        ],
+        "question": "Что бы вы посмотрели?",
+        "type": "Anonymous Poll",
+        "votes": "42.6K"
+      },
+      "preview_link": null,
+      "reacts": [
+        {
+          "count": "20",
+          "emoji": "⭐",
+          "emoji_id": null,
+          "emoji_image": null,
+          "type": "telegram_stars"
+        },
+        {
+          "count": "1.71K",
+          "emoji": "❤",
+          "emoji_id": null,
+          "emoji_image": "https://telegram.org/img/emoji/40/E29DA4.png",
+          "type": "emoji"
+        },
+        {
+          "count": "199",
+          "emoji": "🤡",
+          "emoji_id": null,
+          "emoji_image": "https://telegram.org/img/emoji/40/F09FA4A1.png",
+          "type": "emoji"
+        },
+        {
+          "count": "116",
+          "emoji": "👍",
+          "emoji_id": null,
+          "emoji_image": "https://telegram.org/img/emoji/40/F09F918D.png",
+          "type": "emoji"
+        },
+        {
+          "count": "55",
+          "emoji": "🖕",
+          "emoji_id": null,
+          "emoji_image": "https://telegram.org/img/emoji/40/F09F9695.png",
+          "type": "emoji"
+        },
+        {
+          "count": "48",
+          "emoji": "🎉",
+          "emoji_id": null,
+          "emoji_image": "https://telegram.org/img/emoji/40/F09F8E89.png",
+          "type": "emoji"
+        }
+      ],
+      "reply": null,
+      "text": null
+    },
+    "footer": {
+      "author": null,
+      "date": {
+        "string": "2026-09-13T14:50:58+00:00",
+        "unix": 1789311058
+      },
+      "edited": false,
+      "views": "166K"
+    },
+    "forwarded": null,
+    "id": 6429,
+    "view": "eyJjIjotMTI1MDEyMjM5MCwicCI6NjQyOSwidCI6MTc5MjcxNzE2MCwiaCI6IjcyNDk5ZmNkZGVhNTYwMWRkOSJ9"
+  },
+  "status": 200
+}

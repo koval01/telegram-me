@@ -131,11 +131,51 @@
     },
     {
       "method": "GET",
+      "path": "/s/nebudetgg/6191",
+      "params": {},
+      "status": 200,
+      "content_type": "text/html",
+      "file": "post_nebudetgg_6191.txt.gz"
+    },
+    {
+      "method": "GET",
       "path": "/s/nebudetgg/6209",
       "params": {},
       "status": 200,
       "content_type": "text/html",
       "file": "post_nebudetgg_6209.txt.gz"
+    },
+    {
+      "method": "GET",
+      "path": "/s/nebudetgg/6222",
+      "params": {},
+      "status": 200,
+      "content_type": "text/html",
+      "file": "post_nebudetgg_6222.txt.gz"
+    },
+    {
+      "method": "GET",
+      "path": "/s/nebudetgg/6364",
+      "params": {},
+      "status": 200,
+      "content_type": "text/html",
+      "file": "post_nebudetgg_6364.txt.gz"
+    },
+    {
+      "method": "GET",
+      "path": "/s/nebudetgg/6375",
+      "params": {},
+      "status": 200,
+      "content_type": "text/html",
+      "file": "post_nebudetgg_6375.txt.gz"
+    },
+    {
+      "method": "GET",
+      "path": "/s/nebudetgg/6429",
+      "params": {},
+      "status": 200,
+      "content_type": "text/html",
+      "file": "post_nebudetgg_6429.txt.gz"
     },
     {
       "method": "GET",
@@ -287,6 +327,13 @@
     }
   ],
   "extra_posts": {
-    "nebudetgg": 6209
+    "nebudetgg": [
+      6209,
+      6429,
+      6191,
+      6375,
+      6222,
+      6364
+    ]
   }
 }

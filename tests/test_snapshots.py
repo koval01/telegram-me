@@ -92,8 +92,9 @@ def test_feed(make_client: ClientFactory, snapshot: Snapshot, parser_mode: str) 
 
 
 def test_extra_posts(client: TestClient, snapshot: Snapshot, manifest: dict[str, Any]) -> None:
-    for channel, post_id in manifest["extra_posts"].items():
-        response = client.get(f"/v1/post/{channel}/{post_id}")
-        snapshot(f"post_{channel}_{post_id}", _result(response))
-        response = client.get(f"/v1/body/{channel}", params={"position": post_id})
-        snapshot(f"body_{channel}_{post_id}", _result(response))
+    for channel, post_ids in manifest["extra_posts"].items():
+        for post_id in post_ids:
+            response = client.get(f"/v1/post/{channel}/{post_id}")
+            snapshot(f"post_{channel}_{post_id}", _result(response))
+            response = client.get(f"/v1/body/{channel}", params={"position": post_id})
+            snapshot(f"body_{channel}_{post_id}", _result(response))

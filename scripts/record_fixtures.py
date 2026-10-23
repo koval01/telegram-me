@@ -28,7 +28,10 @@ MANIFEST_PATH = FIXTURES_DIR / "manifest.json"
 BODY_CHANNELS = ["durov", "telegram", "stranaua", "tginfo", "nebudetafk", "nebudetgg"]
 PREVIEW_CHANNELS = ["durov", "telegram", "stranaua"]
 # Specific pages with rare content: channel -> post id.
-EXTRA_POSTS = {"nebudetgg": 6209}  # inline keyboard button
+# One post of each rare kind is enough; they all live in @nebudetgg.
+EXTRA_POSTS = {
+    "nebudetgg": [6209, 6429, 6191, 6375, 6222, 6364],  # button, poll, sticker, reply, link, voice
+}
 MISSING_CHANNEL = "zzzzzznotexistingchannelzzzz"
 _FIRST_POST = re.compile(r'data-post="[^"/]+/(\d+)"')
 
@@ -100,10 +103,13 @@ async def main(only: list[str]) -> None:
     try:
         for channel in only or BODY_CHANNELS:
             await recorder.channel(channel)
-        for channel, post_id in EXTRA_POSTS.items():
+        for channel, post_ids in EXTRA_POSTS.items():
             if not only or channel in only:
-                await recorder.record(f"post_{channel}_{post_id}", "GET", f"/s/{channel}/{post_id}")
-                manifest["extra_posts"][channel] = post_id
+                for post_id in post_ids:
+                    await recorder.record(
+                        f"post_{channel}_{post_id}", "GET", f"/s/{channel}/{post_id}"
+                    )
+                manifest["extra_posts"][channel] = post_ids
         if not only:
             for channel in PREVIEW_CHANNELS:
                 await recorder.record(f"preview_{channel}", "GET", f"/{channel}")
