@@ -67,6 +67,7 @@ rare post type, add its ID to `EXTRA_POSTS` in `scripts/record_fixtures.py`.
 | `test_graphql_limits.py` | GraphQL depth, cost, alias, token and batch limits |
 | `test_api.py` | Validation, feature flags, headers, rate limiting, CORS, docs |
 | `test_runtime.py` | Embedded refresher lifecycle, JSON logging |
+| `test_docs_config.py` | Documentation translations: every page present, configuration in sync with English |
 
 Tests are async-aware (`pytest-asyncio` in auto mode) and warnings are
 errors.

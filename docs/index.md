@@ -54,11 +54,11 @@ channels are reachable, exactly as a browser sees them.
 
 ## Try it
 
-A public demo runs at **<https://telegram-me-gliv.onrender.com>** (interactive
+A public demo runs at **<https://tme.koval-dev.org>** (interactive
 Swagger UI at the root):
 
 ```bash
-curl https://telegram-me-gliv.onrender.com/v1/body/durov
+curl https://tme.koval-dev.org/v1/body/durov
 ```
 
 ```json

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{#-
+  Language switcher: keep the reader on the same page and section.
+
+  Every language is a separate build (English at the site root, the others
+  under /es/ and /ru/) with the same page paths. The theme's own switcher
+  cannot tell the root language from the others, and instant navigation does
+  not re-render the header, so the links are rewritten here on every page.
+-#}
+{% block scripts %}
+  {{ super() }}
+  {% if config.extra.alternate %}
+    <script>
+      (() => {
+        const config = JSON.parse(document.getElementById("__config").textContent)
+        const base = new URL(config.base + "/", location.href).pathname
+        const links = [...document.querySelectorAll(".md-select__link[hreflang]")]
+        const roots = new Map(links.map(link => [link, new URL(link.getAttribute("href"), location.href)]))
+        document$.subscribe(() => {
+          const page = location.pathname.startsWith(base) ? location.pathname.slice(base.length) : ""
+          for (const [link, root] of roots) link.href = new URL(page, root).href
+        })
+        document.addEventListener("click", event => {
+          const link = event.target instanceof Element && event.target.closest(".md-select__link[hreflang]")
+          if (link) link.hash = location.hash
+        }, true)
+      })()
+    </script>
+  {% endif %}
+{% endblock %}

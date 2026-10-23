@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := help
 .PHONY: help install dev test snapshots lint format typecheck check rust native fixtures smoke \
-        docker up down logs docs docs-serve
+        docker up down logs docs docs-serve docs-preview
 
 help: ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-12s\033[0m %s\n", $$1, $$2}'
@@ -58,8 +58,14 @@ down: ## Stop the compose stack
 logs: ## Follow compose logs
 	docker compose logs -f
 
-docs: ## Build the documentation site into site/
+docs: ## Build the documentation into site/ (English), site/es/ and site/ru/
 	uv run --group docs zensical build --clean
+	uv run --group docs zensical build --clean -f zensical.es.toml
+	uv run --group docs zensical build --clean -f zensical.ru.toml
 
-docs-serve: ## Preview the documentation on :8001
-	uv run --group docs zensical serve --dev-addr 127.0.0.1:8001
+docs-serve: ## Live preview of one language on :8001 (DOCS_LANG=en|es|ru)
+	uv run --group docs zensical serve --dev-addr 127.0.0.1:8001 \
+		$(if $(filter-out en,$(DOCS_LANG)),-f zensical.$(DOCS_LANG).toml)
+
+docs-preview: docs ## Serve the built site with all languages on :8001
+	uv run --no-project python -m http.server 8001 --bind 127.0.0.1 --directory site
