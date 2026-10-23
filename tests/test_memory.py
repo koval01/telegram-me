@@ -2,7 +2,7 @@
 
 Requests go straight to the ASGI app over the recorded fixtures (see
 `tests/workload.py`). Python allocations are checked on every platform;
-resident memory, which also covers native allocations (lexbor trees, the
+resident memory, which also covers native allocations (the Rust parser and ranker, the
 compression and serialization libraries), where /proc is available (Linux,
 so in CI).
 Deselect with `-m "not memory"` for a quicker local run.
@@ -65,7 +65,7 @@ async def _growth(app: FastAPI, warmup: int, requests: int, channels: int) -> Gr
 
 async def test_parsing_every_request_does_not_leak() -> None:
     # Without a page cache every request fetches and parses a page, so a leak
-    # in the parser (lexbor trees), validation or rendering adds up quickly.
+    # in the native parser, validation or rendering adds up quickly.
     async with running_app(cache_mode="off") as app:
         growth = await _growth(app, warmup=60, requests=300, channels=3)
     growth.check()

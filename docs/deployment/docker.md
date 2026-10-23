@@ -51,18 +51,21 @@ docker run -d ... ghcr.io/koval01/telegram-me worker         # feed refresher on
 
 ## Resources
 
-Measured on 2.0.0 (arm64, after warming five channels and a feed request):
+Measured on 2.0.0 (arm64), see [Performance](../internals/performance.md#memory):
 
-| `WEB_CONCURRENCY` | Memory |
-|---|---|
-| 1 | ~140 MB (server process + one worker) |
-| 2 | ~210 MB |
+| `WEB_CONCURRENCY` | Idle | After light traffic |
+|---|---|---|
+| 1 | ~110 MB (server process + one worker) | ~145 MB |
+| 2 | ~180 MB | ~225 MB |
 
-Plan for roughly 125 MB plus 70 MB per additional worker, plus up to
-`MEMORY_CACHE_MAX_MB` per worker when running without Redis, or set
-[`WORKERS_MAX_RSS_MB`](../configuration.md#workers_max_rss_mb) as a safety
-net. `WEB_CONCURRENCY` defaults to the CPUs available to the container (max 4);
-set it explicitly when you limit CPUs.
+Plan for roughly 40 MB for the server process and 70–110 MB per worker, plus
+up to `MEMORY_CACHE_MAX_MB` per worker when running without Redis (a worker
+under heavy traffic stays around 170 MB with the default 64). Freed memory is
+returned to the system every
+[`MEMORY_TRIM_INTERVAL`](../configuration.md#memory_trim_interval) seconds.
+[`WORKERS_MAX_RSS_MB`](../configuration.md#workers_max_rss_mb) adds a safety
+net. `WEB_CONCURRENCY` defaults to the CPUs available to the container (max
+4); set it explicitly when you limit CPUs.
 
 ## Building
 

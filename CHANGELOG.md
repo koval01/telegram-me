@@ -6,15 +6,6 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
-### Changed
-
-- Lower memory use: the in-memory cache stores compressed UTF-8 instead of
-  `str` and its `MEMORY_CACHE_MAX_MB` limit now counts real memory (a worker
-  under heavy traffic: ~435 → ~215 MiB); the granian main process no longer
-  imports the application (−25 MiB); workers return freed heap memory to the
-  OS every `MEMORY_TRIM_INTERVAL` seconds (new, default 10); FastAPI
-  dependencies no longer run in a thread pool.
-
 ## [2.0.0] - unreleased
 
 A rewrite of the internals with the same `/v1` API. Existing clients keep
@@ -52,13 +43,13 @@ working; see the upgrade guide for the few behaviour changes.
 - Cache of rendered responses for `/v1/body` and `/v1/more`; coalescing of
   identical concurrent requests to t.me; a global cap on concurrent upstream
   requests (`TELEGRAM_MAX_CONCURRENCY`).
-- Circuit breaker and short timeouts for Redis (`REDIS_TIMEOUT`); size-bounded
-  in-memory cache (`MEMORY_CACHE_MAX_MB`); 60 s cache of unknown channels in
-  previews.
+- Circuit breaker and short timeouts for Redis (`REDIS_TIMEOUT`); compressed
+  in-memory cache bounded by real memory (`MEMORY_CACHE_MAX_MB`); 60 s cache of
+  unknown channels in previews.
 - New settings: `HOST`, `WEB_CONCURRENCY`, `FORWARDED_ALLOW_IPS`, `ACCESS_LOG`,
   `GRACEFUL_TIMEOUT`, `WORKERS_MAX_RSS_MB`, `METRICS_PORT` (Prometheus),
   `CORS_ALLOW_ORIGINS`, `TELEGRAM_TIMEOUT`, `PREVIEW_CACHE_TTL`, the `FEED_*`
-  options, `LOG_LEVEL`, `LOG_FORMAT` (JSON logs).
+  options, `MEMORY_TRIM_INTERVAL`, `LOG_LEVEL`, `LOG_FORMAT` (JSON logs).
 - `compose.yaml` with a bundled Valkey cache, an optional worker and
   `standard` / `full` / `minimal` presets.
 - Rolling multi-server deployments with automatic rollback, migration from the
@@ -94,6 +85,12 @@ working; see the upgrade guide for the few behaviour changes.
   regex) with the GIL released, instead of Python over selectolax. The output
   is byte-for-byte identical to the Python parser; it is 1.3–2× faster per page
   and runs in parallel under load.
+- Memory: cache values are compressed UTF-8 bytes counted at their real size
+  (a 64 MB cache used to grow to ~260 MiB), workers return freed heap memory
+  to the OS (`malloc_trim`), and the server process no longer imports the
+  application. One worker: ~110 MiB idle instead of ~150; under heavy traffic
+  ~230 instead of ~460 MiB with the memory cache and ~155 instead of ~300 MiB
+  with Redis.
 - Cached `/v1/body` responses take about 1 ms; a cached 6-channel feed about
   6 ms (82 ms for 5 channels in 1.x).
 

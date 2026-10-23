@@ -245,7 +245,8 @@ seconds regardless.
 Memory limit of the in-process cache (per worker) when Redis is not used:
 entries are stored compressed and the limit counts what they really occupy
 (value, key and bookkeeping). Least recently used entries are evicted first.
-With the default of 64, a worker under heavy traffic stays around 170 MiB.
+With the default of 64, a worker under heavy traffic stays around 170 MiB
+(the whole container around 230 MiB).
 
 ## Feed
 

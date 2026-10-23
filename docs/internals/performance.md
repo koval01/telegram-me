@@ -66,7 +66,86 @@ Pre-rendering cached responses raised the cached `/v1/body` throughput from
 |---|---|---|
 | `docker stop` | 10 s, then `SIGKILL` (uvicorn was not PID 1) | 0.3 s, exit code 0 |
 | Redis unreachable, `/v1/preview` | 10 s per request | one 0.5 s timeout, then uncached |
-| Container memory, 1 worker | — | ~140 MB |
+| Container memory, 1 worker, idle | — | ~110 MB (see [Memory](#memory)) |
+
+## Memory
+
+Measured on arm64 with the Docker image (`docker stats`, one worker unless
+noted), before and after the memory work that went into 2.0. "Light" is a few
+hundred live requests over six channels; "heavy" is 2 × 20 000 requests from 8
+concurrent clients over 1 200 distinct channels, with t.me replaced by the
+recorded pages.
+
+| Scenario | Before | After |
+|---|---|---|
+| Idle | 146–153 MiB | 110 MiB |
+| Light traffic | 185 MiB | 143 MiB |
+| `WEB_CONCURRENCY=2`, idle / light traffic | 217 / 278 MiB | 180 / 224 MiB |
+| Heavy traffic, memory cache (64 MB limit) | 458 MiB | 229–253 MiB |
+| Heavy traffic, Redis, during / 15 s after | 296–302 / 299 MiB | 190–263 / 155 MiB |
+| granian main process (private memory) | 65 MiB | 29 MiB |
+
+What changed and why:
+
+- **The memory cache counted characters, not bytes.** Values were Python
+  `str`; one emoji makes CPython store a whole string with four bytes per
+  character, so a rendered page of 89 KiB of UTF-8 took 353 KiB, and the
+  64 MB limit let a worker hold ~260 MiB of cache. Values are now UTF-8 bytes,
+  compressed with zstd level 1 (zlib on Python 3.13), and the limit counts the
+  compressed value, the key and the bookkeeping (~230 bytes per entry, measured):
+
+    | Page | As `str` | UTF-8 | In the cache now |
+    |---|---|---|---|
+    | @durov, rendered | 353 KiB | 89 KiB | 21 KiB |
+    | @tginfo, rendered | 700 KiB | 233 KiB | 43 KiB |
+    | @stranaua, rendered | 93 KiB | 59 KiB | 13 KiB |
+
+    Decompressing a page (25–120 µs) is faster than encoding the same `str`
+    to UTF-8 on every hit was (27–306 µs), and Redis replies are read as
+    bytes as well.
+
+- **glibc kept freed memory.** Responses are built from large short-lived
+  objects, and after a burst glibc's heap stayed at its peak: with Redis, a
+  worker held 97 MiB of heap of which 15 MiB were in use. Workers now call
+  `malloc_trim(0)` every [`MEMORY_TRIM_INTERVAL`](../configuration.md#memory_trim_interval)
+  seconds (about 1 ms per call), which returned ~80 MiB in that case.
+- **The granian main process imported the application** (FastAPI, GraphQL,
+  Redis, the HTTP client, the native extension) only to supervise workers. It
+  now imports it in the worker factory.
+- **FastAPI ran the dependencies in a thread pool** (plain `def`), which kept
+  an extra thread — with its own malloc arena — in every worker. They are
+  `async def` now.
+
+Evaluated and not adopted (heavy traffic, measured while the parser was still
+Python; compare the rows with each other):
+
+| Option | Heavy traffic, memory cache | Verdict |
+|---|---|---|
+| glibc (default) | 205 MiB | kept |
+| `MALLOC_ARENA_MAX=2` | 202 MiB | within noise |
+| glibc with fixed `MALLOC_MMAP_THRESHOLD_` / `MALLOC_TRIM_THRESHOLD_` | 211 MiB | within noise; with Redis it recovered only half of what `malloc_trim` does |
+| jemalloc (`LD_PRELOAD`), default / 1 s decay / 2 arenas | 212 / 206 / 200 MiB, +5–17 MiB idle | no gain |
+| `PYTHONMALLOC=malloc` + jemalloc | 200–227 MiB, +15 MiB idle | no gain |
+| mimalloc | 256 MiB | worse |
+| tcmalloc | 252 MiB | worse |
+| Fork workers from a preloaded main process + `gc.freeze()` (2 workers) | 273 instead of 333 MiB | not adopted: granian forks from a multi-threaded supervisor ("use of fork() may lead to deadlocks"), so workers keep being spawned |
+
+Parsing does not keep memory: pages are parsed natively and returned as one
+JSON string, and the memory regression tests show no growth over hundreds of
+uncached parses. `WEB_CONCURRENCY`, `MEMORY_CACHE_MAX_MB` and
+`WORKERS_MAX_RSS_MB` keep their defaults: with real accounting, 64 MB of cache
+now holds 4–16 times more pages than before within a fixed budget.
+
+### Guarding against regressions
+
+`tests/test_memory.py` runs thousands of requests through the app and fails
+when memory keeps growing after a warm-up or the cache exceeds its limit; it
+catches both a leaked parsed page per request and leaked native memory. To
+see the numbers:
+
+```bash
+uv run python scripts/memory_profile.py --requests 20000 --channels 200
+```
 
 ## Reproducing
 
