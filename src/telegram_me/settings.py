@@ -85,11 +85,13 @@ class Settings(BaseSettings):
     telegram_timeout: PositiveFloat = 10.0
     telegram_max_concurrency: PositiveInt = 32
 
-    # Cache backend: Redis when REDIS_URL is set, in-process memory otherwise
+    # Cache: in-process, in front of Redis when REDIS_URL is set
     redis_url: str | None = None
     redis_timeout: PositiveFloat = 0.5
     preview_cache_ttl: PositiveInt = 3600
     memory_cache_max_mb: PositiveInt = 64
+    memory_cache_max_ttl: PositiveFloat = 10.0
+    """With Redis: seconds an in-process copy of a Redis entry is kept at most."""
 
     # Feed: stale-while-revalidate page cache and popularity-driven refresher
     feed_fresh_ttl: PositiveInt = 60

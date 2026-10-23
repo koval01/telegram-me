@@ -17,6 +17,43 @@ Median latency of one request, upstream served from fixtures:
 | `/v1/body/tginfo`, cached | — | 1.1 ms | 22× faster |
 | `/v1/feed`, 5 channels, cached pages | 81.9 ms | 5.4 ms | 15× faster |
 
+## Two-level cache
+
+A repeated request used to cost one Redis round trip when `REDIS_URL` was set:
+production's Upstash is ~90 ms away over TLS, so almost all of a cached
+response's time was the `GET`. Each worker now answers from its in-process
+cache first (Rust, moka) and goes to Redis only on a miss (see
+[Caching](caching.md#levels)).
+
+Median / p95 of 200 repeated requests for `@durov` (one worker, ASGI called
+directly, upstream served from fixtures, Apple M-series, Python 3.13). The
+90 ms Redis is a local Valkey 9.1 behind a proxy that delays each direction
+by 45 ms; "cache" is the time spent in `cache.get` per request:
+
+| Request | Redis 90 ms: 2.0.0 | Redis 90 ms: now | Redis local: 2.0.0 | Redis local: now | No Redis: 2.0.0 | No Redis: now |
+|---|---|---|---|---|---|---|
+| `/v1/body/durov` | 95.0 / 97.4 ms (cache 94.3) | 0.10 / 0.12 ms (cache 0.04) | 0.35 / 0.69 ms | 0.10 / 0.13 ms | 0.15 / 0.16 ms | 0.10 / 0.11 ms |
+| `/v1/post/durov/<id>` | 96.7 / 98.5 ms (cache 94.7) | 0.25 / 0.28 ms (cache 0.04) | 0.88 / 1.08 ms | 0.25 / 0.36 ms | 0.29 / 0.33 ms | 0.25 / 0.26 ms |
+| `/v1/more/durov/before/<id>` | 95.0 / 96.1 ms (cache 94.4) | 0.09 / 0.10 ms (cache 0.03) | 0.34 / 0.54 ms | 0.09 / 0.12 ms | 0.11 / 0.12 ms | 0.09 / 0.10 ms |
+| `/v1/preview/durov` | 94.4 / 96.0 ms (cache 93.9) | 0.08 / 0.08 ms (cache 0.003) | 0.30 / 0.53 ms | 0.08 / 0.11 ms | 0.08 / 0.09 ms | 0.08 / 0.08 ms |
+| Mixed workload, 3 000 requests, 8 clients | 51.7 s | 33.3 s | 2.31 s | 2.33 s | 2.27 s | 2.04 s |
+| Peak RSS of that run | 101 MiB | 120 MiB | 135 MiB | 166 MiB | 153 MiB | 152 MiB |
+
+- The first read of a key on a worker still costs one Redis round trip
+  (`GET` and `PTTL` in one pipeline), as before; so does a write. The mixed
+  workload is mostly first reads (every request names a new channel alias),
+  which is why it gains less.
+- Without Redis the native cache replaces the Python LRU: a hit no longer
+  decompresses in Python (`/v1/body` 0.15 → 0.10 ms), and a 95 KB page is
+  stored in 83 µs instead of 461 µs (zlib on 3.13; Python 3.14's zstd is
+  closer).
+- With Redis each worker now also holds what it read or wrote in the last
+  `MEMORY_CACHE_MAX_TTL` (10) seconds, bounded by `MEMORY_CACHE_MAX_MB`:
+  +19–31 MiB of peak RSS in this run, where everything was read within 10 s.
+- Releasing the GIL around reads and writes was measured and rejected: next
+  to two CPU-bound Python threads (pydantic on the parsing threads) a 95 KB
+  read took 6.3 ms (p50) with the GIL released, 38 µs with it held.
+
 ## Page parsing: Python + lexbor → Rust
 
 Median time to parse one recorded channel page (`scripts/benchmark.py`):
@@ -161,7 +198,9 @@ now holds 4–16 times more pages than before within a fixed budget.
 
 `tests/test_memory.py` runs thousands of requests through the app and fails
 when memory keeps growing after a warm-up or the cache exceeds its limit; it
-catches both a leaked parsed page per request and leaked native memory. To
+catches both a leaked parsed page per request and leaked native memory.
+`rust/telegram-me-native/tests/cache_memory.rs` counts every allocation of
+the in-process cache and fails when its accounting no longer covers them. To
 see the numbers:
 
 ```bash

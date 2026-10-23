@@ -94,14 +94,12 @@ async def test_memory_cache_stays_within_its_limit() -> None:
         tracemalloc.stop()
     assert entries > 20
     assert limit * 0.9 < accounted <= limit
-    # What the stored entries really hold is within what is accounted. Values
-    # are allocated by the compressor (zstd's Python wrapper on 3.14+, zlib
-    # called from cache.py before), keys and bookkeeping in cache.py.
+    # Entries live in the native cache, outside the Python heap: that what it
+    # accounts covers what they really hold is checked with a counting
+    # allocator by rust/telegram-me-native/tests/cache_memory.rs. Here, no
+    # cached value may be kept on the Python side.
     held = snapshot.filter_traces(
-        [
-            tracemalloc.Filter(inclusive=True, filename_pattern=pattern)
-            for pattern in ("*/telegram_me/cache.py", "*/compression/zstd/*")
-        ]
+        [tracemalloc.Filter(inclusive=True, filename_pattern="*/telegram_me/cache.py")]
     ).statistics("filename")
     held_bytes = sum(stat.size for stat in held)
-    assert accounted * 0.5 < held_bytes <= accounted, f"cache holds {held_bytes / MiB:.2f} MiB"
+    assert held_bytes < 64 * 1024, f"cache.py holds {held_bytes / MiB:.2f} MiB"

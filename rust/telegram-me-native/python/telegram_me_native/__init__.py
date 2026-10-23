@@ -1,7 +1,8 @@
-"""Native (Rust) core of TelegramMe: t.me page parsing and feed ranking."""
+"""Native (Rust) core of TelegramMe: t.me page parsing, feed ranking, local cache."""
 
 from telegram_me_native._native import (
     Candidate,
+    LocalCache,
     RankedItem,
     RankOptions,
     Topic,
@@ -14,6 +15,7 @@ from telegram_me_native._native import (
 
 __all__ = [
     "Candidate",
+    "LocalCache",
     "RankOptions",
     "RankedItem",
     "Topic",

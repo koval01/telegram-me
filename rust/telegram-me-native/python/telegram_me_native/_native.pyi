@@ -71,3 +71,27 @@ def parse_more_page(html: str, simplified: bool) -> tuple[str, list[tuple[str, s
 
 def parse_preview_page(html: str) -> str | None:
     """Parse a landing page; None when it is not a channel."""
+
+class LocalCache:
+    """In-process cache of byte values (moka, LRU), bounded by real memory.
+
+    Values are stored zstd-compressed when that makes them smaller; each entry
+    expires after its own TTL and carries the wall-clock time it was stored at.
+    """
+
+    def __new__(cls, max_bytes: int) -> LocalCache: ...
+    def get(self, key: str) -> tuple[bytes, float] | None:
+        """(value, stored_at) for `key`, or None when missing or expired."""
+    def set(self, key: str, value: bytes, ttl: float, stored_at: float) -> None:
+        """Store `value` for `ttl` seconds (nothing for ttl <= 0 or oversized values)."""
+    def fill(self, key: str, value: bytes, ttl: float, stored_at: float) -> bool:
+        """Store `value` unless an entry stored at or after `stored_at` is held."""
+    def clear(self) -> None:
+        """Drop every entry."""
+    @property
+    def size(self) -> int:
+        """Bytes held by the entries: keys, stored values and bookkeeping."""
+    @property
+    def max_bytes(self) -> int:
+        """The memory limit in bytes."""
+    def __len__(self) -> int: ...

@@ -1,4 +1,4 @@
-"""Key-value cache with Redis and in-memory backends.
+"""Key-value cache: an in-process cache, in front of Redis when it is set.
 
 Entries remember when they were stored, so callers can apply their own
 freshness rules (for example stale-while-revalidate) on top of the
@@ -7,17 +7,18 @@ down: commands use short timeouts and a circuit breaker skips Redis for
 a while after a failure. A burst of commands waits briefly for a pooled
 connection instead; an exhausted pool is a local limit, not an outage.
 
+The in-process cache is native (`telegram_me_native.LocalCache`, Rust on
+`moka`). With Redis it is a first level that answers repeated requests
+without a network round trip (`TwoLevelCache`); without Redis it is the only
+level (`MemoryCache`).
+
 Values are UTF-8 bytes (JSON documents). As `str`, a page with a single
 emoji would take four bytes per character, and the response would have to
 be encoded again on every cache hit.
 """
 
 import logging
-import sys
 import time
-import zlib
-from collections import OrderedDict
-from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Protocol
 
@@ -26,35 +27,14 @@ from redis.asyncio.connection import Connection
 from redis.client import NEVER_DECODE
 from redis.exceptions import ConnectionError as RedisConnectionError
 from redis.exceptions import MaxConnectionsError, RedisError
+from telegram_me_native import LocalCache
 
+from telegram_me.services.coalesce import SingleFlight
 from telegram_me.settings import Settings
 
 logger = logging.getLogger(__name__)
 
 KEY_PREFIX = "tme:v2:"
-
-_compress: Callable[[bytes], bytes]
-_decompress: Callable[[bytes], bytes]
-if sys.version_info >= (3, 14):
-    from compression import zstd
-
-    # Level 1: ~4x smaller rendered pages; decompressing one is faster than
-    # encoding the same JSON from `str` to UTF-8 was.
-    def _compress(data: bytes) -> bytes:
-        return zstd.compress(data, 1)
-
-    _decompress = zstd.decompress
-else:  # pragma: no cover - Python 3.13 has no zstd in the standard library
-
-    def _compress(data: bytes) -> bytes:
-        return zlib.compress(data, 1)
-
-    _decompress = zlib.decompress
-
-# Approximate memory of one MemoryCache entry besides its key and value:
-# the OrderedDict slot and link node, the tuple and two floats (measured
-# with tracemalloc: ~230 bytes).
-_ENTRY_OVERHEAD = 240
 
 # Redis connections per worker: a feed or previews request runs up to 100
 # commands at once, so the pool is sized for upstream fetches finishing
@@ -97,65 +77,43 @@ class Cache(Protocol):
 
 
 class MemoryCache:
-    """In-process LRU cache with per-entry expiry, bounded by memory use.
+    """In-process cache with per-entry expiry, bounded by memory use.
 
-    Values are kept compressed (zstd, or zlib before Python 3.14), and the
-    bound counts what entries really occupy: compressed value, key and
-    bookkeeping.
+    A thin asynchronous face of the native `LocalCache`: least recently used
+    entries are evicted first, values are kept zstd-compressed, and the bound
+    counts what entries really occupy (compressed value, key and bookkeeping).
     """
 
     backend = "memory"
 
     def __init__(self, max_bytes: int) -> None:
-        self._max_bytes = max_bytes
-        self._size = 0
-        # key -> (compressed value, stored at (wall clock), expires at (monotonic))
-        self._data: OrderedDict[str, tuple[bytes, float, float]] = OrderedDict()
+        self._native = LocalCache(max_bytes)
 
     @property
     def size(self) -> int:
-        """Approximate bytes held by the entries."""
-        return self._size
+        """Bytes held by the entries."""
+        return self._native.size
 
     def __len__(self) -> int:
-        return len(self._data)
-
-    @staticmethod
-    def _footprint(key: str, blob: bytes) -> int:
-        return sys.getsizeof(key) + sys.getsizeof(blob) + _ENTRY_OVERHEAD
-
-    def _drop(self, key: str) -> None:
-        blob, _, _ = self._data.pop(key)
-        self._size -= self._footprint(key, blob)
+        return len(self._native)
 
     async def get(self, key: str) -> CacheEntry | None:  # noqa: D102
-        item = self._data.get(key)
-        if item is None:
-            return None
-        blob, stored_at, expires_at = item
-        if expires_at <= time.monotonic():
-            self._drop(key)
-            return None
-        self._data.move_to_end(key)
-        return CacheEntry(_decompress(blob), stored_at)
+        found = self._native.get(key)
+        return None if found is None else CacheEntry(*found)
 
     async def set(self, key: str, value: bytes, ttl: float) -> None:  # noqa: D102
-        if ttl <= 0:
-            return
-        blob = _compress(value)
-        footprint = self._footprint(key, blob)
-        if footprint > self._max_bytes:
-            return
-        if key in self._data:
-            self._drop(key)
-        self._data[key] = (blob, time.time(), time.monotonic() + ttl)
-        self._size += footprint
-        while self._size > self._max_bytes:
-            self._drop(next(iter(self._data)))
+        self._native.set(key, value, ttl, time.time())
+
+    def put(self, key: str, value: bytes, ttl: float, stored_at: float) -> None:
+        """Store `value` with a given store time (synchronous)."""
+        self._native.set(key, value, ttl, stored_at)
+
+    def fill(self, key: str, value: bytes, ttl: float, stored_at: float) -> bool:
+        """Store a copy of an entry unless a newer one is held; True when stored."""
+        return self._native.fill(key, value, ttl, stored_at)
 
     async def close(self) -> None:  # noqa: D102
-        self._data.clear()
-        self._size = 0
+        self._native.clear()
 
 
 class RedisCache:
@@ -201,26 +159,106 @@ class RedisCache:
         except (RedisError, OSError) as exc:
             self.trip(exc)
             return None
-        if not isinstance(raw, bytes):
-            return None
-        stored_at, separator, value = raw.partition(b"\n")
-        try:
-            return CacheEntry(value, float(stored_at)) if separator else None
-        except ValueError:
-            return None
+        return _decode_entry(raw)
 
-    async def set(self, key: str, value: bytes, ttl: float) -> None:  # noqa: D102
+    async def get_with_ttl(self, key: str) -> tuple[CacheEntry, float | None] | None:
+        """The entry for `key` and its remaining TTL in seconds (None if unknown).
+
+        Both come from one round trip (a pipeline of GET and PTTL).
+        """
+        if not self.available:
+            return None
+        try:
+            async with self.client.pipeline(transaction=False) as pipe:
+                pipe.execute_command("GET", KEY_PREFIX + key, **{NEVER_DECODE: True})
+                pipe.pttl(KEY_PREFIX + key)
+                raw, pttl = await pipe.execute()
+        except (RedisError, OSError) as exc:
+            self.trip(exc)
+            return None
+        entry = _decode_entry(raw)
+        if entry is None:
+            return None
+        # PTTL is -1 for a key without expiry and -2 for one gone meanwhile.
+        return entry, pttl / 1000 if isinstance(pttl, int) and pttl > 0 else None
+
+    async def set(  # noqa: D102
+        self, key: str, value: bytes, ttl: float, *, stored_at: float | None = None
+    ) -> None:
         if ttl <= 0 or not self.available:
             return
+        stored_at = time.time() if stored_at is None else stored_at
         try:
             await self.client.set(
-                KEY_PREFIX + key, b"%.3f\n%b" % (time.time(), value), px=int(ttl * 1000)
+                KEY_PREFIX + key, b"%.3f\n%b" % (stored_at, value), px=int(ttl * 1000)
             )
         except (RedisError, OSError) as exc:
             self.trip(exc)
 
     async def close(self) -> None:  # noqa: D102
         await self.client.aclose()
+
+
+def _decode_entry(raw: object) -> CacheEntry | None:
+    """Parse a stored value: the Unix time it was stored at, a newline, the payload."""
+    if not isinstance(raw, bytes):
+        return None
+    stored_at, separator, value = raw.partition(b"\n")
+    try:
+        return CacheEntry(value, float(stored_at)) if separator else None
+    except ValueError:
+        return None
+
+
+class TwoLevelCache:
+    """The in-process cache in front of the shared Redis cache.
+
+    Reads try the in-process level first; a miss reads Redis and keeps a copy
+    for the entry's remaining TTL, at most `max_local_ttl`. Writes go to both.
+    While Redis is unavailable (or its circuit breaker is open) the in-process
+    level works alone, and keeps what is written for the full TTL.
+
+    `max_local_ttl` bounds how long a server keeps serving its own copy after
+    another server (or the feed worker) has written a newer one to Redis:
+    without it, a latest page kept for the feed's stale window would be
+    re-fetched from t.me instead of picked up from Redis once it is older than
+    the page TTL.
+    """
+
+    backend = "memory+redis"
+
+    def __init__(self, local: MemoryCache, shared: RedisCache, max_local_ttl: float) -> None:
+        self.local = local
+        self.shared = shared
+        self._max_local_ttl = max_local_ttl
+        # Concurrent misses of one key share a single Redis read.
+        self._reads: SingleFlight[CacheEntry | None] = SingleFlight()
+
+    async def get(self, key: str) -> CacheEntry | None:  # noqa: D102
+        entry = await self.local.get(key)
+        if entry is not None or not self.shared.available:
+            return entry
+        return await self._reads.run(key, lambda: self._read_shared(key))
+
+    async def _read_shared(self, key: str) -> CacheEntry | None:
+        found = await self.shared.get_with_ttl(key)
+        if found is None:
+            return None
+        entry, ttl = found
+        local_ttl = self._max_local_ttl if ttl is None else min(ttl, self._max_local_ttl)
+        # A write that landed meanwhile is newer than this copy and stays.
+        self.local.fill(key, entry.value, local_ttl, entry.stored_at)
+        return entry
+
+    async def set(self, key: str, value: bytes, ttl: float) -> None:  # noqa: D102
+        stored_at = time.time()
+        local_ttl = min(ttl, self._max_local_ttl) if self.shared.available else ttl
+        self.local.put(key, value, local_ttl, stored_at)
+        await self.shared.set(key, value, ttl, stored_at=stored_at)
+
+    async def close(self) -> None:  # noqa: D102
+        await self.local.close()
+        await self.shared.close()
 
 
 class WaitingConnectionPool(BlockingConnectionPool):
@@ -263,7 +301,15 @@ def create_redis(settings: Settings) -> Redis | None:
 
 
 def create_cache(settings: Settings, redis: Redis | None) -> Cache:
-    """Pick the cache backend for the given settings."""
+    """The in-process cache, in front of Redis when there is one."""
+    local = MemoryCache(settings.memory_cache_max_mb * 1024 * 1024)
     if redis is None:
-        return MemoryCache(settings.memory_cache_max_mb * 1024 * 1024)
-    return RedisCache(redis)
+        return local
+    return TwoLevelCache(local, RedisCache(redis), settings.memory_cache_max_ttl)
+
+
+def shared_cache(cache: Cache) -> RedisCache | None:
+    """The Redis level of `cache`, if it has one."""
+    if isinstance(cache, TwoLevelCache):
+        return cache.shared
+    return cache if isinstance(cache, RedisCache) else None

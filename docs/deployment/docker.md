@@ -59,8 +59,9 @@ Measured on 2.0.0 (arm64), see [Performance](../internals/performance.md#memory)
 | 2 | ~180 MB | ~225 MB |
 
 Plan for roughly 40 MB for the server process and 70–110 MB per worker, plus
-up to `MEMORY_CACHE_MAX_MB` per worker when running without Redis (a worker
-under heavy traffic stays around 170 MB with the default 64). Freed memory is
+up to `MEMORY_CACHE_MAX_MB` per worker for the in-process cache (a worker
+under heavy traffic without Redis stays around 170 MB with the default 64;
+with Redis it holds only the last `MEMORY_CACHE_MAX_TTL` seconds of entries). Freed memory is
 returned to the system every
 [`MEMORY_TRIM_INTERVAL`](../configuration.md#memory_trim_interval) seconds.
 [`WORKERS_MAX_RSS_MB`](../configuration.md#workers_max_rss_mb) adds a safety

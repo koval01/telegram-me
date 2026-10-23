@@ -12,11 +12,14 @@ from redis.exceptions import ConnectionError as RedisConnectionError
 
 from telegram_me.cache import (
     KEY_PREFIX,
+    CacheEntry,
     MemoryCache,
     RedisCache,
+    TwoLevelCache,
     WaitingConnectionPool,
     create_cache,
     create_redis,
+    shared_cache,
 )
 from tests.conftest import make_settings
 
@@ -39,15 +42,15 @@ async def test_memory_cache_roundtrip_and_age() -> None:
     assert entry.stored_at == 1_000_000
 
 
-async def test_memory_cache_expires(monkeypatch: pytest.MonkeyPatch) -> None:
-    cache = MemoryCache(max_bytes=1024)
-    now = [100.0]
-    monkeypatch.setattr("telegram_me.cache.time.monotonic", lambda: now[0])
-    await cache.set("k", b"v", ttl=10)
-    now[0] = 109.0
+async def test_memory_cache_expires() -> None:
+    # Expiry runs on the native cache's own monotonic clock.
+    cache = MemoryCache(max_bytes=4096)
+    await cache.set("k", b"v", ttl=0.05)
+    await cache.set("long", b"v", ttl=60)
     assert await cache.get("k") is not None
-    now[0] = 110.0
+    await asyncio.sleep(0.08)
     assert await cache.get("k") is None
+    assert await cache.get("long") is not None
 
 
 async def _entry_size(key: str, value: bytes) -> int:
@@ -115,6 +118,20 @@ async def test_redis_cache_roundtrip(redis_cache: RedisCache) -> None:
     assert 0 < await redis_cache.client.pttl(KEY_PREFIX + "k") <= 60_000
 
 
+async def test_redis_cache_get_with_ttl(redis_cache: RedisCache) -> None:
+    await redis_cache.set("k", b"v", ttl=60, stored_at=123.5)
+    found = await redis_cache.get_with_ttl("k")
+    assert found is not None
+    entry, ttl = found
+    assert entry == CacheEntry(b"v", 123.5)
+    assert ttl is not None
+    assert 59 < ttl <= 60
+    assert await redis_cache.get_with_ttl("missing") is None
+    # A key written without expiry has no known TTL.
+    await redis_cache.client.set(KEY_PREFIX + "forever", "1.0\nv")
+    assert await redis_cache.get_with_ttl("forever") == (CacheEntry(b"v", 1.0), None)
+
+
 async def test_redis_cache_ignores_foreign_values(redis_cache: RedisCache) -> None:
     await redis_cache.client.set(KEY_PREFIX + "k", "legacy value without header")
     assert await redis_cache.get("k") is None
@@ -127,6 +144,24 @@ class _BrokenRedis(FakeAsyncRedis):
         type(self).calls += 1
         raise RedisConnectionError("down")
 
+    def pipeline(self, *_args: object, **_kwargs: object) -> Any:
+        return _BrokenPipeline()
+
+
+class _BrokenPipeline:
+    async def __aenter__(self) -> "_BrokenPipeline":
+        return self
+
+    async def __aexit__(self, *_exc: object) -> None:
+        return None
+
+    def __getattr__(self, _name: str) -> Any:
+        return lambda *_args, **_kwargs: self
+
+    async def execute(self) -> None:
+        _BrokenRedis.calls += 1
+        raise RedisConnectionError("down")
+
 
 async def test_redis_outage_opens_circuit_breaker(caplog: pytest.LogCaptureFixture) -> None:
     cache = RedisCache(_BrokenRedis(decode_responses=True), cooldown=30)
@@ -136,6 +171,13 @@ async def test_redis_outage_opens_circuit_breaker(caplog: pytest.LogCaptureFixtu
     await cache.set("k", b"v", ttl=60)  # no-op while open
     assert _BrokenRedis.calls == 1
     assert "Redis unavailable" in caplog.text
+
+
+async def test_redis_get_with_ttl_trips_circuit_breaker() -> None:
+    cache = RedisCache(_BrokenRedis(decode_responses=True), cooldown=30)
+    assert await cache.get_with_ttl("k") is None
+    assert not cache.available
+    assert await cache.get_with_ttl("k") is None
 
 
 class _SlowConnection(FakeAsyncRedisConnection):
@@ -220,8 +262,16 @@ async def test_create_redis_pool_is_sized_from_upstream_concurrency() -> None:
 
 
 def test_create_cache_picks_backend() -> None:
-    assert create_cache(make_settings(), None).backend == "memory"
-    assert create_cache(make_settings(), FakeAsyncRedis()).backend == "redis"
+    memory = create_cache(make_settings(memory_cache_max_mb=3), None)
+    assert isinstance(memory, MemoryCache)
+    assert memory.backend == "memory"
+    assert shared_cache(memory) is None
+
+    two_level = create_cache(make_settings(), FakeAsyncRedis())
+    assert isinstance(two_level, TwoLevelCache)
+    assert two_level.backend == "memory+redis"
+    assert shared_cache(two_level) is two_level.shared
+    assert shared_cache(two_level.shared) is two_level.shared
 
 
 async def test_memory_cache_is_safe_under_concurrency() -> None:
@@ -229,3 +279,155 @@ async def test_memory_cache_is_safe_under_concurrency() -> None:
     await asyncio.gather(*(cache.set(f"k{i}", b"x" * 10, ttl=60) for i in range(50)))
     hits = [await cache.get(f"k{i}") for i in range(50)]
     assert sum(hit is not None for hit in hits) == 10
+
+
+# Two levels ------------------------------------------------------------------------------
+
+
+@pytest.fixture
+async def two_level() -> AsyncIterator[TwoLevelCache]:
+    cache = TwoLevelCache(
+        MemoryCache(2**20), RedisCache(FakeAsyncRedis(decode_responses=True)), max_local_ttl=60
+    )
+    yield cache
+    await cache.close()
+
+
+class _CountingReads:
+    """Wraps `RedisCache.get_with_ttl` to count calls, optionally slowed down."""
+
+    def __init__(self, cache: RedisCache, delay: float = 0.0) -> None:
+        self.calls = 0
+        self._read = cache.get_with_ttl
+        self._delay = delay
+        cache.get_with_ttl = self  # type: ignore[method-assign]
+
+    async def __call__(self, key: str) -> tuple[CacheEntry, float | None] | None:
+        self.calls += 1
+        found = await self._read(key)
+        await asyncio.sleep(self._delay)  # the reply is on its way back
+        return found
+
+
+async def test_two_level_writes_both_levels_with_one_store_time(two_level: TwoLevelCache) -> None:
+    await two_level.set("k", b"value", ttl=60)
+    local, shared = await two_level.local.get("k"), await two_level.shared.get("k")
+    assert local is not None
+    assert shared is not None
+    assert local.value == shared.value == b"value"
+    assert shared.stored_at == pytest.approx(local.stored_at, abs=0.001)  # Redis keeps ms
+    assert 0 < await two_level.shared.client.pttl(KEY_PREFIX + "k") <= 60_000
+
+
+async def test_two_level_hit_skips_redis(two_level: TwoLevelCache) -> None:
+    await two_level.set("k", b"value", ttl=60)
+    reads = _CountingReads(two_level.shared)
+    entry = await two_level.get("k")
+    assert entry is not None
+    assert entry.value == b"value"
+    assert reads.calls == 0
+
+
+async def test_two_level_miss_reads_redis_and_fills_local(two_level: TwoLevelCache) -> None:
+    await two_level.shared.set("k", b"shared", ttl=60, stored_at=123.0)
+    reads = _CountingReads(two_level.shared)
+    assert await two_level.get("k") == CacheEntry(b"shared", 123.0)
+    # The copy keeps the original store time: ages (and the feed's
+    # stale-while-revalidate) are the same on every server.
+    assert await two_level.local.get("k") == CacheEntry(b"shared", 123.0)
+    assert await two_level.get("k") == CacheEntry(b"shared", 123.0)
+    assert reads.calls == 1
+    assert await two_level.get("missing") is None
+    assert await two_level.local.get("missing") is None
+
+
+async def test_two_level_copy_expires_with_the_redis_entry(two_level: TwoLevelCache) -> None:
+    await two_level.shared.set("k", b"v", ttl=0.05)
+    assert await two_level.get("k") is not None
+    assert await two_level.local.get("k") is not None
+    await asyncio.sleep(0.08)
+    assert await two_level.local.get("k") is None
+    assert await two_level.get("k") is None
+
+
+async def test_two_level_local_ttl_is_capped() -> None:
+    cache = TwoLevelCache(
+        MemoryCache(2**20), RedisCache(FakeAsyncRedis(decode_responses=True)), max_local_ttl=0.05
+    )
+    await cache.set("written", b"v", ttl=60)
+    await cache.shared.set("read", b"v", ttl=60)
+    await cache.shared.client.set(KEY_PREFIX + "no-ttl", "1.0\nv")
+    for key in ("read", "no-ttl"):
+        assert await cache.get(key) is not None
+    await asyncio.sleep(0.08)
+    for key in ("written", "read", "no-ttl"):
+        assert await cache.local.get(key) is None
+        assert await cache.get(key) is not None  # read again from Redis
+    await cache.close()
+
+
+async def test_two_level_sees_newer_writes_of_other_servers_after_the_cap() -> None:
+    redis = FakeAsyncRedis(decode_responses=True)
+    first, second = (
+        TwoLevelCache(MemoryCache(2**20), RedisCache(redis), max_local_ttl=0.05) for _ in range(2)
+    )
+    await first.set("page", b"old", ttl=600)
+    assert (await second.get("page") or CacheEntry(b"", 0)).value == b"old"
+    await first.set("page", b"new", ttl=600)
+    assert (await second.get("page") or CacheEntry(b"", 0)).value == b"old"  # its own copy
+    await asyncio.sleep(0.08)
+    assert (await second.get("page") or CacheEntry(b"", 0)).value == b"new"
+
+
+async def test_two_level_concurrent_misses_share_one_redis_read(two_level: TwoLevelCache) -> None:
+    await two_level.shared.set("k", b"v", ttl=60)
+    reads = _CountingReads(two_level.shared, delay=0.01)
+    entries = await asyncio.gather(*(two_level.get("k") for _ in range(20)))
+    assert {entry.value if entry else None for entry in entries} == {b"v"}
+    assert reads.calls == 1
+
+
+async def test_two_level_read_does_not_replace_a_newer_local_write(
+    two_level: TwoLevelCache,
+) -> None:
+    await two_level.shared.set("k", b"old", ttl=60, stored_at=1.0)
+    _CountingReads(two_level.shared, delay=0.02)
+    read = asyncio.create_task(two_level.get("k"))
+    await asyncio.sleep(0.005)
+    await two_level.set("k", b"new", ttl=60)  # lands while the read is in flight
+    old = await read
+    assert old is not None
+    assert old.value == b"old"
+    current = await two_level.get("k")
+    assert current is not None
+    assert current.value == b"new"
+
+
+async def test_two_level_runs_on_local_cache_while_redis_is_down(
+    caplog: pytest.LogCaptureFixture,
+) -> None:
+    _BrokenRedis.calls = 0
+    cache = TwoLevelCache(
+        MemoryCache(2**20), RedisCache(_BrokenRedis(decode_responses=True)), max_local_ttl=0.05
+    )
+    await cache.set("k", b"v", ttl=60)  # opens the circuit breaker
+    assert _BrokenRedis.calls == 1
+    assert not cache.shared.available
+    assert "Redis unavailable" in caplog.text
+    # While Redis is skipped, the in-process level keeps entries for their
+    # full TTL: there is no shared copy to pick up instead.
+    await cache.set("later", b"v", ttl=60)
+    await asyncio.sleep(0.08)
+    entry = await cache.get("later")
+    assert entry is not None
+    assert entry.value == b"v"
+    assert await cache.get("missing") is None
+    assert _BrokenRedis.calls == 1  # neither read nor write touched Redis
+
+
+async def test_two_level_open_breaker_skips_redis_reads(two_level: TwoLevelCache) -> None:
+    await two_level.shared.set("k", b"v", ttl=60)
+    reads = _CountingReads(two_level.shared)
+    two_level.shared.trip(RedisConnectionError("down"))
+    assert await two_level.get("k") is None
+    assert reads.calls == 0

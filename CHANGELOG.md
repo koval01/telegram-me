@@ -6,6 +6,28 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Changed
+
+- **Repeated requests no longer wait for Redis.** Each worker keeps an
+  in-process cache in front of Redis: a repeated `/v1/body`, `/v1/post`,
+  `/v1/more` or `/v1/preview` takes 0.1–0.25 ms instead of one Redis round
+  trip (~95 ms with Upstash). Misses read Redis once (`GET` and `PTTL` in one
+  pipeline) and keep a copy for the entry's remaining TTL, at most
+  `MEMORY_CACHE_MAX_TTL` seconds; writes go to both levels. While Redis is
+  down the in-process cache works alone.
+- The in-process cache is native (Rust, `moka`, zstd) instead of a Python
+  `OrderedDict`: LRU bounded by `MEMORY_CACHE_MAX_MB` of real memory as
+  before, per-entry expiry, and a hit is up to a third faster without Redis.
+- With Redis, each worker now also uses up to `MEMORY_CACHE_MAX_MB` (64 MiB by
+  default) for the in-process cache; in practice only what was read in the
+  last `MEMORY_CACHE_MAX_TTL` seconds.
+
+### Added
+
+- `MEMORY_CACHE_MAX_TTL` (default 10 s): with Redis, the longest a worker
+  keeps its own copy of an entry, which bounds how late it sees an entry
+  another server or the feed worker wrote.
+
 ## [2.0.0] - 2026-10-24
 
 A rewrite of the internals with the same `/v1` API. Existing clients keep
