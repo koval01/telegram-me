@@ -6,6 +6,25 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Changed
+
+- t.me pages are parsed in Rust (`telegram-me-native`: html5ever, selectors,
+  regex) with the GIL released, instead of Python over selectolax/lexbor. The
+  output is byte-for-byte identical (contract snapshots unchanged); parsing is
+  1.3–2× faster per page and runs in parallel under load. `selectolax` is no
+  longer a dependency.
+
+- The feed is ranked natively in Rust (`telegram-me-native`, PyO3): engagement
+  relative to each channel, freshness half-life, duplicate stories collapsed
+  across channels, topics inferred from the texts and diversity re-ranking.
+  `_score` values and the feed order change.
+
+### Added
+
+- `/v1/feed` items may carry `_duplicates` (collapsed reposts) and `_topic`
+  (shared subject with keywords).
+- Settings `FEED_HALF_LIFE_HOURS`, `FEED_DIVERSITY`, `FEED_COLLAPSE_DUPLICATES`.
+
 ## [2.0.0] - unreleased
 
 A rewrite of the internals with the same `/v1` API. Existing clients keep

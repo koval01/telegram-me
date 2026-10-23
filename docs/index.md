@@ -93,7 +93,7 @@ curl https://telegram-me-gliv.onrender.com/v1/body/durov
 - **FastAPI + Pydantic v2** for the HTTP layer and strict response models.
 - **pyreqwest** (Rust: tokio, hyper, rustls) for all traffic to t.me — one
   pooled HTTP/2 client running outside the GIL.
-- **selectolax / lexbor** (C) for HTML parsing.
+- **telegram-me-native** (Rust, this project) for HTML parsing (html5ever) and feed ranking.
 - **granian** (Rust) as the HTTP server, with **uvloop** (C) as event loop.
 - **Redis / Valkey** (optional) with **hiredis** (C) for a cache shared by all
   workers and servers; an in-process cache otherwise.

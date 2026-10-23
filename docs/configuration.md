@@ -47,6 +47,9 @@ The source of truth is
 | [`FEED_REFRESH_MAX_INTERVAL`](#feed_refresh_max_interval) | `600` | Feed |
 | [`FEED_REFRESH_TOP`](#feed_refresh_top) | `200` | Feed |
 | [`FEED_POPULARITY_HALF_LIFE`](#feed_popularity_half_life) | `3600` | Feed |
+| [`FEED_HALF_LIFE_HOURS`](#feed_half_life_hours) | `24` | Feed |
+| [`FEED_DIVERSITY`](#feed_diversity) | `0.5` | Feed |
+| [`FEED_COLLAPSE_DUPLICATES`](#feed_collapse_duplicates) | `true` | Feed |
 | [`LOG_LEVEL`](#log_level) | `INFO` | Logging |
 | [`LOG_FORMAT`](#log_format) | `text` | Logging |
 
@@ -232,6 +235,21 @@ How many of the most popular channels the refresher looks after.
 
 Half-life in seconds of a channel's popularity: a feed request counts half as
 much after this time. Channels whose score drops below 0.05 are forgotten.
+
+### `FEED_HALF_LIFE_HOURS`
+
+Hours after which a post's freshness halves in the ranking. Lower values
+favour the newest posts more strongly.
+
+### `FEED_DIVERSITY`
+
+From `0` (pure score order) to `1` (strongest spreading of channels and
+subjects). See [Internals → Feed](internals/feed.md#diversity).
+
+### `FEED_COLLAPSE_DUPLICATES`
+
+Merge the same story posted by several channels into its best post, listing
+the others in `_duplicates`.
 
 ## Logging
 

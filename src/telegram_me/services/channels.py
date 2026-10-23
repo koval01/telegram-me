@@ -18,8 +18,8 @@ from telegram_me.telegram.errors import (
     TelegramNotFoundError,
     TelegramParseError,
 )
-from telegram_me.telegram.parsing.html import JSONDict
 from telegram_me.telegram.parsing.pages import (
+    JSONDict,
     parse_channel_page,
     parse_more_page,
     parse_preview_page,

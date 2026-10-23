@@ -51,10 +51,15 @@ Each item is a post in its **raw parsed form** (fields Telegram did not
 provide are omitted rather than `null`), plus:
 
 - `channel` — the profile of the channel the post belongs to;
-- `_score` — the ranking score in `[0, 10]`, highest first.
+- `_score` — the ranking score in `[0, 10]`;
+- `_duplicates` *(optional)* — the same story posted by other channels,
+  collapsed into this post: `[{"channel": "…", "id": 123}, …]`;
+- `_topic` *(optional)* — the subject this post shares with other posts in
+  the feed: `{"id": 3, "keywords": ["starlink", "ограничения", …]}`.
 
-Posts are de-duplicated by `(channel, id)`. Channels that cannot be loaded
-(unknown, t.me errors) are skipped.
+The order is the feed order. It is mostly, but not strictly, by `_score`:
+the ranker interleaves channels and subjects (see Ranking below).
+Channels that cannot be loaded (unknown, t.me errors) are skipped.
 
 ## Freshness
 
@@ -74,17 +79,22 @@ requests therefore never wait for t.me. Details:
 
 ## Ranking
 
-```text
-score = min(10, (0.4·engagement + 0.2·content + 0.02·edited) · (freshness + 0.1))
-```
+Ranking runs natively in Rust and combines:
 
-- **engagement** — views, positive minus negative reactions and comments,
-  each relative to the channel's subscribers and capped;
-- **content** — bonus for photos, videos, GIFs and polls (capped at 10 each)
-  and for longer texts;
-- **freshness** — 1.0 for a new post, 0.8 after a day, decaying exponentially
-  over the week and slowly afterwards;
-- **edited** — a small bonus for edited posts.
+- **engagement relative to the channel** — views adjusted for the post's age
+  and compared with the channel's other posts, so small channels' standout
+  posts compete with large channels;
+- **reactions**, **content richness** and **audience size**;
+- **freshness** with a half-life of
+  [`FEED_HALF_LIFE_HOURS`](../configuration.md#feed_half_life_hours) (24 h);
+- **duplicate collapsing** across channels;
+- **diversity**: fewer runs of one channel or one subject
+  ([`FEED_DIVERSITY`](../configuration.md#feed_diversity));
+- **topics** inferred from the texts.
 
-The exact formula is documented in [Internals → Feed](../internals/feed.md#scoring).
+The full algorithm is in [Internals → Feed](../internals/feed.md#ranking).
 With `PARSER_MODE=simplified` reactions are not parsed and do not contribute.
+
+!!! note "Changed in 2.1"
+    The ranking moved to Rust and changed: `_score` values and the order differ
+    from 2.0, and `_duplicates` / `_topic` were added.
