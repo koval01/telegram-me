@@ -1,13 +1,23 @@
 import asyncio
 import os
 from collections.abc import AsyncIterator
+from typing import Any
 
 import pytest
 import time_machine
-from fakeredis import FakeAsyncRedis
+from fakeredis import FakeAsyncRedis, FakeServer
+from fakeredis.aioredis import FakeAsyncRedisConnection
+from redis.asyncio import ConnectionPool, Redis
 from redis.exceptions import ConnectionError as RedisConnectionError
 
-from telegram_me.cache import KEY_PREFIX, MemoryCache, RedisCache, create_cache
+from telegram_me.cache import (
+    KEY_PREFIX,
+    MemoryCache,
+    RedisCache,
+    WaitingConnectionPool,
+    create_cache,
+    create_redis,
+)
 from tests.conftest import make_settings
 
 
@@ -126,6 +136,87 @@ async def test_redis_outage_opens_circuit_breaker(caplog: pytest.LogCaptureFixtu
     await cache.set("k", b"v", ttl=60)  # no-op while open
     assert _BrokenRedis.calls == 1
     assert "Redis unavailable" in caplog.text
+
+
+class _SlowConnection(FakeAsyncRedisConnection):
+    """Holds its pooled connection across an await, like a network round trip."""
+
+    async def read_response(self, *args: Any, **kwargs: Any) -> Any:
+        await asyncio.sleep(0.001)
+        return await super().read_response(*args, **kwargs)
+
+
+def _small_pool_redis(pool_class: type[ConnectionPool], size: int, **kwargs: Any) -> Redis:
+    pool = pool_class(
+        connection_class=_SlowConnection,
+        server=FakeServer(),
+        max_connections=size,
+        decode_responses=True,
+        **kwargs,
+    )
+    return Redis.from_pool(pool)
+
+
+async def _burst(cache: RedisCache, count: int = 50) -> None:
+    await asyncio.gather(*(cache.set(f"k{i}", b"v%d" % i, ttl=60) for i in range(count)))
+
+
+async def test_exhausted_pool_does_not_open_circuit_breaker() -> None:
+    # redis-py's default pool fails a command at once when every connection is
+    # busy: a burst like a 50-channel feed exhausts a pool of two.
+    cache = RedisCache(_small_pool_redis(ConnectionPool, 2))
+    await _burst(cache)
+    stored = await cache.client.keys(KEY_PREFIX + "*")
+    assert 0 < len(stored) < 50
+    assert cache.available
+    await cache.close()
+
+
+async def test_burst_waits_for_a_pooled_connection() -> None:
+    cache = RedisCache(_small_pool_redis(WaitingConnectionPool, 2, timeout=5))
+    await _burst(cache)
+    entries = await asyncio.gather(*(cache.get(f"k{i}") for i in range(50)))
+    assert [entry.value if entry else None for entry in entries] == [b"v%d" % i for i in range(50)]
+    assert cache.available
+    await cache.close()
+
+
+async def test_pool_wait_timeout_skips_command_without_tripping(
+    caplog: pytest.LogCaptureFixture,
+) -> None:
+    cache = RedisCache(_small_pool_redis(WaitingConnectionPool, 1, timeout=0.01))
+    await cache.set("k", b"v", ttl=60)
+    pool = cache.client.connection_pool
+    assert isinstance(pool, WaitingConnectionPool)
+    held = await pool.get_connection()
+    assert await cache.get("k") is None
+    await cache.set("other", b"v", ttl=60)
+    assert cache.available
+    assert caplog.text.count("Redis connection pool exhausted") == 1
+    assert "Redis unavailable" not in caplog.text
+
+    await pool.release(held)
+    entry = await cache.get("k")
+    assert entry is not None
+    assert entry.value == b"v"
+    await cache.close()
+
+
+async def test_create_redis_pool_is_sized_from_upstream_concurrency() -> None:
+    assert create_redis(make_settings()) is None
+    settings = make_settings(redis_url="redis://localhost:6379/0", redis_timeout=0.25)
+    client = create_redis(settings)
+    assert client is not None
+    pool = client.connection_pool
+    assert isinstance(pool, WaitingConnectionPool)
+    assert pool.max_connections == 2 * settings.telegram_max_concurrency
+    assert pool.timeout == 0.25
+    await client.aclose()
+
+    small = create_redis(make_settings(redis_url="redis://localhost", telegram_max_concurrency=4))
+    assert small is not None
+    assert small.connection_pool.max_connections == 32
+    await small.aclose()
 
 
 def test_create_cache_picks_backend() -> None:
