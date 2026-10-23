@@ -40,6 +40,7 @@ The source of truth is
 | [`GRAPHQL_MAX_BATCH_SIZE`](#graphql_max_batch_size) | `10` | GraphQL |
 | [`CACHE_MODE`](#cache_mode) | `normal` | Performance |
 | [`PARSER_MODE`](#parser_mode) | `full` | Performance |
+| [`MEMORY_TRIM_INTERVAL`](#memory_trim_interval) | `10` | Performance |
 | [`TELEGRAM_TIMEOUT`](#telegram_timeout) | `10` | Upstream |
 | [`TELEGRAM_MAX_CONCURRENCY`](#telegram_max_concurrency) | `32` | Upstream |
 | [`REDIS_URL`](#redis_url) | — | Cache |
@@ -98,7 +99,9 @@ before it is killed.
 ### `WORKERS_MAX_RSS_MB`
 
 Recycle a worker whose resident memory exceeds this many MiB. A safety net
-for memory-constrained hosts; unset by default.
+for memory-constrained hosts; unset by default. A worker uses ~60 MiB idle and
+~100 MiB under load with Redis, plus up to `MEMORY_CACHE_MAX_MB` without it, so
+a value of about `MEMORY_CACHE_MAX_MB + 150` only fires on real trouble.
 
 ### `METRICS_PORT`
 
@@ -194,6 +197,14 @@ their own settings below.
 | `full` | everything: text with entities, media, polls, buttons, replies, link previews, reactions |
 | `simplified` | text (no entities), media and buttons — noticeably cheaper on CPU |
 
+### `MEMORY_TRIM_INTERVAL`
+
+Seconds between returns of freed heap memory to the operating system
+(`malloc_trim`, glibc only — the Docker image). After a burst of traffic glibc
+otherwise keeps the memory of large short-lived objects for reuse: a worker
+under load held ~80 MiB of such free heap. One trim takes about 1 ms. `0`
+disables it.
+
 ## Upstream
 
 ### `TELEGRAM_TIMEOUT`
@@ -231,8 +242,11 @@ seconds regardless.
 
 ### `MEMORY_CACHE_MAX_MB`
 
-Size limit of the in-process cache (per worker) when Redis is not used.
-Least recently used entries are evicted first.
+Memory limit of the in-process cache (per worker) when Redis is not used:
+entries are stored compressed and the limit counts what they really occupy
+(value, key and bookkeeping). Least recently used entries are evicted first.
+With the default of 64, a worker under heavy traffic stays around 170 MiB
+(the whole container around 230 MiB).
 
 ## Feed
 

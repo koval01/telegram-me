@@ -24,6 +24,7 @@ from telegram_me.schemas.requests import (
     HealthzResponse,
     HTTPError,
 )
+from telegram_me.services.channels import dump_json
 
 _ERRORS: dict[int | str, dict[str, Any]] = {
     400: {"model": HTTPError},
@@ -36,10 +37,10 @@ _ERRORS: dict[int | str, dict[str, Any]] = {
 def _json(model: Post | Preview | PreviewsModel | FeedResponse) -> Response:
     # Models are validated once and serialized by pydantic-core directly;
     # returning a Response skips FastAPI's second validation pass.
-    return Response(model.model_dump_json(), media_type="application/json")
+    return Response(dump_json(model), media_type="application/json")
 
 
-def _raw_json(content: str) -> Response:
+def _raw_json(content: bytes) -> Response:
     return Response(content, media_type="application/json")
 
 

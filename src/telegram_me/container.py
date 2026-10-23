@@ -7,6 +7,7 @@ from contextlib import AsyncExitStack, asynccontextmanager, suppress
 from dataclasses import dataclass
 
 from telegram_me.cache import Cache, RedisCache, create_cache, create_redis
+from telegram_me.memory import trimming_memory
 from telegram_me.services.channels import ChannelService
 from telegram_me.services.feed import FeedRefresher, FeedService
 from telegram_me.services.popularity import (
@@ -48,6 +49,7 @@ async def build_container(
 ) -> AsyncIterator[Container]:
     """Create the container and close every resource on exit."""
     async with AsyncExitStack() as stack:
+        await stack.enter_async_context(trimming_memory(settings.memory_trim_interval))
         cache = create_cache(settings, create_redis(settings))
         stack.push_async_callback(cache.close)
 

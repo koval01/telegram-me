@@ -126,6 +126,7 @@ addopts = ["--strict-markers", "--strict-config", "-ra"]
 asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"
 filterwarnings = ["error"]
+markers = ["memory: memory regression guards (part of the default run and CI)"]
 
 [tool.coverage.run]
 source = ["telegram_me"]
