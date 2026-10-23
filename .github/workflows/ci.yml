@@ -1,0 +1,94 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_call:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  UV_VERSION: "0.13.5"
+  FORCE_COLOR: "1"
+
+jobs:
+  lint:
+    name: Lint & types
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10
+        with:
+          version: ${{ env.UV_VERSION }}
+          enable-cache: true
+      - run: uv sync --locked
+      - run: uv run ruff check --output-format=github .
+      - run: uv run ruff format --check .
+      - run: uv run mypy
+
+  test:
+    name: Tests (Python ${{ matrix.python }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.13", "3.14"]
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10
+        with:
+          version: ${{ env.UV_VERSION }}
+          python-version: ${{ matrix.python }}
+          enable-cache: true
+      - run: uv sync --locked
+      - name: Offline tests and contract snapshots
+        run: uv run pytest --cov --cov-report=term --cov-report=xml
+      - name: Coverage summary
+        if: matrix.python == '3.14'
+        run: uv run coverage report --format=markdown >> "$GITHUB_STEP_SUMMARY"
+
+  docker:
+    name: Docker image smoke test
+    runs-on: ubuntu-latest
+    needs: [lint, test]
+    steps:
+      - uses: actions/checkout@v7
+      - uses: docker/setup-buildx-action@v4
+      - uses: docker/build-push-action@v7
+        with:
+          context: .
+          load: true
+          tags: telegram-me:ci
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      - name: Start the container hardened like production
+        run: |
+          docker run -d --name api -p 8000:3000 --read-only --tmpfs /tmp \
+            --cap-drop ALL --security-opt no-new-privileges \
+            -e ENABLE_FEED=true telegram-me:ci
+          for _ in $(seq 1 30); do
+            status="$(docker inspect -f '{{.State.Health.Status}}' api)"
+            [ "$status" = healthy ] && break
+            sleep 2
+          done
+          test "$status" = healthy
+      - uses: astral-sh/setup-uv@v10
+        with:
+          version: ${{ env.UV_VERSION }}
+      - name: Smoke matrix against live t.me
+        run: uv run --no-project python scripts/smoke_matrix.py --base-url http://127.0.0.1:8000 --preset full
+      - name: Graceful shutdown
+        run: |
+          start=$(date +%s)
+          docker stop -t 15 api
+          test "$(docker inspect -f '{{.State.ExitCode}}' api)" = 0
+          echo "stopped in $(( $(date +%s) - start ))s"
+      - name: Container logs
+        if: failure()
+        run: docker logs api

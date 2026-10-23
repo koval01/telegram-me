@@ -1,2 +1,0 @@
-runtime: python313
-entrypoint: chmod +x start.sh && ./start.sh

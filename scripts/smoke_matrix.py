@@ -198,6 +198,15 @@ def build_scenarios(
                 payload={"channels": ["durov", "stranaua", "nebudetafk"]},
             ),
             Scenario(
+                "previews_partial_result",
+                "POST",
+                "/v1/previews",
+                {200 if previews_enabled else 503},
+                payload={"channels": ["durov", "zzzzzznotexistingchannelzzzz"]},
+            ),
+            Scenario("post_with_inline_button", "GET", "/v1/post/nebudetgg/6209", {200}),
+            Scenario("body_around_post", "GET", "/v1/body/stranaua?position=252483", {200}),
+            Scenario(
                 "feed_valid",
                 "POST",
                 "/v1/feed",

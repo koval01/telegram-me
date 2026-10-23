@@ -1,0 +1,37 @@
+# Production stack used by deploy/remote-deploy.sh on each server.
+# Redis is external (REDIS_URL in .env) so all servers share one cache.
+
+name: telegram-me
+
+x-app: &app
+  image: ${APP_IMAGE:?APP_IMAGE must be set}
+  env_file:
+    - path: .env
+      required: true
+  restart: unless-stopped
+  read_only: true
+  tmpfs:
+    - /tmp
+  cap_drop:
+    - ALL
+  security_opt:
+    - no-new-privileges:true
+  stop_grace_period: 15s
+  logging:
+    driver: json-file
+    options:
+      max-size: 50m
+      max-file: "5"
+
+services:
+  api:
+    <<: *app
+    ports:
+      - "${APP_PORT:-8000}:3000"
+
+  worker:
+    <<: *app
+    command: ["worker"]
+    profiles: ["worker"]
+    healthcheck:
+      disable: true

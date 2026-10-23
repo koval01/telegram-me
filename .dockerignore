@@ -1,11 +1,9 @@
-# flyctl launch added from .gitignore
-**/.env
-**/.env.local
-**/.venv
-**/.DS_Store
-**/.idea
-
-# flyctl launch added from .venv/.gitignore
-# created by virtualenv automatically
-.venv/**/*
-fly.toml
+# Only what the image build needs; everything else stays out of the context.
+*
+!src/
+!pyproject.toml
+!uv.lock
+!README.md
+!LICENSE
+**/__pycache__
+**/*.py[cod]

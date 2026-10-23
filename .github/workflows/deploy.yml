@@ -1,0 +1,107 @@
+name: Deploy
+
+# Rolling deployment to every server in SERVERS_IPS, one at a time. Each
+# server runs deploy/remote-deploy.sh, which rolls back to the previous image
+# if the new one does not become healthy; the rollout stops at the first
+# failing server. Run it manually with an older tag to roll back everything.
+
+on:
+  workflow_call:
+    inputs:
+      image_tag:
+        type: string
+        required: true
+  workflow_dispatch:
+    inputs:
+      image_tag:
+        description: "Image tag to deploy, e.g. sha-0123456789ab, 2.0.0 or latest"
+        type: string
+        required: true
+        default: latest
+      with_worker:
+        description: "Also run the standalone feed worker"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    env:
+      IMAGE: ${{ vars.DEPLOY_IMAGE || 'docker.io/koval01/telegram-me' }}:${{ inputs.image_tag }}
+      SSH_USER: ${{ vars.SSH_USER || 'ubuntu' }}
+      COMPOSE_PROFILES: ${{ inputs.with_worker && 'worker' || '' }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Prepare SSH
+        env:
+          SSH_KEY: ${{ secrets.SSH_KEY }}
+          SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
+          SERVERS: ${{ secrets.SERVERS_IPS }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/id_deploy
+          chmod 600 ~/.ssh/id_deploy
+          if [ -n "$SSH_KNOWN_HOSTS" ]; then
+            printf '%s\n' "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          else
+            echo "::warning::SSH_KNOWN_HOSTS secret is not set; trusting host keys on first use."
+            for server in $SERVERS; do ssh-keyscan -T 10 "$server" >> ~/.ssh/known_hosts; done
+          fi
+
+      - name: Render production .env
+        env:
+          REDIS_URL: ${{ secrets.REDIS_URL }}
+        run: |
+          umask 077
+          cat > deploy/.env <<EOF
+          REDIS_URL=${REDIS_URL}
+          ENABLE_FEED=${{ vars.ENABLE_FEED || 'true' }}
+          ENABLE_PREVIEWS=${{ vars.ENABLE_PREVIEWS || 'true' }}
+          ENABLE_RATE_LIMIT=${{ vars.ENABLE_RATE_LIMIT || 'false' }}
+          RATE_LIMIT_RPM=${{ vars.RATE_LIMIT_RPM || '120' }}
+          CACHE_MODE=${{ vars.CACHE_MODE || 'normal' }}
+          PARSER_MODE=${{ vars.PARSER_MODE || 'full' }}
+          FEED_REFRESH_MODE=${{ inputs.with_worker && 'worker' || 'embedded' }}
+          FORWARDED_ALLOW_IPS=${{ vars.FORWARDED_ALLOW_IPS || '127.0.0.1' }}
+          DISABLE_DOCS=${{ vars.DISABLE_DOCS || 'false' }}
+          LOG_FORMAT=json
+          EOF
+          sed -i 's/^ *//' deploy/.env
+
+      - name: Roll out ${{ env.IMAGE }}
+        env:
+          SERVERS: ${{ secrets.SERVERS_IPS }}
+        run: |
+          set -euo pipefail
+          # Values below are interpolated into the remote command on purpose.
+          [[ "$IMAGE" =~ ^[A-Za-z0-9./:_@-]+$ ]] || { echo "::error::invalid image: $IMAGE"; exit 1; }
+          [[ "$COMPOSE_PROFILES" =~ ^[a-z,]*$ ]] || { echo "::error::invalid profiles"; exit 1; }
+          ssh_opts=(-i ~/.ssh/id_deploy -o BatchMode=yes -o ConnectTimeout=15)
+          for server in $SERVERS; do
+            echo "::group::$server"
+            target="$SSH_USER@$server"
+            ssh "${ssh_opts[@]}" "$target" 'mkdir -p ~/telegram-me && chmod 700 ~/telegram-me'
+            scp "${ssh_opts[@]}" deploy/compose.prod.yaml deploy/remote-deploy.sh deploy/.env \
+              "$target:telegram-me/"
+            # shellcheck disable=SC2029
+            ssh "${ssh_opts[@]}" "$target" \
+              "chmod 600 ~/telegram-me/.env && COMPOSE_PROFILES='$COMPOSE_PROFILES' bash ~/telegram-me/remote-deploy.sh '$IMAGE'"
+            echo "::endgroup::"
+          done
+
+      - name: Public health check
+        if: vars.PUBLIC_HEALTHCHECK_URL != ''
+        run: curl -fsS --retry 5 --retry-delay 5 "${{ vars.PUBLIC_HEALTHCHECK_URL }}"
+
+      - name: Clean up secrets
+        if: always()
+        run: rm -f ~/.ssh/id_deploy deploy/.env

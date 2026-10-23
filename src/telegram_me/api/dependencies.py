@@ -1,4 +1,4 @@
-"""FastAPI dependencies: services, feature gates and path parameters."""
+"""FastAPI dependencies: services, feature flags and path parameters."""
 
 from typing import Annotated, Literal
 
@@ -22,22 +22,34 @@ def get_channel_service(container: Annotated[Container, Depends(get_container)])
     return container.channels
 
 
-def require_previews(container: Annotated[Container, Depends(get_container)]) -> None:
-    """Reject the request with 503 when previews are disabled."""
-    if not container.settings.enable_previews:
-        raise FeatureDisabledError("previews")
-
-
 def get_feed_service(container: Annotated[Container, Depends(get_container)]) -> FeedService:
-    """Feed service; rejects the request with 503 when the feed is disabled."""
-    if not container.settings.enable_feed:
-        raise FeatureDisabledError("feed")
+    """Feed service of the running application."""
     return container.feed
+
+
+class FeatureGate:
+    """Feature flags, checked inside handlers.
+
+    Handlers call `require()` after FastAPI has validated the request, so
+    invalid input is still answered with 422 while a feature is disabled.
+    """
+
+    def __init__(self, container: Annotated[Container, Depends(get_container)]) -> None:
+        self._settings = container.settings
+
+    def require(self, feature: Literal["feed", "previews"]) -> None:
+        """Raise `FeatureDisabledError` (503) when `feature` is switched off."""
+        enabled = {
+            "feed": self._settings.enable_feed,
+            "previews": self._settings.enable_previews,
+        }[feature]
+        if not enabled:
+            raise FeatureDisabledError(feature)
 
 
 Channels = Annotated[ChannelService, Depends(get_channel_service)]
 Feed = Annotated[FeedService, Depends(get_feed_service)]
-Previews = Depends(require_previews)
+Features = Annotated[FeatureGate, Depends()]
 
 ChannelName = Annotated[
     str, Path(pattern=CHANNEL_PATTERN, description="Telegram channel username, e.g. `durov`")

@@ -1,0 +1,73 @@
+# TelegramMe with a bundled Valkey (Redis-compatible) cache.
+#
+#   docker compose up -d                      # pre-built image from GHCR
+#   docker compose up -d --build              # build from this checkout
+#   docker compose --profile worker up -d     # plus a standalone feed worker
+#
+# Configuration comes from `.env` (see `.env.example`); presets live in
+# deploy/presets/ and are selected with `PRESET=full docker compose up -d` (standard, full, minimal).
+
+name: telegram-me
+
+x-app: &app
+  image: ${APP_IMAGE:-ghcr.io/koval01/telegram-me:latest}
+  build:
+    context: .
+  env_file:
+    - path: deploy/presets/${PRESET:-standard}.env
+      required: true
+    - path: .env
+      required: false
+  environment:
+    REDIS_URL: ${REDIS_URL:-redis://valkey:6379/0}
+  depends_on:
+    valkey:
+      condition: service_healthy
+  restart: unless-stopped
+  read_only: true
+  tmpfs:
+    - /tmp
+  cap_drop:
+    - ALL
+  security_opt:
+    - no-new-privileges:true
+  stop_grace_period: 15s
+  logging:
+    driver: json-file
+    options:
+      max-size: 20m
+      max-file: "5"
+
+services:
+  api:
+    <<: *app
+    ports:
+      - "${APP_PORT:-8000}:3000"
+
+  worker:
+    <<: *app
+    command: ["worker"]
+    profiles: ["worker"]
+    healthcheck:
+      disable: true
+
+  valkey:
+    image: valkey/valkey:9.1-alpine
+    command:
+      - valkey-server
+      - --save
+      - ""
+      - --appendonly
+      - "no"
+      - --maxmemory
+      - ${VALKEY_MAXMEMORY:-256mb}
+      - --maxmemory-policy
+      - allkeys-lru
+    restart: unless-stopped
+    read_only: true
+    healthcheck:
+      test: ["CMD", "valkey-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 5s

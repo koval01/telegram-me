@@ -8,11 +8,11 @@ from telegram_me.api.dependencies import (
     ChannelName,
     Channels,
     Direction,
+    Features,
     Feed,
     OptionalPosition,
     Position,
     PostId,
-    Previews,
 )
 from telegram_me.schemas.channel import ChannelBody, More, Preview
 from telegram_me.schemas.channel import Previews as PreviewsModel
@@ -96,10 +96,10 @@ async def post(channel: ChannelName, identifier: PostId, service: Channels) -> R
     summary="Get preview information of channel",
     response_model=Preview,
     responses=_ERRORS,
-    dependencies=[Previews],
 )
-async def preview(channel: ChannelName, service: Channels) -> Response:
+async def preview(channel: ChannelName, service: Channels, features: Features) -> Response:
     """Short channel summary: title, subscribers, description, avatar."""
+    features.require("previews")
     return _json(await service.preview(channel))
 
 
@@ -108,14 +108,15 @@ async def preview(channel: ChannelName, service: Channels) -> Response:
     summary="Get preview data about the channel group",
     response_model=PreviewsModel,
     responses=_ERRORS,
-    dependencies=[Previews],
 )
-async def previews(payload: ChannelsRequest, service: Channels) -> Response:
+async def previews(payload: ChannelsRequest, service: Channels, features: Features) -> Response:
     """Previews of up to 100 channels at once; unknown channels are omitted."""
+    features.require("previews")
     return _json(await service.previews(payload.channels))
 
 
 @feed.post("/feed", response_model=FeedResponse, responses=_ERRORS)
-async def create_feed(item: FeedRequest, service: Feed) -> Response:
+async def create_feed(item: FeedRequest, service: Feed, features: Features) -> Response:
     """Create feed for given channels and return sorted posts."""
+    features.require("feed")
     return _json(FeedResponse(result=await service.build(item.channels)))

@@ -54,6 +54,24 @@ def test_feed_is_disabled_by_default(fetcher: FixtureFetcher) -> None:
     assert response.json() == {"detail": "Feature 'feed' is disabled by server configuration"}
 
 
+@pytest.mark.parametrize(
+    ("method", "path", "payload"),
+    [
+        ("GET", "/v1/preview/bad-name", None),
+        ("POST", "/v1/previews", ["durov"]),
+        ("POST", "/v1/previews", {"channels": []}),
+        ("POST", "/v1/feed", {"channels": ["bad-name"]}),
+        ("POST", "/v1/feed", {"not_channels": ["durov"]}),
+    ],
+)
+def test_validation_runs_before_feature_gate(
+    make_client: ClientFactory, method: str, path: str, payload: Any
+) -> None:
+    # 1.x contract: invalid input is 422 even while the feature is disabled.
+    client = make_client(enable_feed=False, enable_previews=False)
+    assert client.request(method, path, json=payload).status_code == 422
+
+
 def test_previews_can_be_disabled(make_client: ClientFactory) -> None:
     client = make_client(enable_previews=False)
     assert client.get("/v1/preview/durov").status_code == 503
