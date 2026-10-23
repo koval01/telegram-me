@@ -5,6 +5,11 @@ FEED_FRESH_TTL is used as is, an older one (up to FEED_STALE_TTL) is used
 immediately while a background refresh replaces it, and only missing pages
 are fetched inline, all of them in parallel. The refresher keeps popular
 channels warm so most feed requests never wait for t.me.
+
+Ranking runs in the native extension (`telegram_me_native`, Rust) on a worker
+thread with the GIL released: per-channel engagement normalisation,
+freshness, collapsing of near-duplicate posts across channels, topic
+detection and diversity re-ranking.
 """
 
 import asyncio
@@ -12,18 +17,13 @@ import contextlib
 import logging
 import math
 import time
-from datetime import UTC, datetime
 from typing import Any
 
+import telegram_me_native as native
+
 from telegram_me.services.channels import ChannelService, decode_page
+from telegram_me.services.feed_signals import candidate, parse_compact_number
 from telegram_me.services.popularity import LeaderLock, Popularity
-from telegram_me.services.scoring import (
-    ScoredPost,
-    content_summary,
-    parse_compact_number,
-    parse_published_at,
-    reaction_counts,
-)
 from telegram_me.settings import Settings
 from telegram_me.telegram.parsing.html import JSONDict
 
@@ -39,10 +39,19 @@ class FeedService:
         self._channels = channels
         self._popularity = popularity
         self._settings = settings
-        self._simplified = settings.parser_mode == "simplified"
+
+    def rank_options(self, now: float | None = None) -> native.RankOptions:
+        """Ranking parameters for the current moment."""
+        settings = self._settings
+        return native.RankOptions(
+            now=int(time.time() if now is None else now),
+            half_life_hours=settings.feed_half_life_hours,
+            diversity=settings.feed_diversity,
+            collapse_duplicates=settings.feed_collapse_duplicates,
+        )
 
     async def build(self, channels: list[str]) -> list[dict[str, Any]]:
-        """Posts of all channels, best score first, without duplicates."""
+        """Ranked posts of all channels (see the module docstring)."""
         unique = list(dict.fromkeys(channels))
         hit = asyncio.ensure_future(self._popularity.hit(unique))
         pages = await asyncio.gather(
@@ -50,23 +59,40 @@ class FeedService:
         )
         await hit
 
-        now = datetime.now(UTC)
         posts: list[dict[str, Any]] = []
+        candidates: list[native.Candidate] = []
+        seen: set[tuple[str, int]] = set()
         for channel, page in zip(unique, pages, strict=True):
             if isinstance(page, BaseException):
                 logger.warning("Feed skipped channel %s: %r", channel, page)
                 continue
-            posts.extend(self._scored_posts(channel, page, now))
-
-        posts.sort(key=lambda post: post.get("_score", 0), reverse=True)
-        seen: set[tuple[str, int]] = set()
-        result = []
-        for post in posts:
-            key = (post["channel"]["username"], post["id"])
-            if key not in seen:
+            info = page.get("channel", {})
+            username = str(info.get("username") or channel)
+            subscribers = parse_compact_number((info.get("counters") or {}).get("subscribers"), 1)
+            for post in page.get("content", {}).get("posts", []):
+                key = (username, int(post["id"]))
+                if key in seen:
+                    continue
                 seen.add(key)
-                result.append(post)
-        return result
+                posts.append({**post, "channel": info})
+                candidates.append(candidate(username, subscribers, post))
+
+        items, topics = await asyncio.to_thread(native.rank, candidates, self.rank_options())
+        return [self._entry(posts, item, topics) for item in items]
+
+    @staticmethod
+    def _entry(
+        posts: list[dict[str, Any]], item: native.RankedItem, topics: list[native.Topic]
+    ) -> dict[str, Any]:
+        entry = {**posts[item.index], "_score": item.score}
+        if item.duplicates:
+            entry["_duplicates"] = [
+                {"channel": posts[i]["channel"].get("username"), "id": posts[i]["id"]}
+                for i in item.duplicates
+            ]
+        if item.topic is not None and len(topics[item.topic].members) > 1:
+            entry["_topic"] = {"id": item.topic, "keywords": topics[item.topic].keywords}
+        return entry
 
     async def _page(self, channel: str) -> JSONDict:
         entry = await self._channels.cached_page(channel)
@@ -77,27 +103,6 @@ class FeedService:
                 self._channels.refresh_page_in_background(channel)
                 return decode_page(entry.value)
         return await self._channels.refresh_page(channel)
-
-    def _scored_posts(self, channel: str, page: JSONDict, now: datetime) -> list[dict[str, Any]]:
-        posts_data = page.get("content", {}).get("posts", [])
-        info = page.get("channel", {})
-        subscribers = parse_compact_number(info.get("counters", {}).get("subscribers", "1"), 1)
-
-        scored = []
-        for post in posts_data:
-            footer = post.get("footer", {})
-            content = post.get("content", {})
-            score = ScoredPost(
-                published_at=parse_published_at(footer.get("date", {}).get("string", "")),
-                views=parse_compact_number(footer.get("views", "0"), 0),
-                content=content_summary(content),
-                edited=footer.get("edited", False),
-                reactions={} if self._simplified else reaction_counts(content.get("reacts")),
-                subscribers=subscribers,
-            ).score(now)
-            scored.append({**post, "channel": info, "_score": score})
-        logger.debug("Scored %d posts of %s", len(scored), channel)
-        return scored
 
 
 class FeedRefresher:

@@ -85,6 +85,12 @@ class Settings(BaseSettings):
     feed_refresh_max_interval: PositiveInt = 600
     feed_refresh_top: PositiveInt = 200
     feed_popularity_half_life: PositiveInt = 3600
+    feed_half_life_hours: PositiveFloat = 24.0
+    """Hours after which a post's freshness halves in the ranking."""
+    feed_diversity: float = Field(default=0.5, ge=0.0, le=1.0)
+    """0 = pure score order; higher values spread channels and subjects."""
+    feed_collapse_duplicates: bool = True
+    """Merge the same story posted by several channels into one entry."""
 
     # Logging
     log_level: Literal["DEBUG", "INFO", "WARNING", "ERROR"] = "INFO"

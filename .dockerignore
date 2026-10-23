@@ -1,9 +1,12 @@
 # Only what the image build needs; everything else stays out of the context.
 *
 !src/
+!rust/
+rust/**/target
 !pyproject.toml
 !uv.lock
 !README.md
 !LICENSE
 **/__pycache__
 **/*.py[cod]
+rust/**/*.so

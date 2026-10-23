@@ -4,6 +4,8 @@
 
 - [uv](https://docs.astral.sh/uv/getting-started/installation/) 0.13 or newer.
   uv installs Python 3.13+ automatically when it is missing.
+- [Rust](https://rustup.rs/) 1.85 or newer (CI and the image use 1.99): `uv sync`
+  compiles the native extension `telegram-me-native`.
 - Optional: Docker, to run the image or the compose stack.
 - Optional: GNU `make` for the shortcuts below.
 
@@ -44,6 +46,8 @@ start one (`docker run -p 6379:6379 valkey/valkey:9.1-alpine`) and set
 | `make lint` | `ruff check` + `ruff format --check` |
 | `make format` | Format and autofix |
 | `make typecheck` | `mypy` in strict mode |
+| `make rust` | `cargo fmt --check`, clippy (pedantic) and `cargo test` |
+| `make native` | Rebuild the Rust extension after editing `rust/` |
 | `make check` | Everything CI runs before building the image |
 | `make snapshots` | Regenerate API contract snapshots after an intended change |
 | `make fixtures` | Re-record t.me pages used by the tests |
@@ -65,6 +69,9 @@ src/telegram_me/
 ├── schemas/          # Pydantic response and request models
 ├── services/         # channel pages, feed, scoring, popularity, coalescing
 └── telegram/         # t.me client and lexbor-based HTML parsers
+rust/telegram-me-native/
+├── src/              # rank.rs, simhash.rs, topics.rs, text.rs, python.rs (PyO3)
+└── python/           # telegram_me_native package + type stubs
 tests/
 ├── fixtures/telegram # recorded t.me responses (gzip) + manifest.json
 ├── snapshots/        # pinned JSON of every endpoint
