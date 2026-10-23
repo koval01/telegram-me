@@ -35,7 +35,7 @@ from tests.conftest import FIXTURES_DIR, make_settings  # noqa: E402
 from tests.workload import AliasFetcher, peak_rss_mb, rss_mb, run_workload  # noqa: E402
 
 from telegram_me.app import create_app  # noqa: E402
-from telegram_me.cache import MemoryCache  # noqa: E402
+from telegram_me.cache import MemoryCache, TwoLevelCache  # noqa: E402
 from telegram_me.schemas.channel import ChannelBody  # noqa: E402
 from telegram_me.services.channels import dump_json, encode, validate_with_posts  # noqa: E402
 from telegram_me.telegram.parsing.pages import parse_channel_page  # noqa: E402
@@ -141,12 +141,14 @@ async def workload(
             progress_every=max(requests // 10, 1),
         )
         cache = app.state.container.cache
+        if isinstance(cache, TwoLevelCache):
+            cache = cache.local
         _, peak = tracemalloc.get_traced_memory()
         elapsed = time.perf_counter() - started
         print(f"  statuses {statuses}, {requests / elapsed:.0f} req/s under tracemalloc")
         print(f"  traced peak {peak / MiB:.1f} MiB, peak RSS {peak_rss_mb():.1f} MiB")
         if isinstance(cache, MemoryCache):
-            print(f"  MemoryCache: {len(cache)} entries, {cache.size / MiB:.1f} MiB accounted")
+            print(f"  in-process cache: {len(cache)} entries, {cache.size / MiB:.1f} MiB accounted")
         snapshot = tracemalloc.take_snapshot()
     tracemalloc.stop()
     print("  top allocations still alive at the end:")

@@ -56,7 +56,7 @@ rare post type, add its ID to `EXTRA_POSTS` in `scripts/record_fixtures.py`.
 |---|---|
 | `test_client.py` | URL building, status mapping, validation, the single network retry |
 | `test_fetcher.py` | `ReqwestFetcher` against a real local HTTP server: gzip, headers, empty POST bodies |
-| `test_cache.py` | Memory LRU with memory limit, compression and expiry, Redis backend, circuit breaker |
+| `test_cache.py` | In-process cache (limit, compression, expiry), Redis backend, circuit breaker, two-level reads, fills, outage |
 | `test_memory_trim.py` | Periodic `malloc_trim` (glibc only), disabling it |
 | `test_coalesce.py` | Single-flight sharing, error propagation, cancellation safety |
 | `test_popularity.py` | Popularity decay and leader election on Redis (fakeredis with Lua) |
@@ -77,8 +77,11 @@ errors.
 `tests/test_memory.py` (marker `memory`) sends thousands of requests straight
 to the ASGI app over aliases of the recorded channels (`tests/workload.py`)
 and fails when Python allocations or, on Linux, resident memory keep growing
-after a warm-up, or when the memory cache exceeds its limit. It is part of the
-default run, so CI runs it; skip it locally with `-m "not memory"`.
+after a warm-up, or when the in-process cache exceeds its limit. It is part of
+the default run, so CI runs it; skip it locally with `-m "not memory"`. The
+cache's entries live on the Rust heap, which `tracemalloc` does not see: that
+the limit counts what they really hold is checked by
+`rust/telegram-me-native/tests/cache_memory.rs` with a counting allocator.
 
 `scripts/memory_profile.py` prints the numbers behind it: import cost of the
 main process and a worker, the size of one cached page, and RSS and Python

@@ -5,7 +5,9 @@
 //! event loop, when called through `asyncio.to_thread`) keep running.
 
 use pyo3::prelude::*;
+use pyo3::types::PyBytes;
 
+use crate::cache;
 use crate::parse;
 use crate::rank as ranking;
 
@@ -192,6 +194,70 @@ fn parse_preview_page(py: Python<'_>, html: String) -> Option<String> {
     py.detach(move || parse::parse_preview_page(&html).map(|v| to_json(&v)))
 }
 
+/// In-process byte cache (see `crate::cache`).
+///
+/// Calls keep the GIL. They are made from the event loop and take tens of
+/// microseconds (a 95 KB page: 38 us to read, 83 us to store); released, the
+/// GIL goes to a busy parsing thread and the event loop waits for it to come
+/// back: a read then took 6.3 ms (p50) next to two CPU-bound Python threads.
+#[pyclass(frozen, module = "telegram_me_native._native", name = "LocalCache")]
+pub struct PyLocalCache {
+    inner: cache::LocalCache,
+}
+
+#[pymethods]
+impl PyLocalCache {
+    #[new]
+    fn new(max_bytes: u64) -> Self {
+        Self {
+            inner: cache::LocalCache::new(max_bytes),
+        }
+    }
+
+    /// `(value, stored_at)` for `key`, or `None`.
+    fn get<'py>(&self, py: Python<'py>, key: &str) -> PyResult<Option<(Bound<'py, PyBytes>, f64)>> {
+        let Some(entry) = self.inner.get(key) else {
+            return Ok(None);
+        };
+        let value = PyBytes::new_with(py, entry.len(), |out| {
+            entry.write_value(out);
+            Ok(())
+        })?;
+        Ok(Some((value, entry.stored_at())))
+    }
+
+    /// Store `value` for `ttl` seconds.
+    fn set(&self, key: &str, value: &[u8], ttl: f64, stored_at: f64) {
+        self.inner.insert(key, value, ttl, stored_at);
+    }
+
+    /// Store `value` unless a newer entry is held for `key`; True when stored.
+    fn fill(&self, key: &str, value: &[u8], ttl: f64, stored_at: f64) -> bool {
+        self.inner.fill(key, value, ttl, stored_at)
+    }
+
+    /// Drop every entry.
+    fn clear(&self) {
+        self.inner.clear();
+    }
+
+    /// Bytes held by the entries.
+    #[getter]
+    fn size(&self) -> u64 {
+        self.inner.weighted_size()
+    }
+
+    /// The memory limit in bytes.
+    #[getter]
+    fn max_bytes(&self) -> u64 {
+        self.inner.max_bytes()
+    }
+
+    fn __len__(&self) -> usize {
+        usize::try_from(self.inner.len()).unwrap_or(usize::MAX)
+    }
+}
+
 /// The extension module.
 #[pymodule]
 fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
@@ -200,6 +266,7 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     module.add_class::<PyRankOptions>()?;
     module.add_class::<PyRankedItem>()?;
     module.add_class::<PyTopic>()?;
+    module.add_class::<PyLocalCache>()?;
     module.add_function(wrap_pyfunction!(rank, module)?)?;
     module.add_function(wrap_pyfunction!(parse_channel_page, module)?)?;
     module.add_function(wrap_pyfunction!(parse_more_page, module)?)?;

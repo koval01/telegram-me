@@ -95,8 +95,9 @@ curl https://tme.koval-dev.org/v1/body/durov
   pooled HTTP/2 client running outside the GIL.
 - **telegram-me-native** (Rust, this project) for HTML parsing (html5ever) and feed ranking.
 - **granian** (Rust) as the HTTP server, with **uvloop** (C) as event loop.
-- **Redis / Valkey** (optional) with **hiredis** (C) for a cache shared by all
-  workers and servers; an in-process cache otherwise.
+- An in-process cache in Rust (**moka**, zstd) per worker, in front of
+  **Redis / Valkey** (optional, with **hiredis**, C) shared by all workers and
+  servers.
 
 See [Performance](internals/performance.md) for measured numbers.
 

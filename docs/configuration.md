@@ -47,6 +47,7 @@ The source of truth is
 | [`REDIS_TIMEOUT`](#redis_timeout) | `0.5` | Cache |
 | [`PREVIEW_CACHE_TTL`](#preview_cache_ttl) | `3600` | Cache |
 | [`MEMORY_CACHE_MAX_MB`](#memory_cache_max_mb) | `64` | Cache |
+| [`MEMORY_CACHE_MAX_TTL`](#memory_cache_max_ttl) | `10` | Cache |
 | [`FEED_FRESH_TTL`](#feed_fresh_ttl) | `60` | Feed |
 | [`FEED_STALE_TTL`](#feed_stale_ttl) | `900` | Feed |
 | [`FEED_REFRESH_MODE`](#feed_refresh_mode) | `embedded` | Feed |
@@ -100,8 +101,9 @@ before it is killed.
 
 Recycle a worker whose resident memory exceeds this many MiB. A safety net
 for memory-constrained hosts; unset by default. A worker uses ~60 MiB idle and
-~100 MiB under load with Redis, plus up to `MEMORY_CACHE_MAX_MB` without it, so
-a value of about `MEMORY_CACHE_MAX_MB + 150` only fires on real trouble.
+~100 MiB under load, plus up to `MEMORY_CACHE_MAX_MB` for its in-process
+cache, so a value of about `MEMORY_CACHE_MAX_MB + 150` only fires on real
+trouble.
 
 ### `METRICS_PORT`
 
@@ -225,11 +227,14 @@ from being rate-limited by Telegram during large feed or previews requests.
 Redis or Valkey URL, e.g. `redis://valkey:6379/0` or
 `rediss://user:pass@host:6380/0`. When set, the page cache, preview cache,
 feed popularity and the refresher leader lock are shared by every worker and
-server. When unset, an in-process cache is used.
+server. Each worker still answers repeated requests from its in-process cache
+first ([`MEMORY_CACHE_MAX_MB`](#memory_cache_max_mb),
+[`MEMORY_CACHE_MAX_TTL`](#memory_cache_max_ttl)), so only its misses wait for
+a Redis round trip. When unset, the in-process cache is the only one.
 
 A Redis outage never slows requests down: commands time out after
 [`REDIS_TIMEOUT`](#redis_timeout) and Redis is then bypassed for 30 seconds
-(circuit breaker), the API working uncached meanwhile.
+(circuit breaker), the API working on its in-process cache meanwhile.
 
 Each worker keeps up to `2 × TELEGRAM_MAX_CONCURRENCY` (at least 32)
 connections to Redis. A burst of commands beyond that, such as several
@@ -249,11 +254,23 @@ seconds regardless.
 
 ### `MEMORY_CACHE_MAX_MB`
 
-Memory limit of the in-process cache (per worker) when Redis is not used:
+Memory limit of the in-process cache, per worker, with or without Redis:
 entries are stored compressed and the limit counts what they really occupy
 (value, key and bookkeeping). Least recently used entries are evicted first.
 With the default of 64, a worker under heavy traffic stays around 170 MiB
-(the whole container around 230 MiB).
+(the whole container around 230 MiB). With Redis, a worker holds only what
+was read or written in the last [`MEMORY_CACHE_MAX_TTL`](#memory_cache_max_ttl)
+seconds, usually far less than the limit.
+
+### `MEMORY_CACHE_MAX_TTL`
+
+With Redis: the longest a worker keeps its own copy of a cache entry, in
+seconds. A worker sees an entry that another server (or the feed worker)
+wrote to Redis at most this long after it was written; the cost is one Redis
+read per key and worker this often, for keys that are being read. Copies
+never outlive the Redis entry. Without Redis, and while Redis is unavailable,
+entries keep their full TTL. See
+[Internals → Caching](internals/caching.md#how-the-levels-work-together).
 
 ## Feed
 

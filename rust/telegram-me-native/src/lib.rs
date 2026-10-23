@@ -1,8 +1,10 @@
-//! Native core of `TelegramMe`: everything CPU-heavy lives here.
+//! Native core of `TelegramMe`: everything CPU-heavy lives here, and the
+//! in-process cache.
 //!
 //! The algorithms live in plain Rust modules (tested with `cargo test`); the
 //! optional `python` feature adds the `PyO3` bindings built by maturin.
 
+pub mod cache;
 pub mod parse;
 pub mod rank;
 pub mod simhash;

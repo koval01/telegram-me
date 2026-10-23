@@ -19,7 +19,7 @@ flowchart TB
     R --> FS["services/feed.py<br/>FeedService"]
     FS --> CS
     RF["FeedRefresher<br/>(embedded or worker)"] --> CS
-    CS --> C["cache.py<br/>Redis / memory"]
+    CS --> C["cache.py<br/>in-process (Rust) + Redis"]
     CS --> SF["services/coalesce.py<br/>SingleFlight"]
     SF --> TC["telegram/client.py<br/>TelegramClient"]
     TC --> F["ReqwestFetcher<br/>pyreqwest (Rust: tokio · hyper · rustls)"]
@@ -34,7 +34,7 @@ flowchart TB
 | `services/` | Business logic: fetching, caching and validating pages, the feed, scoring, popularity, request coalescing |
 | `telegram/` | Everything t.me-specific: the HTTP client with its retry and concurrency rules, the HTML parsers, error types |
 | `schemas/` | Public response and request models |
-| `cache.py` | Cache backends with entry age, circuit breaker |
+| `cache.py` | In-process and Redis levels with entry age, circuit breaker |
 | `container.py` | Creates and closes long-lived objects; the only place that knows how things are wired |
 | `app.py`, `server.py` | Application factory with lifespan; process entry points |
 
@@ -79,8 +79,8 @@ order: refresher, HTTP client, cache.
 ## Process model
 
 `telegram-me serve` starts granian with `WEB_CONCURRENCY` worker processes.
-Each worker has its own event loop (uvloop), HTTP client and — without Redis —
-its own memory cache. granian restarts crashed workers, can recycle workers by
+Each worker has its own event loop (uvloop), HTTP client and in-process
+cache (in front of Redis when it is set). granian restarts crashed workers, can recycle workers by
 memory, and forwards `SIGTERM` for a graceful shutdown.
 
 `telegram-me worker` runs only the feed refresher, for deployments that keep
@@ -97,6 +97,7 @@ background work off the API processes.
 | Validation, JSON (responses and cache) | pydantic-core | Rust |
 | Redis protocol | hiredis | C |
 | Feed ranking, duplicates, topics | `telegram-me-native` (this project) | Rust (PyO3) |
+| In-process cache | `telegram-me-native` (moka, libzstd) | Rust (PyO3), C |
 
 Native code written for this project lives in the Rust crate
 [`rust/telegram-me-native`](https://github.com/koval01/telegram-me/tree/main/rust/telegram-me-native),

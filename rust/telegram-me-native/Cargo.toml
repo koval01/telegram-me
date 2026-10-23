@@ -3,7 +3,7 @@ name = "telegram-me-native"
 version = "0.1.0"
 edition = "2024"
 rust-version = "1.85"
-description = "Native core of TelegramMe: t.me page parsing and feed ranking"
+description = "Native core of TelegramMe: t.me page parsing, feed ranking and the in-process cache"
 license = "Apache-2.0"
 publish = false
 
@@ -20,6 +20,8 @@ scraper = { version = "0.29.0", default-features = false, features = ["determini
 serde_json = { version = "1.0.154", features = ["preserve_order"] }
 rustc-hash = "2.1.3"
 pyo3 = { version = "0.30.1", features = ["abi3-py313"], optional = true }
+moka = { version = "0.12.16", features = ["sync"] }
+zstd = { version = "0.14.3", default-features = false }
 
 [features]
 default = []
@@ -37,3 +39,6 @@ lto = "fat"
 codegen-units = 1
 panic = "abort"
 strip = true
+
+[dev-dependencies]
+cap = "0.1.2"

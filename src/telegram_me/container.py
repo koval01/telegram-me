@@ -7,7 +7,7 @@ from concurrent.futures import ThreadPoolExecutor
 from contextlib import AsyncExitStack, asynccontextmanager, suppress
 from dataclasses import dataclass
 
-from telegram_me.cache import Cache, RedisCache, create_cache, create_redis
+from telegram_me.cache import Cache, create_cache, create_redis, shared_cache
 from telegram_me.memory import trimming_memory
 from telegram_me.services.channels import ChannelService
 from telegram_me.services.feed import FeedRefresher, FeedService
@@ -64,9 +64,9 @@ async def build_container(
 
         popularity: Popularity
         leader_lock: LeaderLock
-        if isinstance(cache, RedisCache):
-            popularity = RedisPopularity(cache)
-            leader_lock = RedisLeaderLock(cache, ttl=_LEADER_TTL)
+        if (shared := shared_cache(cache)) is not None:
+            popularity = RedisPopularity(shared)
+            leader_lock = RedisLeaderLock(shared, ttl=_LEADER_TTL)
         else:
             popularity = MemoryPopularity()
             leader_lock = LocalLeaderLock()
