@@ -7,7 +7,8 @@ repos:
       - id: trailing-whitespace
         exclude: ^tests/snapshots/
       - id: end-of-file-fixer
-        exclude: ^tests/snapshots/
+        # Snapshots are generated; static files are served byte for byte.
+        exclude: ^(tests/snapshots/|src/telegram_me/static/)
       - id: check-yaml
       - id: check-toml
       - id: check-merge-conflict
