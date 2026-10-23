@@ -1,6 +1,7 @@
 # Errors
 
-Every error except `422` and `429` has the same body:
+Every error except `422` and `429` has the same body (the GraphQL API reports
+errors differently, see [GraphQL errors](graphql.md#errors)):
 
 ```json
 {"detail": "Requested Telegram resource was not found"}

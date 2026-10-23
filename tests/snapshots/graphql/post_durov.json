@@ -1,0 +1,108 @@
+{
+  "data": {
+    "post": {
+      "content": {
+        "inline": null,
+        "media": [
+          {
+            "available": null,
+            "duration": null,
+            "thumb": "https://cdn4.telesco.pe/file/Dd57Twb7xLmOeIWI1ki0CHFsYYCvgGJdzHnEwFG1fO-vkJ18ZX7v7BTN12_Jq_VUNMgDMY4tCChW01b4lxD04GW-_Crf_C-6iOSKwUqWO9zBigI5UbHvv1k11O1fTV6LYjTOk8cWAnoHOj2H5cl3mhFaCkWPTMNHVlR0KZi9jvpLdgcUtgz67uLXX4OaMusx1vpfpVMq1OvXgvAD_5UwZsvpQ9iTsTEqioI93_C9g3srt9ZXfBCs1bhIrzq5Gxo5L2PoxXIz8f0BDbyHxtJlrzjF7mMP-za0uzWqL8G0lkRLZpQuq-ikVsGO6q50rLdVreEOqct79un_rNRwUK5JDQ",
+            "type": "gif",
+            "url": "https://cdn4.telesco.pe/file/b231b9b161.mp4?token=t9CdtSB2kdYkn4Ixy81V1DwtJ1AYKf9sI3qNMmzdrPibxwQriO45g80asbirS5xoc-wMh2q0WqZkd74Rb0MpFBGgnOU6TNPdTjg93vdSQtcswpQ2cO3cH96HpPow4PJno0woHaJ5mrswruJcEWIMLPe0F5RiNbRTfnu4ZYDTLVJMDvxUuMtGqklzl9n7vWr83wumWqnTekGOrZbhYazXu2oTlwZvlVIe5_ChCHCYeL6wmuX25UnHoaHu6j75pXDEhkz-9s-i3V7MqB1zWbur8AiW58YIgrsEkivuolMdiV1FAl9DsBQVWDUZY5IStTqPmrlr2GBxFoKINsF3FVAePjzoLYYGMqknLXWitR9ENcuYlvuH2_duRcW1gSNrDutwJRiNb4oohoOr2QiJZhWoYyGpijaw_6z9cGAq5qraeb67jIHbQJRGf3qFSIx1nXYKlYBH2IGEFbmyeDQT784STQ5YPI-eEt4U2NpNTzs5qqOhyJVQlX8AwFaoOXyE8JMF1U5N6F2kgYRk9lSL-fG7i4rS94h3rQJ8XKuOf9GXGF6tJT-wZRWgCS1AQJnzDxJQ0sz9GR52DM9Ho7mOsVJxsH0JrprSkZ-jLGCuNWz4izHcr0djjMAgjRxHVogYUkwXcmv5R27x7EdgEMGthHOr_gJwSqXM3BRMKCcD7HrBjy0",
+            "waves": null
+          }
+        ],
+        "poll": null,
+        "preview_link": null,
+        "reacts": [
+          {
+            "count": "6.3K",
+            "emoji": "⭐",
+            "emoji_id": null,
+            "emoji_image": null,
+            "type": "telegram_stars"
+          },
+          {
+            "count": "54.6K",
+            "emoji": null,
+            "emoji_id": "5265077361648368841",
+            "emoji_image": null,
+            "type": "custom_emoji"
+          },
+          {
+            "count": "16.4K",
+            "emoji": null,
+            "emoji_id": "5465587407350942612",
+            "emoji_image": null,
+            "type": "custom_emoji"
+          },
+          {
+            "count": "9.57K",
+            "emoji": null,
+            "emoji_id": "5936157098181135162",
+            "emoji_image": null,
+            "type": "custom_emoji"
+          },
+          {
+            "count": "6.58K",
+            "emoji": null,
+            "emoji_id": "5399847211989246390",
+            "emoji_image": null,
+            "type": "custom_emoji"
+          },
+          {
+            "count": "1.66K",
+            "emoji": null,
+            "emoji_id": "5373223594484587136",
+            "emoji_image": null,
+            "type": "custom_emoji"
+          }
+        ],
+        "reply": null,
+        "text": {
+          "entities": [
+            {
+              "language": null,
+              "length": 1,
+              "offset": 0,
+              "type": "animoji",
+              "url": "https://telegram.org/img/emoji/40/F09FA9B5.png"
+            },
+            {
+              "language": null,
+              "length": 16,
+              "offset": 21,
+              "type": "bold",
+              "url": null
+            },
+            {
+              "language": null,
+              "length": 1,
+              "offset": 124,
+              "type": "animoji",
+              "url": "https://telegram.org/img/emoji/40/F09F9888.png"
+            }
+          ],
+          "html": "<tg-emoji emoji-id=\"5460865451586250451\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09FA9B5.png')\"><b>🩵</b></i></tg-emoji> Telegram now has a <b>Rich Text Editor</b>.<br><br>It supports tables, headings, inline media, lists, AI content, formulas, and more.<br><br><tg-emoji emoji-id=\"5357135183864667855\"><i class=\"emoji\" style=\"background-image:url('//telegram.org/img/emoji/40/F09F9888.png')\"><b>😈</b></i></tg-emoji> Messaging apps will never be the same!",
+          "string": "🩵 Telegram now has a Rich Text Editor.\n\nIt supports tables, headings, inline media, lists, AI content, formulas, and more.\n\n😈 Messaging apps will never be the same!"
+        }
+      },
+      "footer": {
+        "author": {
+          "html": "Pavel Durov",
+          "string": "Pavel Durov"
+        },
+        "date": {
+          "string": "2026-07-16T20:45:25+00:00",
+          "unix": 1784234725
+        },
+        "edited": false,
+        "views": "5.83M"
+      },
+      "forwarded": null,
+      "id": 531,
+      "view": "eyJjIjotMTAwNjUwMzEyMiwicCI6NTMxLCJ0IjoxNzkyNzA3ODYxLCJoIjoiMDU0N2FiODJiMDk0NWUyNTc4In0"
+    }
+  }
+}

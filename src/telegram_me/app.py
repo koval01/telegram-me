@@ -9,7 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
 from telegram_me import __version__
-from telegram_me.api import routes
+from telegram_me.api import graphql, routes
 from telegram_me.api.errors import install_error_handlers
 from telegram_me.api.middleware import RateLimitMiddleware, ResponseHeadersMiddleware
 from telegram_me.container import build_container, running_refresher
@@ -52,6 +52,8 @@ def create_app(settings: Settings | None = None, *, fetcher: Fetcher | None = No
     app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
     for router in (routes.service, routes.channels, routes.feed):
         app.include_router(router)
+    if settings.enable_graphql:
+        app.include_router(graphql.create_router(settings))
     install_error_handlers(app)
 
     # Added last = outermost: rate limiting runs before everything else.

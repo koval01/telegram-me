@@ -1,0 +1,79 @@
+{
+  "data": {
+    "post": {
+      "content": {
+        "inline": null,
+        "media": [
+          {
+            "available": null,
+            "duration": null,
+            "thumb": null,
+            "type": "sticker",
+            "url": "https://cdn4.telesco.pe/file/1ad36c3b30.webp?token=N1keN18cnhkddufaTvCfbBeGqv7OrNREqx4zPBfS7Zju-7i6SC9aQrQRkAh0TCZzWMSLiRUKw6IevhhImUAwC9OL0FBqL_l6oJHSO-ibgAw9cuVuRcq6dyXMJNp-rm-MoSiG7flYsWFE4TRZVAjO5nGgRd6HW2BLBpruEPJ6Mccc7uLuVBbOzBGFT7WZrPp9wJtbNuYhdoC3JYGQIzdK90RuwJepg9OrUp4Kx-C2fTMMyW2tJg3G89gxIuAJSzj7sS8bHofvHi-f1Je0R3ithuf7cTDudWjNCG45sQG1uXnhCgcUFzuksNBvNp7y-dRcfrDAyElvymGOQT5zBmZHwA",
+            "waves": null
+          }
+        ],
+        "poll": null,
+        "preview_link": null,
+        "reacts": [
+          {
+            "count": "2",
+            "emoji": "⭐",
+            "emoji_id": null,
+            "emoji_image": null,
+            "type": "telegram_stars"
+          },
+          {
+            "count": "2.36K",
+            "emoji": "❤",
+            "emoji_id": null,
+            "emoji_image": "https://telegram.org/img/emoji/40/E29DA4.png",
+            "type": "emoji"
+          },
+          {
+            "count": "274",
+            "emoji": "😱",
+            "emoji_id": null,
+            "emoji_image": "https://telegram.org/img/emoji/40/F09F98B1.png",
+            "type": "emoji"
+          },
+          {
+            "count": "169",
+            "emoji": "💅",
+            "emoji_id": null,
+            "emoji_image": "https://telegram.org/img/emoji/40/F09F9285.png",
+            "type": "emoji"
+          },
+          {
+            "count": "39",
+            "emoji": "💩",
+            "emoji_id": null,
+            "emoji_image": "https://telegram.org/img/emoji/40/F09F92A9.png",
+            "type": "emoji"
+          },
+          {
+            "count": "21",
+            "emoji": "👎",
+            "emoji_id": null,
+            "emoji_image": "https://telegram.org/img/emoji/40/F09F918E.png",
+            "type": "emoji"
+          }
+        ],
+        "reply": null,
+        "text": null
+      },
+      "footer": {
+        "author": null,
+        "date": {
+          "string": "2026-05-04T14:20:07+00:00",
+          "unix": 1777904407
+        },
+        "edited": false,
+        "views": "249K"
+      },
+      "forwarded": null,
+      "id": 6191,
+      "view": "eyJjIjotMTI1MDEyMjM5MCwicCI6NjE5MSwidCI6MTc5MjcxNzE2MCwiaCI6Ijg4ODUzOThkMmE4YzUyZTcyNyJ9"
+    }
+  }
+}

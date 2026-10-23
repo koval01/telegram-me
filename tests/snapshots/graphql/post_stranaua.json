@@ -1,0 +1,67 @@
+{
+  "data": {
+    "post": {
+      "content": {
+        "inline": null,
+        "media": null,
+        "poll": null,
+        "preview_link": null,
+        "reacts": null,
+        "reply": null,
+        "text": {
+          "entities": [
+            {
+              "language": null,
+              "length": 12,
+              "offset": 427,
+              "type": "text_link",
+              "url": "https://stranaua.media/"
+            },
+            {
+              "language": null,
+              "length": 9,
+              "offset": 443,
+              "type": "text_link",
+              "url": "https://x.com/stranaua?s=21"
+            },
+            {
+              "language": null,
+              "length": 27,
+              "offset": 455,
+              "type": "text_link",
+              "url": "http://t.me/strana_send_bot"
+            },
+            {
+              "language": null,
+              "length": 17,
+              "offset": 485,
+              "type": "text_link",
+              "url": "https://t.me/@strana_ad_bot"
+            },
+            {
+              "language": null,
+              "length": 6,
+              "offset": 505,
+              "type": "text_link",
+              "url": "https://t.me/stranaua/137068"
+            }
+          ],
+          "html": "РФ и Китай начинают совместную марсианскую миссию, сообщает пресс-служба Роскосмоса.<br><br>«У нас совместная лунная миссия «Чанъэ-7». Также мы начинаем совместную марсианскую миссию – изготовление приборов и техники для изучения Марса», – сообщил глава Роскосмоса Дмитрий Баканов.<br><br>Он также отметил, что страны обмениваются данными дистанционного зондирования Земли и совместно используют навигационные системы ГЛОНАСС и «Бэйдоу».<br><br><a href=\"https://stranaua.media/\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Сайт \"Страна</a>\" | <a href=\"https://x.com/stranaua?s=21\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">X/Twitter</a> | <a href=\"http://t.me/strana_send_bot\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Прислать новость/фото/видео</a> | <a href=\"https://t.me/@strana_ad_bot\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Реклама на канале</a> | <a href=\"https://t.me/stranaua/137068\" target=\"_blank\" rel=\"noopener\" onclick=\"return confirm('Open this link?\\n\\n'+this.href);\">Помощь</a>",
+          "string": "РФ и Китай начинают совместную марсианскую миссию, сообщает пресс-служба Роскосмоса.\n\n«У нас совместная лунная миссия «Чанъэ-7». Также мы начинаем совместную марсианскую миссию – изготовление приборов и техники для изучения Марса», – сообщил глава Роскосмоса Дмитрий Баканов.\n\nОн также отметил, что страны обмениваются данными дистанционного зондирования Земли и совместно используют навигационные системы ГЛОНАСС и «Бэйдоу».\n\nСайт \"Страна\" | X/Twitter | Прислать новость/фото/видео | Реклама на канале | Помощь"
+        }
+      },
+      "footer": {
+        "author": null,
+        "date": {
+          "string": "2026-10-22T17:02:01+00:00",
+          "unix": 1792688521
+        },
+        "edited": false,
+        "views": "74K"
+      },
+      "forwarded": null,
+      "id": 252483,
+      "view": "eyJjIjotMTA5MjQxMzgzNCwicCI6MjUyNDgzLCJ0IjoxNzkyNzA3ODYyLCJoIjoiM2Y1NWY5MmMwNTgyYzI2MDJkIn0"
+    }
+  }
+}

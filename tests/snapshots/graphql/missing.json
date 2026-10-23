@@ -1,0 +1,43 @@
+{
+  "data": {
+    "body": null,
+    "durov": {
+      "channel": {
+        "title": "Pavel Durov"
+      }
+    },
+    "preview": null
+  },
+  "errors": [
+    {
+      "extensions": {
+        "code": "NOT_FOUND"
+      },
+      "locations": [
+        {
+          "column": 11,
+          "line": 3
+        }
+      ],
+      "message": "Requested Telegram resource was not found",
+      "path": [
+        "body"
+      ]
+    },
+    {
+      "extensions": {
+        "code": "NOT_FOUND"
+      },
+      "locations": [
+        {
+          "column": 11,
+          "line": 4
+        }
+      ],
+      "message": "Requested Telegram resource was not found",
+      "path": [
+        "preview"
+      ]
+    }
+  ]
+}
