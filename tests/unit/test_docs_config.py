@@ -83,7 +83,7 @@ def test_english_build_excludes_translations() -> None:
     assert sorted(excluded) == sorted(f"/{lang}/" for lang in LANGUAGES)
 
 
-@pytest.mark.parametrize("lang", ("en", *LANGUAGES))
+@pytest.mark.parametrize("lang", ["en", *LANGUAGES])
 def test_language_switcher_lists_every_language(lang: str) -> None:
     name = "zensical.toml" if lang == "en" else f"zensical.{lang}.toml"
     alternate = load(name)["extra"]["alternate"]
