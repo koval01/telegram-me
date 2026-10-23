@@ -57,13 +57,14 @@ Taking `GET /v1/body/durov` as an example:
    and asks **`ReqwestFetcher`** for the page; pyreqwest performs the request on
    a pooled HTTP/2 connection in Rust, outside the GIL, and returns the decoded
    body. A dropped connection is retried once.
-7. **`parse_channel_page`** hands the HTML to the Rust parser (GIL
-   released), which builds the tree once with html5ever and extracts the
-   channel profile, pagination and every post; a post that fails is skipped
-   and logged.
-8. The parsed page is cached (for `/v1/post` and the feed), validated against
-   `ChannelBody` (posts that do not validate are dropped), serialized by
-   pydantic-core and cached as the rendered response.
+7. On one of two parsing threads, **`parse_channel_page`** hands the HTML to
+   the Rust parser (GIL released), which builds the tree once with html5ever
+   and extracts the channel profile, pagination and every post; a post that
+   fails is skipped and logged.
+8. Still on that thread, the parsed page is validated against `ChannelBody`
+   (posts that do not validate are dropped) and serialized by pydantic-core;
+   back on the event loop it is cached (for `/v1/post` and the feed) together
+   with the rendered response.
 9. The route returns the JSON bytes directly, bypassing FastAPI's own
    response validation.
 

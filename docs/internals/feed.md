@@ -135,7 +135,9 @@ Every 5 seconds the refresher:
     ```
 
     — a channel requested ~20 times per half-life is refreshed every 30 s, a
-    channel requested once every 10 minutes.
+    channel requested once every 10 minutes. At most 16 channels are refreshed
+    at a time, so a tick leaves upstream slots to user requests and does not
+    flood the parser and Redis.
 
 Leadership moves automatically when the leader stops (it releases the lock) or
 dies (the lock expires within 30 s). Without Redis every process is its own

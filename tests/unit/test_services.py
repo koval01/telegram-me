@@ -1,3 +1,4 @@
+import asyncio
 import gzip
 from collections.abc import Mapping
 from typing import Any
@@ -170,6 +171,26 @@ async def test_refresher_refreshes_popular_channels_when_due(durov_html: str) ->
     assert await refresher.tick() == 0  # not due again yet
     assert fetcher.paths == ["/s/durov"]
     assert await channels.cached_page("durov") is not None
+
+
+async def test_refresher_bounds_concurrent_refreshes() -> None:
+    class Channels:
+        in_flight = peak = 0
+
+        async def refresh_page(self, channel: str) -> dict[str, Any]:
+            self.in_flight += 1
+            self.peak = max(self.peak, self.in_flight)
+            await asyncio.sleep(0.001)
+            self.in_flight -= 1
+            return {}
+
+    channels = Channels()
+    popularity = MemoryPopularity()
+    await popularity.hit([f"channel{i}" for i in range(30)])
+    refresher = FeedRefresher(channels, popularity, LocalLeaderLock(), make_settings())  # type: ignore[arg-type]
+
+    assert await refresher.tick() == 30
+    assert channels.peak == FeedRefresher.concurrency
 
 
 async def test_rendered_body_cache_is_identical_to_fresh_render(durov_html: str) -> None:

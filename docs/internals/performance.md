@@ -31,6 +31,27 @@ concurrent requests parse pages in parallel instead of queueing on one core
 (24 pages on 24 threads: 111 ms → 67 ms on 8 cores, before the optimisations
 above).
 
+## Event loop under a refresher tick
+
+Event-loop lag of one worker with Redis (Valkey) and the embedded refresher,
+in-process workload of 8 clients × 3 000 requests twice, with a refresher tick
+in between that refreshes the ~200 channels the first pass made popular:
+
+| | Worst lag | Median lag | Run time | Breaker trips |
+|---|---|---|---|---|
+| Parsing on the event loop, unbounded tick | 0.87–1.31 s | 9 ms | 32–36 s | 1 per run |
+| 2 parsing threads, ≤ 16 refreshes at a time | 25–122 ms | 1.1 ms | 13 s | none |
+
+Each finished fetch used to parse its page (~3 ms native) and validate and
+render it (~0.5–2 ms pydantic) right on the event loop. When a tick's fetches
+finished together they ran back to back for about a second, longer than
+`REDIS_TIMEOUT`, so a Redis command in flight timed out and opened the
+circuit breaker for 30 s. Pages are now parsed on two dedicated threads: the
+default executor (up to `cpu + 4` threads) was no faster and, competing with
+the event loop for the GIL, tripled its p99 lag (~21 ms instead of ~7 ms).
+The refresher refreshes at most 16 channels at a time, which also leaves
+upstream slots for user requests.
+
 ## Outgoing HTTP client
 
 2 000 HTTPS requests for a 148 KB page, 32 concurrent, against a local TLS

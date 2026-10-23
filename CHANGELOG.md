@@ -77,6 +77,12 @@ working; see the upgrade guide for the few behaviour changes.
   recover after a reboot.
 - The rate limiter kept every client IP forever.
 - Invalid input to a disabled feature now still answers `422`.
+- A feed refresher tick over ~200 channels stalled the event loop for about a
+  second (pages were parsed and validated on it), long enough for a Redis
+  command to time out and open the circuit breaker for 30 s. Pages are now
+  parsed, validated and rendered on two dedicated threads, and the refresher
+  refreshes at most 16 channels at a time: worst event-loop lag under load
+  ~1 s → about 30 ms (rarely ~120 ms), no breaker trips.
 
 ### Performance
 
