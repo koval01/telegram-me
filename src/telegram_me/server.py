@@ -1,4 +1,9 @@
-"""Process entry points: the HTTP server (granian) and the standalone feed worker."""
+"""Process entry points: the HTTP server (granian) and the standalone feed worker.
+
+The granian main process only supervises workers, so the application (FastAPI,
+Redis, the HTTP client, the parser) is imported by the functions that run in
+workers rather than at the top of this module.
+"""
 
 import asyncio
 import logging
@@ -11,8 +16,6 @@ from granian.constants import Interfaces, Loops
 from granian.log import LogLevels
 from granian.utils.proxies import wrap_asgi_with_proxy_headers
 
-from telegram_me.app import create_app
-from telegram_me.container import build_container
 from telegram_me.log import configure_logging
 from telegram_me.settings import Settings
 
@@ -24,6 +27,8 @@ def asgi() -> Any:
 
     Trusts `X-Forwarded-For` / `X-Forwarded-Proto` only from FORWARDED_ALLOW_IPS.
     """
+    from telegram_me.app import create_app  # noqa: PLC0415
+
     settings = Settings()
     return wrap_asgi_with_proxy_headers(
         create_app(settings), trusted_hosts=settings.forwarded_allow_ips
@@ -69,6 +74,8 @@ async def run_worker(settings: Settings) -> None:
     Needs REDIS_URL: pages it refreshes must land in the cache the API
     instances read from.
     """
+    from telegram_me.container import build_container  # noqa: PLC0415
+
     configure_logging(settings.log_level, settings.log_format)
     if not settings.redis_url:
         msg = "The feed worker needs REDIS_URL to share its cache with the API"

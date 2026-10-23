@@ -178,5 +178,5 @@ async def test_rendered_body_cache_is_identical_to_fresh_render(durov_html: str)
     first = await service.body_json("durov")
     cached = await service.body_json("durov")
     assert cached == first
-    assert cached == (await service.body("durov")).model_dump_json()
+    assert cached == (await service.body("durov")).model_dump_json().encode()
     assert fetcher.paths == ["/s/durov"]

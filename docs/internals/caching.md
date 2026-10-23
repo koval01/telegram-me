@@ -27,8 +27,16 @@ circuit breaker: Redis is skipped for 30 seconds and requests are served
 uncached, so a Redis outage costs at most one slow request per worker, not one
 per request. Responses are parsed by hiredis (C).
 
-**Memory** (default): an LRU dictionary per worker, bounded by
-`MEMORY_CACHE_MAX_MB` of stored text, with per-entry expiry.
+**Memory** (default): an LRU dictionary per worker with per-entry expiry,
+bounded by `MEMORY_CACHE_MAX_MB` of real memory: values are stored compressed
+(zstd level 1; zlib on Python 3.13) and the limit counts the compressed value,
+the key and the bookkeeping of every entry. A rendered page takes 14–53 KiB
+there instead of 93–700 KiB as a Python `str` (see
+[Performance](performance.md#memory)).
+
+Values are UTF-8 bytes in both backends. Keeping JSON as `str` cost up to four
+bytes per character (a single emoji widens the whole string) and an encode on
+every cache hit.
 
 ## Pre-rendered responses
 

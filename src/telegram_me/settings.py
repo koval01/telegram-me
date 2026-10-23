@@ -4,7 +4,7 @@ import os
 from functools import cached_property
 from typing import Literal
 
-from pydantic import Field, PositiveFloat, PositiveInt
+from pydantic import Field, NonNegativeFloat, PositiveFloat, PositiveInt
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 type CacheMode = Literal["off", "normal", "aggressive"]
@@ -66,6 +66,8 @@ class Settings(BaseSettings):
     # Performance
     cache_mode: CacheMode = "normal"
     parser_mode: ParserMode = "full"
+    memory_trim_interval: NonNegativeFloat = 10.0
+    """Return freed heap memory to the OS every this many seconds (glibc; 0 disables)."""
 
     # Upstream (t.me)
     telegram_timeout: PositiveFloat = 10.0

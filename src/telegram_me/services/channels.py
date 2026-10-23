@@ -30,7 +30,7 @@ logger = logging.getLogger(__name__)
 # Negative preview results are cached briefly to absorb repeated lookups of
 # channels that do not exist.
 _MISSING_PREVIEW_TTL = 60
-_MISSING = "null"
+_MISSING = b"null"
 _BODY_POSTS = ("content", "posts")
 
 
@@ -48,7 +48,7 @@ class ChannelService:
         self._simplified = settings.parser_mode == "simplified"
         self._pages: SingleFlight[JSONDict] = SingleFlight()
         self._previews: SingleFlight[JSONDict | None] = SingleFlight()
-        self._rendered: SingleFlight[str] = SingleFlight()
+        self._rendered: SingleFlight[bytes] = SingleFlight()
 
     # Raw (parsed, unvalidated) pages -------------------------------------------------
 
@@ -91,7 +91,7 @@ class ChannelService:
             # Pre-render the /v1/body response: cache hits are then served as
             # bytes without decoding, validating or serializing the page again.
             try:
-                rendered = validate_with_posts(ChannelBody, data, _BODY_POSTS).model_dump_json()
+                rendered = dump_json(validate_with_posts(ChannelBody, data, _BODY_POSTS))
             except TelegramParseError:
                 logger.warning("Channel page of %s does not match the schema", channel)
             else:
@@ -105,14 +105,14 @@ class ChannelService:
         data = await self.page(channel, position)
         return validate_with_posts(ChannelBody, data, _BODY_POSTS)
 
-    async def body_json(self, channel: str, position: int | None = None) -> str:
+    async def body_json(self, channel: str, position: int | None = None) -> bytes:
         """`body()` rendered as JSON, served from the response cache when fresh."""
         ttl = self._settings.page_cache_ttl
         if ttl:
             entry = await self._cache.get(_rendered(self.page_key(channel, position)))
             if entry is not None and entry.age < ttl:
                 return entry.value
-        return (await self.body(channel, position)).model_dump_json()
+        return dump_json(await self.body(channel, position))
 
     async def post(self, channel: str, identifier: int) -> Post:
         """A single post."""
@@ -129,7 +129,7 @@ class ChannelService:
 
     async def more_json(
         self, channel: str, position: int, direction: Literal["before", "after"]
-    ) -> str:
+    ) -> bytes:
         """Posts before or after `position` (anchor excluded), rendered as JSON."""
         key = f"more:{self._settings.parser_mode}:{channel.lower()}:{direction}:{position}"
         ttl = self._settings.page_cache_ttl
@@ -142,11 +142,11 @@ class ChannelService:
 
     async def _load_more(
         self, key: str, channel: str, position: int, direction: Literal["before", "after"]
-    ) -> str:
+    ) -> bytes:
         html = await self._client.more_page(channel, position, direction)
         data = _parse(parse_more_page, html, simplified=self._simplified)
         data = {**data, "posts": [p for p in data["posts"] if p.get("id") != position]}
-        rendered = validate_with_posts(More, data, ("posts",)).model_dump_json()
+        rendered = dump_json(validate_with_posts(More, data, ("posts",)))
         await self._cache.set(key, rendered, self._settings.page_cache_ttl)
         return rendered
 
@@ -202,17 +202,22 @@ class ChannelService:
         return Previews(found)
 
 
-def encode(data: Any) -> str:
-    """Serialize JSON-compatible data (Rust-backed, via pydantic-core)."""
-    return to_json(data).decode()
+def encode(data: Any) -> bytes:
+    """Serialize JSON-compatible data to UTF-8 (Rust-backed, via pydantic-core)."""
+    return to_json(data)
 
 
-def decode(value: str) -> Any:
+def dump_json(model: BaseModel) -> bytes:
+    """`model.model_dump_json()` as UTF-8 bytes, without an intermediate `str`."""
+    return model.__pydantic_serializer__.to_json(model)
+
+
+def decode(value: bytes) -> Any:
     """Deserialize JSON produced by `encode`."""
     return from_json(value)
 
 
-def decode_page(value: str) -> JSONDict:
+def decode_page(value: bytes) -> JSONDict:
     """Deserialize a cached parsed page."""
     data = from_json(value)
     if not isinstance(data, dict):

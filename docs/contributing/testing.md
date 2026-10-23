@@ -52,7 +52,8 @@ rare post type, add its ID to `EXTRA_POSTS` in `scripts/record_fixtures.py`.
 |---|---|
 | `test_client.py` | URL building, status mapping, validation, the single network retry |
 | `test_fetcher.py` | `ReqwestFetcher` against a real local HTTP server: gzip, headers, empty POST bodies |
-| `test_cache.py` | Memory LRU with size limit and expiry, Redis backend, circuit breaker |
+| `test_cache.py` | Memory LRU with memory limit, compression and expiry, Redis backend, circuit breaker |
+| `test_memory_trim.py` | Periodic `malloc_trim` (glibc only), disabling it |
 | `test_coalesce.py` | Single-flight sharing, error propagation, cancellation safety |
 | `test_popularity.py` | Popularity decay and leader election on Redis (fakeredis with Lua) |
 | `test_services.py` | Page and response caches, previews, stale-while-revalidate feed, refresher scheduling |
@@ -62,6 +63,24 @@ rare post type, add its ID to `EXTRA_POSTS` in `scripts/record_fixtures.py`.
 
 Tests are async-aware (`pytest-asyncio` in auto mode) and warnings are
 errors.
+
+## Memory
+
+`tests/test_memory.py` (marker `memory`) sends thousands of requests straight
+to the ASGI app over aliases of the recorded channels (`tests/workload.py`)
+and fails when Python allocations or, on Linux, resident memory keep growing
+after a warm-up, or when the memory cache exceeds its limit. It is part of the
+default run, so CI runs it; skip it locally with `-m "not memory"`.
+
+`scripts/memory_profile.py` prints the numbers behind it: import cost of the
+main process and a worker, the size of one cached page, and RSS and Python
+allocations sampled during a long workload:
+
+```bash
+uv run python scripts/memory_profile.py --requests 20000 --channels 50
+```
+
+RSS is read from `/proc`, so run it on Linux for meaningful numbers.
 
 ## Live smoke test
 

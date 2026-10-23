@@ -6,6 +6,15 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Changed
+
+- Lower memory use: the in-memory cache stores compressed UTF-8 instead of
+  `str` and its `MEMORY_CACHE_MAX_MB` limit now counts real memory (a worker
+  under heavy traffic: ~435 → ~215 MiB); the granian main process no longer
+  imports the application (−25 MiB); workers return freed heap memory to the
+  OS every `MEMORY_TRIM_INTERVAL` seconds (new, default 10); FastAPI
+  dependencies no longer run in a thread pool.
+
 ## [2.0.0] - unreleased
 
 A rewrite of the internals with the same `/v1` API. Existing clients keep
