@@ -6,6 +6,14 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Added
+
+- GraphQL API at `/graphql` next to REST `/v1`, so clients can select only the
+  fields they need: the same data and services as REST, per-request page
+  memoization, batching, GraphiQL, stable `extensions.code` errors and
+  configurable depth, cost, alias, token and batch limits. Enabled by default
+  (`ENABLE_GRAPHQL`); see the GraphQL API docs.
+
 ## [2.0.0] - unreleased
 
 A rewrite of the internals with the same `/v1` API. Existing clients keep
