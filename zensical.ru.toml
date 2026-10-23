@@ -1,0 +1,152 @@
+# Russian documentation: docs/ru/ built into site/ru/.
+# Everything except the language-specific values matches zensical.toml;
+# tests/unit/test_docs_config.py keeps the two in sync.
+
+[project]
+site_name = "TelegramMe"
+site_description = "REST API для публичных Telegram-каналов на основе веб-превью t.me"
+site_author = "Koval Yaroslav"
+site_url = "https://koval01.github.io/telegram-me/ru/"
+docs_dir = "docs/ru"
+site_dir = "site/ru"
+repo_url = "https://github.com/koval01/telegram-me"
+repo_name = "koval01/telegram-me"
+edit_uri = "edit/main/docs/ru/"
+copyright = "Copyright &copy; 2024–2026 Koval Yaroslav · Лицензия Apache-2.0"
+
+
+nav = [
+  { "Главная" = "index.md" },
+  { "Начало работы" = [
+    "getting-started/quickstart.md",
+    "getting-started/local-development.md",
+  ] },
+  { "Справочник API" = [
+    "api/index.md",
+    "api/channel-page.md",
+    "api/more.md",
+    "api/post.md",
+    "api/previews.md",
+    "api/feed.md",
+    "api/graphql.md",
+    "api/service.md",
+    "api/models.md",
+    "api/errors.md",
+  ] },
+  { "Конфигурация" = "configuration.md" },
+  { "Развёртывание" = [
+    "deployment/docker.md",
+    "deployment/compose.md",
+    "deployment/production.md",
+    "deployment/reverse-proxy.md",
+    "deployment/upgrading.md",
+  ] },
+  { "Внутреннее устройство" = [
+    "internals/architecture.md",
+    "internals/caching.md",
+    "internals/feed.md",
+    "internals/parsing.md",
+    "internals/performance.md",
+  ] },
+  { "Участие в разработке" = [
+    "contributing/development.md",
+    "contributing/testing.md",
+    "contributing/releasing.md",
+  ] },
+  { "Частые вопросы" = "faq.md" },
+  { "История изменений" = "changelog.md" },
+]
+
+[project.theme]
+language = "ru"
+custom_dir = "overrides"
+features = [
+  "content.action.edit",
+  "content.code.annotate",
+  "content.code.copy",
+  "content.tabs.link",
+  "content.tooltips",
+  "navigation.footer",
+  "navigation.indexes",
+  "navigation.instant",
+  "navigation.instant.prefetch",
+  "navigation.path",
+  "navigation.sections",
+  "navigation.top",
+  "navigation.tracking",
+  "search.highlight",
+  "toc.follow",
+]
+
+[project.theme.icon]
+logo = "lucide/send"
+repo = "fontawesome/brands/github"
+
+[[project.theme.palette]]
+media = "(prefers-color-scheme)"
+toggle.icon = "lucide/sun-moon"
+toggle.name = "Включить светлую тему"
+
+[[project.theme.palette]]
+media = "(prefers-color-scheme: light)"
+scheme = "default"
+primary = "indigo"
+accent = "sky"
+toggle.icon = "lucide/sun"
+toggle.name = "Включить тёмную тему"
+
+[[project.theme.palette]]
+media = "(prefers-color-scheme: dark)"
+scheme = "slate"
+primary = "indigo"
+accent = "sky"
+toggle.icon = "lucide/moon"
+toggle.name = "Как в системе"
+
+[[project.extra.social]]
+icon = "fontawesome/brands/github"
+link = "https://github.com/koval01/telegram-me"
+
+# Language switcher, see zensical.toml.
+[[project.extra.alternate]]
+name = "English"
+link = "../"
+lang = "en"
+
+[[project.extra.alternate]]
+name = "Español"
+link = "../es/"
+lang = "es"
+
+[[project.extra.alternate]]
+name = "Русский"
+link = "./"
+lang = "ru"
+
+[project.markdown_extensions]
+abbr = {}
+admonition = {}
+attr_list = {}
+def_list = {}
+footnotes = {}
+md_in_html = {}
+tables = {}
+toc.permalink = true
+pymdownx.betterem = {}
+pymdownx.details = {}
+pymdownx.emoji.emoji_generator = "zensical.extensions.emoji.to_svg"
+pymdownx.emoji.emoji_index = "zensical.extensions.emoji.twemoji"
+pymdownx.highlight.anchor_linenums = true
+pymdownx.highlight.line_spans = "__span"
+pymdownx.highlight.pygments_lang_class = true
+pymdownx.inlinehilite = {}
+pymdownx.keys = {}
+pymdownx.magiclink = {}
+pymdownx.mark = {}
+pymdownx.snippets.base_path = ["."]
+pymdownx.snippets.check_paths = true
+pymdownx.superfences.custom_fences = [
+  { name = "mermaid", class = "mermaid", format = "pymdownx.superfences.fence_code_format" },
+]
+pymdownx.tabbed.alternate_style = true
+pymdownx.tasklist.custom_checkbox = true

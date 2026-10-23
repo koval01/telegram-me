@@ -8,6 +8,14 @@ repo_name = "koval01/telegram-me"
 edit_uri = "edit/main/docs/"
 copyright = "Copyright &copy; 2024–2026 Koval Yaroslav · Apache-2.0 License"
 
+# English lives at the site root. Translations are separate builds of
+# docs/<lang>/ (zensical.<lang>.toml) into site/<lang>/; see the
+# "Documentation" section of docs/contributing/development.md.
+exclude_docs = """
+/es/
+/ru/
+"""
+
 nav = [
   { "Home" = "index.md" },
   { "Getting started" = [
@@ -52,6 +60,7 @@ nav = [
 
 [project.theme]
 language = "en"
+custom_dir = "overrides"
 features = [
   "content.action.edit",
   "content.code.annotate",
@@ -98,6 +107,23 @@ toggle.name = "Switch to system preference"
 [[project.extra.social]]
 icon = "fontawesome/brands/github"
 link = "https://github.com/koval01/telegram-me"
+
+# Language switcher. Links are relative to the site root of this build; the
+# theme keeps the reader on the same page when the other language has it.
+[[project.extra.alternate]]
+name = "English"
+link = "./"
+lang = "en"
+
+[[project.extra.alternate]]
+name = "Español"
+link = "es/"
+lang = "es"
+
+[[project.extra.alternate]]
+name = "Русский"
+link = "ru/"
+lang = "ru"
 
 [project.markdown_extensions]
 abbr = {}

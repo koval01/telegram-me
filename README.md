@@ -11,6 +11,8 @@ feed. No Telegram account or bot token needed.
 
 **Demo:** <https://tme.koval-dev.org> ·
 **Docs:** <https://koval01.github.io/telegram-me/>
+(also in [Español](https://koval01.github.io/telegram-me/es/) and
+[Русский](https://koval01.github.io/telegram-me/ru/))
 
 ```bash
 curl https://tme.koval-dev.org/v1/body/durov

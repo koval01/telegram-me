@@ -53,7 +53,7 @@ start one (`docker run -p 6379:6379 valkey/valkey:9.1-alpine`) and set
 | `make fixtures` | Re-record t.me pages used by the tests |
 | `make smoke` | Smoke-test a running instance against live t.me |
 | `make docker` / `make up` | Build the image / start the compose stack |
-| `make docs-serve` | Preview this documentation on <http://localhost:8001> |
+| `make docs-serve` | Preview this documentation on <http://localhost:8001> (`DOCS_LANG=es` or `ru` for a translation) |
 
 ## Project layout
 

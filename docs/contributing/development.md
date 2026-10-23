@@ -48,3 +48,25 @@ and Docker base images.
 `make install` installs git hooks that run ruff (with autofix), ruff format,
 mypy and a few hygiene checks on every commit, using the versions from
 `uv.lock`. Run them on demand with `uv run pre-commit run --all-files`.
+
+## Documentation
+
+The site is written in English in `docs/`, with Spanish and Russian
+translations in `docs/es/` and `docs/ru/` that mirror its file layout. Each
+language is its own build: `zensical.toml` builds English into `site/`, and
+`zensical.es.toml` / `zensical.ru.toml` build the translations into
+`site/es/` and `site/ru/`. The language switcher in the header keeps the reader
+on the same page and section (`overrides/main.html`).
+
+```bash
+make docs-serve                  # live preview of English on :8001
+make docs-serve DOCS_LANG=ru     # live preview of the Russian pages
+make docs-preview                # build all languages and serve site/ with the switcher
+```
+
+When you change a page, update its translations in the same pull request, or
+open an issue for them. Translated headings keep the English anchor with an
+explicit id (`## Ejemplo { #example }`), so links and the switcher land on the
+same section in every language. Code, commands, setting names and JSON keys
+are not translated. `tests/unit/test_docs_config.py` checks that every page
+has a translation and that the three configuration files stay in sync.
