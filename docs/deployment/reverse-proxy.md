@@ -80,3 +80,8 @@ so a Cloudflare cache rule ("Eligible for cache" on `/v1/*`) caches responses
 for 10 s (`normal`) or 120 s (`aggressive`) at the edge. Cloudflare connects
 from its own IP ranges: either list them in `FORWARDED_ALLOW_IPS`, or set the
 nginx `real_ip` module to restore `CF-Connecting-IP`.
+
+Without a load balancer of your own, the deploy workflow can run Caddy on
+every server for Cloudflare to connect to. It handles TLS and
+`CF-Connecting-IP` for you: see
+[Cloudflare without a load balancer](production.md#cloudflare-without-a-load-balancer).

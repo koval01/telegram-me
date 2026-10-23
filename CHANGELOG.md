@@ -55,6 +55,12 @@ working; see the upgrade guide for the few behaviour changes.
   options, `MEMORY_TRIM_INTERVAL`, `LOG_LEVEL`, `LOG_FORMAT` (JSON logs).
 - `compose.yaml` with a bundled Valkey cache, an optional worker and
   `standard` / `full` / `minimal` presets.
+- Servers can sit straight behind Cloudflare: with the `PUBLIC_HOST`
+  variable every server also runs Caddy on port 443 (Cloudflare Origin CA
+  certificate from the `TLS_CERT`/`TLS_KEY` secrets, or a self-signed one) and
+  the API only listens on localhost. `deploy/bootstrap-server.sh` prepares a
+  fresh Ubuntu server (Docker, swap, Oracle Cloud firewall). Deployment logs
+  mask the server addresses.
 - Rolling multi-server deployments with automatic rollback, migration from the
   1.x container, manual rollback by tag; multi-arch images with SBOM and
   provenance on GHCR and Docker Hub.

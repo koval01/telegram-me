@@ -1,8 +1,11 @@
 # Production
 
-The reference production setup is several identical servers behind a load
-balancer, sharing one Redis, deployed by GitHub Actions with rolling updates
-and automatic rollback.
+The reference production setup is several identical servers sharing one
+Redis, deployed by GitHub Actions with rolling updates and automatic
+rollback. Requests reach the servers either through a load balancer of your
+own, or straight from Cloudflare (proxied DNS records, one per server), with
+a Caddy container on each server terminating TLS (see
+[Cloudflare without a load balancer](#cloudflare-without-a-load-balancer)).
 
 ```mermaid
 flowchart LR
@@ -17,15 +20,25 @@ flowchart LR
 
 ## Server preparation
 
-On each server (Ubuntu or any Linux with Docker):
+Run [`deploy/bootstrap-server.sh`](https://github.com/koval01/telegram-me/blob/main/deploy/bootstrap-server.sh)
+once on each fresh Ubuntu server, as the user GitHub Actions logs in as:
 
 ```bash
-curl -fsSL https://get.docker.com | sudo sh
-sudo usermod -aG docker ubuntu        # the user GitHub Actions logs in as
+ssh ubuntu@<server> 'bash -s' < deploy/bootstrap-server.sh
 ```
 
-Allow the load balancer to reach port `8000` and nothing else from outside,
-for example with UFW:
+It is safe to run again. It:
+
+- installs Docker Engine and the compose plugin from Docker's repository;
+- adds the user to the `docker` group;
+- adds 2 GiB of swap when there is none (`SWAP_MB=0` skips it). This helps
+  small machines such as 1 GB cloud instances;
+- opens port 443 in the host firewall of Oracle Cloud images, which reject
+  everything but SSH. The cloud security list or security group still decides
+  who may connect.
+
+Behind a load balancer of your own, allow it to reach port `8000` and nothing
+else from outside, for example with UFW:
 
 ```bash
 sudo ufw default deny incoming
@@ -76,10 +89,11 @@ sequenceDiagram
 
 | Secret | Required | Purpose |
 |---|---|---|
-| `SERVERS_IPS` | yes | Space-separated server addresses |
+| `SERVERS_IPS` | yes | Server addresses separated by spaces, e.g. `203.0.113.10 203.0.113.11`. The workflow masks each address in its logs and names servers 1, 2, … |
 | `SSH_KEY` | yes | Private key for `SSH_USER` |
 | `SSH_KNOWN_HOSTS` | recommended | `ssh-keyscan` output for the servers; without it host keys are trusted on first use (with a warning) |
 | `REDIS_URL` | yes | Shared Redis for all servers |
+| `TLS_CERT`, `TLS_KEY` | with `PUBLIC_HOST` | Cloudflare Origin CA certificate and key (PEM) for Caddy; without them Caddy uses a self-signed certificate |
 | `DOCKER_USERNAME`, `DOCKERHUB_TOKEN` | yes | Push to Docker Hub (`DOCKER_PASSWORD` is accepted instead of the token) |
 
 ### Variables
@@ -93,7 +107,8 @@ deployment:
 | `ENABLE_PREVIEWS` | `true` | |
 | `ENABLE_RATE_LIMIT`, `RATE_LIMIT_RPM` | `false`, `120` | |
 | `CACHE_MODE`, `PARSER_MODE` | `normal`, `full` | |
-| `FORWARDED_ALLOW_IPS` | `127.0.0.1` | Set to the load balancer address(es) |
+| `PUBLIC_HOST` | — | Public hostname, e.g. `api.example.com`. Set it to run Caddy on port 443 of every server (Cloudflare without a load balancer) |
+| `FORWARDED_ALLOW_IPS` | `127.0.0.1` | Set to the load balancer address(es). With `PUBLIC_HOST`: `172.29.53.0/24`, the stack's own network (Caddy) |
 | `DISABLE_DOCS` | `false` | |
 | `DEPLOY_IMAGE` | `docker.io/koval01/telegram-me` | Repository to deploy from |
 | `SSH_USER` | `ubuntu` | |
@@ -101,6 +116,29 @@ deployment:
 
 Use the `production` environment in the repository settings to add required
 reviewers or restrict which branches may deploy.
+
+## Cloudflare without a load balancer
+
+With proxied DNS records pointing at the servers themselves, Cloudflare
+connects to port 443 of each one. Set the `PUBLIC_HOST` variable, and every
+deployment then also runs the `proxy` service of `compose.prod.yaml`: Caddy
+([`deploy/Caddyfile`](https://github.com/koval01/telegram-me/blob/main/deploy/Caddyfile)).
+
+- Caddy terminates TLS and forwards to the API, which then listens on
+  `127.0.0.1:8000` only.
+- The client address comes from `CF-Connecting-IP`, trusted only from
+  [Cloudflare's ranges](https://www.cloudflare.com/ips/). Caddy passes it on
+  in `X-Forwarded-For`, so rate limiting and logs see real clients.
+- **Certificate.** Create an Origin CA certificate in the Cloudflare dashboard
+  (*SSL/TLS → Origin Server*) and store it as the `TLS_CERT` and `TLS_KEY`
+  secrets. Then use SSL mode **Full (strict)**. Without them Caddy serves a
+  self-signed certificate, which works with SSL mode **Full** only.
+- Let only Cloudflare's ranges reach port 443 in the cloud firewall (security
+  list or group), and nothing reach port 8000.
+
+Cloudflare picks one of the DNS records per connection. While one server
+restarts during a rolling deployment, some requests to it can fail for a few
+seconds.
 
 ## Rolling back
 
