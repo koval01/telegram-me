@@ -32,6 +32,13 @@ jobs:
         run: |
           rustup toolchain install "$RUST_VERSION" --profile minimal --component clippy,rustfmt
           rustup default "$RUST_VERSION"
+      - uses: astral-sh/setup-uv@07a047e608db84b3d8c06cd9a7c7dcc9c355c18e # v10.3.2
+        with:
+          version: ${{ env.UV_VERSION }}
+      - name: Python for the PyO3 build (abi3 needs >= 3.13)
+        run: |
+          uv python install 3.14
+          echo "PYO3_PYTHON=$(uv python find 3.14)" >> "$GITHUB_ENV"
       - run: cargo fmt --check
       - run: cargo clippy --locked --all-targets -- -D warnings
       - run: cargo clippy --locked --all-targets --features python -- -D warnings
