@@ -94,5 +94,11 @@ background work off the API processes.
 | HTML parsing | selectolax | C (lexbor) |
 | Validation, JSON (responses and cache) | pydantic-core | Rust |
 | Redis protocol | hiredis | C |
+| Feed ranking, duplicates, topics | `telegram-me-native` (this project) | Rust (PyO3) |
+
+Native code written for this project lives in the Rust crate
+[`rust/telegram-me-native`](https://github.com/koval01/telegram-me/tree/main/rust/telegram-me-native),
+built with maturin as a uv workspace member. Python stays the orchestration
+layer: fetching, caching, routing and gluing results together.
 
 The measured effect is on the [Performance](performance.md) page.

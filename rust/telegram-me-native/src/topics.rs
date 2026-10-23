@@ -6,7 +6,7 @@
 //! similarity to its centroid passes a threshold, otherwise it starts a new
 //! one. The same vectors drive the diversity penalty of the re-ranker.
 
-use std::collections::HashMap;
+use rustc_hash::FxHashMap as HashMap;
 
 use crate::text::Token;
 
@@ -27,17 +27,17 @@ impl Corpus {
     /// Build vectors for `documents` (each a list of tokens).
     #[must_use]
     pub fn new(documents: &[Vec<Token>]) -> Self {
-        let mut vocabulary: HashMap<String, u32> = HashMap::new();
+        let mut vocabulary: HashMap<String, u32> = HashMap::default();
         let mut forms: Vec<HashMap<String, u32>> = Vec::new();
         let mut doc_freq: Vec<u32> = Vec::new();
         let mut counts: Vec<HashMap<u32, u32>> = Vec::with_capacity(documents.len());
 
         for doc in documents {
-            let mut tf: HashMap<u32, u32> = HashMap::new();
+            let mut tf: HashMap<u32, u32> = HashMap::default();
             for token in doc {
                 let next = u32::try_from(vocabulary.len()).unwrap_or(u32::MAX);
                 let id = *vocabulary.entry(token.stem.clone()).or_insert_with(|| {
-                    forms.push(HashMap::new());
+                    forms.push(HashMap::default());
                     doc_freq.push(0);
                     next
                 });
@@ -154,7 +154,7 @@ pub fn cluster(
         let topic = if let Some((topic, _)) = best {
             topic
         } else {
-            centroids.push(HashMap::new());
+            centroids.push(HashMap::default());
             members.push(Vec::new());
             centroids.len() - 1
         };

@@ -6,6 +6,8 @@
 //! also catches a story re-posted with an added headline or signature. Posts
 //! are grouped with union-find so that A~B and B~C put all three together.
 
+use rayon::prelude::*;
+
 use crate::text::fnv1a;
 
 /// Words per shingle.
@@ -138,17 +140,27 @@ pub fn clusters(
     max_distance: u32,
     min_containment: f64,
 ) -> Vec<usize> {
+    // Comparing pairs is the expensive part and is spread over all cores;
+    // merging the (few) matching pairs is sequential.
+    let pairs: Vec<(usize, usize)> = (0..signatures.len())
+        .into_par_iter()
+        .flat_map_iter(|i| {
+            let a = signatures[i].as_ref();
+            signatures
+                .iter()
+                .enumerate()
+                .skip(i + 1)
+                .filter_map(move |(j, other)| {
+                    let (a, b) = (a?, other.as_ref()?);
+                    (distance(a.simhash, b.simhash) <= max_distance
+                        && containment(&a.shingles, &b.shingles) >= min_containment)
+                        .then_some((i, j))
+                })
+        })
+        .collect();
     let mut sets = UnionFind::new(signatures.len());
-    for i in 0..signatures.len() {
-        let Some(a) = &signatures[i] else { continue };
-        for (j, other) in signatures.iter().enumerate().skip(i + 1) {
-            if let Some(b) = other
-                && distance(a.simhash, b.simhash) <= max_distance
-                && containment(&a.shingles, &b.shingles) >= min_containment
-            {
-                sets.union(i, j);
-            }
-        }
+    for (i, j) in pairs {
+        sets.union(i, j);
     }
     (0..signatures.len()).map(|i| sets.find(i)).collect()
 }

@@ -13,7 +13,8 @@
 //!    just placed (TF-IDF cosine) and runs of posts from the same channel.
 //! 5. **Topics**: posts are grouped by subject with their keywords.
 
-use std::collections::HashMap;
+use rayon::prelude::*;
+use rustc_hash::FxHashMap as HashMap;
 
 use crate::simhash;
 use crate::text::{Token, tokens};
@@ -156,7 +157,7 @@ fn base_scores(candidates: &[Candidate], tokens: &[Vec<Token>], options: &Option
         .collect();
 
     // Robust per-channel statistics of projected log-views.
-    let mut by_channel: HashMap<&str, Vec<f64>> = HashMap::new();
+    let mut by_channel: HashMap<&str, Vec<f64>> = HashMap::default();
     for (c, value) in candidates.iter().zip(&projected) {
         by_channel
             .entry(c.channel.as_str())
@@ -291,7 +292,7 @@ fn diversify(
 /// Rank `candidates`.
 #[must_use]
 pub fn rank(candidates: &[Candidate], options: &Options) -> Ranking {
-    let tokens: Vec<Vec<Token>> = candidates.iter().map(|c| tokens(&c.text)).collect();
+    let tokens: Vec<Vec<Token>> = candidates.par_iter().map(|c| tokens(&c.text)).collect();
     let scores = base_scores(candidates, &tokens, options);
     let corpus = Corpus::new(&tokens);
 
@@ -299,10 +300,10 @@ pub fn rank(candidates: &[Candidate], options: &Options) -> Ranking {
     order.sort_by(by_score(candidates, &scores));
 
     // Collapse near-duplicates into the best-scoring member of each cluster.
-    let mut duplicates: HashMap<usize, Vec<usize>> = HashMap::new();
+    let mut duplicates: HashMap<usize, Vec<usize>> = HashMap::default();
     let pool: Vec<usize> = if options.collapse_duplicates {
         let signatures: Vec<Option<simhash::Signature>> = tokens
-            .iter()
+            .par_iter()
             .map(|t| {
                 let stems: Vec<String> = t.iter().map(|token| token.stem.clone()).collect();
                 simhash::signature(&stems, options.duplicate_min_tokens)
@@ -313,7 +314,7 @@ pub fn rank(candidates: &[Candidate], options: &Options) -> Ranking {
             options.duplicate_distance,
             options.duplicate_containment,
         );
-        let mut leader: HashMap<usize, usize> = HashMap::new();
+        let mut leader: HashMap<usize, usize> = HashMap::default();
         let mut pool = Vec::with_capacity(order.len());
         for &i in &order {
             if let Some(&best) = leader.get(&clusters[i]) {

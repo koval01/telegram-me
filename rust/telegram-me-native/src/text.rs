@@ -7,8 +7,9 @@
 //! dependency-free and good enough to match inflected forms of the same word
 //! ("войны", "война" → "войн"; "ракеты", "ракетой" → "ракет").
 
-use std::collections::HashSet;
 use std::sync::LazyLock;
+
+use rustc_hash::FxHashSet;
 
 /// Maximum characters kept from a word when stemming.
 const STEM_CHARS: usize = 5;
@@ -202,7 +203,7 @@ const STOP_WORDS: &[&str] = &[
     "які",
 ];
 
-static STOP_SET: LazyLock<HashSet<&'static str>> =
+static STOP_SET: LazyLock<FxHashSet<&'static str>> =
     LazyLock::new(|| STOP_WORDS.iter().copied().collect());
 
 fn is_stop_word(token: &str) -> bool {
@@ -222,11 +223,12 @@ pub struct Token {
 #[must_use]
 pub fn tokens(text: &str) -> Vec<Token> {
     let mut out = Vec::new();
+    let mut word = String::with_capacity(32);
     for raw in text.split_whitespace() {
         if raw.starts_with("http://") || raw.starts_with("https://") || raw.starts_with('@') {
             continue;
         }
-        let mut word = String::new();
+        word.clear();
         for ch in raw.chars() {
             if ch.is_alphanumeric() {
                 word.extend(ch.to_lowercase());
