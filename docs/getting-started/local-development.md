@@ -68,7 +68,7 @@ src/telegram_me/
 ├── api/              # routes, dependencies, middleware, error mapping
 ├── schemas/          # Pydantic response and request models
 ├── services/         # channel pages, feed, scoring, popularity, coalescing
-└── telegram/         # t.me client and lexbor-based HTML parsers
+└── telegram/         # t.me client and wrappers of the Rust page parser
 rust/telegram-me-native/
 ├── src/              # rank.rs, simhash.rs, topics.rs, text.rs, python.rs (PyO3)
 └── python/           # telegram_me_native package + type stubs

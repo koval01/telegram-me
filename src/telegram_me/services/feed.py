@@ -25,7 +25,7 @@ from telegram_me.services.channels import ChannelService, decode_page
 from telegram_me.services.feed_signals import candidate, parse_compact_number
 from telegram_me.services.popularity import LeaderLock, Popularity
 from telegram_me.settings import Settings
-from telegram_me.telegram.parsing.html import JSONDict
+from telegram_me.telegram.parsing.pages import JSONDict
 
 logger = logging.getLogger(__name__)
 

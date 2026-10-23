@@ -17,6 +17,20 @@ Median latency of one request, upstream served from fixtures:
 | `/v1/body/tginfo`, cached | — | 1.1 ms | 22× faster |
 | `/v1/feed`, 5 channels, cached pages | 81.9 ms | 5.4 ms | 15× faster |
 
+## Page parsing: Python + lexbor → Rust
+
+Median time to parse one recorded channel page (`scripts/benchmark.py`):
+
+| Page | Python + selectolax/lexbor | Rust (html5ever) |
+|---|---|---|
+| @durov (20 posts, many custom emoji) | 4.9 ms | 3.6 ms |
+| @tginfo (20 long posts, many links) | 12.4 ms | 6.3 ms |
+
+The bigger difference is under load: the Rust parser releases the GIL, so
+concurrent requests parse pages in parallel instead of queueing on one core
+(24 pages on 24 threads: 111 ms → 67 ms on 8 cores, before the optimisations
+above).
+
 ## Outgoing HTTP client
 
 2 000 HTTPS requests for a 148 KB page, 32 concurrent, against a local TLS

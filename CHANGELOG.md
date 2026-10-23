@@ -8,6 +8,12 @@ All notable changes to this project are documented here. The format follows
 
 ### Changed
 
+- t.me pages are parsed in Rust (`telegram-me-native`: html5ever, selectors,
+  regex) with the GIL released, instead of Python over selectolax/lexbor. The
+  output is byte-for-byte identical (contract snapshots unchanged); parsing is
+  1.3–2× faster per page and runs in parallel under load. `selectolax` is no
+  longer a dependency.
+
 - The feed is ranked natively in Rust (`telegram-me-native`, PyO3): engagement
   relative to each channel, freshness half-life, duplicate stories collapsed
   across channels, topics inferred from the texts and diversity re-ranking.

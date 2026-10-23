@@ -6,6 +6,7 @@
 
 use pyo3::prelude::*;
 
+use crate::parse;
 use crate::rank as ranking;
 
 /// One post to rank.
@@ -160,6 +161,37 @@ fn rank(
     (items, topics)
 }
 
+/// Skipped posts as `(data-post, reason)`.
+type Skipped = Vec<(String, String)>;
+
+fn to_json(value: &serde_json::Value) -> String {
+    serde_json::to_string(value).expect("JSON values always serialise")
+}
+
+/// Parse `t.me/s/<channel>`: `(page JSON, skipped posts)`, or `None` when the
+/// page is not a public channel.
+#[pyfunction]
+fn parse_channel_page(py: Python<'_>, html: String, simplified: bool) -> Option<(String, Skipped)> {
+    py.detach(move || {
+        parse::parse_channel_page(&html, simplified).map(|p| (to_json(&p.value), p.skipped))
+    })
+}
+
+/// Parse a "load more" fragment: `(page JSON, skipped posts)`.
+#[pyfunction]
+fn parse_more_page(py: Python<'_>, html: String, simplified: bool) -> (String, Skipped) {
+    py.detach(move || {
+        let parsed = parse::parse_more_page(&html, simplified);
+        (to_json(&parsed.value), parsed.skipped)
+    })
+}
+
+/// Parse a `t.me/<channel>` landing page; `None` when it is not a channel.
+#[pyfunction]
+fn parse_preview_page(py: Python<'_>, html: String) -> Option<String> {
+    py.detach(move || parse::parse_preview_page(&html).map(|v| to_json(&v)))
+}
+
 /// The extension module.
 #[pymodule]
 fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
@@ -169,5 +201,8 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     module.add_class::<PyRankedItem>()?;
     module.add_class::<PyTopic>()?;
     module.add_function(wrap_pyfunction!(rank, module)?)?;
+    module.add_function(wrap_pyfunction!(parse_channel_page, module)?)?;
+    module.add_function(wrap_pyfunction!(parse_more_page, module)?)?;
+    module.add_function(wrap_pyfunction!(parse_preview_page, module)?)?;
     Ok(())
 }

@@ -62,3 +62,12 @@ class Topic:
 
 def rank(candidates: list[Candidate], options: RankOptions) -> tuple[list[RankedItem], list[Topic]]:
     """Rank candidates; returns (items in feed order, topics)."""
+
+def parse_channel_page(html: str, simplified: bool) -> tuple[str, list[tuple[str, str]]] | None:
+    """Parse `t.me/s/<channel>`: (page JSON, skipped posts), None if not a channel."""
+
+def parse_more_page(html: str, simplified: bool) -> tuple[str, list[tuple[str, str]]]:
+    """Parse a "load more" fragment: (page JSON, skipped posts)."""
+
+def parse_preview_page(html: str) -> str | None:
+    """Parse a landing page; None when it is not a channel."""

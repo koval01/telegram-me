@@ -24,7 +24,7 @@ flowchart TB
     SF --> TC["telegram/client.py<br/>TelegramClient"]
     TC --> F["ReqwestFetcher<br/>pyreqwest (Rust: tokio · hyper · rustls)"]
     F --> T(("t.me"))
-    CS --> P["telegram/parsing<br/>selectolax / lexbor (C)"]
+    CS --> P["telegram/parsing<br/>telegram-me-native (Rust)"]
     CS --> V["schemas<br/>pydantic-core (Rust)"]
 ```
 
@@ -57,7 +57,8 @@ Taking `GET /v1/body/durov` as an example:
    and asks **`ReqwestFetcher`** for the page; pyreqwest performs the request on
    a pooled HTTP/2 connection in Rust, outside the GIL, and returns the decoded
    body. A dropped connection is retried once.
-7. **`parse_channel_page`** parses the HTML once with lexbor and extracts the
+7. **`parse_channel_page`** hands the HTML to the Rust parser (GIL
+   released), which builds the tree once with html5ever and extracts the
    channel profile, pagination and every post; a post that fails is skipped
    and logged.
 8. The parsed page is cached (for `/v1/post` and the feed), validated against
@@ -91,7 +92,7 @@ background work off the API processes.
 | HTTP server, worker supervision | granian | Rust |
 | Event loop | uvloop | C (libuv) |
 | Outgoing HTTP/2, TLS, pooling, decompression | pyreqwest | Rust (tokio, hyper, rustls) |
-| HTML parsing | selectolax | C (lexbor) |
+| HTML parsing and extraction | `telegram-me-native` (html5ever, selectors, regex) | Rust |
 | Validation, JSON (responses and cache) | pydantic-core | Rust |
 | Redis protocol | hiredis | C |
 | Feed ranking, duplicates, topics | `telegram-me-native` (this project) | Rust (PyO3) |
