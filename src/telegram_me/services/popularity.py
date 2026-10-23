@@ -12,7 +12,7 @@ import time
 from collections.abc import Iterable
 from typing import Protocol, cast
 
-from redis.exceptions import RedisError
+from redis.exceptions import MaxConnectionsError, RedisError
 
 from telegram_me.cache import KEY_PREFIX, RedisCache
 
@@ -167,7 +167,8 @@ class RedisLeaderLock:
                 return True
         except (RedisError, OSError) as exc:
             self._cache.trip(exc)
-            self._leader_since = None
+            if not isinstance(exc, MaxConnectionsError):  # else nothing reached Redis
+                self._leader_since = None
         return False
 
     async def release(self) -> None:  # noqa: D102

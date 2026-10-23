@@ -4,7 +4,8 @@ Entries remember when they were stored, so callers can apply their own
 freshness rules (for example stale-while-revalidate) on top of the
 backend expiry. The Redis backend never lets an outage slow requests
 down: commands use short timeouts and a circuit breaker skips Redis for
-a while after a failure.
+a while after a failure. A burst of commands waits briefly for a pooled
+connection instead; an exhausted pool is a local limit, not an outage.
 
 Values are UTF-8 bytes (JSON documents). As `str`, a page with a single
 emoji would take four bytes per character, and the response would have to
@@ -20,9 +21,11 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Protocol
 
-from redis.asyncio import Redis
+from redis.asyncio import BlockingConnectionPool, Redis
+from redis.asyncio.connection import Connection
 from redis.client import NEVER_DECODE
-from redis.exceptions import RedisError
+from redis.exceptions import ConnectionError as RedisConnectionError
+from redis.exceptions import MaxConnectionsError, RedisError
 
 from telegram_me.settings import Settings
 
@@ -52,6 +55,11 @@ else:  # pragma: no cover - Python 3.13 has no zstd in the standard library
 # the OrderedDict slot and link node, the tuple and two floats (measured
 # with tracemalloc: ~230 bytes).
 _ENTRY_OVERHEAD = 240
+
+# Redis connections per worker: a feed or previews request runs up to 100
+# commands at once, so the pool is sized for upstream fetches finishing
+# together (two writes each) and bursts beyond it wait for a free connection.
+_MIN_REDIS_CONNECTIONS = 32
 
 
 @dataclass(frozen=True, slots=True)
@@ -159,6 +167,7 @@ class RedisCache:
         self.client = client
         self._cooldown = cooldown
         self._disabled_until = 0.0
+        self._pool_warned_at = -cooldown
 
     @property
     def available(self) -> bool:
@@ -166,7 +175,17 @@ class RedisCache:
         return time.monotonic() >= self._disabled_until
 
     def trip(self, exc: Exception) -> None:
-        """Open the circuit breaker after a failed Redis command."""
+        """Open the circuit breaker after a failed Redis command.
+
+        An exhausted connection pool leaves it closed: the command never reached
+        Redis, and skipping Redis would send every worker to t.me instead.
+        """
+        if isinstance(exc, MaxConnectionsError):
+            now = time.monotonic()
+            if now - self._pool_warned_at >= self._cooldown:
+                self._pool_warned_at = now
+                logger.warning("Redis connection pool exhausted, skipping a command: %s", exc)
+            return
         if self.available:
             logger.warning("Redis unavailable, bypassing it for %.0fs: %s", self._cooldown, exc)
         self._disabled_until = time.monotonic() + self._cooldown
@@ -204,17 +223,43 @@ class RedisCache:
         await self.client.aclose()
 
 
+class WaitingConnectionPool(BlockingConnectionPool):
+    """Connection pool where a burst waits up to `timeout` for a free connection.
+
+    redis-py's default pool fails a command at once when every connection is
+    in use. When the wait runs out this one raises `MaxConnectionsError`, which
+    `RedisCache.trip` tells apart from a Redis failure.
+    """
+
+    async def get_connection(self, *args: object, **kwargs: object) -> Connection:  # noqa: D102
+        try:
+            return await super().get_connection(*args, **kwargs)  # type: ignore[no-untyped-call,no-any-return]
+        except RedisConnectionError as exc:
+            # The wait timed out; connect failures raise other errors or causes.
+            if type(exc) is RedisConnectionError and isinstance(exc.__cause__, TimeoutError):
+                raise MaxConnectionsError(str(exc)) from exc
+            raise
+
+
+def redis_max_connections(settings: Settings) -> int:
+    """Redis connections per worker (see `_MIN_REDIS_CONNECTIONS`)."""
+    return max(_MIN_REDIS_CONNECTIONS, 2 * settings.telegram_max_concurrency)
+
+
 def create_redis(settings: Settings) -> Redis | None:
     """Build a Redis client with short timeouts, or None when REDIS_URL is unset."""
     if not settings.redis_url:
         return None
-    return Redis.from_url(
+    pool = WaitingConnectionPool.from_url(
         settings.redis_url,
+        max_connections=redis_max_connections(settings),
+        timeout=settings.redis_timeout,
         decode_responses=True,
         socket_timeout=settings.redis_timeout,
         socket_connect_timeout=settings.redis_timeout,
         health_check_interval=30,
     )
+    return Redis.from_pool(pool)
 
 
 def create_cache(settings: Settings, redis: Redis | None) -> Cache:

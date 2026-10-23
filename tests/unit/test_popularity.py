@@ -1,9 +1,11 @@
 from collections.abc import AsyncIterator
 
 import pytest
-from fakeredis import FakeAsyncRedis
+from fakeredis import FakeAsyncRedis, FakeServer
+from fakeredis.aioredis import FakeAsyncRedisConnection
+from redis.asyncio import Redis
 
-from telegram_me.cache import RedisCache
+from telegram_me.cache import RedisCache, WaitingConnectionPool
 from telegram_me.services.popularity import (
     LEADER_KEY,
     LocalLeaderLock,
@@ -72,3 +74,23 @@ async def test_redis_lock_detects_lost_leadership(redis_cache: RedisCache) -> No
     await redis_cache.client.delete(LEADER_KEY)  # e.g. expired while paused
     assert await second.acquire()
     assert not await first.acquire()
+
+
+async def test_redis_lock_keeps_leadership_while_pool_is_exhausted() -> None:
+    pool = WaitingConnectionPool(
+        connection_class=FakeAsyncRedisConnection,
+        server=FakeServer(),
+        max_connections=1,
+        timeout=0.01,
+        decode_responses=True,
+    )
+    cache = RedisCache(Redis.from_pool(pool))
+    lock = RedisLeaderLock(cache, ttl=30)
+    assert await lock.acquire()
+
+    held = await pool.get_connection()
+    assert not await lock.acquire()  # renewal could not be sent
+    await pool.release(held)
+    assert await lock.acquire()  # still the owner: renewed, not re-elected
+    assert cache.available
+    await cache.close()

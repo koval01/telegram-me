@@ -231,9 +231,16 @@ A Redis outage never slows requests down: commands time out after
 [`REDIS_TIMEOUT`](#redis_timeout) and Redis is then bypassed for 30 seconds
 (circuit breaker), the API working uncached meanwhile.
 
+Each worker keeps up to `2 × TELEGRAM_MAX_CONCURRENCY` (at least 32)
+connections to Redis. A burst of commands beyond that, such as several
+100-channel feed requests at once, waits up to `REDIS_TIMEOUT` for a free
+connection; a command that still gets none is skipped as a cache miss without
+opening the circuit breaker.
+
 ### `REDIS_TIMEOUT`
 
-Connect and command timeout in seconds.
+Connect and command timeout in seconds, and the longest a command waits for a
+free pooled connection.
 
 ### `PREVIEW_CACHE_TTL`
 

@@ -68,6 +68,11 @@ working; see the upgrade guide for the few behaviour changes.
 - Inline keyboards lost every row after the first.
 - `forwarded.name.html` contained a broken `<span>` fragment.
 - With Redis unreachable every preview request took 10 seconds.
+- A few concurrent feed or previews requests could exhaust the Redis
+  connection pool, which opened the circuit breaker and sent every request to
+  t.me for 30 seconds. Bursts now wait briefly for a pooled connection
+  (`2 × TELEGRAM_MAX_CONCURRENCY` per worker), and an exhausted pool no longer
+  counts as a Redis outage.
 - The comment count used in feed ranking was never found, while costing one
   extra request to t.me per post (up to ~2 000 per feed request); the dead
   lookup was removed.

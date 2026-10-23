@@ -27,6 +27,12 @@ circuit breaker: Redis is skipped for 30 seconds and requests are served
 uncached, so a Redis outage costs at most one slow request per worker, not one
 per request. Responses are parsed by hiredis (C).
 
+A feed or previews request runs up to 100 cache lookups at once, so the
+connection pool (`2 × TELEGRAM_MAX_CONCURRENCY` per worker, at least 32) makes
+a burst wait up to `REDIS_TIMEOUT` for a free connection. A command that gets
+none is skipped as a miss; an exhausted pool is a local limit, so it does not
+open the circuit breaker.
+
 **Memory** (default): an LRU dictionary per worker with per-entry expiry,
 bounded by `MEMORY_CACHE_MAX_MB` of real memory: values are stored compressed
 (zstd level 1; zlib on Python 3.13) and the limit counts the compressed value,
