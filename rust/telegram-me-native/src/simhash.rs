@@ -78,7 +78,10 @@ pub fn containment(a: &[u64], b: &[u64]) -> f64 {
         }
     }
     let smaller = a.len().min(b.len());
-    #[allow(clippy::cast_precision_loss)]
+    #[expect(
+        clippy::cast_precision_loss,
+        reason = "token counts are far below 2^52"
+    )]
     if smaller == 0 {
         0.0
     } else {
@@ -202,7 +205,10 @@ mod tests {
         assert_eq!(fp("Срочная новость дня"), None);
     }
 
-    #[allow(clippy::unnecessary_wraps)] // matches the `clusters` input type
+    #[expect(
+        clippy::unnecessary_wraps,
+        reason = "matches the `clusters` input type"
+    )]
     fn sig(simhash: u64, shingles: &[u64]) -> Option<Signature> {
         Some(Signature {
             simhash,

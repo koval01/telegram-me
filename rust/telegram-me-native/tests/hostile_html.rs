@@ -38,7 +38,11 @@ fn fixtures() -> Vec<(String, String)> {
             flate2::read::GzDecoder::new(std::fs::File::open(&path).expect("fixture"))
                 .read_to_string(&mut text)
                 .expect("gzip UTF-8 fixture");
-            let name = path.file_name().unwrap().to_string_lossy().into_owned();
+            let name = path
+                .file_name()
+                .expect("file name")
+                .to_string_lossy()
+                .into_owned();
             if name.starts_with("more_") {
                 text = serde_json::from_str::<String>(&text).expect("JSON-wrapped HTML");
             }
@@ -68,6 +72,7 @@ fn parse_all(html: &str) {
 }
 
 /// Runs `parse_all` and reports the input (saved under target/) on a panic.
+#[expect(clippy::panic, reason = "fails the calling test, with the saved input")]
 fn check(label: &str, html: &str) {
     if catch_unwind(AssertUnwindSafe(|| parse_all(html))).is_err() {
         let dir = Path::new(env!("CARGO_TARGET_TMPDIR"));
@@ -92,7 +97,7 @@ impl Rng {
     }
 
     fn below(&mut self, n: usize) -> usize {
-        usize::try_from(self.next() % (n.max(1) as u64)).unwrap()
+        usize::try_from(self.next() % (n.max(1) as u64)).expect("below n")
     }
 
     fn pick<'a>(&mut self, items: &[&'a str]) -> &'a str {
@@ -288,7 +293,7 @@ fn snippet_soup_never_panics() {
     }
 }
 
-/// A channel page with `posts` copies of `message` (which may use `{id}`).
+/// A channel page with `posts` copies of `message` (which may use `@ID@`).
 fn page(posts: usize, message: &str) -> String {
     let mut html = String::from(
         r#"<html><head><meta property="og:title" content="X"></head><body>
@@ -297,7 +302,7 @@ fn page(posts: usize, message: &str) -> String {
 <section class="tgme_channel_history js-message_history">"#,
     );
     for id in 1..=posts {
-        html.push_str(&message.replace("{id}", &id.to_string()));
+        html.push_str(&message.replace("@ID@", &id.to_string()));
     }
     html.push_str("</section></body></html>");
     html
@@ -305,7 +310,7 @@ fn page(posts: usize, message: &str) -> String {
 
 fn message(text: &str) -> String {
     format!(
-        r#"<div class="tgme_widget_message_wrap js-widget_message_wrap"><div class="tgme_widget_message js-widget_message" data-post="x/{{id}}" data-view="v"><div class="tgme_widget_message_bubble"><div class="tgme_widget_message_text js-message_text" dir="auto">{text}</div><div class="tgme_widget_message_footer"><div class="tgme_widget_message_info"><span class="tgme_widget_message_views">1K</span><span class="tgme_widget_message_meta"><a class="tgme_widget_message_date" href="https://t.me/x/{{id}}"><time datetime="2026-01-01T00:00:00+00:00" class="time">00:00</time></a></span></div></div></div></div></div>"#
+        r#"<div class="tgme_widget_message_wrap js-widget_message_wrap"><div class="tgme_widget_message js-widget_message" data-post="x/@ID@" data-view="v"><div class="tgme_widget_message_bubble"><div class="tgme_widget_message_text js-message_text" dir="auto">{text}</div><div class="tgme_widget_message_footer"><div class="tgme_widget_message_info"><span class="tgme_widget_message_views">1K</span><span class="tgme_widget_message_meta"><a class="tgme_widget_message_date" href="https://t.me/x/@ID@"><time datetime="2026-01-01T00:00:00+00:00" class="time">00:00</time></a></span></div></div></div></div></div>"#
     )
 }
 
@@ -317,8 +322,14 @@ fn message(text: &str) -> String {
 fn deep_nesting_does_not_overflow_the_stack() {
     let depth = 6_000;
     let cases = [
-        ("div", "<div>".repeat(depth) + &"</div>".repeat(depth)),
-        ("b", "<b>".repeat(depth) + "x" + &"</b>".repeat(depth)),
+        (
+            "div",
+            format!("{}{}", "<div>".repeat(depth), "</div>".repeat(depth)),
+        ),
+        (
+            "b",
+            format!("{}x{}", "<b>".repeat(depth), "</b>".repeat(depth)),
+        ),
         ("mixed", "<i><u><a href=\"#\">".repeat(depth / 3)),
     ];
     for (name, inner) in cases {

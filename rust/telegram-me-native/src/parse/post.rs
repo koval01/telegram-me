@@ -10,7 +10,7 @@ use super::dom::{Document, attr, css, first, select, text, text_strip};
 use super::entities::parse_entities;
 use super::media::extract_media;
 use super::reactions::parse_reactions;
-use super::{background_url, inner_html, object, opt_str, truthy};
+use super::{background_url, inner_html, map, object, opt_str, truthy};
 
 const FORMATTING_TAGS: &[&str] = &[
     "a",
@@ -65,26 +65,31 @@ pub fn unix_timestamp(timestamp: &str) -> Fallible<i64> {
     }
     let (year, month, day) = (number(0..4)?, number(5..7)?, number(8..10)?);
     let (hour, minute, second) = (number(11..13)?, number(14..16)?, number(17..19)?);
-    let mut rest = &timestamp[19..];
+    let mut rest = timestamp.get(19..).ok_or_else(invalid)?;
     if let Some(fraction) = rest.strip_prefix('.') {
-        let digits = fraction.chars().take_while(char::is_ascii_digit).count();
-        rest = &fraction[digits..];
+        rest = fraction.trim_start_matches(|c: char| c.is_ascii_digit());
     }
     let offset = match rest {
         "" | "Z" => 0,
         _ => {
-            let sign = match rest.as_bytes()[0] {
-                b'+' => 1,
-                b'-' => -1,
-                _ => return Err(invalid()),
+            let (sign, rest) = if let Some(rest) = rest.strip_prefix('+') {
+                (1, rest)
+            } else if let Some(rest) = rest.strip_prefix('-') {
+                (-1, rest)
+            } else {
+                return Err(invalid());
             };
-            let digits: String = rest[1..].chars().filter(char::is_ascii_digit).collect();
+            let digits: String = rest.chars().filter(char::is_ascii_digit).collect();
             if digits.len() != 4 {
                 return Err(invalid());
             }
-            let hours: i64 = digits[0..2].parse().map_err(|_| invalid())?;
-            let minutes: i64 = digits[2..4].parse().map_err(|_| invalid())?;
-            sign * (hours * 3600 + minutes * 60)
+            let part = |range: std::ops::Range<usize>| -> Fallible<i64> {
+                digits
+                    .get(range)
+                    .and_then(|d| d.parse().ok())
+                    .ok_or_else(invalid)
+            };
+            sign * (part(0..2)? * 3600 + part(2..4)? * 60)
         }
     };
     Ok(days_from_civil(year, month, day) * 86_400 + hour * 3600 + minute * 60 + second - offset)
@@ -241,19 +246,16 @@ fn footer(doc: &Document, bubble: ElementRef<'_>) -> Fallible<Value> {
     };
     let views = first(bubble, css!(".tgme_widget_message_views")).map(text);
     let meta = first(bubble, css!(".tgme_widget_message_meta"));
-    let mut footer = object! {
+    let mut footer = map! {
         "views" => opt_str(views),
         "edited" => meta.is_some_and(|m| text(m).starts_with("edited")),
         "date" => object! {"string" => timestamp, "unix" => unix_timestamp(timestamp)?},
     };
     let author = name(doc, first(bubble, css!(".tgme_widget_message_from_author")));
     if truthy(&author) {
-        footer
-            .as_object_mut()
-            .expect("object")
-            .insert("author".into(), author);
+        footer.insert("author".into(), author);
     }
-    Ok(footer)
+    Ok(Value::Object(footer))
 }
 
 fn forwarded(doc: &Document, message: ElementRef<'_>) -> Value {
@@ -263,13 +265,12 @@ fn forwarded(doc: &Document, message: ElementRef<'_>) -> Value {
     // The visible name sits in a nested <span dir="auto">; reading it directly
     // keeps `html` well-formed (it is empty for senders who hide their name).
     let label = first(node, css!("span[dir=auto]")).unwrap_or(node);
-    let mut forwarded = object! {
+    let mut map = map! {
         "name" => object! {
             "string" => text(node),
             "html" => inner_html(doc, Some(label), "span").unwrap_or_default(),
         },
     };
-    let map = forwarded.as_object_mut().expect("object");
     if let Some(url) = attr(node, "href").filter(|u| !u.is_empty()) {
         map.insert("url".into(), Value::from(url));
     }
@@ -282,7 +283,7 @@ fn forwarded(doc: &Document, message: ElementRef<'_>) -> Value {
             },
         );
     }
-    forwarded
+    Value::Object(map)
 }
 
 /// Numeric post id from `data-post="<channel>/<id>"`.
@@ -333,7 +334,7 @@ fn parse_message(
         }
     }
 
-    let mut post = object! {
+    let mut post = map! {
         "id" => identifier,
         "content" => Value::Object(content),
         "footer" => footer(doc, bubble)?,
@@ -341,11 +342,9 @@ fn parse_message(
     };
     let forwarded = forwarded(doc, message);
     if truthy(&forwarded) {
-        post.as_object_mut()
-            .expect("object")
-            .insert("forwarded".into(), forwarded);
+        post.insert("forwarded".into(), forwarded);
     }
-    Ok(post)
+    Ok(Value::Object(post))
 }
 
 /// Parse every post under `root`; malformed posts are skipped and reported.

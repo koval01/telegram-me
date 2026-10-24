@@ -258,7 +258,11 @@ fn candidate(channel: &str, subscribers: u64, post_id: u64, post: &RawObject<'_>
 /// Spaces (also no-break spaces) are ignored; `default` is returned for an
 /// empty or unparsable value. Only ASCII digits count as digits.
 #[must_use]
-#[allow(clippy::cast_possible_truncation, clippy::cast_sign_loss)]
+#[expect(
+    clippy::cast_possible_truncation,
+    clippy::cast_sign_loss,
+    reason = "`int(float)`: finite, truncated and clamped at 0 first; saturates above u64"
+)]
 pub fn parse_compact_number(value: &str, default: u64) -> u64 {
     if value.is_empty() {
         return default;
@@ -328,7 +332,10 @@ fn media_counts(media: &Value) -> (u32, u32, u32) {
 }
 
 /// `int(value)` for a JSON scalar; 0 when Python would not convert it.
-#[allow(clippy::cast_possible_truncation)]
+#[expect(
+    clippy::cast_possible_truncation,
+    reason = "`int(float)` truncates; the cast saturates where Python would not"
+)]
 fn python_int(value: &Value) -> i64 {
     match value {
         Value::Number(number) => number

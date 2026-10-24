@@ -165,7 +165,7 @@ impl Compiled {
         (start, end): (usize, usize),
         group: usize,
     ) -> Option<(usize, usize)> {
-        let caps = self.relaxed.captures(&text[start..end])?;
+        let caps = self.relaxed.captures(text.get(start..end)?)?;
         caps.get(group)
             .map(|m| (start + m.start(), start + m.end()))
     }
@@ -175,8 +175,10 @@ impl Compiled {
         match self.lookahead {
             Lookahead::None => true,
             Lookahead::NotFollowedBy(tag) => {
-                let rest = &text[candidate.1..];
-                !rest.find('<').is_some_and(|i| rest[i..].starts_with(tag))
+                let rest = text.get(candidate.1..).unwrap_or_default();
+                !rest
+                    .find('<')
+                    .is_some_and(|i| rest.get(i..).is_some_and(|r| r.starts_with(tag)))
             }
             Lookahead::NoHashAfterUrl => {
                 let position = candidate.2.map_or(candidate.0, |(s, _)| s);
@@ -206,7 +208,7 @@ static TAG: LazyLock<regex::Regex> =
 /// `match.group().strip("<>").split(">")[-depth].split("<")[0]`.
 fn visible_text(whole: &str, depth: usize) -> Option<&str> {
     let parts: Vec<&str> = whole.trim_matches(['<', '>']).split('>').collect();
-    let part = parts.len().checked_sub(depth).map(|i| parts[i])?;
+    let part = parts.get(parts.len().checked_sub(depth)?)?;
     part.split('<').next()
 }
 
@@ -225,9 +227,12 @@ fn py_find(haystack: &[char], needle: &[char], start: i64) -> i64 {
     if needle.is_empty() {
         return i64::try_from(start).unwrap_or(-1);
     }
-    haystack[start..]
-        .windows(needle.len())
-        .position(|window| window == needle)
+    haystack
+        .get(start..)
+        .and_then(|rest| {
+            rest.windows(needle.len())
+                .position(|window| window == needle)
+        })
         .map_or(-1, |position| i64::try_from(start + position).unwrap_or(-1))
 }
 
@@ -244,7 +249,7 @@ fn matches(text: &str) -> Vec<(usize, Found)> {
     }
     let last_hash = text.rfind('#');
     let search = |index: usize, from: usize| -> Option<Candidate> {
-        let (compiled, alternative) = (&COMPILED[index], &ALTERNATIVES[index]);
+        let (compiled, alternative) = (COMPILED.get(index)?, ALTERNATIVES.get(index)?);
         let found = compiled.relaxed_at(text, from, alternative.url_group)?;
         let exact = compiled.accepts(text, &found, last_hash);
         Some(Candidate { found, exact })
@@ -258,38 +263,42 @@ fn matches(text: &str) -> Vec<(usize, Found)> {
                 *slot = search(index, cursor);
             }
         }
-        let Some(index) = next
+        let Some((_, index, found, exact)) = next
             .iter()
             .enumerate()
-            .filter_map(|(i, c)| c.as_ref().map(|c| (c.found.0, i)))
-            .min()
-            .map(|(_, i)| i)
+            .filter_map(|(i, c)| c.as_ref().map(|c| (c.found.0, i, c.found, c.exact)))
+            .min_by_key(|&(start, i, ..)| (start, i))
         else {
             break;
         };
-        let candidate = next[index].as_ref().expect("selected candidate exists");
-        if !candidate.exact {
+        let (Some(compiled), Some(alternative)) = (COMPILED.get(index), ALTERNATIVES.get(index))
+        else {
+            break;
+        };
+        if !exact {
             // The exact match can only start at the candidate or later.
-            let mut start = candidate.found.0;
-            if let (Lookahead::NoHashAfterUrl, Some(hash)) = (COMPILED[index].lookahead, last_hash)
-            {
+            let mut start = found.0;
+            if let (Lookahead::NoHashAfterUrl, Some(hash)) = (compiled.lookahead, last_hash) {
                 // Its URL must begin after the last `#`, so the match starts at
                 // the earliest `<a` of the tag around that `#`, or after it.
-                let tag_start = text[..hash].rfind('>').map_or(0, |i| i + 1);
-                let earliest = text[tag_start..hash]
-                    .find("<a")
+                let before = text.get(..hash).unwrap_or_default();
+                let tag_start = before.rfind('>').map_or(0, |i| i + 1);
+                let earliest = before
+                    .get(tag_start..)
+                    .and_then(|tag| tag.find("<a"))
                     .map_or(hash, |i| tag_start + i);
                 start = start.max(earliest);
             }
-            next[index] = COMPILED[index]
-                .exact_at(text, start, ALTERNATIVES[index].url_group)
-                .map(|found| Candidate { found, exact: true });
+            if let Some(slot) = next.get_mut(index) {
+                *slot = compiled
+                    .exact_at(text, start, alternative.url_group)
+                    .map(|found| Candidate { found, exact: true });
+            }
             continue;
         }
-        let found = candidate.found;
-        let url = ALTERNATIVES[index]
+        let url = alternative
             .url_group
-            .and_then(|group| COMPILED[index].group_span(text, (found.0, found.1), group));
+            .and_then(|group| compiled.group_span(text, (found.0, found.1), group));
         let found = (found.0, found.1, url);
         out.push((index, found));
         // No alternative can match the empty string, so `end > start`.
@@ -310,8 +319,12 @@ pub fn parse_entities(html: &str) -> Result<Vec<Value>, String> {
     let mut entities = Vec::new();
     let mut offset: i64 = 0;
     for (index, (start, end, url)) in matches(html_text) {
-        let alternative = &ALTERNATIVES[index];
-        let visible: Vec<char> = visible_text(&html_text[start..end], alternative.depth)
+        let Some(alternative) = ALTERNATIVES.get(index) else {
+            continue;
+        };
+        let visible: Vec<char> = html_text
+            .get(start..end)
+            .and_then(|whole| visible_text(whole, alternative.depth))
             .ok_or_else(|| "IndexError: list index out of range".to_owned())?
             .chars()
             .collect();
@@ -320,8 +333,10 @@ pub fn parse_entities(html: &str) -> Result<Vec<Value>, String> {
         entity.insert("offset".into(), Value::from(position));
         entity.insert("length".into(), Value::from(visible.len()));
         entity.insert("type".into(), Value::from(alternative.entity_type));
-        if let Some((url_start, url_end)) = url.filter(|(s, e)| e > s) {
-            let url = &html_text[url_start..url_end];
+        if let Some(url) = url
+            .filter(|(s, e)| e > s)
+            .and_then(|(s, e)| html_text.get(s..e))
+        {
             let url = if matches!(alternative.entity_type, "emoji" | "animoji") {
                 format!("https:{url}")
             } else {

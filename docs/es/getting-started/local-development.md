@@ -4,7 +4,7 @@
 
 - [uv](https://docs.astral.sh/uv/getting-started/installation/) 0.13 o
   posterior. uv instala Python 3.13+ automáticamente si falta.
-- [Rust](https://rustup.rs/) 1.85 o posterior (la CI y la imagen usan 1.99):
+- [Rust](https://rustup.rs/) 1.99 o posterior (la que usan la CI y la imagen):
   `uv sync` compila la extensión nativa `telegram-me-native`.
 - Opcional: Docker, para ejecutar la imagen o el stack de compose.
 - Opcional: GNU `make` para los atajos de abajo.

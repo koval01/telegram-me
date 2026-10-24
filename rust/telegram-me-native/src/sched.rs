@@ -296,7 +296,10 @@ impl Gate {
     /// Suggested client back-off in seconds while requests are being shed.
     #[must_use]
     pub fn retry_after(&self) -> f64 {
-        #[allow(clippy::cast_precision_loss)] // queue lengths are far below 2^52
+        #[expect(
+            clippy::cast_precision_loss,
+            reason = "queue lengths are far below 2^52"
+        )]
         let rounds = (self.queued() as f64 / self.capacity as f64).ceil() + 1.0;
         (rounds * self.hold).clamp(1.0, 60.0)
     }
@@ -463,7 +466,10 @@ fn splitmix(mut x: u64) -> u64 {
 
 /// Uniform in [0, 1) from random bits.
 fn to_unit(bits: u64) -> f64 {
-    #[allow(clippy::cast_precision_loss)] // 53 bits fit an f64 mantissa exactly
+    #[expect(
+        clippy::cast_precision_loss,
+        reason = "53 bits fit an f64 mantissa exactly"
+    )]
     let unit = (bits >> 11) as f64 / (1u64 << 53) as f64;
     unit
 }

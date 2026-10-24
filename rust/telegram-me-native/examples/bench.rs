@@ -1,5 +1,6 @@
 //! `cargo run --release --example bench`: ranking time by batch size.
-#![allow(clippy::cast_possible_wrap, clippy::cast_possible_truncation)] // synthetic test data
+#![expect(clippy::cast_possible_wrap, reason = "synthetic test data")]
+#![expect(clippy::print_stdout, reason = "a command-line benchmark")]
 
 use std::time::Instant;
 

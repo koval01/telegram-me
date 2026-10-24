@@ -120,7 +120,7 @@ fn view_maturity(age_hours: f64) -> f64 {
 fn median(values: &mut [f64]) -> f64 {
     values.sort_by(f64::total_cmp);
     let mid = values.len() / 2;
-    if values.len() % 2 == 0 {
+    if values.len().is_multiple_of(2) {
         f64::midpoint(values[mid - 1], values[mid])
     } else {
         values[mid]
@@ -144,7 +144,10 @@ fn sigmoid(x: f64) -> f64 {
     1.0 / (1.0 + (-x).exp())
 }
 
-#[allow(clippy::cast_precision_loss)]
+#[expect(
+    clippy::cast_precision_loss,
+    reason = "ages in seconds and view counts are far below 2^52"
+)]
 fn base_scores(candidates: &[Candidate], tokens: &[Vec<Token>], options: &Options) -> Vec<f64> {
     let age_hours: Vec<f64> = candidates
         .iter()
@@ -273,7 +276,11 @@ fn diversify(
                 .take(CHANNEL_WINDOW)
                 .filter(|&&p| candidates[p].channel == candidates[candidate].channel)
                 .count();
-            #[allow(clippy::cast_possible_wrap, clippy::cast_possible_truncation)]
+            #[expect(
+                clippy::cast_possible_wrap,
+                clippy::cast_possible_truncation,
+                reason = "at most CHANNEL_WINDOW posts"
+            )]
             let adjusted = scores[candidate]
                 * (1.0 - d * f64::from(max_similarity))
                 * (1.0 - d / 2.0).powi(same_channel as i32);
@@ -351,7 +358,10 @@ pub fn rank(candidates: &[Candidate], options: &Options) -> Ranking {
 }
 
 #[cfg(test)]
-#[allow(clippy::cast_possible_wrap)] // small loop counters used as test data
+#[expect(
+    clippy::cast_possible_wrap,
+    reason = "small loop counters used as test data"
+)]
 mod tests {
     use super::*;
 

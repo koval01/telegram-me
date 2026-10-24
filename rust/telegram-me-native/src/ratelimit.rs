@@ -151,10 +151,14 @@ impl RateLimiter {
 
     /// Reject every request of `key` for the next `seconds`.
     pub fn block(&self, key: &str, seconds: f64) {
-        let Ok(duration) = Duration::try_from_secs_f64(seconds) else {
+        // Any f64 comes in from Python, and `Instant + Duration` panics on
+        // overflow (which aborts the worker).
+        let Some(until) = Duration::try_from_secs_f64(seconds)
+            .ok()
+            .and_then(|duration| Instant::now().checked_add(duration))
+        else {
             return;
         };
-        let until = Instant::now() + duration;
         self.clients.entry_by_ref(key).and_compute_with(|entry| {
             let state = entry.map(moka::Entry::into_value);
             moka::ops::compute::Op::Put(State {
@@ -269,6 +273,8 @@ mod tests {
         let limiter = RateLimiter::new(60, 1);
         limiter.block("a", f64::NAN);
         limiter.block("a", -1.0);
+        // A valid Duration, but past the end of `Instant`.
+        limiter.block("a", 1.5e19);
         assert!(limiter.check("a", 1).allowed);
     }
 }

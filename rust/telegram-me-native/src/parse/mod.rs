@@ -5,6 +5,10 @@
 //! Per-post failures are isolated: a malformed post is skipped and reported in
 //! [`Parsed::skipped`] instead of failing the page.
 
+// Hostile HTML must not panic the worker (the release build aborts on
+// panic): slice and index only through checked accessors.
+#![warn(clippy::indexing_slicing, clippy::string_slice)]
+
 pub mod dom;
 pub mod entities;
 pub mod media;
@@ -23,7 +27,7 @@ use dom::{Document, attr, css, first, select, text};
 pub use pages::{parse_channel_page, parse_more_page, parse_preview_page};
 
 /// A parsed page and the posts that had to be skipped.
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Parsed {
     /// The page as a JSON object.
     pub value: Value,
@@ -31,14 +35,21 @@ pub struct Parsed {
     pub skipped: Vec<(String, String)>,
 }
 
+/// JSON object literal preserving key order, as a [`Map`] to add keys to.
+macro_rules! map {
+    ($($key:expr => $value:expr),+ $(,)?) => {{
+        let mut map = serde_json::Map::new();
+        $(map.insert(String::from($key), serde_json::Value::from($value));)+
+        map
+    }};
+}
+pub(crate) use map;
+
 /// JSON object literal preserving key order.
 macro_rules! object {
-    ($($key:expr => $value:expr),* $(,)?) => {{
-        #[allow(unused_mut)]
-        let mut map = serde_json::Map::new();
-        $(map.insert(String::from($key), serde_json::Value::from($value));)*
-        serde_json::Value::Object(map)
-    }};
+    ($($body:tt)*) => {
+        serde_json::Value::Object($crate::parse::map! { $($body)* })
+    };
 }
 pub(crate) use object;
 
@@ -67,12 +78,10 @@ static BACKGROUND_URL: LazyLock<Regex> = LazyLock::new(|| {
 /// engine: the leftmost-first match is always the first `<TAG`, the first `>`
 /// after it and the first `</TAG>` after that (or no match at all).
 fn first_inner(html: &str, tag: &str) -> Option<String> {
-    let open = format!("<{tag}");
-    let close = format!("</{tag}>");
-    let start = html.find(&open)? + open.len();
-    let content = start + html[start..].find('>')? + 1;
-    let end = content + html[content..].find(&close)?;
-    Some(html[content..end].to_owned())
+    let (_, open) = html.split_once(&format!("<{tag}"))?;
+    let (_, content) = open.split_once('>')?;
+    let (inner, _) = content.split_once(&format!("</{tag}>"))?;
+    Some(inner.to_owned())
 }
 
 /// Inner HTML of the first `<tag>` in the node's serialised HTML.
@@ -87,7 +96,10 @@ pub(crate) fn inner_html(
 /// URL from a `background-image:url('...')` declaration.
 pub(crate) fn background_url(style: Option<&str>) -> Option<String> {
     let style = style.filter(|s| !s.is_empty())?;
-    BACKGROUND_URL.captures(style).map(|c| c[1].to_owned())
+    BACKGROUND_URL
+        .captures(style)
+        .and_then(|c| c.get(1))
+        .map(|m| m.as_str().to_owned())
 }
 
 fn hex(byte: u8) -> Option<u8> {
@@ -98,23 +110,24 @@ fn hex(byte: u8) -> Option<u8> {
 
 /// `urllib.parse.unquote(value.replace("+", " "))`.
 fn percent_decode(value: &str) -> String {
-    let bytes = value.as_bytes();
-    let mut out = Vec::with_capacity(bytes.len());
-    let mut i = 0;
-    while i < bytes.len() {
-        match bytes[i] {
+    let mut out = Vec::with_capacity(value.len());
+    let mut rest = value.as_bytes();
+    while let Some((&byte, tail)) = rest.split_first() {
+        rest = tail;
+        match byte {
             b'+' => out.push(b' '),
-            b'%' if i + 2 < bytes.len() => {
-                if let (Some(high), Some(low)) = (hex(bytes[i + 1]), hex(bytes[i + 2])) {
+            b'%' => {
+                if let [high, low, after @ ..] = tail
+                    && let (Some(high), Some(low)) = (hex(*high), hex(*low))
+                {
                     out.push(high * 16 + low);
-                    i += 3;
-                    continue;
+                    rest = after;
+                } else {
+                    out.push(b'%');
                 }
-                out.push(b'%');
             }
             byte => out.push(byte),
         }
-        i += 1;
     }
     String::from_utf8_lossy(&out).into_owned()
 }
@@ -218,7 +231,7 @@ mod tests {
         assert_eq!(get("/s/durov?before=42"), object! {"before" => 42});
         assert_eq!(get("/s/durov?q=a%20b&x=1"), object! {"q" => "a b"});
         assert_eq!(get("/s/durov?empty=&after=7#frag"), object! {"after" => 7});
-        assert_eq!(get("/s/durov"), object! {});
+        assert_eq!(get("/s/durov"), Value::Object(Map::new()));
     }
 
     #[test]

@@ -4,7 +4,7 @@
 
 - [uv](https://docs.astral.sh/uv/getting-started/installation/) 0.13 или
   новее. Если Python 3.13+ не установлен, uv установит его автоматически.
-- [Rust](https://rustup.rs/) 1.85 или новее (CI и образ используют 1.99):
+- [Rust](https://rustup.rs/) 1.99 или новее (эту версию используют CI и образ):
   `uv sync` компилирует нативное расширение `telegram-me-native`.
 - Необязательно: Docker — чтобы запускать образ или compose-стек.
 - Необязательно: GNU `make` — для сокращённых команд ниже.

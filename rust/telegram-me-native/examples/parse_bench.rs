@@ -1,5 +1,9 @@
 //! `cargo run --release --example parse_bench -- page.html`: where parsing time goes.
-#![allow(clippy::cast_precision_loss)]
+#![expect(
+    clippy::print_stdout,
+    clippy::unwrap_used,
+    reason = "a command-line benchmark"
+)]
 
 use std::time::Instant;
 
