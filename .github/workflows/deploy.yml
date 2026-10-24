@@ -67,8 +67,14 @@ jobs:
           REDIS_URL: ${{ secrets.REDIS_URL }}
           TLS_CERT: ${{ secrets.TLS_CERT }}
           TLS_KEY: ${{ secrets.TLS_KEY }}
+          POW_SECRET: ${{ secrets.POW_SECRET }}
+          ENABLE_POW: ${{ vars.ENABLE_POW || 'false' }}
         run: |
           umask 077
+          if [ "$ENABLE_POW" = true ] && [ "${#POW_SECRET}" -lt 32 ]; then
+            echo "::error::ENABLE_POW needs the POW_SECRET secret (at least 32 characters)"
+            exit 1
+          fi
           [[ "$PUBLIC_HOST" =~ ^[A-Za-z0-9.-]*$ ]] || { echo "::error::invalid PUBLIC_HOST"; exit 1; }
           mkdir -p deploy/certs
           caddy_tls=internal
@@ -93,6 +99,11 @@ jobs:
           ENABLE_PREVIEWS=${{ vars.ENABLE_PREVIEWS || 'true' }}
           ENABLE_RATE_LIMIT=${{ vars.ENABLE_RATE_LIMIT || 'false' }}
           RATE_LIMIT_RPM=${{ vars.RATE_LIMIT_RPM || '120' }}
+          RATE_LIMIT_SHARED=${{ vars.RATE_LIMIT_SHARED || 'true' }}
+          ENABLE_POW=${ENABLE_POW}
+          POW_DIFFICULTY=${{ vars.POW_DIFFICULTY || '18' }}
+          POW_CHALLENGE_TTL=${{ vars.POW_CHALLENGE_TTL || '300' }}
+          POW_BIND_IP=${{ vars.POW_BIND_IP || 'true' }}
           CACHE_MODE=${{ vars.CACHE_MODE || 'normal' }}
           PARSER_MODE=${{ vars.PARSER_MODE || 'full' }}
           FEED_REFRESH_MODE=${{ inputs.with_worker && 'worker' || 'embedded' }}
@@ -104,6 +115,11 @@ jobs:
           CADDY_TLS=${caddy_tls}
           EOF
           sed -i 's/^ *//' deploy/.env
+          # Optional values: only written when set (an empty value is invalid).
+          if [ -n "${{ vars.RATE_LIMIT_BURST }}" ]; then
+            echo "RATE_LIMIT_BURST=${{ vars.RATE_LIMIT_BURST }}" >> deploy/.env
+          fi
+          if [ -n "$POW_SECRET" ]; then echo "POW_SECRET=${POW_SECRET}" >> deploy/.env; fi
 
       - name: Roll out ${{ env.IMAGE }}
         env:

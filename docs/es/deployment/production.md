@@ -98,6 +98,8 @@ sequenceDiagram
 | `SSH_KEY` | sí | Clave privada para `SSH_USER` |
 | `SSH_KNOWN_HOSTS` | recomendado | Salida de `ssh-keyscan` para los servidores; sin ella, las claves de host se aceptan en el primer uso (con una advertencia) |
 | `REDIS_URL` | sí | Redis compartido por todos los servidores |
+| `CF_BYPASS_KEY` | no | La comprobación de salud pública lo envía como `x-bypass-key`, para una regla WAF de Cloudflare que la exime de la protección contra bots |
+| `POW_SECRET` | con `ENABLE_POW` | Firma los desafíos de prueba de trabajo; al menos 32 caracteres ([`POW_SECRET`](../configuration.md#pow_secret)) |
 | `TLS_CERT`, `TLS_KEY` | con `PUBLIC_HOST` | Certificado y clave de Cloudflare Origin CA (PEM) para Caddy; sin ellos Caddy usa un certificado autofirmado |
 | `DOCKER_USERNAME`, `DOCKERHUB_TOKEN` | sí | Push a Docker Hub (se acepta `DOCKER_PASSWORD` en lugar del token) |
 
@@ -110,7 +112,10 @@ escribe en cada despliegue:
 |---|---|---|
 | `ENABLE_FEED` | `true` | Se mantiene activado en producción para los clientes existentes; el valor por defecto de la aplicación es `false` |
 | `ENABLE_PREVIEWS` | `true` | |
-| `ENABLE_RATE_LIMIT`, `RATE_LIMIT_RPM` | `false`, `120` | |
+| `ENABLE_RATE_LIMIT`, `RATE_LIMIT_RPM` | `false`, `120` | Consulta [Límite de peticiones y prueba de trabajo](../api/protection.md) |
+| `RATE_LIMIT_BURST`, `RATE_LIMIT_SHARED` | `RATE_LIMIT_RPM`, `true` | |
+| `ENABLE_POW`, `POW_DIFFICULTY` | `false`, `18` | `ENABLE_POW` necesita el secreto `POW_SECRET`; sin él, el despliegue se detiene |
+| `POW_CHALLENGE_TTL`, `POW_BIND_IP` | `300`, `true` | |
 | `CACHE_MODE`, `PARSER_MODE` | `normal`, `full` | |
 | `PUBLIC_HOST` | — | Nombre de host público, p. ej. `api.example.com`. Defínelo para ejecutar Caddy en el puerto 443 de cada servidor (Cloudflare sin balanceador de carga) |
 | `FORWARDED_ALLOW_IPS` | `127.0.0.1` | Defínelo con la(s) dirección(es) del balanceador de carga. Con `PUBLIC_HOST`: `172.29.53.0/24`, la red propia del stack (Caddy) |
@@ -143,6 +148,17 @@ despliegue ejecutará también el servicio `proxy` de `compose.prod.yaml`: Caddy
 - Deja que solo los rangos de Cloudflare lleguen al puerto 443 en el
   cortafuegos de la nube (lista o grupo de seguridad), y que nada llegue al
   puerto 8000.
+
+Los clientes de la API son programas, no navegadores. La protección de
+Cloudflare contra bots (Bot Fight Mode, el nivel «I'm Under Attack», las reglas
+Managed Challenge) les responde con una página de verificación (`403`) en lugar
+de JSON, y eso incluye la comprobación de salud pública del despliegue.
+Desactívala si la API está pensada para programas. Si se queda activada (por
+ejemplo, en una demo), añade una regla WAF personalizada que la omita para las
+peticiones cuya cabecera coincida con una clave aleatoria larga, por ejemplo
+`any(http.request.headers["x-bypass-key"][*] eq "<key>")`. Guarda la clave en
+el secreto `CF_BYPASS_KEY` para la comprobación de salud y pásala al smoke test
+con `--header "x-bypass-key:$KEY"`.
 
 Cloudflare elige uno de los registros DNS por conexión. Mientras un servidor se
 reinicia durante un despliegue escalonado, algunas solicitudes dirigidas a él

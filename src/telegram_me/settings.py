@@ -4,7 +4,14 @@ import os
 from functools import cached_property
 from typing import Literal
 
-from pydantic import Field, NonNegativeFloat, PositiveFloat, PositiveInt
+from pydantic import (
+    Field,
+    NonNegativeFloat,
+    PositiveFloat,
+    PositiveInt,
+    SecretStr,
+    model_validator,
+)
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 type CacheMode = Literal["off", "normal", "aggressive"]
@@ -60,8 +67,23 @@ class Settings(BaseSettings):
     # Features
     enable_feed: bool = False
     enable_previews: bool = True
+
+    # Protection (both off by default)
     enable_rate_limit: bool = False
     rate_limit_rpm: PositiveInt = 120
+    rate_limit_burst: PositiveInt | None = None
+    """Requests a client may make at once; RATE_LIMIT_RPM when unset."""
+    rate_limit_shared: bool = True
+    """With Redis, count each client across every worker and server."""
+    enable_pow: bool = False
+    pow_secret: SecretStr | None = None
+    """Signs proof-of-work challenges; the same on every server, at least 32 characters."""
+    pow_difficulty: int = Field(default=18, ge=8, le=32)
+    """Leading zero bits each request's hash must have (the work doubles per bit)."""
+    pow_challenge_ttl: int = Field(default=300, ge=30, le=3600)
+    """Seconds a challenge stays valid (and reusable for new requests)."""
+    pow_bind_ip: bool = True
+    """Accept a challenge only from the client address it was issued to."""
 
     # GraphQL (`/graphql`); limits apply to every operation of a request
     enable_graphql: bool = True
@@ -111,6 +133,15 @@ class Settings(BaseSettings):
     # Logging
     log_level: Literal["DEBUG", "INFO", "WARNING", "ERROR"] = "INFO"
     log_format: LogFormat = "text"
+
+    @model_validator(mode="after")
+    def _require_pow_secret(self) -> "Settings":
+        if self.enable_pow:
+            secret = self.pow_secret.get_secret_value() if self.pow_secret else ""
+            if len(secret) < 32:
+                msg = "ENABLE_POW needs POW_SECRET of at least 32 characters"
+                raise ValueError(msg)
+        return self
 
     @cached_property
     def page_cache_ttl(self) -> int:

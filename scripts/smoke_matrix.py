@@ -4,6 +4,8 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
+import itertools
 import json
 import sys
 import time
@@ -44,10 +46,45 @@ class ScenarioResult:
 EXTRA_HEADERS: dict[str, str] = {}
 
 
+def solve_pow(challenge: str, difficulty: int, method: str, target: str) -> str:
+    """Find a nonce for a proof-of-work challenge (docs/api/protection.md)."""
+    prefix = hashlib.sha256(f"{challenge}\n".encode())
+    suffix = f"\n{method} {target}".encode()
+    for n in itertools.count():
+        nonce = format(n, "x")
+        digest = prefix.copy()
+        digest.update(nonce.encode() + suffix)
+        if int.from_bytes(digest.digest(), "big") >> (256 - difficulty) == 0:
+            return nonce
+    raise AssertionError
+
+
+def pow_challenge(raw: bytes) -> dict[str, Any] | None:
+    """The fresh challenge in a proof-of-work rejection, if it is one."""
+    try:
+        body = json.loads(raw)
+    except ValueError:
+        return None
+    challenge = body.get("pow") if isinstance(body, dict) else None
+    return challenge if isinstance(challenge, dict) and "challenge" in challenge else None
+
+
 def call(base_url: str, scenario: Scenario, timeout: float) -> ScenarioResult:
-    """Execute one HTTP request scenario."""
+    """Execute one HTTP request scenario; answers a proof-of-work demand once."""
+    result, challenge = _call(base_url, scenario, timeout, {})
+    if challenge is None:
+        return result
+    text, bits = challenge["challenge"], challenge["difficulty"]
+    nonce = solve_pow(text, bits, scenario.method, scenario.path)
+    result, _ = _call(base_url, scenario, timeout, {"X-PoW": f"{text}:{nonce}"})
+    return result
+
+
+def _call(
+    base_url: str, scenario: Scenario, timeout: float, extra: dict[str, str]
+) -> tuple[ScenarioResult, dict[str, Any] | None]:
     url = f"{base_url}{scenario.path}"
-    headers = {"accept": "application/json", **EXTRA_HEADERS}
+    headers = {"accept": "application/json", **EXTRA_HEADERS, **extra}
     data = None
     if scenario.payload is not None:
         data = json.dumps(scenario.payload).encode("utf-8")
@@ -62,21 +99,23 @@ def call(base_url: str, scenario: Scenario, timeout: float) -> ScenarioResult:
             raw = response.read()
             elapsed = int((time.time() - started) * 1000)
             preview = raw.decode("utf-8", errors="replace")[:200].replace("\n", " ")
-            return ScenarioResult(scenario, response.status, elapsed, len(raw), preview)
+            return ScenarioResult(scenario, response.status, elapsed, len(raw), preview), None
     except error.HTTPError as exc:
         raw = exc.read()
         elapsed = int((time.time() - started) * 1000)
         preview = raw.decode("utf-8", errors="replace")[:200].replace("\n", " ")
-        return ScenarioResult(scenario, exc.code, elapsed, len(raw), preview)
+        challenge = pow_challenge(raw) if exc.code in {400, 403, 428} and not extra else None
+        return ScenarioResult(scenario, exc.code, elapsed, len(raw), preview), challenge
     except Exception as exc:  # pylint: disable=broad-exception-caught
         elapsed = int((time.time() - started) * 1000)
-        return ScenarioResult(
+        result = ScenarioResult(
             scenario=scenario,
             status="ERR",
             elapsed_ms=elapsed,
             body_size=0,
             body_preview=f"{type(exc).__name__}: {exc}",
         )
+        return result, None
 
 
 def parse_args() -> argparse.Namespace:

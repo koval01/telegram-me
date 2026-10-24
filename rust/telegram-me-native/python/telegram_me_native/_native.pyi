@@ -95,3 +95,33 @@ class LocalCache:
     def max_bytes(self) -> int:
         """The memory limit in bytes."""
     def __len__(self) -> int: ...
+
+class RateLimiter:
+    """Per-client GCRA rate limiter: `burst` requests at once, then `per_minute`."""
+
+    def __init__(self, per_minute: int, burst: int) -> None: ...
+    def check(self, key: str, cost: int = 1) -> tuple[bool, int, float]:
+        """(allowed, remaining, retry_after_seconds) for one request of `key`."""
+    def take_counts(self) -> list[tuple[str, int]]:
+        """Accepted cells per client since the previous call."""
+    def block(self, key: str, seconds: float) -> None:
+        """Reject every request of `key` for the next `seconds`."""
+    @property
+    def burst(self) -> int:
+        """The burst size."""
+    def __len__(self) -> int: ...
+
+class ProofOfWork:
+    """Stateless proof-of-work challenges (HMAC-signed) and their verification."""
+
+    def __init__(self, secret: bytes, bits: int, ttl: int, bind_ip: bool = True) -> None: ...
+    def issue(self, ip: str) -> tuple[str, int, int]:
+        """(challenge, bits, expires) for a client at `ip`."""
+    def verify(self, header: str | None, method: str, target: str, ip: str) -> str | None:
+        """None when the X-PoW header is accepted, else the rejection code."""
+    @property
+    def bits(self) -> int:
+        """Required leading zero bits."""
+
+def solve_pow(challenge: str, method: str, target: str, bits: int) -> str:
+    """Find a nonce for `challenge` (reference solver)."""

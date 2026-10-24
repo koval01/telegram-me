@@ -7,9 +7,13 @@
 use pyo3::prelude::*;
 use pyo3::types::PyBytes;
 
+use std::time::Duration;
+
 use crate::cache;
 use crate::parse;
+use crate::pow;
 use crate::rank as ranking;
+use crate::ratelimit;
 
 /// One post to rank.
 #[pyclass(frozen, module = "telegram_me_native._native", name = "Candidate")]
@@ -258,6 +262,113 @@ impl PyLocalCache {
     }
 }
 
+/// Per-client GCRA rate limiter (see `crate::ratelimit`).
+///
+/// Calls keep the GIL: a check is one map lookup, made from the event loop.
+#[pyclass(frozen, module = "telegram_me_native._native", name = "RateLimiter")]
+pub struct PyRateLimiter {
+    inner: ratelimit::RateLimiter,
+}
+
+#[pymethods]
+impl PyRateLimiter {
+    #[new]
+    fn new(per_minute: u32, burst: u32) -> PyResult<Self> {
+        if per_minute == 0 || burst == 0 {
+            return Err(pyo3::exceptions::PyValueError::new_err(
+                "per_minute and burst must be positive",
+            ));
+        }
+        Ok(Self {
+            inner: ratelimit::RateLimiter::new(per_minute, burst),
+        })
+    }
+
+    /// `(allowed, remaining, retry_after_seconds)` for one request of `key`.
+    #[pyo3(signature = (key, cost = 1))]
+    fn check(&self, key: &str, cost: u32) -> (bool, u32, f64) {
+        let decision = self.inner.check(key, cost);
+        (decision.allowed, decision.remaining, decision.retry_after)
+    }
+
+    /// Accepted cells per client since the previous call.
+    fn take_counts(&self) -> Vec<(String, u32)> {
+        self.inner.take_counts()
+    }
+
+    /// Reject every request of `key` for the next `seconds`.
+    fn block(&self, key: &str, seconds: f64) {
+        self.inner.block(key, seconds);
+    }
+
+    /// The burst size.
+    #[getter]
+    fn burst(&self) -> u32 {
+        self.inner.burst()
+    }
+
+    fn __len__(&self) -> usize {
+        usize::try_from(self.inner.len()).unwrap_or(usize::MAX)
+    }
+}
+
+/// Proof-of-work challenges and their verification (see `crate::pow`).
+///
+/// Calls keep the GIL: issuing or checking takes a few microseconds.
+#[pyclass(frozen, module = "telegram_me_native._native", name = "ProofOfWork")]
+pub struct PyProofOfWork {
+    inner: pow::ProofOfWork,
+}
+
+#[pymethods]
+impl PyProofOfWork {
+    #[new]
+    #[pyo3(signature = (secret, bits, ttl, bind_ip = true))]
+    fn new(secret: &[u8], bits: u8, ttl: u64, bind_ip: bool) -> PyResult<Self> {
+        if bits > 64 || ttl == 0 {
+            return Err(pyo3::exceptions::PyValueError::new_err(
+                "bits must be at most 64 and ttl positive",
+            ));
+        }
+        Ok(Self {
+            inner: pow::ProofOfWork::new(secret, bits, Duration::from_secs(ttl), bind_ip),
+        })
+    }
+
+    /// `(challenge, bits, expires)` for a client at `ip`.
+    fn issue(&self, ip: &str) -> (String, u8, u64) {
+        let issued = self.inner.issue(ip);
+        (issued.challenge, issued.bits, issued.expires)
+    }
+
+    /// `None` when the `X-PoW` header is accepted, else the rejection code.
+    #[pyo3(signature = (header, method, target, ip))]
+    fn verify(
+        &self,
+        header: Option<&str>,
+        method: &str,
+        target: &str,
+        ip: &str,
+    ) -> Option<&'static str> {
+        self.inner
+            .verify(header, method, target, ip)
+            .err()
+            .map(pow::Rejection::code)
+    }
+
+    /// Required leading zero bits.
+    #[getter]
+    fn bits(&self) -> u8 {
+        self.inner.bits()
+    }
+}
+
+/// Find a nonce for `challenge` (reference solver, for tests and tools).
+#[pyfunction]
+fn solve_pow(challenge: &str, method: &str, target: &str, bits: u8) -> String {
+    pow::solve(challenge, method, target, bits)
+}
+
 /// The extension module.
 #[pymodule]
 fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
@@ -267,6 +378,9 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     module.add_class::<PyRankedItem>()?;
     module.add_class::<PyTopic>()?;
     module.add_class::<PyLocalCache>()?;
+    module.add_class::<PyRateLimiter>()?;
+    module.add_class::<PyProofOfWork>()?;
+    module.add_function(wrap_pyfunction!(solve_pow, module)?)?;
     module.add_function(wrap_pyfunction!(rank, module)?)?;
     module.add_function(wrap_pyfunction!(parse_channel_page, module)?)?;
     module.add_function(wrap_pyfunction!(parse_more_page, module)?)?;

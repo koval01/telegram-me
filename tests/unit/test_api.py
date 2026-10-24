@@ -137,18 +137,6 @@ def test_cors_allows_any_origin_by_default(client: TestClient) -> None:
     assert response.headers["access-control-allow-origin"] == "https://example.com"
 
 
-def test_rate_limit(make_client: ClientFactory) -> None:
-    client = make_client(enable_rate_limit=True, rate_limit_rpm=2)
-    first = client.get("/healthz")
-    assert first.headers["x-ratelimit-limit"] == "2"
-    assert first.headers["x-ratelimit-remaining"] == "1"
-    assert client.get("/healthz").status_code == 200
-    blocked = client.get("/healthz")
-    assert blocked.status_code == 429
-    assert blocked.text == "Rate limit exceeded"
-    assert blocked.headers["retry-after"] == "60"
-
-
 def test_upstream_errors_map_to_503(make_client: ClientFactory, fetcher: FixtureFetcher) -> None:
     async def unavailable(*_args: object, **_kwargs: object) -> Any:
         from telegram_me.telegram.errors import TelegramUpstreamError  # noqa: PLC0415

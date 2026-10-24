@@ -31,8 +31,15 @@
 | [`CORS_ALLOW_ORIGINS`](#cors_allow_origins) | `["*"]` | API |
 | [`ENABLE_PREVIEWS`](#enable_previews) | `true` | Функции |
 | [`ENABLE_FEED`](#enable_feed) | `false` | Функции |
-| [`ENABLE_RATE_LIMIT`](#enable_rate_limit) | `false` | Функции |
-| [`RATE_LIMIT_RPM`](#rate_limit_rpm) | `120` | Функции |
+| [`ENABLE_RATE_LIMIT`](#enable_rate_limit) | `false` | Защита |
+| [`RATE_LIMIT_RPM`](#rate_limit_rpm) | `120` | Защита |
+| [`RATE_LIMIT_BURST`](#rate_limit_burst) | = `RATE_LIMIT_RPM` | Защита |
+| [`RATE_LIMIT_SHARED`](#rate_limit_shared) | `true` | Защита |
+| [`ENABLE_POW`](#enable_pow) | `false` | Защита |
+| [`POW_SECRET`](#pow_secret) | — | Защита |
+| [`POW_DIFFICULTY`](#pow_difficulty) | `18` | Защита |
+| [`POW_CHALLENGE_TTL`](#pow_challenge_ttl) | `300` | Защита |
+| [`POW_BIND_IP`](#pow_bind_ip) | `true` | Защита |
 | [`ENABLE_GRAPHQL`](#enable_graphql) | `true` | GraphQL |
 | [`GRAPHQL_MAX_DEPTH`](#graphql_max_depth) | `10` | GraphQL |
 | [`GRAPHQL_MAX_COMPLEXITY`](#graphql_max_complexity) | `1500` | GraphQL |
@@ -136,16 +143,62 @@ JSON-список разрешённых origin для браузеров, на�
 Включить `POST /v1/feed` (и его фоновый рефрешер). **По умолчанию выключено**,
 потому что это самый тяжёлый эндпоинт. Когда он отключён, он отвечает `503`.
 
+## Защита { #protection }
+
+Обе выключены по умолчанию; как они работают и что отправляют клиенты, описано в разделе [Ограничение частоты и proof of work](api/protection.md).
+
 ### `ENABLE_RATE_LIMIT`
 
-Ограничение частоты запросов по IP клиента со скользящим окном для всех
-эндпоинтов; применяется внутри каждого процесса-воркера. Для лимита, общего для
-всех воркеров и серверов, настройте его в обратном прокси или CDN.
+Ограничение частоты запросов по IP клиента для всех эндпоинтов (GCRA):
+всплеск до [`RATE_LIMIT_BURST`](#rate_limit_burst) запросов, затем
+[`RATE_LIMIT_RPM`](#rate_limit_rpm) в минуту. При превышении API отвечает `429`
+с `Retry-After`. За прокси укажите
+[`FORWARDED_ALLOW_IPS`](#forwarded_allow_ips), чтобы учитывался настоящий IP клиента.
 
 ### `RATE_LIMIT_RPM`
 
-Запросов в минуту на IP при включённом ограничении. При превышении
-возвращается `429` с `Retry-After: 60`.
+Устойчивый темп: запросов в минуту на IP клиента.
+
+### `RATE_LIMIT_BURST`
+
+Сколько запросов клиент может сделать сразу, прежде чем начнёт действовать
+поминутный темп. По умолчанию равно `RATE_LIMIT_RPM`.
+
+### `RATE_LIMIT_SHARED`
+
+При заданном [`REDIS_URL`](#redis_url) каждый клиент считается по всем
+воркерам и серверам: раз в секунду каждый процесс добавляет свои счётчики в
+Redis и блокирует клиентов, превысивших лимит там. Запросы никогда не ждут
+Redis. При `false` или без Redis каждый процесс ограничивает сам по себе.
+
+### `ENABLE_POW`
+
+Требовать [proof of work](api/protection.md#proof-of-work) в каждом запросе
+(кроме документации, `/healthz` и эндпоинта задач). Нужен
+[`POW_SECRET`](#pow_secret); задачи выдаёт `GET /v1/pow/challenge`.
+
+### `POW_SECRET`
+
+Подписывает задачи (HMAC-SHA256). Не короче 32 символов, **одинаковый на
+всех серверах** и секретный: зная его, можно подделывать задачи. Сгенерировать:
+`openssl rand -hex 32`. Смена секрета делает выданные задачи недействительными.
+
+### `POW_DIFFICULTY`
+
+Сколько ведущих нулевых бит должно быть в SHA-256 каждого запроса, от 8 до 32.
+Каждый бит удваивает работу клиента: 18 — это около 0,2 с на Python и 17 мс в
+нативном коде на запрос. См. [Выбор сложности](api/protection.md#choosing-the-difficulty).
+
+### `POW_CHALLENGE_TTL`
+
+Сколько секунд задача остаётся действительной, от 30 до 3600. Всё это время
+клиент использует одну задачу для всех своих запросов.
+
+### `POW_BIND_IP`
+
+Принимать задачу только с того IP, которому она выдана, чтобы решённые
+задачи нельзя было раздавать. Выключите для клиентов, у которых адрес часто
+меняется.
 
 ## GraphQL { #graphql }
 
