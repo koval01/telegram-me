@@ -94,6 +94,7 @@ sequenceDiagram
 | `SSH_KNOWN_HOSTS` | recommended | `ssh-keyscan` output for the servers; without it host keys are trusted on first use (with a warning) |
 | `REDIS_URL` | yes | Shared Redis for all servers |
 | `CF_BYPASS_KEY` | no | Sent as `x-bypass-key` by the public health check, for a Cloudflare WAF rule that skips bot protection for it |
+| `POW_SECRET` | with `ENABLE_POW` | Signs proof-of-work challenges; at least 32 characters ([`POW_SECRET`](../configuration.md#pow_secret)) |
 | `TLS_CERT`, `TLS_KEY` | with `PUBLIC_HOST` | Cloudflare Origin CA certificate and key (PEM) for Caddy; without them Caddy uses a self-signed certificate |
 | `DOCKER_USERNAME`, `DOCKERHUB_TOKEN` | yes | Push to Docker Hub (`DOCKER_PASSWORD` is accepted instead of the token) |
 
@@ -106,7 +107,10 @@ deployment:
 |---|---|---|
 | `ENABLE_FEED` | `true` | Kept on in production for existing clients; the application default is `false` |
 | `ENABLE_PREVIEWS` | `true` | |
-| `ENABLE_RATE_LIMIT`, `RATE_LIMIT_RPM` | `false`, `120` | |
+| `ENABLE_RATE_LIMIT`, `RATE_LIMIT_RPM` | `false`, `120` | See [Rate limit and proof of work](../api/protection.md) |
+| `RATE_LIMIT_BURST`, `RATE_LIMIT_SHARED` | `RATE_LIMIT_RPM`, `true` | |
+| `ENABLE_POW`, `POW_DIFFICULTY` | `false`, `18` | `ENABLE_POW` needs the `POW_SECRET` secret; the deploy stops without it |
+| `POW_CHALLENGE_TTL`, `POW_BIND_IP` | `300`, `true` | |
 | `CACHE_MODE`, `PARSER_MODE` | `normal`, `full` | |
 | `PUBLIC_HOST` | — | Public hostname, e.g. `api.example.com`. Set it to run Caddy on port 443 of every server (Cloudflare without a load balancer) |
 | `FORWARDED_ALLOW_IPS` | `127.0.0.1` | Set to the load balancer address(es). With `PUBLIC_HOST`: `172.29.53.0/24`, the stack's own network (Caddy) |
@@ -140,9 +144,9 @@ deployment then also runs the `proxy` service of `compose.prod.yaml`: Caddy
 API clients are programs, not browsers. Cloudflare's bot protection (Bot
 Fight Mode, the "I'm Under Attack" level, Managed Challenge rules) answers
 them with a challenge page (`403`) instead of JSON, and that includes the
-deployment's public health check. Keep it off for the API hostname. For
-requests of your own, you can instead add a WAF custom rule that skips it
-when a header matches a long random key, for example
+deployment's public health check. Keep it off when programs are meant to use
+the API. When it stays on (a demo, say), add a WAF custom rule that skips it
+for requests whose header matches a long random key, for example
 `any(http.request.headers["x-bypass-key"][*] eq "<key>")`. Store the key as
 the `CF_BYPASS_KEY` secret for the health check, and pass it to the smoke
 test with `--header "x-bypass-key:$KEY"`.

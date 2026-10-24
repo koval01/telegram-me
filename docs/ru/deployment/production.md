@@ -96,6 +96,8 @@ sequenceDiagram
 | `SSH_KEY` | да | Приватный ключ для `SSH_USER` |
 | `SSH_KNOWN_HOSTS` | рекомендуется | Вывод `ssh-keyscan` для серверов; без него ключам хостов доверяют при первом подключении (с предупреждением) |
 | `REDIS_URL` | да | Общий Redis для всех серверов |
+| `CF_BYPASS_KEY` | нет | Отправляется публичной проверкой здоровья как `x-bypass-key` — для правила WAF Cloudflare, которое пропускает её мимо защиты от ботов |
+| `POW_SECRET` | с `ENABLE_POW` | Подписывает задачи proof of work; не короче 32 символов ([`POW_SECRET`](../configuration.md#pow_secret)) |
 | `TLS_CERT`, `TLS_KEY` | с `PUBLIC_HOST` | Сертификат и ключ Cloudflare Origin CA (PEM) для Caddy; без них Caddy использует самоподписанный сертификат |
 | `DOCKER_USERNAME`, `DOCKERHUB_TOKEN` | да | Push в Docker Hub (вместо токена принимается `DOCKER_PASSWORD`) |
 
@@ -108,7 +110,10 @@ sequenceDiagram
 |---|---|---|
 | `ENABLE_FEED` | `true` | В продакшене оставлено включённым ради существующих клиентов; в самом приложении по умолчанию `false` |
 | `ENABLE_PREVIEWS` | `true` | |
-| `ENABLE_RATE_LIMIT`, `RATE_LIMIT_RPM` | `false`, `120` | |
+| `ENABLE_RATE_LIMIT`, `RATE_LIMIT_RPM` | `false`, `120` | См. [Ограничение частоты и proof of work](../api/protection.md) |
+| `RATE_LIMIT_BURST`, `RATE_LIMIT_SHARED` | `RATE_LIMIT_RPM`, `true` | |
+| `ENABLE_POW`, `POW_DIFFICULTY` | `false`, `18` | `ENABLE_POW` требует секрета `POW_SECRET`; без него развёртывание останавливается |
+| `POW_CHALLENGE_TTL`, `POW_BIND_IP` | `300`, `true` | |
 | `CACHE_MODE`, `PARSER_MODE` | `normal`, `full` | |
 | `PUBLIC_HOST` | — | Публичное имя хоста, например `api.example.com`. Задайте его, чтобы запускать Caddy на порту 443 каждого сервера (Cloudflare без балансировщика) |
 | `FORWARDED_ALLOW_IPS` | `127.0.0.1` | Укажите адрес(а) балансировщика. С `PUBLIC_HOST`: `172.29.53.0/24`, собственная сеть стека (Caddy) |
@@ -140,6 +145,17 @@ sequenceDiagram
   самоподписанный сертификат, который работает только в режиме SSL **Full**.
 - В облачном файрволе (список или группа безопасности) пропускайте к порту
   443 только диапазоны Cloudflare, а к порту 8000 — никого.
+
+Клиенты API — программы, а не браузеры. Защита Cloudflare от ботов (Bot Fight
+Mode, уровень «I'm Under Attack», правила Managed Challenge) отвечает им
+страницей проверки (`403`) вместо JSON, и это касается и публичной проверки
+здоровья при развёртывании. Выключайте её, если API предназначен для программ.
+Если она остаётся включённой (например, для демо), добавьте собственное правило
+WAF, которое пропускает запросы с заголовком, совпадающим с длинным случайным
+ключом, например
+`any(http.request.headers["x-bypass-key"][*] eq "<key>")`. Сохраните ключ в
+секрете `CF_BYPASS_KEY` для проверки здоровья и передавайте его smoke-тесту
+через `--header "x-bypass-key:$KEY"`.
 
 Cloudflare выбирает одну из DNS-записей на каждое соединение. Пока сервер
 перезапускается во время поэтапного развёртывания, часть запросов к нему может

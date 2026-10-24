@@ -8,6 +8,14 @@ All notable changes to this project are documented here. The format follows
 
 ### Changed
 
+- **The rate limit is native (Rust) and shared.** It uses GCRA (a burst of
+  `RATE_LIMIT_BURST`, then `RATE_LIMIT_RPM` per minute) instead of a Python
+  sliding window. With Redis, a client is counted across all workers and
+  servers without requests ever waiting for Redis.
+  - `Retry-After` is now the actual wait instead of a fixed 60 s.
+  - The `429` body is JSON (`{"detail": "Rate limit exceeded"}`).
+  - CORS preflights are no longer counted, and `429` responses carry CORS
+    headers.
 - **Repeated requests no longer wait for Redis.** Each worker keeps an
   in-process cache in front of Redis: a repeated `/v1/body`, `/v1/post`,
   `/v1/more` or `/v1/preview` takes 0.1–0.25 ms instead of one Redis round
@@ -24,6 +32,16 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- **Optional proof of work** (`ENABLE_POW`). Each request carries an
+  `X-PoW: <challenge>:<nonce>` header, and its SHA-256 must start with
+  `POW_DIFFICULTY` zero bits (18 by default).
+  - Challenges come from `GET /v1/pow/challenge` or any rejection. They are
+    stateless and HMAC-signed (`POW_SECRET`), bound to the client IP
+    (`POW_BIND_IP`), and reusable until they expire (`POW_CHALLENGE_TTL`).
+  - Each solution is tied to its method and target, and accepted once.
+  - Rejections answer `428`, `400` or `403` with a fresh challenge.
+  - Verification is native (Rust) and takes under a microsecond.
+- `RATE_LIMIT_BURST` and `RATE_LIMIT_SHARED`.
 - `MEMORY_CACHE_MAX_TTL` (default 10 s): with Redis, the longest a worker
   keeps its own copy of an entry, which bounds how late it sees an entry
   another server or the feed worker wrote.

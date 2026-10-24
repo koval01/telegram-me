@@ -31,8 +31,15 @@ La fuente de verdad es
 | [`CORS_ALLOW_ORIGINS`](#cors_allow_origins) | `["*"]` | API |
 | [`ENABLE_PREVIEWS`](#enable_previews) | `true` | Funciones |
 | [`ENABLE_FEED`](#enable_feed) | `false` | Funciones |
-| [`ENABLE_RATE_LIMIT`](#enable_rate_limit) | `false` | Funciones |
-| [`RATE_LIMIT_RPM`](#rate_limit_rpm) | `120` | Funciones |
+| [`ENABLE_RATE_LIMIT`](#enable_rate_limit) | `false` | Protección |
+| [`RATE_LIMIT_RPM`](#rate_limit_rpm) | `120` | Protección |
+| [`RATE_LIMIT_BURST`](#rate_limit_burst) | = `RATE_LIMIT_RPM` | Protección |
+| [`RATE_LIMIT_SHARED`](#rate_limit_shared) | `true` | Protección |
+| [`ENABLE_POW`](#enable_pow) | `false` | Protección |
+| [`POW_SECRET`](#pow_secret) | — | Protección |
+| [`POW_DIFFICULTY`](#pow_difficulty) | `18` | Protección |
+| [`POW_CHALLENGE_TTL`](#pow_challenge_ttl) | `300` | Protección |
+| [`POW_BIND_IP`](#pow_bind_ip) | `true` | Protección |
 | [`ENABLE_GRAPHQL`](#enable_graphql) | `true` | GraphQL |
 | [`GRAPHQL_MAX_DEPTH`](#graphql_max_depth) | `10` | GraphQL |
 | [`GRAPHQL_MAX_COMPLEXITY`](#graphql_max_complexity) | `1500` | GraphQL |
@@ -138,16 +145,62 @@ Activa `POST /v1/feed` (y su actualizador en segundo plano). **Desactivado por
 defecto** porque es, con diferencia, el endpoint más pesado. Cuando está
 desactivado responde `503`.
 
+## Protección { #protection }
+
+Ambas están desactivadas por defecto; consulta [Límite de peticiones y prueba de trabajo](api/protection.md) para ver cómo funcionan y qué envían los clientes.
+
 ### `ENABLE_RATE_LIMIT`
 
-Límite de solicitudes por IP de cliente con ventana deslizante para todos los
-endpoints, aplicado dentro de cada proceso worker. Para un límite compartido
-por todos los workers y servidores, aplícalo en el proxy inverso o en la CDN.
+Límite de peticiones por IP de cliente en todos los endpoints (GCRA): una
+ráfaga de [`RATE_LIMIT_BURST`](#rate_limit_burst) peticiones y después
+[`RATE_LIMIT_RPM`](#rate_limit_rpm) por minuto. Por encima del límite la API
+responde `429` con `Retry-After`. Detrás de un proxy, configura
+[`FORWARDED_ALLOW_IPS`](#forwarded_allow_ips) para usar la IP real del cliente.
 
 ### `RATE_LIMIT_RPM`
 
-Solicitudes por minuto y por IP cuando el límite está activado. Superarlo
-devuelve `429` con `Retry-After: 60`.
+Peticiones sostenidas por minuto por IP de cliente.
+
+### `RATE_LIMIT_BURST`
+
+Peticiones que un cliente puede hacer de golpe antes de que se aplique el
+ritmo por minuto. Por defecto, `RATE_LIMIT_RPM`.
+
+### `RATE_LIMIT_SHARED`
+
+Con [`REDIS_URL`](#redis_url), cuenta cada cliente en todos los workers y
+servidores: cada proceso suma sus contadores en Redis una vez por segundo y
+bloquea a los clientes que superan el límite allí. Las peticiones nunca esperan
+a Redis. Con `false`, o sin Redis, cada proceso limita por su cuenta.
+
+### `ENABLE_POW`
+
+Exige una [prueba de trabajo](api/protection.md#proof-of-work) en cada petición
+(salvo la documentación, `/healthz` y el endpoint de desafíos). Requiere
+[`POW_SECRET`](#pow_secret); `GET /v1/pow/challenge` entrega los desafíos.
+
+### `POW_SECRET`
+
+Firma los desafíos (HMAC-SHA256). Al menos 32 caracteres, **el mismo en todos
+los servidores** y secreto: con él cualquiera puede falsificar desafíos.
+Genera uno con `openssl rand -hex 32`. Cambiarlo invalida los desafíos emitidos.
+
+### `POW_DIFFICULTY`
+
+Bits a cero iniciales que debe tener el SHA-256 de cada petición, de 8 a 32.
+Cada bit duplica el trabajo del cliente: 18 son unos 0,2 s en Python y 17 ms en
+código nativo por petición. Consulta [Elegir la dificultad](api/protection.md#choosing-the-difficulty).
+
+### `POW_CHALLENGE_TTL`
+
+Segundos que un desafío sigue siendo válido, de 30 a 3600. Un cliente reutiliza
+un mismo desafío para todas sus peticiones durante ese tiempo.
+
+### `POW_BIND_IP`
+
+Acepta un desafío solo desde la IP a la que se emitió, para que los desafíos
+resueltos no se puedan repartir. Desactívalo para clientes cuya dirección
+cambia a menudo.
 
 ## GraphQL { #graphql }
 

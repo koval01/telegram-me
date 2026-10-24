@@ -32,6 +32,7 @@ nav = [
     "api/service.md",
     "api/models.md",
     "api/errors.md",
+    "api/protection.md",
   ] },
   { "Конфигурация" = "configuration.md" },
   { "Развёртывание" = [
