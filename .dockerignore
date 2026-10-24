@@ -3,6 +3,7 @@
 !src/
 !rust/
 rust/**/target
+rust/**/fuzz
 !pyproject.toml
 !uv.lock
 !README.md

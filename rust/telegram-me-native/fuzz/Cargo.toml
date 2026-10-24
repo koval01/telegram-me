@@ -1,0 +1,30 @@
+# Coverage-guided fuzzing of the page parsers (cargo-fuzz, nightly Rust):
+#
+#   cargo +nightly fuzz run pages -- -max_total_time=60
+#
+# The nightly workflow runs it for ten minutes a day, seeded with the
+# recorded pages (scripts/fuzz_corpus.py). tests/hostile_html.rs is the fast,
+# deterministic counterpart run by `cargo test`.
+[package]
+name = "telegram-me-native-fuzz"
+version = "0.0.0"
+edition = "2024"
+publish = false
+
+[package.metadata]
+cargo-fuzz = true
+
+[dependencies]
+libfuzzer-sys = "0.4.13"
+telegram-me-native = { path = ".." }
+
+[[bin]]
+name = "pages"
+path = "fuzz_targets/pages.rs"
+test = false
+doc = false
+bench = false
+
+# Not part of any workspace of the parent directory.
+[workspace]
+members = ["."]

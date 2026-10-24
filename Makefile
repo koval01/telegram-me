@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := help
-.PHONY: help install dev test snapshots lint format typecheck check rust native fixtures smoke \
-        docker up down logs docs docs-serve docs-preview
+.PHONY: help install dev test snapshots contract lint format typecheck check rust native fixtures \
+        smoke integration deploy-test docker up down logs docs docs-serve docs-preview
 
 help: ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-12s\033[0m %s\n", $$1, $$2}'
@@ -16,7 +16,11 @@ test: ## Run the test suite with coverage
 	uv run pytest --cov
 
 snapshots: ## Re-generate contract snapshots (review the diff afterwards!)
-	UPDATE_SNAPSHOTS=1 uv run pytest tests/test_snapshots.py tests/test_graphql_contract.py
+	UPDATE_SNAPSHOTS=1 uv run pytest tests/test_snapshots.py tests/test_graphql_contract.py tests/test_openapi_contract.py
+
+contract: ## Breaking REST/GraphQL changes against BASE (default origin/main)
+	uv run python scripts/api_contract.py --base $${BASE:-origin/main}
+	python3 scripts/coverage_floor.py --base $${BASE:-origin/main}
 
 lint: ## Lint and check formatting
 	uv run ruff check .
@@ -45,6 +49,16 @@ fixtures: ## Re-record t.me fixtures (CHANNELS="a b" for some only)
 
 smoke: ## Smoke-test a running instance against live t.me
 	uv run --no-project python scripts/smoke_matrix.py --base-url http://127.0.0.1:$${APP_PORT:-8000}
+
+# Black-box tests of an image (TME_TEST_IMAGE, default telegram-me:dev); their
+# own environment, so the project's .venv keeps its packages.
+IT_ENV = UV_PROJECT_ENVIRONMENT=.venv-integration TME_TEST_IMAGE=$${TME_TEST_IMAGE:-telegram-me:dev}
+
+integration: ## The image as two servers with Valkey (TME_PREVIOUS_IMAGE: rolling upgrade too)
+	$(IT_ENV) uv run --only-group integration pytest --confcutdir tests/integration tests/integration
+
+deploy-test: ## deploy/ scripts with real Docker Compose against the image
+	$(IT_ENV) uv run --only-group integration pytest --confcutdir tests/deploy tests/deploy
 
 docker: ## Build the Docker image as telegram-me:dev
 	docker build -t telegram-me:dev .

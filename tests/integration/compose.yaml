@@ -1,0 +1,108 @@
+# Integration stack: the built image as two servers sharing one Valkey, each
+# with two granian workers, in front of a fake t.me (fake_telegram.py).
+# Started and stopped by tests/integration/conftest.py:
+#
+#   TME_TEST_IMAGE=telegram-me:dev uv run pytest tests/integration
+#
+# server-a/server-b: caching and coalescing (no protection);
+# guarded-a/guarded-b: shared rate limit and proof of work;
+# previous (profile `previous`): the release before, sharing Valkey with the
+# others, as during a rolling deployment.
+# Ports are bound to 127.0.0.1 only.
+
+name: telegram-me-it
+
+x-app: &app
+  image: ${APP_IMAGE:?APP_IMAGE must be set}
+  environment: &env
+    REDIS_URL: redis://valkey:6379/0
+    TELEGRAM_BASE_URL: http://upstream:8080
+    TELEGRAM_TIMEOUT: "5"
+    WEB_CONCURRENCY: "2"
+    # Tests pick the client address with X-Forwarded-For.
+    FORWARDED_ALLOW_IPS: "*"
+    ENABLE_FEED: "true"
+    FEED_REFRESH_MODE: "off"
+    # Long enough that nothing expires while a test runs.
+    CACHE_MODE: aggressive
+    LOG_FORMAT: json
+  depends_on:
+    valkey:
+      condition: service_healthy
+    upstream:
+      condition: service_healthy
+  read_only: true
+  tmpfs:
+    - /tmp
+  cap_drop:
+    - ALL
+  security_opt:
+    - no-new-privileges:true
+
+x-guarded-env: &guarded-env
+  <<: *env
+  ENABLE_RATE_LIMIT: "true"
+  RATE_LIMIT_RPM: "20"
+  ENABLE_POW: "true"
+  POW_SECRET: integration-tests-only-secret-0123456789
+  POW_DIFFICULTY: "8"
+
+services:
+  valkey:
+    image: valkey/valkey:9.1-alpine
+    command: ["valkey-server", "--save", "", "--appendonly", "no"]
+    healthcheck:
+      test: ["CMD", "valkey-cli", "ping"]
+      interval: 2s
+      timeout: 2s
+      retries: 15
+
+  upstream:
+    image: ${APP_IMAGE:?APP_IMAGE must be set}
+    entrypoint: ["python", "/tests/integration/fake_telegram.py"]
+    environment:
+      PORT: "8080"
+    volumes:
+      - ./:/tests/integration:ro
+      - ../fixtures:/tests/fixtures:ro
+    read_only: true
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request as r; r.urlopen('http://127.0.0.1:8080/__health', timeout=2)"
+      interval: 2s
+      timeout: 3s
+      retries: 15
+    ports:
+      - "127.0.0.1:18080:8080"
+
+  server-a:
+    <<: *app
+    ports:
+      - "127.0.0.1:18001:3000"
+
+  server-b:
+    <<: *app
+    ports:
+      - "127.0.0.1:18002:3000"
+
+  guarded-a:
+    <<: *app
+    environment: *guarded-env
+    ports:
+      - "127.0.0.1:18003:3000"
+
+  guarded-b:
+    <<: *app
+    environment: *guarded-env
+    ports:
+      - "127.0.0.1:18004:3000"
+
+  previous:
+    <<: *app
+    image: ${PREVIOUS_IMAGE:-unused}
+    profiles: ["previous"]
+    ports:
+      - "127.0.0.1:18005:3000"
