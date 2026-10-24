@@ -247,13 +247,13 @@ workflow **Nightly** la ejecuta contra t.me real y contra producción.
 
 | Workflow, trabajo | Cuándo | Duración | Detecta |
 |---|---|---|---|
-| CI: Rust | cada push | ~2 min | fmt, clippy, pruebas de Rust (HTML hostil), umbral de cobertura de Rust |
-| CI: Lint & types | cada push | ~3 min | ruff, mypy, shellcheck, actionlint |
+| CI: Rust | cada push | ~3 min | fmt, clippy, pruebas de Rust (HTML hostil), umbral de cobertura de Rust |
+| CI: Lint & types | cada push | ~3,5 min | ruff, mypy, shellcheck, actionlint |
 | CI: Tests | cada push | ~2 min | la batería anterior en Python 3.13 y 3.14, umbral de cobertura de Python |
-| CI: Docker image smoke test | tras los tres anteriores | ~1,5 min | la imagen arranca endurecida, matriz de humo contra t.me real, parada ordenada |
+| CI: Docker image smoke test | tras los tres anteriores | ~2 min | la imagen arranca endurecida, matriz de humo contra t.me real, parada ordenada |
 | CI: Integration | tras la imagen | ~2 min | [pruebas de integración](#integration-tests) |
 | CI: Deploy scripts | tras la imagen | ~2 min | [pruebas de los scripts de despliegue](#deploy-scripts) |
-| Guards | cada pull request, cambios de etiquetas | ~20 s | [cambios incompatibles de la API](#breaking-changes), umbrales de cobertura rebajados |
+| Guards | cada pull request, cambios de etiquetas | ~10 s | [cambios incompatibles de la API](#breaking-changes), umbrales de cobertura rebajados |
 | Nightly | 03:23 UTC a diario | ~15 min | pruebas de humo contra t.me real y producción, 10 min de fuzzing, ejecuciones largas de propiedades; abre una issue con la etiqueta `nightly` |
 
 Release (pushes a `main`) ejecuta CI y Guards antes de construir y desplegar

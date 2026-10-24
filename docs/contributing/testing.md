@@ -231,13 +231,13 @@ and the **Nightly** workflow runs it against live t.me and production.
 
 | Workflow, job | When | Takes | Catches |
 |---|---|---|---|
-| CI: Rust | every push | ~2 min | fmt, clippy, Rust tests (hostile HTML), Rust coverage floor |
-| CI: Lint & types | every push | ~3 min | ruff, mypy, shellcheck, actionlint |
+| CI: Rust | every push | ~3 min | fmt, clippy, Rust tests (hostile HTML), Rust coverage floor |
+| CI: Lint & types | every push | ~3.5 min | ruff, mypy, shellcheck, actionlint |
 | CI: Tests | every push | ~2 min | the suite above on Python 3.13 and 3.14, Python coverage floor |
-| CI: Docker image smoke test | after the three above | ~1.5 min | the image starts hardened, smoke matrix against live t.me, graceful stop |
+| CI: Docker image smoke test | after the three above | ~2 min | the image starts hardened, smoke matrix against live t.me, graceful stop |
 | CI: Integration | after the image | ~2 min | [integration tests](#integration-tests) |
 | CI: Deploy scripts | after the image | ~2 min | [deploy script tests](#deploy-scripts) |
-| Guards | every pull request, label changes | ~20 s | [breaking API changes](#breaking-changes), lowered coverage floors |
+| Guards | every pull request, label changes | ~10 s | [breaking API changes](#breaking-changes), lowered coverage floors |
 | Nightly | 03:23 UTC daily | ~15 min | live t.me and production smoke tests, 10 min of fuzzing, long property runs; opens an issue labelled `nightly` |
 
 Release (pushes to `main`) runs CI and Guards before the image is built and

@@ -238,13 +238,13 @@ uv run --no-project python scripts/smoke_matrix.py --base-url https://api.exampl
 
 | Workflow, задача | Когда | Длится | Ловит |
 |---|---|---|---|
-| CI: Rust | каждый push | ~2 мин | fmt, clippy, тесты Rust (враждебный HTML), порог покрытия Rust |
-| CI: Lint & types | каждый push | ~3 мин | ruff, mypy, shellcheck, actionlint |
+| CI: Rust | каждый push | ~3 мин | fmt, clippy, тесты Rust (враждебный HTML), порог покрытия Rust |
+| CI: Lint & types | каждый push | ~3,5 мин | ruff, mypy, shellcheck, actionlint |
 | CI: Tests | каждый push | ~2 мин | набор выше на Python 3.13 и 3.14, порог покрытия Python |
-| CI: Docker image smoke test | после трёх выше | ~1,5 мин | образ стартует в защищённом режиме, smoke-матрица на живом t.me, корректная остановка |
+| CI: Docker image smoke test | после трёх выше | ~2 мин | образ стартует в защищённом режиме, smoke-матрица на живом t.me, корректная остановка |
 | CI: Integration | после образа | ~2 мин | [интеграционные тесты](#integration-tests) |
 | CI: Deploy scripts | после образа | ~2 мин | [тесты скриптов развёртывания](#deploy-scripts) |
-| Guards | каждый pull request, изменение меток | ~20 с | [несовместимые изменения API](#breaking-changes), пониженные пороги покрытия |
+| Guards | каждый pull request, изменение меток | ~10 с | [несовместимые изменения API](#breaking-changes), пониженные пороги покрытия |
 | Nightly | ежедневно в 03:23 UTC | ~15 мин | smoke-тесты на живом t.me и продакшене, 10 мин фаззинга, долгие прогоны свойств; открывает issue с меткой `nightly` |
 
 Release (push в `main`) запускает CI и Guards до сборки и развёртывания
