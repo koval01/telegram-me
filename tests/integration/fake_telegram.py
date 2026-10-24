@@ -17,7 +17,6 @@ Unrecorded requests are answered 404 and counted under `unmatched`.
 import gzip
 import json
 import os
-import re
 import sys
 import threading
 import time
@@ -28,7 +27,16 @@ from typing import Any
 from urllib.parse import parse_qsl, urlsplit
 
 FIXTURES = Path(os.environ.get("FIXTURES_DIR", Path(__file__).parents[1] / "fixtures" / "telegram"))
-_ALIAS = re.compile(r"(?<=/)([a-z]+)_m\d+(?=/|$)")
+
+
+def _unalias(path: str) -> str:
+    """`/s/durov_m17/531` -> `/s/durov/531` (no regex: paths come from clients)."""
+    segments = path.split("/")
+    for index, segment in enumerate(segments):
+        name, separator, number = segment.rpartition("_m")
+        if separator and number.isdigit() and name.isalpha() and name.islower():
+            segments[index] = name
+    return "/".join(segments)
 
 
 def _key(method: str, path: str, params: dict[str, str]) -> tuple[str, str, tuple[Any, ...]]:
@@ -105,7 +113,7 @@ class Handler(BaseHTTPRequestHandler):
             return
         if STATE.delay:
             time.sleep(STATE.delay)
-        key = _key(method, _ALIAS.sub(r"\1", url.path), params)
+        key = _key(method, _unalias(url.path), params)
         response = STATE.responses.get(key)
         with STATE.lock:
             STATE.counts[f"{method} {url.path}" if response else "unmatched"] += 1
