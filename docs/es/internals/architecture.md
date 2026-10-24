@@ -20,13 +20,14 @@ flowchart TB
     R --> FS["services/feed.py<br/>FeedService"]
     FS --> CS
     RF["FeedRefresher<br/>(integrado o worker)"] --> CS
-    CS --> C["cache.py<br/>Redis / memoria"]
+    CS --> C["cache.py<br/>en el proceso (Rust) + Redis"]
     CS --> SF["services/coalesce.py<br/>SingleFlight"]
     SF --> TC["telegram/client.py<br/>TelegramClient"]
     TC --> F["ReqwestFetcher<br/>pyreqwest (Rust: tokio · hyper · rustls)"]
     F --> T(("t.me"))
     CS --> P["telegram/parsing<br/>telegram-me-native (Rust)"]
     CS --> V["schemas<br/>pydantic-core (Rust)"]
+    FS --> NF["build_feed<br/>telegram-me-native (Rust)"]
 ```
 
 | Paquete | Responsabilidad |
@@ -35,7 +36,7 @@ flowchart TB
 | `services/` | Lógica de negocio: descargar, guardar en caché y validar páginas, el feed, la puntuación, la popularidad, la agrupación de solicitudes |
 | `telegram/` | Todo lo específico de t.me: el cliente HTTP con sus reglas de reintento y concurrencia, los parsers de HTML, los tipos de error |
 | `schemas/` | Modelos públicos de respuesta y de solicitud |
-| `cache.py` | Backends de caché con antigüedad de las entradas, circuit breaker |
+| `cache.py` | Niveles dentro del proceso y Redis con antigüedad de las entradas, circuit breaker |
 | `container.py` | Crea y cierra los objetos de larga duración; el único lugar que sabe cómo está conectado todo |
 | `app.py`, `server.py` | Fábrica de la aplicación con lifespan; puntos de entrada de los procesos |
 
@@ -56,18 +57,22 @@ Tomando `GET /v1/body/durov` como ejemplo:
    caché. Un acierto se devuelve como bytes: sin análisis ni validación.
 5. En caso de fallo, **SingleFlight** se asegura de que solo una corrutina
    descargue `t.me/s/durov`; las solicitudes concurrentes esperan a la misma
-   tarea.
-6. **`TelegramClient`** toma un hueco del semáforo de concurrencia del proceso
-   y pide la página a **`ReqwestFetcher`**; pyreqwest realiza la solicitud
+   tarea. Con Redis, esa corrutina toma una concesión breve para que, de todos
+   los servidores, solo un proceso la descargue; los demás recogen su
+   resultado de la caché (consulta [Caché](caching.md#request-coalescing)).
+6. **`TelegramClient`** toma un hueco de la puerta hacia el origen del proceso
+   (justa entre canales y solicitudes de feed, `503` cuando su cola está
+   llena) y pide la página a **`ReqwestFetcher`**; pyreqwest realiza la solicitud
    sobre una conexión HTTP/2 del pool en Rust, fuera del GIL, y devuelve el
    cuerpo decodificado. Una conexión caída se reintenta una vez.
-7. **`parse_channel_page`** entrega el HTML al parser de Rust (con el GIL
-   liberado), que construye el árbol una sola vez con html5ever y extrae el
-   perfil del canal, la paginación y cada publicación; una publicación que
-   falla se omite y se registra en el log.
-8. La página analizada se guarda en caché (para `/v1/post` y el feed), se valida
-   contra `ChannelBody` (las publicaciones que no validan se descartan),
-   pydantic-core la serializa y se guarda en caché como respuesta renderizada.
+7. En uno de los dos hilos de análisis, **`parse_channel_page`** entrega el
+   HTML al parser de Rust (con el GIL liberado), que construye el árbol una
+   sola vez con html5ever y extrae el perfil del canal, la paginación y cada
+   publicación; una publicación que falla se omite y se registra en el log.
+8. Todavía en ese hilo, la página analizada se valida contra `ChannelBody` (las
+   publicaciones que no validan se descartan) y pydantic-core la serializa; de
+   vuelta en el event loop se guarda en caché (para `/v1/post` y el feed) junto
+   con la respuesta renderizada.
 9. La ruta devuelve directamente los bytes JSON, sin pasar por la validación de
    respuestas propia de FastAPI.
 
@@ -82,8 +87,8 @@ orden inverso: actualizador, cliente HTTP, caché.
 ## Modelo de procesos { #process-model }
 
 `telegram-me serve` arranca granian con `WEB_CONCURRENCY` procesos worker. Cada
-worker tiene su propio bucle de eventos (uvloop), su cliente HTTP y, sin Redis,
-su propia caché en memoria. granian reinicia los workers que fallan, puede
+worker tiene su propio bucle de eventos (uvloop), su cliente HTTP y su caché
+dentro del proceso (delante de Redis cuando está definido). granian reinicia los workers que fallan, puede
 reciclar workers según su memoria y reenvía `SIGTERM` para un apagado
 ordenado.
 
@@ -101,11 +106,15 @@ la API.
 | Análisis y extracción de HTML | `telegram-me-native` (html5ever, selectors, regex) | Rust |
 | Validación, JSON (respuestas y caché) | pydantic-core | Rust |
 | Protocolo de Redis | hiredis | C |
-| Clasificación del feed, duplicados, temas | `telegram-me-native` (este proyecto) | Rust (PyO3) |
+| Montaje del feed: señales, clasificación, duplicados, temas, respuesta | `telegram-me-native` (este proyecto) | Rust (PyO3) |
+| Caché dentro del proceso | `telegram-me-native` (moka, libzstd) | Rust (PyO3), C |
+| Planificación de solicitudes: vuelos, puerta justa hacia el origen, puntos de renovación | `telegram-me-native` (este proyecto) | Rust (PyO3) |
 
 El código nativo escrito para este proyecto está en el crate de Rust
 [`rust/telegram-me-native`](https://github.com/koval01/telegram-me/tree/main/rust/telegram-me-native),
 compilado con maturin como miembro del workspace de uv. Python sigue siendo la
 capa de orquestación: descarga, caché, enrutamiento y unión de los resultados.
+Lo que aún queda en Python en la ruta crítica, y el orden en que pasa a Rust,
+está en la [Hoja de ruta hacia Rust](rust-roadmap.md).
 
 El efecto medido está en la página de [Rendimiento](performance.md).

@@ -153,7 +153,9 @@ Cada 5 segundos, el actualizador:
     ```
 
     Así, un canal pedido ~20 veces por vida media se actualiza cada 30 s, y
-    un canal pedido una sola vez, cada 10 minutos.
+    un canal pedido una sola vez, cada 10 minutos. Se actualizan como mucho
+    16 canales a la vez, así que un ciclo deja huecos hacia el origen para las
+    solicitudes de los usuarios y no satura el parser ni Redis.
 
 El liderazgo cambia automáticamente cuando el líder se detiene (libera el
 bloqueo) o muere (el bloqueo caduca en 30 s). Sin Redis, cada proceso es su

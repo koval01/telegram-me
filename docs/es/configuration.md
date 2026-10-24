@@ -51,10 +51,15 @@ La fuente de verdad es
 | [`MEMORY_TRIM_INTERVAL`](#memory_trim_interval) | `10` | Rendimiento |
 | [`TELEGRAM_TIMEOUT`](#telegram_timeout) | `10` | Origen |
 | [`TELEGRAM_MAX_CONCURRENCY`](#telegram_max_concurrency) | `32` | Origen |
+| [`UPSTREAM_QUEUE_LIMIT`](#upstream_queue_limit) | 16 × `TELEGRAM_MAX_CONCURRENCY` | Origen |
+| [`MAX_WAITING_REQUESTS`](#max_waiting_requests) | `4096` | Origen |
+| [`SHARED_COALESCING`](#shared_coalescing) | `true` | Origen |
+| [`EARLY_REFRESH_WINDOW`](#early_refresh_window) | `0.1` | Origen |
 | [`REDIS_URL`](#redis_url) | — | Caché |
 | [`REDIS_TIMEOUT`](#redis_timeout) | `0.5` | Caché |
 | [`PREVIEW_CACHE_TTL`](#preview_cache_ttl) | `3600` | Caché |
 | [`MEMORY_CACHE_MAX_MB`](#memory_cache_max_mb) | `64` | Caché |
+| [`MEMORY_CACHE_MAX_TTL`](#memory_cache_max_ttl) | `10` | Caché |
 | [`FEED_FRESH_TTL`](#feed_fresh_ttl) | `60` | Feed |
 | [`FEED_STALE_TTL`](#feed_stale_ttl) | `900` | Feed |
 | [`FEED_REFRESH_MODE`](#feed_refresh_mode) | `embedded` | Feed |
@@ -110,8 +115,8 @@ Segundos que un worker puede tardar en terminar las solicitudes en curso tras
 
 Recicla un worker cuya memoria residente supere esta cantidad de MiB. Una red
 de seguridad para hosts con poca memoria; sin definir por defecto. Un worker
-usa ~60 MiB en reposo y ~100 MiB bajo carga con Redis, más hasta
-`MEMORY_CACHE_MAX_MB` sin él, así que un valor de alrededor de
+usa ~60 MiB en reposo y ~100 MiB bajo carga, más hasta `MEMORY_CACHE_MAX_MB`
+para su caché dentro del proceso, así que un valor de alrededor de
 `MEMORY_CACHE_MAX_MB + 150` solo salta ante problemas reales.
 
 ### `METRICS_PORT`
@@ -276,7 +281,38 @@ una conexión nueva cuando el error es de red.
 
 Máximo de solicitudes simultáneas a t.me por proceso worker. Evita que
 Telegram limite la frecuencia de solicitudes del servidor durante solicitudes
-grandes de feed o de vistas previas.
+grandes de feed o de vistas previas. Los huecos se reparten de forma justa: por
+turnos entre canales y solicitudes de feed o de vistas previas, y las
+solicitudes de los usuarios antes que las actualizaciones en segundo plano
+(consulta [Caché](internals/caching.md#upstream-protection)).
+
+### `UPSTREAM_QUEUE_LIMIT`
+
+Cuántas solicitudes deja un worker esperando a que quede libre un hueco hacia
+el origen. Las siguientes solicitudes que necesitan t.me se responden con `503`
+y una cabecera `Retry-After` en lugar de ponerse en cola. Por defecto, 16 por
+cada hueco de `TELEGRAM_MAX_CONCURRENCY` (512).
+
+### `MAX_WAITING_REQUESTS`
+
+Cuántas solicitudes deja un worker esperando a la vez un trabajo hacia el
+origen (una descarga o un renderizado que empezó otra solicitud); por encima,
+`503` con `Retry-After`. Acota la memoria que puede retener una avalancha de
+solicitudes.
+
+### `SHARED_COALESCING`
+
+Con `REDIS_URL`, descarga cada página una sola vez entre todos los workers y
+servidores: el proceso que descarga toma una concesión (lease) breve en Redis
+y los demás esperan su resultado en lugar de pedirlo a t.me por su cuenta.
+Desactívalo para agrupar solo dentro de cada worker.
+
+### `EARLY_REFRESH_WINDOW`
+
+Renueva en segundo plano una página en caché que se sigue leyendo dentro de
+esta última fracción de su actualidad (0.1: el último segundo de los 10 s de
+`CACHE_MODE=normal`), para que las páginas populares nunca caduquen bajo
+carga. `0` lo desactiva.
 
 ## Caché { #cache }
 
@@ -285,13 +321,17 @@ grandes de feed o de vistas previas.
 URL de Redis o Valkey, p. ej. `redis://valkey:6379/0` o
 `rediss://user:pass@host:6380/0`. Si se define, la caché de páginas, la caché
 de vistas previas, la popularidad del feed y el bloqueo de líder del
-actualizador se comparten entre todos los workers y servidores. Si no, se usa
-una caché dentro del proceso.
+actualizador se comparten entre todos los workers y servidores. Aun así, cada
+worker responde primero a las solicitudes repetidas desde su caché dentro del
+proceso ([`MEMORY_CACHE_MAX_MB`](#memory_cache_max_mb),
+[`MEMORY_CACHE_MAX_TTL`](#memory_cache_max_ttl)), de modo que solo sus fallos
+de caché esperan un viaje de ida y vuelta a Redis. Si no se define, la caché
+dentro del proceso es la única.
 
 Una caída de Redis nunca ralentiza las solicitudes: los comandos agotan su
 tiempo de espera tras [`REDIS_TIMEOUT`](#redis_timeout) y, a continuación,
 Redis se omite durante 30 segundos (circuit breaker), mientras la API funciona
-sin caché.
+con su caché dentro del proceso.
 
 Cada worker mantiene hasta `2 × TELEGRAM_MAX_CONCURRENCY` (al menos 32)
 conexiones a Redis. Una ráfaga de comandos que supere esa cifra, como varias
@@ -311,12 +351,25 @@ desconocidos se guardan en caché 60 segundos en cualquier caso.
 
 ### `MEMORY_CACHE_MAX_MB`
 
-Límite de memoria de la caché dentro del proceso (por worker) cuando no se usa
-Redis: las entradas se guardan comprimidas y el límite cuenta lo que ocupan
+Límite de memoria de la caché dentro del proceso, por worker, con Redis o sin
+él: las entradas se guardan comprimidas y el límite cuenta lo que ocupan
 realmente (valor, clave y datos de control). Las entradas usadas menos
 recientemente se expulsan primero. Con el valor por defecto de 64, un worker
 con tráfico intenso se mantiene en torno a 170 MiB (todo el contenedor, en
-torno a 230 MiB).
+torno a 230 MiB). Con Redis, un worker guarda solo lo que se leyó o escribió en
+los últimos [`MEMORY_CACHE_MAX_TTL`](#memory_cache_max_ttl) segundos, por lo
+general mucho menos que el límite.
+
+### `MEMORY_CACHE_MAX_TTL`
+
+Con Redis: el tiempo máximo, en segundos, que un worker conserva su propia
+copia de una entrada de caché. Un worker ve una entrada que otro servidor (o el
+worker del feed) escribió en Redis como mucho este tiempo después de que se
+escribiera; el coste es una lectura de Redis por clave y worker con esta
+frecuencia, para las claves que se están leyendo. Las copias nunca sobreviven a
+la entrada de Redis. Sin Redis, y mientras Redis no está disponible, las
+entradas conservan su TTL completo. Consulta
+[Funcionamiento interno → Caché](internals/caching.md#how-the-levels-work-together).
 
 ## Feed { #feed }
 

@@ -60,8 +60,10 @@ docker run -d ... ghcr.io/koval01/telegram-me worker         # feed refresher on
 | 2 | ~180 МБ | ~225 МБ |
 
 Закладывайте примерно 40 МБ на процесс сервера и 70–110 МБ на воркер, плюс до
-`MEMORY_CACHE_MAX_MB` на воркер при работе без Redis (воркер под высокой
-нагрузкой держится около 170 МБ при значении по умолчанию 64). Освобождённая
+`MEMORY_CACHE_MAX_MB` на воркер для кэша внутри процесса (воркер под высокой
+нагрузкой без Redis держится около 170 МБ при значении по умолчанию 64; с
+Redis он держит только записи за последние `MEMORY_CACHE_MAX_TTL` секунд).
+Освобождённая
 память возвращается системе каждые
 [`MEMORY_TRIM_INTERVAL`](../configuration.md#memory_trim_interval) секунд.
 [`WORKERS_MAX_RSS_MB`](../configuration.md#workers_max_rss_mb) добавляет
