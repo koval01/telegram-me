@@ -26,6 +26,7 @@ flowchart TB
     F --> T(("t.me"))
     CS --> P["telegram/parsing<br/>telegram-me-native (Rust)"]
     CS --> V["schemas<br/>pydantic-core (Rust)"]
+    FS --> NF["build_feed<br/>telegram-me-native (Rust)"]
 ```
 
 | Package | Responsibility |
@@ -96,12 +97,14 @@ background work off the API processes.
 | HTML parsing and extraction | `telegram-me-native` (html5ever, selectors, regex) | Rust |
 | Validation, JSON (responses and cache) | pydantic-core | Rust |
 | Redis protocol | hiredis | C |
-| Feed ranking, duplicates, topics | `telegram-me-native` (this project) | Rust (PyO3) |
+| Feed assembly: signals, ranking, duplicates, topics, response | `telegram-me-native` (this project) | Rust (PyO3) |
 | In-process cache | `telegram-me-native` (moka, libzstd) | Rust (PyO3), C |
 
 Native code written for this project lives in the Rust crate
 [`rust/telegram-me-native`](https://github.com/koval01/telegram-me/tree/main/rust/telegram-me-native),
 built with maturin as a uv workspace member. Python stays the orchestration
-layer: fetching, caching, routing and gluing results together.
+layer: fetching, caching, routing and gluing results together. What is left
+on the hot path in Python, and the order in which it moves to Rust, is in the
+[Rust roadmap](rust-roadmap.md).
 
 The measured effect is on the [Performance](performance.md) page.

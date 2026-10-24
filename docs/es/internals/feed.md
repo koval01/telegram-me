@@ -10,25 +10,35 @@ flowchart LR
     P -- "< FEED_FRESH_TTL" --> USE[usar]
     P -- "< FEED_STALE_TTL" --> USE2[usar + actualizar en segundo plano]
     P -- "más antigua / ausente" --> FETCH[descargar ahora, todas en paralelo]
-    USE & USE2 & FETCH --> SIG["señales (Python)"]
-    SIG --> RANK["clasificación (Rust, GIL liberado)"]
-    RANK --> OUT[publicaciones + _score, _duplicates, _topic]
+    USE & USE2 & FETCH --> B["build_feed (Rust, GIL liberado)<br/>señales · clasificación · respuesta"]
+    B --> OUT[bytes de la respuesta]
 ```
 
 1. Los canales se deduplican (manteniendo el orden) y se cuentan en la
    clasificación de popularidad.
 2. Todas las páginas se resuelven de forma concurrente con las reglas
-   anteriores.
-3. Python convierte cada publicación en un `Candidate`: contador de
-   visualizaciones analizado, suscriptores del canal, totales de reacciones
-   positivas y negativas, número de elementos multimedia, texto plano, momento
-   de publicación, marca de edición
-   ([`services/feed_signals.py`](https://github.com/koval01/telegram-me/blob/main/src/telegram_me/services/feed_signals.py)).
-4. `telegram_me_native.rank()` (Rust,
-   [`rust/telegram-me-native/src/rank.rs`](https://github.com/koval01/telegram-me/blob/main/rust/telegram-me-native/src/rank.rs))
-   se ejecuta en un hilo de trabajo con el GIL liberado y devuelve las
-   publicaciones en el orden del feed con sus puntuaciones, duplicados
-   agrupados y temas.
+   anteriores. Cada página se usa tal como la guarda la caché de páginas, en
+   bytes; una página descargada en ese momento llega junto con su codificación
+   para la caché, de modo que en Python no se decodifica ni se codifica nada.
+3. `telegram_me_native.build_feed()` (Rust,
+   [`rust/telegram-me-native/src/feed.rs`](https://github.com/koval01/telegram-me/blob/main/rust/telegram-me-native/src/feed.rs))
+   se ejecuta en un hilo de trabajo con el GIL liberado y hace el resto en una
+   sola llamada:
+    - lee cada página en una sola pasada, conservando cada publicación como el
+      texto JSON con el que se guardó en caché, y descarta las publicaciones ya
+      vistas con el mismo nombre de usuario;
+    - extrae las señales de clasificación del footer y del content de cada
+      publicación: contador de visualizaciones analizado (`1.2K`, `15 400`),
+      suscriptores del canal, totales de reacciones positivas y negativas,
+      número de elementos multimedia, texto plano, momento de publicación,
+      marca de edición;
+    - las clasifica ([`rank.rs`](https://github.com/koval01/telegram-me/blob/main/rust/telegram-me-native/src/rank.rs), más abajo);
+    - escribe la respuesta: cada publicación con su `channel`, `_score` y,
+      cuando corresponde, `_duplicates` y `_topic`.
+
+    Una página que no es JSON válido (una entrada de caché dañada) se omite y
+    se registra en el log. El campo `feed` de GraphQL decodifica los mismos
+    bytes.
 
 ## Clasificación { #ranking }
 

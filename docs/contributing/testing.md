@@ -12,7 +12,10 @@ The suite never talks to t.me. Two kinds of tests keep the service honest.
 pages** and compares the complete JSON response with a file in
 `tests/snapshots/`. Any change to what the API returns — a renamed field, a
 different number, a missing post — fails a test and shows up as a readable
-diff.
+diff. The JSON files are compared parsed, so each response's exact bytes are
+pinned as well, by their SHA-256 in `tests/snapshots/raw_digests.json`: key
+order, number formatting and string escaping must not change either, which is
+what lets code move from pydantic to Rust without touching the contract.
 
 The recorded pages live in `tests/fixtures/telegram/` (gzip) with a
 `manifest.json` describing which request each file answers. A
@@ -23,7 +26,10 @@ score depends on "now".
 Coverage includes six channels (`durov`, `telegram`, `stranaua`, `tginfo`,
 `nebudetafk`, `nebudetgg`), both parser modes, pagination in both directions,
 previews, a missing channel, the feed, and individual posts with an inline
-button, a poll, a sticker, a reply, a link preview and a voice message.
+button, a poll, a sticker, a reply, a link preview and a voice message. A
+synthetic feed, seeded straight into the cache, adds collapsed duplicates and
+pages the parser would never produce (no username, no channel info, posts
+without footer or content).
 
 `tests/test_graphql_contract.py` does the same for GraphQL: the full schema
 (SDL) in `tests/snapshots/graphql/schema.graphql`, a snapshot per query, and

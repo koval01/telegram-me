@@ -1,5 +1,6 @@
 import functools
 import gzip
+import hashlib
 import json
 import os
 from collections.abc import Callable, Iterator, Mapping
@@ -17,11 +18,13 @@ from telegram_me.telegram.client import FetchResult, Method
 TESTS_DIR = Path(__file__).resolve().parent
 FIXTURES_DIR = TESTS_DIR / "fixtures" / "telegram"
 SNAPSHOTS_DIR = TESTS_DIR / "snapshots"
+RAW_DIGESTS = SNAPSHOTS_DIR / "raw_digests.json"
 MANIFEST: dict[str, Any] = json.loads((FIXTURES_DIR / "manifest.json").read_text("utf-8"))
 # Shortly after the fixtures were recorded; feed scoring depends on "now".
 FROZEN_NOW = "2026-10-23T00:00:00+00:00"
 
 type Snapshot = Callable[[str, Any], None]
+type RawSnapshot = Callable[[str, bytes], None]
 type ClientFactory = Callable[..., TestClient]
 
 
@@ -134,5 +137,38 @@ def snapshot(request: pytest.FixtureRequest) -> Snapshot:
         assert expected == json.loads(serialized), (
             f"Snapshot {path.name} differs (test: {request.node.name})"
         )
+
+    return check
+
+
+@pytest.fixture(scope="session")
+def _raw_digests() -> Iterator[tuple[dict[str, str], dict[str, str]]]:
+    """(digests on disk, digests recorded by this run); rewritten with UPDATE_SNAPSHOTS=1."""
+    expected = json.loads(RAW_DIGESTS.read_text("utf-8")) if RAW_DIGESTS.exists() else {}
+    recorded: dict[str, str] = {}
+    yield expected, recorded
+    if os.environ.get("UPDATE_SNAPSHOTS") == "1" and recorded:
+        merged = dict(sorted((expected | recorded).items()))
+        RAW_DIGESTS.write_text(json.dumps(merged, indent=2) + "\n", encoding="utf-8")
+
+
+@pytest.fixture
+def raw_snapshot(_raw_digests: tuple[dict[str, str], dict[str, str]]) -> RawSnapshot:
+    """Compare the exact bytes of a response with tests/snapshots/raw_digests.json.
+
+    `snapshot` compares parsed JSON; this pins key order, number formatting
+    and string escaping too, i.e. the response byte for byte.
+    """
+    expected, recorded = _raw_digests
+    update = os.environ.get("UPDATE_SNAPSHOTS") == "1"
+
+    def check(name: str, content: bytes) -> None:
+        digest = hashlib.sha256(content).hexdigest()
+        recorded[name] = digest
+        if update:
+            return
+        if name not in expected:
+            pytest.fail(f"Missing raw digest for {name}; run with UPDATE_SNAPSHOTS=1")
+        assert expected[name] == digest, f"Response bytes of {name} changed"
 
     return check

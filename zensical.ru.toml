@@ -48,6 +48,7 @@ nav = [
     "internals/feed.md",
     "internals/parsing.md",
     "internals/performance.md",
+    "internals/rust-roadmap.md",
   ] },
   { "Участие в разработке" = [
     "contributing/development.md",

@@ -2,27 +2,6 @@
 
 __version__: str
 
-class Candidate:
-    """One post to rank. Counters are already parsed (`1.2K` -> 1200)."""
-
-    def __new__(
-        cls,
-        *,
-        channel: str,
-        post_id: int,
-        published_at: int,
-        views: int = 0,
-        subscribers: int = 0,
-        positive_reactions: int = 0,
-        negative_reactions: int = 0,
-        photos: int = 0,
-        videos: int = 0,
-        gifs: int = 0,
-        polls: int = 0,
-        text: str = "",
-        edited: bool = False,
-    ) -> Candidate: ...
-
 class RankOptions:
     """Ranking parameters."""
 
@@ -40,28 +19,12 @@ class RankOptions:
         topic_keywords: int = 5,
     ) -> RankOptions: ...
 
-class RankedItem:
-    """A ranked post; `index` points into the candidate list."""
+def build_feed(pages: list[tuple[str, bytes]], options: RankOptions) -> tuple[bytes, list[int]]:
+    """Rank the posts of cached pages and render the `/v1/feed` body.
 
-    @property
-    def index(self) -> int: ...
-    @property
-    def score(self) -> float: ...
-    @property
-    def duplicates(self) -> list[int]: ...
-    @property
-    def topic(self) -> int | None: ...
-
-class Topic:
-    """A group of posts about the same subject."""
-
-    @property
-    def keywords(self) -> list[str]: ...
-    @property
-    def members(self) -> list[int]: ...
-
-def rank(candidates: list[Candidate], options: RankOptions) -> tuple[list[RankedItem], list[Topic]]:
-    """Rank candidates; returns (items in feed order, topics)."""
+    `pages` are (requested username, cached page JSON). Returns the response
+    JSON and the indices of pages that could not be read (left out).
+    """
 
 def parse_channel_page(html: str, simplified: bool) -> tuple[str, list[tuple[str, str]]] | None:
     """Parse `t.me/s/<channel>`: (page JSON, skipped posts), None if not a channel."""

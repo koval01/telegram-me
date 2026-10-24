@@ -54,6 +54,25 @@ by 45 ms; "cache" is the time spent in `cache.get` per request:
   to two CPU-bound Python threads (pydantic on the parsing threads) a 95 KB
   read took 6.3 ms (p50) with the GIL released, 38 µs with it held.
 
+## Native feed assembly
+
+A feed used to decode every cached page into Python objects, build a ranker
+input per post and serialise the result with pydantic, on the event loop with
+the GIL held: ~41 ms of a 100-channel feed. It is now one call to
+`telegram_me_native.build_feed` with the GIL released (cached page bytes in,
+response bytes out). `scripts/audit.py`, in process, same machine, 100-channel
+feeds of 2 000 posts:
+
+| | Before | After |
+|---|---|---|
+| `POST /v1/feed`, 100 channels | 83.7 ms | 42.7 ms |
+| CPU of that feed on one core (`RAYON_NUM_THREADS=1`) | 131 ms | 106 ms |
+| Python allocations of that feed | 20.8 MiB | 9.8 MiB |
+| Cached `/v1/body` next to a feed loop, p50 / p99 | 15.2 / 61.6 ms | 2.3 / 10.5 ms |
+| Peak RSS of a worker serving 200 such feeds (Linux) | 220 MiB | 218 MiB (noise) |
+
+Details, per-endpoint costs and what moves next: [Rust roadmap](rust-roadmap.md).
+
 ## Page parsing: Python + lexbor → Rust
 
 Median time to parse one recorded channel page (`scripts/benchmark.py`):
@@ -211,6 +230,7 @@ uv run python scripts/memory_profile.py --requests 20000 --channels 200
 
 ```bash
 uv run python scripts/benchmark.py   # in-process, recorded pages, no network
+uv run python scripts/audit.py --stages   # per endpoint (wall, CPU, allocations) and per stage
 ```
 
 For server throughput, start an instance and point a load generator at it:

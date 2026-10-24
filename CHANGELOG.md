@@ -16,6 +16,14 @@ All notable changes to this project are documented here. The format follows
   - The `429` body is JSON (`{"detail": "Rate limit exceeded"}`).
   - CORS preflights are no longer counted, and `429` responses carry CORS
     headers.
+- **The feed is built natively.** `POST /v1/feed` hands the cached pages to
+  the Rust extension and gets the response back in one call with the GIL
+  released (`telegram_me_native.build_feed`): reading the pages, the ranking
+  signals, ranking and rendering. A 100-channel feed takes about half the
+  time (84 → 43 ms in process), allocates half as much Python memory, and no
+  longer stalls the worker's other requests: a cached `/v1/body` next to a
+  feed loop went from 62 to 10 ms at p99. Responses are byte-for-byte the
+  same. Resident memory is unchanged within noise.
 - **Repeated requests no longer wait for Redis.** Each worker keeps an
   in-process cache in front of Redis: a repeated `/v1/body`, `/v1/post`,
   `/v1/more` or `/v1/preview` takes 0.1–0.25 ms instead of one Redis round
@@ -42,6 +50,13 @@ All notable changes to this project are documented here. The format follows
   - Rejections answer `428`, `400` or `403` with a fresh challenge.
   - Verification is native (Rust) and takes under a microsecond.
 - `RATE_LIMIT_BURST` and `RATE_LIMIT_SHARED`.
+- `scripts/audit.py`: wall time, CPU time and Python allocations per
+  endpoint, an event-loop stall test, the cost of each stage of the cold page
+  pipeline and the memory of a feed loop. The findings and the plan for the
+  rest of the hot path are in `docs/internals/rust-roadmap.md`.
+- The contract snapshots also pin every REST response byte for byte
+  (`tests/snapshots/raw_digests.json`), and a synthetic feed covers
+  duplicates and malformed pages.
 - `MEMORY_CACHE_MAX_TTL` (default 10 s): with Redis, the longest a worker
   keeps its own copy of an entry, which bounds how late it sees an entry
   another server or the feed worker wrote.

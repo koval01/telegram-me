@@ -34,7 +34,7 @@ _ERRORS: dict[int | str, dict[str, Any]] = {
 }
 
 
-def _json(model: Post | Preview | PreviewsModel | FeedResponse) -> Response:
+def _json(model: Post | Preview | PreviewsModel) -> Response:
     # Models are validated once and serialized by pydantic-core directly;
     # returning a Response skips FastAPI's second validation pass.
     return Response(dump_json(model), media_type="application/json")
@@ -120,4 +120,4 @@ async def previews(payload: ChannelsRequest, service: Channels, features: Featur
 async def create_feed(item: FeedRequest, service: Feed, features: Features) -> Response:
     """Create feed for given channels and return sorted posts."""
     features.require("feed")
-    return _json(FeedResponse(result=await service.build(item.channels)))
+    return _raw_json(await service.build_json(item.channels))

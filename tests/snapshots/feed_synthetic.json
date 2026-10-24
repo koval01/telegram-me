@@ -1,0 +1,295 @@
+{
+  "body": {
+    "result": [
+      {
+        "_duplicates": [
+          {
+            "channel": "synth_b",
+            "id": 10
+          }
+        ],
+        "_score": 6.549171462665,
+        "channel": {
+          "counters": {
+            "subscribers": "1.2K"
+          },
+          "username": "Synth_A"
+        },
+        "content": {
+          "reacts": [
+            {
+              "count": "1.2K",
+              "emoji": "👍",
+              "type": "emoji"
+            },
+            {
+              "count": "20",
+              "emoji": "👎",
+              "type": "emoji"
+            },
+            {
+              "count": "50",
+              "emoji": null,
+              "type": "telegram_stars"
+            },
+            {
+              "count": "999",
+              "emoji_id": "1",
+              "type": "custom_emoji"
+            }
+          ],
+          "text": {
+            "html": "Министерство обороны сообщило о новых поставках техники в регион, поставки начнутся уже на следующей неделе и продлятся до конца месяца по плану",
+            "string": "Министерство обороны сообщило о новых поставках техники в регион, поставки начнутся уже на следующей неделе и продлятся до конца месяца по плану"
+          }
+        },
+        "footer": {
+          "date": {
+            "string": "2026-10-22T18:00:00+00:00",
+            "unix": 1792691999
+          },
+          "edited": false,
+          "views": "15 400"
+        },
+        "id": 1,
+        "view": "post 1"
+      },
+      {
+        "_score": 4.3548951062894075,
+        "_topic": {
+          "id": 1,
+          "keywords": [
+            "ракеты",
+            "запуск",
+            "космодрома",
+            "старт",
+            "утро"
+          ]
+        },
+        "channel": {
+          "counters": {
+            "subscriber": "3M"
+          },
+          "username": "synth_b"
+        },
+        "content": {
+          "media": [
+            {
+              "type": "gif"
+            },
+            {
+              "type": "sticker"
+            },
+            {
+              "type": "roundvideo"
+            }
+          ],
+          "text": {
+            "html": "Запуск ракеты с космодрома перенесли, старт ракеты состоится завтра утром",
+            "string": "Запуск ракеты с космодрома перенесли, старт ракеты состоится завтра утром"
+          }
+        },
+        "footer": {
+          "date": {
+            "string": "2026-10-22T18:00:00+00:00",
+            "unix": 1792691989
+          },
+          "edited": false,
+          "views": "1.2K"
+        },
+        "id": 11,
+        "view": "post 11"
+      },
+      {
+        "_score": 3.761346851824863,
+        "channel": {
+          "title": {
+            "html": "C",
+            "string": "C"
+          }
+        },
+        "content": {},
+        "footer": {
+          "date": {
+            "string": "2026-10-22T18:00:00+00:00",
+            "unix": 1792691977
+          },
+          "edited": false,
+          "views": "10 281"
+        },
+        "id": 23,
+        "view": "post 23"
+      },
+      {
+        "_score": 3.514124529034175,
+        "channel": {},
+        "content": {
+          "text": {
+            "html": "page without channel info",
+            "string": "page without channel info"
+          }
+        },
+        "footer": {
+          "date": {
+            "string": "2026-10-22T18:00:00+00:00",
+            "unix": 1792691970
+          },
+          "edited": false,
+          "views": "1.2K"
+        },
+        "id": 30,
+        "view": "post 30"
+      },
+      {
+        "_score": 4.592439442293365,
+        "channel": {
+          "counters": {
+            "subscribers": "1.2K"
+          },
+          "username": "Synth_A"
+        },
+        "content": {
+          "media": [
+            {
+              "type": "image"
+            },
+            {
+              "type": "image"
+            },
+            {
+              "type": "video"
+            }
+          ],
+          "poll": {
+            "options": [],
+            "question": "?"
+          },
+          "text": {
+            "html": "Погода на выходные: солнечно, без осадков, до двадцати градусов тепла днём",
+            "string": "Погода на выходные: солнечно, без осадков, до двадцати градусов тепла днём"
+          }
+        },
+        "footer": {
+          "date": {
+            "string": "2026-10-22T18:00:00+00:00",
+            "unix": 1792691998
+          },
+          "edited": false,
+          "views": "1.2K"
+        },
+        "id": 2,
+        "view": "post 2"
+      },
+      {
+        "_score": 3.647731222098616,
+        "channel": {
+          "counters": {
+            "subscribers": "1.2K"
+          },
+          "username": "Synth_A"
+        },
+        "content": {
+          "text": {
+            "html": "overrides",
+            "string": "overrides"
+          }
+        },
+        "footer": {
+          "date": {
+            "string": "2026-10-22T18:00:00+00:00",
+            "unix": 1792691996
+          },
+          "edited": false,
+          "views": "1.2K"
+        },
+        "id": 4,
+        "view": "post 4"
+      },
+      {
+        "_score": 3.5348985151469487,
+        "_topic": {
+          "id": 1,
+          "keywords": [
+            "ракеты",
+            "запуск",
+            "космодрома",
+            "старт",
+            "утро"
+          ]
+        },
+        "channel": {
+          "title": {
+            "html": "C",
+            "string": "C"
+          }
+        },
+        "content": {
+          "text": {
+            "html": "Старт ракеты с космодрома: запуск ракеты назначен на утро",
+            "string": "Старт ракеты с космодрома: запуск ракеты назначен на утро"
+          }
+        },
+        "footer": {
+          "date": {
+            "string": "2026-10-22T18:00:00+00:00",
+            "unix": 1792691980
+          },
+          "edited": false,
+          "views": "1.2K"
+        },
+        "id": 20,
+        "view": "post 20"
+      },
+      {
+        "_score": 1.9285594448270242,
+        "channel": {
+          "counters": {
+            "subscribers": "1.2K"
+          },
+          "username": "Synth_A"
+        },
+        "content": {
+          "text": {
+            "html": "ctl \u0001 sep   \"quoted\" back\\slash / 😀  ",
+            "string": "ctl \u0001 sep   \"quoted\" back\\slash / 😀  "
+          }
+        },
+        "footer": {
+          "date": {
+            "string": "2026-10-22T18:00:00+00:00",
+            "unix": 1792691997
+          },
+          "edited": false,
+          "views": "n/a"
+        },
+        "id": 3,
+        "view": "post 3"
+      },
+      {
+        "_score": 0.2621752358135027,
+        "channel": {
+          "title": {
+            "html": "C",
+            "string": "C"
+          }
+        },
+        "id": 21,
+        "view": "no footer, no content"
+      },
+      {
+        "_score": 0.2621752358135027,
+        "channel": {
+          "title": {
+            "html": "C",
+            "string": "C"
+          }
+        },
+        "content": null,
+        "footer": null,
+        "id": 22,
+        "view": "nulls"
+      }
+    ]
+  },
+  "status": 200
+}

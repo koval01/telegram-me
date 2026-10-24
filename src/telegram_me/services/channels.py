@@ -11,7 +11,7 @@ import functools
 import logging
 from collections.abc import Callable
 from concurrent.futures import Executor
-from typing import Any, Literal
+from typing import Any, Literal, NamedTuple
 
 from pydantic import BaseModel, ValidationError
 from pydantic_core import from_json, to_json
@@ -47,6 +47,13 @@ def _rendered(page_key: str) -> str:
     return f"json:body:{page_key}"
 
 
+class LoadedPage(NamedTuple):
+    """A freshly fetched channel page: parsed, and as stored in the page cache."""
+
+    data: JSONDict
+    raw: bytes
+
+
 class ChannelService:
     """Fetches, parses, caches and validates t.me pages."""
 
@@ -63,7 +70,7 @@ class ChannelService:
         # Where pages are parsed; None is the event loop's default executor.
         self._executor = executor
         self._simplified = settings.parser_mode == "simplified"
-        self._pages: SingleFlight[JSONDict] = SingleFlight()
+        self._pages: SingleFlight[LoadedPage] = SingleFlight()
         self._previews: SingleFlight[JSONDict | None] = SingleFlight()
         self._rendered: SingleFlight[bytes] = SingleFlight()
 
@@ -83,9 +90,9 @@ class ChannelService:
         entry = await self._cache.get(self.page_key(channel, position)) if ttl else None
         if entry is not None and entry.age < ttl:
             return decode_page(entry.value)
-        return await self.refresh_page(channel, position)
+        return (await self.refresh_page(channel, position)).data
 
-    async def refresh_page(self, channel: str, position: int | None = None) -> JSONDict:
+    async def refresh_page(self, channel: str, position: int | None = None) -> LoadedPage:
         """Fetch and parse a page now (coalesced with concurrent identical fetches)."""
         key = self.page_key(channel, position)
         return await self._pages.run(key, lambda: self._load_page(key, channel, position))
@@ -95,7 +102,7 @@ class ChannelService:
         key = self.page_key(channel)
         self._pages.start(key, lambda: self._load_page(key, channel, None))
 
-    async def _load_page(self, key: str, channel: str, position: int | None) -> JSONDict:
+    async def _load_page(self, key: str, channel: str, position: int | None) -> LoadedPage:
         html = await self._client.channel_page(channel, position)
         page_ttl = self._settings.page_cache_ttl
         data, raw, rendered = await self._offload(
@@ -108,7 +115,7 @@ class ChannelService:
         await self._cache.set(key, raw, raw_ttl)
         if rendered is not None:
             await self._cache.set(_rendered(key), rendered, page_ttl)
-        return data
+        return LoadedPage(data, raw)
 
     # Endpoints -----------------------------------------------------------------------
 

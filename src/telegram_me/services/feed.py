@@ -6,10 +6,13 @@ immediately while a background refresh replaces it, and only missing pages
 are fetched inline, all of them in parallel. The refresher keeps popular
 channels warm so most feed requests never wait for t.me.
 
-Ranking runs in the native extension (`telegram_me_native`, Rust) on a worker
-thread with the GIL released: per-channel engagement normalisation,
-freshness, collapsing of near-duplicate posts across channels, topic
-detection and diversity re-ranking.
+Python decides which pages to use; everything after that runs in one call
+to the native extension (`telegram_me_native`, Rust) on a worker thread with
+the GIL released: reading the cached pages, the ranking signals, per-channel
+engagement normalisation, freshness, collapsing of near-duplicate posts
+across channels, topic detection, diversity re-ranking and rendering the
+response. Pages travel as the bytes the cache holds and come back as the
+response bytes, so a feed request builds no Python objects per post.
 """
 
 import asyncio
@@ -20,12 +23,11 @@ import time
 from typing import Any
 
 import telegram_me_native as native
+from pydantic_core import from_json
 
-from telegram_me.services.channels import ChannelService, decode_page
-from telegram_me.services.feed_signals import candidate, parse_compact_number
+from telegram_me.services.channels import ChannelService, LoadedPage
 from telegram_me.services.popularity import LeaderLock, Popularity
 from telegram_me.settings import Settings
-from telegram_me.telegram.parsing.pages import JSONDict
 
 logger = logging.getLogger(__name__)
 
@@ -50,8 +52,8 @@ class FeedService:
             collapse_duplicates=settings.feed_collapse_duplicates,
         )
 
-    async def build(self, channels: list[str]) -> list[dict[str, Any]]:
-        """Ranked posts of all channels (see the module docstring)."""
+    async def build_json(self, channels: list[str]) -> bytes:
+        """Ranked posts of all channels as the `/v1/feed` response body."""
         unique = list(dict.fromkeys(channels))
         hit = asyncio.ensure_future(self._popularity.hit(unique))
         pages = await asyncio.gather(
@@ -59,50 +61,32 @@ class FeedService:
         )
         await hit
 
-        posts: list[dict[str, Any]] = []
-        candidates: list[native.Candidate] = []
-        seen: set[tuple[str, int]] = set()
+        found: list[tuple[str, bytes]] = []
         for channel, page in zip(unique, pages, strict=True):
             if isinstance(page, BaseException):
                 logger.warning("Feed skipped channel %s: %r", channel, page)
-                continue
-            info = page.get("channel", {})
-            username = str(info.get("username") or channel)
-            subscribers = parse_compact_number((info.get("counters") or {}).get("subscribers"), 1)
-            for post in page.get("content", {}).get("posts", []):
-                key = (username, int(post["id"]))
-                if key in seen:
-                    continue
-                seen.add(key)
-                posts.append({**post, "channel": info})
-                candidates.append(candidate(username, subscribers, post))
+            else:
+                found.append((channel, page))
+        feed, unreadable = await asyncio.to_thread(native.build_feed, found, self.rank_options())
+        for index in unreadable:
+            logger.warning("Feed skipped channel %s: corrupted page in cache", found[index][0])
+        return feed
 
-        items, topics = await asyncio.to_thread(native.rank, candidates, self.rank_options())
-        return [self._entry(posts, item, topics) for item in items]
+    async def build(self, channels: list[str]) -> list[dict[str, Any]]:
+        """`build_json()` decoded: the feed entries (`result`) as Python objects."""
+        result: list[dict[str, Any]] = from_json(await self.build_json(channels))["result"]
+        return result
 
-    @staticmethod
-    def _entry(
-        posts: list[dict[str, Any]], item: native.RankedItem, topics: list[native.Topic]
-    ) -> dict[str, Any]:
-        entry = {**posts[item.index], "_score": item.score}
-        if item.duplicates:
-            entry["_duplicates"] = [
-                {"channel": posts[i]["channel"].get("username"), "id": posts[i]["id"]}
-                for i in item.duplicates
-            ]
-        if item.topic is not None and len(topics[item.topic].members) > 1:
-            entry["_topic"] = {"id": item.topic, "keywords": topics[item.topic].keywords}
-        return entry
-
-    async def _page(self, channel: str) -> JSONDict:
+    async def _page(self, channel: str) -> bytes:
+        """The channel's latest page as the page cache stores it."""
         entry = await self._channels.cached_page(channel)
         if entry is not None:
             if entry.age < self._settings.feed_fresh_ttl:
-                return decode_page(entry.value)
+                return entry.value
             if entry.age < self._settings.feed_stale_ttl:
                 self._channels.refresh_page_in_background(channel)
-                return decode_page(entry.value)
-        return await self._channels.refresh_page(channel)
+                return entry.value
+        return (await self._channels.refresh_page(channel)).raw
 
 
 class FeedRefresher:
@@ -177,7 +161,7 @@ class FeedRefresher:
 
         slots = asyncio.Semaphore(self.concurrency)
 
-        async def refresh(channel: str) -> JSONDict:
+        async def refresh(channel: str) -> LoadedPage:
             async with slots:
                 return await self._channels.refresh_page(channel)
 

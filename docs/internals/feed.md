@@ -10,22 +10,31 @@ flowchart LR
     P -- "< FEED_FRESH_TTL" --> USE[use]
     P -- "< FEED_STALE_TTL" --> USE2[use + refresh in background]
     P -- "older / missing" --> FETCH[fetch now, all in parallel]
-    USE & USE2 & FETCH --> SIG["signals (Python)"]
-    SIG --> RANK["rank (Rust, GIL released)"]
-    RANK --> OUT[posts + _score, _duplicates, _topic]
+    USE & USE2 & FETCH --> B["build_feed (Rust, GIL released)<br/>signals · rank · render"]
+    B --> OUT[response bytes]
 ```
 
 1. Channels are de-duplicated (order kept) and counted in the popularity
    ranking.
-2. All pages are resolved concurrently with the rules above.
-3. Python turns every post into a `Candidate`: parsed view counter, channel
-   subscribers, positive and negative reaction totals, media counts, plain
-   text, publication time, edited flag
-   ([`services/feed_signals.py`](https://github.com/koval01/telegram-me/blob/main/src/telegram_me/services/feed_signals.py)).
-4. `telegram_me_native.rank()` — Rust,
-   [`rust/telegram-me-native/src/rank.rs`](https://github.com/koval01/telegram-me/blob/main/rust/telegram-me-native/src/rank.rs) —
-   runs on a worker thread with the GIL released and returns the posts in
-   feed order with scores, collapsed duplicates and topics.
+2. All pages are resolved concurrently with the rules above. Each page is
+   used as the bytes the page cache holds; a page fetched now comes with its
+   cache encoding, so nothing is decoded or encoded in Python.
+3. `telegram_me_native.build_feed()` — Rust,
+   [`rust/telegram-me-native/src/feed.rs`](https://github.com/koval01/telegram-me/blob/main/rust/telegram-me-native/src/feed.rs) —
+   runs on a worker thread with the GIL released and does the rest in one
+   call:
+    - reads every page in one pass, keeping each post as the JSON text it was
+      cached as, and drops a post already seen under the same username;
+    - picks the ranking signals out of each post's footer and content: parsed
+      view counter (`1.2K`, `15 400`), channel subscribers, positive and
+      negative reaction totals, media counts, plain text, publication time,
+      edited flag;
+    - ranks them ([`rank.rs`](https://github.com/koval01/telegram-me/blob/main/rust/telegram-me-native/src/rank.rs), below);
+    - writes the response: every post with its `channel`, `_score` and, when
+      they apply, `_duplicates` and `_topic`.
+
+    A page that is not valid JSON (a corrupted cache entry) is left out and
+    logged. GraphQL's `feed` decodes the same bytes.
 
 ## Ranking
 
@@ -111,8 +120,12 @@ hash tables use FxHash. Measured with
 | 500 | ~4 ms |
 | 2 000 (100 channels) | 17–24 ms |
 
-The ranking runs on a worker thread with the GIL released, so the event loop
-keeps serving other requests meanwhile.
+A whole 100-channel feed (reading the pages, the signals, ranking and the
+response) takes 43 ms on 8 cores and 106 ms of CPU on one in
+`scripts/audit.py`, whose aliases make most stories duplicates; see the
+[Rust roadmap](rust-roadmap.md#stage-1-results). It runs on a worker thread
+with the GIL released, so the event loop keeps serving other requests
+meanwhile.
 
 ## Popularity and the refresher
 

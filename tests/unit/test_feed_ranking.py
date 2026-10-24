@@ -1,22 +1,17 @@
-"""The native (Rust) feed ranker and the signals Python feeds into it.
+"""The native (Rust) feed: cached pages in, ranked `/v1/feed` body out.
 
-Rust has its own unit tests (`cargo test`); these tests pin the behaviour as
-seen from Python, through the real extension module.
+Rust has its own unit tests (`cargo test`), including the ranking signals
+(`1.2K` counters, reactions, media); these tests pin the behaviour as seen
+from Python, through the real extension module and the same page JSON the
+page cache holds.
 """
 
 import itertools
 import time
 from typing import Any
 
-import pytest
 import telegram_me_native as native
-
-from telegram_me.services.feed_signals import (
-    candidate,
-    media_counts,
-    parse_compact_number,
-    reaction_totals,
-)
+from pydantic_core import from_json, to_json
 
 NOW = 1_800_000_000
 HOUR = 3600
@@ -24,196 +19,176 @@ STORY = (
     "Министерство обороны сообщило о новых поставках техники в регион, поставки "
     "начнутся уже на следующей неделе и продлятся до конца месяца по плану"
 )
-
-
 WEATHER = "Погода на выходные: солнечно, без осадков, до двадцати градусов тепла днём"
 ROCKET_1 = "Запуск ракеты с космодрома перенесли, старт ракеты состоится завтра утром"
 ROCKET_2 = "Старт ракеты с космодрома: запуск ракеты назначен на утро"
 FOOTBALL = "Футбольный матч сборной завершился победой, гол забит на последней минуте"
 
+type Post = tuple[str, int, dict[str, Any]]
+
 
 def make(
-    channel: str, post_id: int, hours_ago: float = 1, views: int = 1000, **extra: Any
-) -> native.Candidate:
-    return native.Candidate(
-        channel=channel,
-        post_id=post_id,
-        published_at=int(NOW - hours_ago * HOUR),
-        views=views,
-        subscribers=extra.pop("subscribers", 10_000),
-        **extra,
-    )
+    channel: str,
+    post_id: int,
+    hours_ago: float = 1,
+    views: int | str = 1000,
+    *,
+    subscribers: int = 10_000,
+    text: str = "",
+    reacts: list[dict[str, Any]] | None = None,
+    media: tuple[str, ...] = (),
+) -> Post:
+    """A post as the parser caches it, with its channel's subscriber count."""
+    content: dict[str, Any] = {}
+    if text:
+        content["text"] = {"string": text, "html": text}
+    if media:
+        content["media"] = [{"type": kind} for kind in media]
+    if reacts:
+        content["reacts"] = reacts
+    post = {
+        "id": post_id,
+        "content": content,
+        "footer": {
+            "views": str(views),
+            "date": {"string": "", "unix": int(NOW - hours_ago * HOUR)},
+        },
+        "view": "",
+    }
+    return channel, subscribers, post
+
+
+def pages(posts: list[Post]) -> list[tuple[str, bytes]]:
+    """Group posts into one cached page per channel, in order of appearance."""
+    grouped: dict[str, dict[str, Any]] = {}
+    for channel, subscribers, post in posts:
+        page = grouped.setdefault(
+            channel,
+            {
+                "channel": {"username": channel, "counters": {"subscribers": str(subscribers)}},
+                "content": {"posts": []},
+            },
+        )
+        page["content"]["posts"].append(post)
+    return [(channel, to_json(page)) for channel, page in grouped.items()]
 
 
 def options(**overrides: Any) -> native.RankOptions:
     return native.RankOptions(now=NOW, **overrides)
 
 
-# --- signals -----------------------------------------------------------------
+def rank(posts: list[Post], **overrides: Any) -> list[dict[str, Any]]:
+    feed, unreadable = native.build_feed(pages(posts), options(**overrides))
+    assert unreadable == []
+    result: list[dict[str, Any]] = from_json(feed)["result"]
+    return result
 
 
-@pytest.mark.parametrize(
-    ("value", "expected"),
-    [
-        ("15", 15),
-        ("1.2K", 1200),
-        ("3.5M", 3_500_000),
-        ("15 400", 15400),
-        ("10\N{NO-BREAK SPACE}281", 10281),
-        ("n/a", 0),
-        ("", 0),
-        (None, 0),
-    ],
-)
-def test_parse_compact_number(value: str | None, expected: int) -> None:
-    assert parse_compact_number(value) == expected
-
-
-def test_reaction_totals() -> None:
-    reacts: list[dict[str, Any]] = [
-        {"type": "emoji", "emoji": "👍", "count": "1.2K"},
-        {"type": "emoji", "emoji": "🔥", "count": "300"},
-        {"type": "telegram_stars", "emoji": "⭐", "count": "50"},
-        {"type": "emoji", "emoji": "👎", "count": "20"},
-        {"type": "custom_emoji", "emoji": None, "emoji_id": "1", "count": "999"},
-    ]
-    assert reaction_totals(reacts) == (1550, 20)
-    assert reaction_totals(None) == (0, 0)
-
-
-def test_media_counts() -> None:
-    content = {
-        "media": [
-            {"type": "image"},
-            {"type": "image"},
-            {"type": "video"},
-            {"type": "roundvideo"},
-            {"type": "gif"},
-            {"type": "sticker"},
-            {"type": "voice"},
-        ],
-        "poll": {"question": "?"},
-    }
-    assert media_counts(content) == {"photos": 2, "videos": 2, "gifs": 2, "polls": 1}
-    assert media_counts({}) == {"photos": 0, "videos": 0, "gifs": 0, "polls": 0}
-
-
-def test_candidate_from_raw_post() -> None:
-    post = {
-        "id": 42,
-        "content": {"text": {"string": "hello", "html": "hello"}},
-        "footer": {"views": "1.5K", "edited": True, "date": {"string": "x", "unix": NOW}},
-    }
-    built = candidate("durov", 1000, post)
-    assert repr(built) == 'Candidate(channel="durov", post_id=42)'
-    items, _ = native.rank([built], options())
-    assert len(items) == 1
-
-
-def test_candidate_tolerates_missing_fields() -> None:
-    items, _ = native.rank([candidate("a", 1, {"id": 1})], options())
-    assert items[0].index == 0
-
-
-# --- ranking properties ------------------------------------------------------
+def ids(entries: list[dict[str, Any]]) -> list[tuple[str, int]]:
+    return [(entry["channel"]["username"], entry["id"]) for entry in entries]
 
 
 def test_every_post_appears_once_with_bounded_score() -> None:
-    candidates = [make(f"c{i % 4}", i, hours_ago=i % 30, views=100 * (i + 1)) for i in range(80)]
-    items, _ = native.rank(candidates, options())
-    assert sorted(item.index for item in items) == list(range(80))
-    assert all(0.0 <= item.score <= 10.0 for item in items)
+    posts = [make(f"c{i % 4}", i, hours_ago=i % 30, views=100 * (i + 1)) for i in range(80)]
+    entries = rank(posts)
+    assert sorted(entry["id"] for entry in entries) == list(range(80))
+    assert all(0.0 <= entry["_score"] <= 10.0 for entry in entries)
 
 
 def test_empty_feed() -> None:
-    assert native.rank([], options()) == ([], [])
+    assert native.build_feed([], options()) == (b'{"result":[]}', [])
+
+
+def test_entries_are_posts_with_channel_and_score() -> None:
+    (entry,) = rank([make("durov", 1, text="hello")])
+    assert list(entry) == ["id", "content", "footer", "view", "channel", "_score"]
+    assert entry["channel"] == {"username": "durov", "counters": {"subscribers": "10000"}}
+
+
+def test_unreadable_pages_are_reported() -> None:
+    good = pages([make("good", 1)])
+    feed, unreadable = native.build_feed([("bad", b"{not json"), *good, ("list", b"[]")], options())
+    assert unreadable == [0, 2]
+    assert ids(from_json(feed)["result"]) == [("good", 1)]
+
+
+def test_compact_counters_reach_the_ranker() -> None:
+    posts = [make("a", i, views="1.2K") for i in range(3)] + [make("a", 3, views="15 400")]
+    assert ids(rank(posts, diversity=0))[0] == ("a", 3)
 
 
 def test_newer_post_wins_when_equal() -> None:
-    items, _ = native.rank(
-        [make("a", 1, hours_ago=48), make("b", 2, hours_ago=1)], options(diversity=0)
-    )
-    assert items[0].index == 1
+    entries = rank([make("a", 1, hours_ago=48), make("b", 2, hours_ago=1)], diversity=0)
+    assert ids(entries)[0] == ("b", 2)
 
 
 def test_half_life_controls_freshness_weight() -> None:
-    candidates = [make("a", 1, hours_ago=1, views=100), make("b", 2, hours_ago=20, views=5000)]
-    fast, _ = native.rank(candidates, options(diversity=0, half_life_hours=1))
-    slow, _ = native.rank(candidates, options(diversity=0, half_life_hours=1000))
-    assert fast[0].index == 0
-    assert slow[0].index == 1
+    posts = [make("a", 1, hours_ago=1, views=100), make("b", 2, hours_ago=20, views=5000)]
+    assert ids(rank(posts, diversity=0, half_life_hours=1))[0] == ("a", 1)
+    assert ids(rank(posts, diversity=0, half_life_hours=1000))[0] == ("b", 2)
 
 
 def test_engagement_is_relative_to_channel() -> None:
-    candidates = []
+    posts = []
     for i in range(4):
-        candidates.append(make("small", i, views=100, subscribers=1_000))
-        candidates.append(make("big", 10 + i, views=200_000, subscribers=5_000_000))
-    candidates.append(make("small", 99, views=2_000, subscribers=1_000))  # 20x its usual
-    candidates.append(make("big", 98, views=200_000, subscribers=5_000_000))  # ordinary
-    items, _ = native.rank(candidates, options(diversity=0))
-    assert candidates_index(items[0].index, candidates) == ("small", 99)
-
-
-def candidates_index(index: int, candidates: list[native.Candidate]) -> tuple[str, int]:
-    text = repr(candidates[index])
-    channel = text.split('channel="')[1].split('"')[0]
-    post_id = int(text.split("post_id=")[1].rstrip(")"))
-    return channel, post_id
+        posts.append(make("small", i, views=100, subscribers=1_000))
+        posts.append(make("big", 10 + i, views=200_000, subscribers=5_000_000))
+    posts.append(make("small", 99, views=2_000, subscribers=1_000))  # 20x its usual
+    posts.append(make("big", 98, views=200_000, subscribers=5_000_000))  # ordinary
+    assert ids(rank(posts, diversity=0))[0] == ("small", 99)
 
 
 def test_negative_reactions_hurt() -> None:
-    good = make("a", 1, positive_reactions=100)
-    bad = make("b", 2, negative_reactions=100)
-    items, _ = native.rank([bad, good], options(diversity=0))
-    assert items[0].index == 1
-    assert items[0].score > items[1].score
+    good = make("a", 1, reacts=[{"type": "emoji", "emoji": "👍", "count": "100"}])
+    bad = make("b", 2, reacts=[{"type": "emoji", "emoji": "👎", "count": "100"}])
+    entries = rank([bad, good], diversity=0)
+    assert ids(entries)[0] == ("a", 1)
+    assert entries[0]["_score"] > entries[1]["_score"]
 
 
 def test_richer_content_helps() -> None:
     plain = make("a", 1)
-    rich = make("b", 2, photos=3, videos=1, text=STORY)
-    items, _ = native.rank([plain, rich], options(diversity=0))
-    assert items[0].index == 1
+    rich = make("b", 2, media=("image", "image", "image", "video"), text=STORY)
+    assert ids(rank([plain, rich], diversity=0))[0] == ("b", 2)
 
 
 def test_duplicates_collapse_into_best_post() -> None:
-    candidates = [
+    posts = [
         make("a", 1, views=300, text=STORY),
         make("b", 2, views=9000, text=f"⚡️ Срочно! {STORY}"),
-        make(
-            "c",
-            3,
-            views=800,
-            text="Погода на выходные: солнечно, без осадков, до двадцати градусов тепла днём",
-        ),
+        make("c", 3, views=800, text=WEATHER),
     ]
-    items, _ = native.rank(candidates, options())
-    assert len(items) == 2
-    merged = next(item for item in items if item.duplicates)
-    assert len(merged.duplicates) == 1
-    assert {merged.index, merged.duplicates[0]} == {0, 1}
+    entries = rank(posts)
+    assert len(entries) == 2
+    merged = next(entry for entry in entries if "_duplicates" in entry)
+    (duplicate,) = merged["_duplicates"]
+    assert {("a", 1), ("b", 2)} == {
+        (merged["channel"]["username"], merged["id"]),
+        (duplicate["channel"], duplicate["id"]),
+    }
 
 
 def test_duplicate_collapsing_can_be_disabled() -> None:
-    candidates = [make("a", 1, text=STORY), make("b", 2, text=STORY)]
-    items, _ = native.rank(candidates, options(collapse_duplicates=False))
-    assert len(items) == 2
+    posts = [make("a", 1, text=STORY), make("b", 2, text=STORY)]
+    assert len(rank(posts, collapse_duplicates=False)) == 2
 
 
 def test_short_texts_are_never_merged() -> None:
-    candidates = [make("a", 1, text="Доброе утро!"), make("b", 2, text="Доброе утро!")]
-    items, _ = native.rank(candidates, options())
-    assert len(items) == 2
+    posts = [make("a", 1, text="Доброе утро!"), make("b", 2, text="Доброе утро!")]
+    assert len(rank(posts)) == 2
+
+
+def test_same_post_of_one_channel_is_listed_once() -> None:
+    feed, _ = native.build_feed(pages([make("a", 1)]) * 2, options())
+    assert len(from_json(feed)["result"]) == 1
 
 
 def test_diversity_interleaves_channels() -> None:
-    candidates = [make("loud", i, views=50_000) for i in range(8)]
-    candidates += [make("quiet", 100 + i, views=40_000) for i in range(4)]
+    posts = [make("loud", i, views=50_000) for i in range(8)]
+    posts += [make("quiet", 100 + i, views=40_000) for i in range(4)]
 
     def longest_run(diversity: float) -> int:
-        items, _ = native.rank(candidates, options(diversity=diversity))
-        channels = [candidates_index(item.index, candidates)[0] for item in items]
+        channels = [channel for channel, _ in ids(rank(posts, diversity=diversity))]
         best = run = 1
         for previous, current in itertools.pairwise(channels):
             run = run + 1 if current == previous else 1
@@ -224,37 +199,27 @@ def test_diversity_interleaves_channels() -> None:
 
 
 def test_topics_group_related_posts() -> None:
-    candidates = [
-        make(
-            "a", 1, text="Запуск ракеты с космодрома перенесли, старт ракеты состоится завтра утром"
-        ),
-        make(
-            "b", 2, text="Футбольный матч сборной завершился победой, гол забит на последней минуте"
-        ),
-        make("c", 3, text="Старт ракеты с космодрома: запуск ракеты назначен на утро"),
-    ]
-    items, topics = native.rank(candidates, options(collapse_duplicates=False))
-    topic = {item.index: item.topic for item in items}
-    assert topic[0] == topic[2] != topic[1]
-    assert topic[0] is not None
-    assert any(word.startswith("ракет") for word in topics[topic[0]].keywords)
-    assert sorted(topics[topic[0]].members) == [0, 2]
+    posts = [make("a", 1, text=ROCKET_1), make("b", 2, text=FOOTBALL), make("c", 3, text=ROCKET_2)]
+    entries = {entry["id"]: entry for entry in rank(posts, collapse_duplicates=False)}
+    assert "_topic" not in entries[2]
+    assert entries[1]["_topic"] == entries[3]["_topic"]
+    assert any(word.startswith("ракет") for word in entries[1]["_topic"]["keywords"])
 
 
 def test_ranking_is_deterministic() -> None:
-    candidates = [make(f"c{i % 3}", i, text="одинаковый текст новости дня") for i in range(30)]
-    first, _ = native.rank(candidates, options())
-    second, _ = native.rank(candidates, options())
-    assert [(i.index, i.score) for i in first] == [(i.index, i.score) for i in second]
+    posts = [make(f"c{i % 3}", i, text="одинаковый текст новости дня") for i in range(30)]
+    first = native.build_feed(pages(posts), options())
+    assert native.build_feed(pages(posts), options()) == first
 
 
 def test_large_feed_is_fast() -> None:
-    candidates = [
+    posts = [
         make(f"c{i % 100}", i, hours_ago=i % 48, views=1000 + i, text=f"{STORY} номер {i % 37}")
         for i in range(2000)
     ]
+    encoded = pages(posts)
     started = time.perf_counter()
-    items, _ = native.rank(candidates, options())
+    feed, _ = native.build_feed(encoded, options())
     elapsed = time.perf_counter() - started
-    assert len(items) <= 2000
-    assert elapsed < 2.0, f"ranking 2000 posts took {elapsed:.2f}s"
+    assert len(from_json(feed)["result"]) <= 2000
+    assert elapsed < 2.0, f"building a feed of 2000 posts took {elapsed:.2f}s"
