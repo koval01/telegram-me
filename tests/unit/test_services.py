@@ -91,9 +91,11 @@ async def test_invalid_post_is_dropped_not_fatal(durov_html: str) -> None:
     page = await service.page("durov")
     broken = {**page["content"]["posts"][0], "footer": {"date": "not a date object"}}
     page = {**page, "content": {"posts": [broken, *page["content"]["posts"][1:]]}}
-    await service._cache.set(service.page_key("durov"), encode(page), 60)
+    # A service that has the broken page in its cache but no rendered body.
+    other = _service(fetcher, make_settings())
+    await other._cache.set(other.page_key("durov"), encode(page), 60)
 
-    body = await service.body("durov")
+    body = await other.body("durov")
     assert len(body.content.posts) == len(page["content"]["posts"]) - 1
 
 
@@ -177,7 +179,7 @@ async def test_refresher_bounds_concurrent_refreshes() -> None:
     class Channels:
         in_flight = peak = 0
 
-        async def refresh_page(self, channel: str) -> dict[str, Any]:
+        async def refresh_page(self, channel: str, fresh_for: float = 0) -> dict[str, Any]:
             self.in_flight += 1
             self.peak = max(self.peak, self.in_flight)
             await asyncio.sleep(0.001)

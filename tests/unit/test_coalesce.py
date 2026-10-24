@@ -81,6 +81,7 @@ async def test_background_start_failure_is_not_reported_as_unretrieved() -> None
         raise RuntimeError(msg)
 
     task = flight.start("k", fail)
+    assert task is not None
     await asyncio.sleep(0)
     await asyncio.sleep(0)
     assert task.done()

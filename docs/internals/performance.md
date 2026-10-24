@@ -73,6 +73,55 @@ feeds of 2 000 posts:
 
 Details, per-endpoint costs and what moves next: [Rust roadmap](rust-roadmap.md).
 
+## Request coalescing
+
+`scripts/coalescing_load.py` starts 6 worker processes (think two servers of
+three granian workers) on one Valkey, each with 32 clients calling its app
+directly. Every client picks requests at random from the same 37: each
+recorded channel through `/v1/body` (latest and around a post), `/v1/post`,
+`/v1/more` both ways, three previews, a 6-channel feed and a GraphQL query
+with a body and the feed. t.me is replaced by recorded pages answered after
+150 ms; `CACHE_MODE=normal` (10 s), so the 27 distinct upstream requests
+expire twice in a 25 s run. Two runs each, Apple M-series with 8 cores:
+
+| | main (with the native feed) | this change, `SHARED_COALESCING=false` | this change |
+|---|---|---|---|
+| Upstream requests, local Valkey | 417 / 412 | 421 / 428 | **75 / 75** |
+| Upstream requests, Valkey 90 ms away | 434 / 422 | 414 / 413 | **75 / 75** |
+| Per distinct upstream request | 15.3–16.1 | 15.3–15.9 | **2.8** (once per TTL period) |
+| Requests served in 25 s, local | 117 k / 117 k | 530 k / 537 k | 548 k / 533 k |
+| CPU per request, local | 1.41 / 1.43 ms | 0.30 / 0.29 ms | 0.29 / 0.29 ms |
+| CPU per request, 90 ms | 1.43 / 1.41 ms | 0.27 / 0.27 ms | 0.27 / 0.27 ms |
+| p99 latency, local | 917 / 902 ms | 206 / 203 ms | 199 / 206 ms |
+| Longest event-loop stall of a worker, local | 845 / 905 ms | 246 / 200 ms | 224 / 228 ms |
+
+- The lease is what removes the duplicates across processes: 75 upstream
+  requests is the minimum for this run (27 distinct, renewed at most twice),
+  and it holds with Redis 90 ms away. Without it every process fetches each
+  page itself, as before.
+- Sharing the rendering is what cuts the CPU: identical feeds are built once
+  (and, for GraphQL, decoded once) instead of once per request, `/v1/post`
+  is cached rendered, and concurrent `/v1/body` misses render once. The freed
+  CPU went into serving 4–5× as many requests in the same time, with shorter
+  event-loop stalls.
+- A Redis command that times out opens the worker's circuit breaker; that
+  worker then fetches on its own (one fetch per key, as before the lease)
+  until it closes. Seen in development when a worker's event loop stalled
+  for over 2 s (before GraphQL feeds were decoded once), not in the runs
+  above.
+
+The cached hot path is unchanged (one worker, median of 2 500 hits, ASGI
+called directly):
+
+| Hit | main | this change |
+|---|---|---|
+| `/v1/body/durov` | 0.101 ms | 0.101 ms |
+| `/v1/more/durov/before/<id>` | 0.091 ms | 0.091 ms |
+| `/v1/post/durov/<id>` | 0.242 ms | **0.067 ms** (cached rendered) |
+
+Admission is a few native calls on a miss only; a hit adds one native call
+that compares the entry's age with its renewal point.
+
 ## Page parsing: Python + lexbor → Rust
 
 Median time to parse one recorded channel page (`scripts/benchmark.py`):
@@ -231,6 +280,8 @@ uv run python scripts/memory_profile.py --requests 20000 --channels 200
 ```bash
 uv run python scripts/benchmark.py   # in-process, recorded pages, no network
 uv run python scripts/audit.py --stages   # per endpoint (wall, CPU, allocations) and per stage
+docker run -d --name tme-valkey -p 6390:6379 valkey/valkey:8
+uv run python scripts/coalescing_load.py --redis redis://127.0.0.1:6390/0
 ```
 
 For server throughput, start an instance and point a load generator at it:

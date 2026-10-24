@@ -6,6 +6,7 @@ from fastapi import FastAPI, Request, status
 from fastapi.responses import JSONResponse
 
 from telegram_me.telegram.errors import (
+    OverloadedError,
     TelegramError,
     TelegramNotFoundError,
     TelegramParseError,
@@ -36,6 +37,11 @@ def _error(status_code: int, detail: str) -> JSONResponse:
 
 
 async def _telegram_error(_request: Request, exc: Exception) -> JSONResponse:
+    if isinstance(exc, OverloadedError):
+        # Shed load: tell clients (and Cloudflare) when to come back.
+        response = _error(status.HTTP_503_SERVICE_UNAVAILABLE, str(exc))
+        response.headers["Retry-After"] = str(exc.retry_after)
+        return response
     for error_type, status_code in _STATUS_BY_ERROR:
         if isinstance(exc, error_type):
             if status_code >= 500:

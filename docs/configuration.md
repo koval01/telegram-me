@@ -50,6 +50,10 @@ The source of truth is
 | [`MEMORY_TRIM_INTERVAL`](#memory_trim_interval) | `10` | Performance |
 | [`TELEGRAM_TIMEOUT`](#telegram_timeout) | `10` | Upstream |
 | [`TELEGRAM_MAX_CONCURRENCY`](#telegram_max_concurrency) | `32` | Upstream |
+| [`UPSTREAM_QUEUE_LIMIT`](#upstream_queue_limit) | 16 × `TELEGRAM_MAX_CONCURRENCY` | Upstream |
+| [`MAX_WAITING_REQUESTS`](#max_waiting_requests) | `4096` | Upstream |
+| [`SHARED_COALESCING`](#shared_coalescing) | `true` | Upstream |
+| [`EARLY_REFRESH_WINDOW`](#early_refresh_window) | `0.1` | Upstream |
 | [`REDIS_URL`](#redis_url) | — | Cache |
 | [`REDIS_TIMEOUT`](#redis_timeout) | `0.5` | Cache |
 | [`PREVIEW_CACHE_TTL`](#preview_cache_ttl) | `3600` | Cache |
@@ -271,6 +275,34 @@ error is a network error.
 
 Maximum simultaneous requests to t.me per worker process. Protects the server
 from being rate-limited by Telegram during large feed or previews requests.
+The slots are shared fairly: round-robin over channels and feed or previews
+requests, user requests before background refreshes (see
+[Caching](internals/caching.md#upstream-protection)).
+
+### `UPSTREAM_QUEUE_LIMIT`
+
+How many requests a worker lets wait for a free upstream slot. Further
+requests that need t.me are answered `503` with a `Retry-After` header
+instead of queueing. Defaults to 16 per `TELEGRAM_MAX_CONCURRENCY` slot (512).
+
+### `MAX_WAITING_REQUESTS`
+
+How many requests a worker lets wait for upstream work (a fetch or render
+someone else started) at once; beyond it, `503` with `Retry-After`. Bounds the
+memory a flood of requests can tie up.
+
+### `SHARED_COALESCING`
+
+With `REDIS_URL`, fetch each page once across all workers and servers: the
+process that fetches takes a short lease in Redis and the others wait for its
+result instead of asking t.me themselves. Turn it off to coalesce per worker
+only.
+
+### `EARLY_REFRESH_WINDOW`
+
+Renew a cached page that is still being read within this last fraction of its
+freshness (0.1: the last second of `CACHE_MODE=normal`'s 10 s), in the
+background, so popular pages never expire under load. `0` disables it.
 
 ## Cache
 

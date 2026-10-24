@@ -4,22 +4,38 @@ Fetched pages are parsed, validated and rendered on a worker thread: the
 native parser releases the GIL, and even pydantic's share must not run on the
 event loop, where a burst of finished fetches would otherwise stall every
 other request and push in-flight Redis commands past REDIS_TIMEOUT.
+
+Identical concurrent requests do the work once. Each kind of result (parsed
+page, rendered body, rendered post, "more" fragment, preview) has a single
+flight per key in this process, and the leader of a flight takes the shared
+lease (`services.lease`) so that only one process of all servers fetches a
+key from t.me; the others pick its result up from the cache. Keys are
+normalized first: channel names are case-insensitive, and an absent
+position is the same as position 0. A cached entry close to the end of its
+freshness is renewed early, in the background, by the first request that
+reads it past its renewal point (see `EarlyRefresh`), so a hot key is fetched
+about once per TTL and never expires under load.
 """
 
 import asyncio
 import functools
 import logging
+import os
+import time
 from collections.abc import Callable
 from concurrent.futures import Executor
 from typing import Any, Literal, NamedTuple
 
+import telegram_me_native as native
 from pydantic import BaseModel, ValidationError
 from pydantic_core import from_json, to_json
 
 from telegram_me.cache import Cache, CacheEntry
 from telegram_me.schemas.channel import ChannelBody, More, Preview, Previews
 from telegram_me.schemas.post import Post
-from telegram_me.services.coalesce import SingleFlight
+from telegram_me.services import upstream
+from telegram_me.services.coalesce import SingleFlight, flight_table
+from telegram_me.services.lease import Lease, LocalLease
 from telegram_me.settings import Settings
 from telegram_me.telegram.client import TelegramClient
 from telegram_me.telegram.errors import (
@@ -41,6 +57,9 @@ logger = logging.getLogger(__name__)
 _MISSING_PREVIEW_TTL = 60
 _MISSING = b"null"
 _BODY_POSTS = ("content", "posts")
+# Distinct keys in flight per waiting-request slot (see `ChannelService`).
+_KEYS_PER_WAITER = 4
+_LOCAL_LEASE = LocalLease()
 
 
 def _rendered(page_key: str) -> str:
@@ -48,10 +67,18 @@ def _rendered(page_key: str) -> str:
 
 
 class LoadedPage(NamedTuple):
-    """A freshly fetched channel page: parsed, and as stored in the page cache."""
+    """A parsed channel page, as the page cache stores it, and when it was fetched."""
 
     data: JSONDict
     raw: bytes
+    stored_at: float
+    # The rendered `/v1/body` when it was rendered along with the page.
+    rendered: bytes | None = None
+
+    @property
+    def age(self) -> float:
+        """Seconds since the page was fetched."""
+        return time.time() - self.stored_at
 
 
 class ChannelService:
@@ -63,16 +90,30 @@ class ChannelService:
         cache: Cache,
         settings: Settings,
         executor: Executor | None = None,
+        lease: Lease | None = None,
     ) -> None:
         self._client = client
         self._cache = cache
         self._settings = settings
         # Where pages are parsed; None is the event loop's default executor.
         self._executor = executor
+        self._lease = lease or _LOCAL_LEASE
         self._simplified = settings.parser_mode == "simplified"
-        self._pages: SingleFlight[LoadedPage] = SingleFlight()
-        self._previews: SingleFlight[JSONDict | None] = SingleFlight()
-        self._rendered: SingleFlight[bytes] = SingleFlight()
+        self._early = native.EarlyRefresh(
+            settings.early_refresh_window, int.from_bytes(os.urandom(8), "little")
+        )
+        # One table bounds the requests waiting for any kind of result.
+        waiters = settings.max_waiting_requests
+        table = flight_table(_KEYS_PER_WAITER * waiters, waiters)
+        self._pages: SingleFlight[LoadedPage] = SingleFlight(table, "page|")
+        self._bodies: SingleFlight[bytes] = SingleFlight(table, "body|")
+        self._posts: SingleFlight[bytes] = SingleFlight(table, "post|")
+        self._previews: SingleFlight[JSONDict | None] = SingleFlight(table, "preview|")
+        self._mores: SingleFlight[bytes] = SingleFlight(table, "more|")
+
+    def _shared_lease(self) -> Lease:
+        # Without a page cache nothing is left for other processes to pick up.
+        return self._lease if self._settings.page_cache_ttl else _LOCAL_LEASE
 
     # Raw (parsed, unvalidated) pages -------------------------------------------------
 
@@ -86,63 +127,150 @@ class ChannelService:
 
     async def page(self, channel: str, position: int | None = None) -> JSONDict:
         """Parsed channel page, served from cache while younger than the page TTL."""
+        return (await self._loaded_page(channel, position)).data
+
+    async def _loaded_page(self, channel: str, position: int | None) -> LoadedPage:
         ttl = self._settings.page_cache_ttl
         entry = await self._cache.get(self.page_key(channel, position)) if ttl else None
         if entry is not None and entry.age < ttl:
-            return decode_page(entry.value)
-        return (await self.refresh_page(channel, position)).data
+            self._renew_if_due(entry, channel, position)
+            return LoadedPage(decode_page(entry.value), entry.value, entry.stored_at)
+        return await self.refresh_page(channel, position)
 
-    async def refresh_page(self, channel: str, position: int | None = None) -> LoadedPage:
-        """Fetch and parse a page now (coalesced with concurrent identical fetches)."""
+    async def refresh_page(
+        self, channel: str, position: int | None = None, *, fresh_for: float | None = None
+    ) -> LoadedPage:
+        """Fetch and parse a page now (coalesced with concurrent identical fetches).
+
+        A copy younger than `fresh_for` seconds (default: the page TTL) that
+        another process wrote meanwhile is used instead of fetching again.
+        """
         key = self.page_key(channel, position)
-        return await self._pages.run(key, lambda: self._load_page(key, channel, position))
+        limit = self._settings.page_cache_ttl if fresh_for is None else fresh_for
+        return await self._pages.run(
+            key, lambda: self._load_page(key, channel, position, lambda e: e.age < limit)
+        )
 
     def refresh_page_in_background(self, channel: str) -> None:
         """Start refreshing a channel's latest page without waiting for it."""
         key = self.page_key(channel)
-        self._pages.start(key, lambda: self._load_page(key, channel, None))
-
-    async def _load_page(self, key: str, channel: str, position: int | None) -> LoadedPage:
-        html = await self._client.channel_page(channel, position)
-        page_ttl = self._settings.page_cache_ttl
-        data, raw, rendered = await self._offload(
-            _process_page, html, channel, simplified=self._simplified, render=bool(page_ttl)
+        fresh_for = self._settings.feed_fresh_ttl
+        self._pages.start(
+            key,
+            lambda: self._load_page(key, channel, None, lambda e: e.age < fresh_for),
+            background=True,
         )
-        # Latest pages stay long enough for the feed's stale-while-revalidate window.
-        raw_ttl = page_ttl
-        if position is None and self._settings.enable_feed:
-            raw_ttl = max(raw_ttl, self._settings.feed_stale_ttl)
-        await self._cache.set(key, raw, raw_ttl)
-        if rendered is not None:
-            await self._cache.set(_rendered(key), rendered, page_ttl)
-        return LoadedPage(data, raw)
+
+    def _renew_if_due(self, entry: CacheEntry, channel: str, position: int | None) -> None:
+        """Renew a page early, in the background, once its entry is close to expiry.
+
+        `entry` is the page or a response rendered from it (they share the
+        page's store time). See `EarlyRefresh`.
+        """
+        key = self.page_key(channel, position)
+        stored_at = entry.stored_at
+        if not self._early.claim(key, entry.age, self._settings.page_cache_ttl, stored_at):
+            return
+        self._pages.start(
+            key,
+            # Any copy newer than this one means another process renewed it.
+            lambda: self._load_page(key, channel, position, lambda e: e.stored_at > stored_at),
+            background=True,
+        )
+
+    async def _load_page(
+        self,
+        key: str,
+        channel: str,
+        position: int | None,
+        fresh: Callable[[CacheEntry], bool],
+    ) -> LoadedPage:
+        async def fetch() -> LoadedPage:
+            html = await self._client.channel_page(channel, position)
+            page_ttl = self._settings.page_cache_ttl
+            data, raw, rendered = await self._offload(
+                _process_page, html, channel, simplified=self._simplified
+            )
+            stored_at = time.time()
+            # Latest pages stay long enough for the feed's stale-while-revalidate window.
+            raw_ttl: float = page_ttl
+            if position is None and self._settings.enable_feed:
+                raw_ttl = max(raw_ttl, self._early.jitter(self._settings.feed_stale_ttl))
+            await self._cache.set(key, raw, raw_ttl, stored_at=stored_at)
+            if rendered is not None:
+                await self._cache.set(_rendered(key), rendered, page_ttl, stored_at=stored_at)
+            return LoadedPage(data, raw, stored_at, rendered)
+
+        def adopt(entry: CacheEntry) -> LoadedPage:
+            return LoadedPage(decode_page(entry.value), entry.value, entry.stored_at)
+
+        return await self._shared_lease().run(key, fetch, adopt, fresh)
 
     # Endpoints -----------------------------------------------------------------------
 
     async def body(self, channel: str, position: int | None = None) -> ChannelBody:
         """Channel profile, posts and pagination."""
-        data = await self.page(channel, position)
-        return validate_with_posts(ChannelBody, data, _BODY_POSTS)
+        return ChannelBody.model_validate_json(await self.body_json(channel, position))
 
     async def body_json(self, channel: str, position: int | None = None) -> bytes:
-        """`body()` rendered as JSON, served from the response cache when fresh."""
+        """Channel profile, posts and pagination, rendered as JSON.
+
+        Served from the response cache while fresh; otherwise rendered once
+        for all concurrent requests: along with the page fetch, or from a
+        cached page in a flight of its own.
+        """
+        key = self.page_key(channel, position)
+        rendered_key = _rendered(key)
         ttl = self._settings.page_cache_ttl
         if ttl:
-            entry = await self._cache.get(_rendered(self.page_key(channel, position)))
+            entry = await self._cache.get(rendered_key)
             if entry is not None and entry.age < ttl:
+                self._renew_if_due(entry, channel, position)
                 return entry.value
-        return dump_json(await self.body(channel, position))
+        page = await self._loaded_page(channel, position)
+        if page.rendered is not None:
+            return page.rendered
+        return await self._bodies.run(rendered_key, lambda: self._render_body(rendered_key, page))
+
+    async def _render_body(self, rendered_key: str, page: LoadedPage) -> bytes:
+        ttl = self._settings.page_cache_ttl
+        if ttl:
+            # The process that fetched the page rendered it as well.
+            entry = await self._cache.get(rendered_key)
+            if entry is not None and entry.stored_at >= page.stored_at and entry.age < ttl:
+                return entry.value
+        rendered = await self._offload(_render_body, page.data)
+        if (remaining := ttl - page.age) > 0:
+            await self._cache.set(rendered_key, rendered, remaining, stored_at=page.stored_at)
+        return rendered
 
     async def post(self, channel: str, identifier: int) -> Post:
         """A single post."""
-        data = await self.page(channel, identifier)
-        for raw in data["content"]["posts"]:
+        return Post.model_validate_json(await self.post_json(channel, identifier))
+
+    async def post_json(self, channel: str, identifier: int) -> bytes:
+        """A single post rendered as JSON; cached while its page is fresh."""
+        key = f"json:post:{self._settings.parser_mode}:{channel.lower()}:{identifier}"
+        ttl = self._settings.page_cache_ttl
+        if ttl:
+            entry = await self._cache.get(key)
+            if entry is not None and entry.age < ttl:
+                self._renew_if_due(entry, channel, identifier)
+                return entry.value
+        return await self._posts.run(key, lambda: self._render_post(key, channel, identifier))
+
+    async def _render_post(self, key: str, channel: str, identifier: int) -> bytes:
+        page = await self._loaded_page(channel, identifier)
+        for raw in page.data["content"]["posts"]:
             if raw.get("id") == identifier:
                 try:
-                    return Post.model_validate(raw)
+                    rendered = dump_json(Post.model_validate(raw))
                 except ValidationError as exc:
                     msg = "Failed to parse Telegram post response"
                     raise TelegramParseError(msg) from exc
+                if (remaining := self._settings.page_cache_ttl - page.age) > 0:
+                    await self._cache.set(key, rendered, remaining, stored_at=page.stored_at)
+                return rendered
         msg = "Requested post was not found"
         raise TelegramNotFoundError(msg)
 
@@ -154,18 +282,38 @@ class ChannelService:
         ttl = self._settings.page_cache_ttl
         entry = await self._cache.get(key) if ttl else None
         if entry is not None and entry.age < ttl:
+            if self._early.claim(key, entry.age, ttl, entry.stored_at):
+                stored_at = entry.stored_at
+                self._mores.start(
+                    key,
+                    lambda: self._load_more(
+                        key, channel, position, direction, lambda e: e.stored_at > stored_at
+                    ),
+                    background=True,
+                )
             return entry.value
-        return await self._rendered.run(
-            key, lambda: self._load_more(key, channel, position, direction)
+        return await self._mores.run(
+            key,
+            lambda: self._load_more(key, channel, position, direction, lambda e: e.age < ttl),
         )
 
     async def _load_more(
-        self, key: str, channel: str, position: int, direction: Literal["before", "after"]
+        self,
+        key: str,
+        channel: str,
+        position: int,
+        direction: Literal["before", "after"],
+        fresh: Callable[[CacheEntry], bool],
     ) -> bytes:
-        html = await self._client.more_page(channel, position, direction)
-        rendered = await self._offload(_process_more, html, position, simplified=self._simplified)
-        await self._cache.set(key, rendered, self._settings.page_cache_ttl)
-        return rendered
+        async def fetch() -> bytes:
+            html = await self._client.more_page(channel, position, direction)
+            rendered = await self._offload(
+                _process_more, html, position, simplified=self._simplified
+            )
+            await self._cache.set(key, rendered, self._settings.page_cache_ttl)
+            return rendered
+
+        return await self._shared_lease().run(key, fetch, lambda entry: entry.value, fresh)
 
     async def preview(self, channel: str) -> Preview:
         """Channel preview from its landing page (cached for PREVIEW_CACHE_TTL)."""
@@ -181,13 +329,19 @@ class ChannelService:
         return Preview.model_validate(data)
 
     async def _load_preview(self, key: str, channel: str) -> JSONDict | None:
-        html = await self._client.preview_page(channel)
-        data, raw = await self._offload(_process_preview, html)
-        if data is None:
-            await self._cache.set(key, raw, _MISSING_PREVIEW_TTL)
-        else:
-            await self._cache.set(key, raw, self._settings.preview_cache_ttl)
-        return data
+        async def fetch() -> JSONDict | None:
+            html = await self._client.preview_page(channel)
+            data, raw = await self._offload(_process_preview, html)
+            ttl = _MISSING_PREVIEW_TTL if data is None else self._settings.preview_cache_ttl
+            await self._cache.set(key, raw, self._early.jitter(ttl))
+            return data
+
+        def adopt(entry: CacheEntry) -> JSONDict | None:
+            data: JSONDict | None = decode(entry.value)
+            return data
+
+        # Previews are cached regardless of CACHE_MODE: any cached one will do.
+        return await self._lease.run(key, fetch, adopt, lambda _entry: True)
 
     async def _offload[**P, T](self, func: Callable[P, T], *args: P.args, **kwargs: P.kwargs) -> T:
         """Run CPU-bound `func` on the parsing executor."""
@@ -201,9 +355,11 @@ class ChannelService:
         than not existing (for example while t.me is unreachable).
         """
         unique = list(dict.fromkeys(channels))
-        results = await asyncio.gather(
-            *(self.preview(channel) for channel in unique), return_exceptions=True
-        )
+        # One flow upstream: a large batch must not crowd out other requests.
+        with upstream.flow(f"previews:{id(unique)}"):
+            results = await asyncio.gather(
+                *(self.preview(channel) for channel in unique), return_exceptions=True
+            )
         found: dict[str, Preview] = {}
         failures: list[BaseException] = []
         for channel, result in zip(unique, results, strict=True):
@@ -245,22 +401,26 @@ def decode_page(value: bytes) -> JSONDict:
 
 
 def _process_page(
-    html: str, channel: str, *, simplified: bool, render: bool
+    html: str, channel: str, *, simplified: bool
 ) -> tuple[JSONDict, bytes, bytes | None]:
     """Parse a channel page into (data, its cache encoding, the rendered /v1/body).
 
     Runs on a worker thread. The body is pre-rendered so that cache hits are
     served as bytes without decoding, validating or serializing the page again;
-    it is None when not wanted or when the page does not match the schema.
+    it is None when the page does not match the schema.
     """
     data = _parse(parse_channel_page, html, simplified=simplified)
     rendered = None
-    if render:
-        try:
-            rendered = dump_json(validate_with_posts(ChannelBody, data, _BODY_POSTS))
-        except TelegramParseError:
-            logger.warning("Channel page of %s does not match the schema", channel)
+    try:
+        rendered = _render_body(data)
+    except TelegramParseError:
+        logger.warning("Channel page of %s does not match the schema", channel)
     return data, encode(data), rendered
+
+
+def _render_body(data: JSONDict) -> bytes:
+    """The `/v1/body` response for a parsed page."""
+    return dump_json(validate_with_posts(ChannelBody, data, _BODY_POSTS))
 
 
 def _process_more(html: str, position: int, *, simplified: bool) -> bytes:

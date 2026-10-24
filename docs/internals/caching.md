@@ -113,16 +113,101 @@ parsed page on each request (see [Performance](performance.md)).
 
 ## Request coalescing
 
-`SingleFlight` keys in-flight work by cache key. While t.me is being asked for
-a page, every other request for the same page waits for that one task instead
-of sending its own request — a burst of 1000 requests for a cold channel
+Identical concurrent requests do the work once: one request to t.me and one
+render, wherever they arrive. The pieces below are measured in
+[Performance](performance.md#request-coalescing); the scheduling core (flight
+table, upstream gate, renewal points) is Rust in
+[`sched.rs`](https://github.com/koval01/telegram-me/blob/main/rust/telegram-me-native/src/sched.rs),
+the Python services only wire it up.
+
+### In one worker
+
+`SingleFlight` keys in-flight work by cache key, separately for parsed pages,
+rendered bodies, rendered posts, `/v1/more` fragments and previews. While t.me
+is being asked for a page, every other request for it waits for that one task
+instead of sending its own — a burst of 1000 requests for a cold channel
 produces one upstream request. A client that disconnects does not cancel the
-shared task.
+shared task. Because REST and GraphQL resolve through the same services, a
+`GET /v1/body/durov` and a GraphQL `body(channel: "durov")` share the fetch
+and the render too; `/v1/post/durov/531` and `/v1/body/durov?position=531`
+share the page around post 531; a feed and a single-channel request share the
+channel's latest page; identical feed requests are built, ranked and rendered
+once.
+
+Keys are normalized before they are compared: channel names are
+case-insensitive (`Durov` and `durov` are one key, for feeds as well) and an
+absent position is position 0. Pages around *different* positions are not
+treated as interchangeable even when they contain the same post: every page
+load carries its own per-post `view` tokens (and t.me renders footers and
+forwards slightly differently around the anchor), so serving one for the
+other would change responses.
+
+### Across workers and servers
+
+Every granian worker of every server has its own single flights, so on their
+own a hot key that expires is fetched once per worker per server — 6 times
+with two servers of three workers. With Redis, the worker that leads locally
+first takes a lease, `tme:v2:lease:<key>`, in one round trip that also reads
+the cached value (a Lua script: `SET NX PX` plus `GET`):
+
+- the cached value is already fresh (another process just wrote it): use it
+  and keep a copy in the in-process cache, no fetch;
+- the lease is taken: fetch, write the cache, release the lease;
+- another process holds the lease: poll with jittered back-off (25 ms growing
+  to 250 ms), retrying the lease on every round, until the holder's result is
+  in the cache. A holder that failed with a domain error (not found, parse,
+  upstream) leaves that error in the lease for 2 s, so waiters — and requests
+  arriving meanwhile — fail the same way instead of all retrying t.me.
+
+The lease lives 3 s and its holder extends it every second while the fetch
+runs, so a holder that crashed or lost Redis is taken over within 3 s, however
+long t.me takes for a live one. No waiter waits longer than
+`2 × TELEGRAM_TIMEOUT + 3` seconds in all, and none waits for Redis longer
+than `REDIS_TIMEOUT` per command: when Redis is slow, down or its circuit
+breaker is open, a worker simply fetches on its own. The local single flight
+still applies then, so an outage costs one fetch per worker (the behaviour
+before the lease), never a thundering herd. `SHARED_COALESCING=false` turns
+the lease off. Without Redis there is nothing to coordinate through, and each
+worker coalesces on its own.
+
+The feed refresher goes through the same path: a refresh that a user request
+on another server is already running joins it, and a page that some process
+fetched within the last half refresh interval is not fetched again.
+
+### Early renewal
+
+Each entry gets a renewal point in the last `EARLY_REFRESH_WINDOW` (10 %) of
+its freshness, derived from the time it was stored, so that every reader in
+every process agrees on it and entries stored together (a refresher tick)
+renew spread out. The first request that reads a page, rendered body,
+rendered post or `/v1/more` entry past that point is still answered from the
+cache and starts a background refresh; later reads of the same entry in that
+process do not ask again, and the refresh is coalesced like any fetch. A hot
+key is therefore fetched about once per TTL and never expires under load —
+no miss storm, and nobody waits for t.me. A probabilistic scheme such as
+XFetch was tried and rejected: with hundreds of reads per second it renews
+about `ln(reads per window)` windows before expiry, doubling the upstream
+traffic of exactly the hottest keys. Long TTLs (previews, the feed's stale
+window) are also shortened by a random part of the window, so entries
+written together do not expire together.
 
 ## Upstream protection
 
-- A per-process semaphore caps simultaneous requests to t.me
-  (`TELEGRAM_MAX_CONCURRENCY`, 32).
+- **Fair concurrency cap.** Each worker sends at most
+  `TELEGRAM_MAX_CONCURRENCY` (32) requests to t.me at once. Free slots go
+  round-robin over *flows* — a channel, or one feed or previews request as a
+  whole — rather than first come, first served, so a 100-channel feed does
+  not make a single-channel request wait behind it. One flow holds at most
+  three quarters of the slots. Background refreshes hold at most half and
+  only get a slot while no user request waits; a user who joins a refresh
+  still waiting for a slot raises it to user priority.
+- **Bounded queues, load shedding.** At most `UPSTREAM_QUEUE_LIMIT` requests
+  (default 16 per slot) wait for a slot, and at most `MAX_WAITING_REQUESTS`
+  (4096) requests wait for upstream work of any kind per worker. Beyond that a
+  request is answered `503` with `Retry-After` (estimated from the queue
+  length and how long a slot is held) instead of queueing without limit; a
+  feed or previews request skips the channels that were shed. Background
+  work beyond the bounds is dropped silently.
 - Unknown channels are cached as `null` for 60 s.
 - Cloudflare edge caching is enabled through `Cache-Control` (see
   [Reverse proxy](../deployment/reverse-proxy.md#cloudflare)).

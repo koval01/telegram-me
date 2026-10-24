@@ -1,7 +1,11 @@
-"""Native (Rust) core of TelegramMe: parsing, feed assembly, local cache, protection."""
+"""Native (Rust) core of TelegramMe: parsing, feed assembly, local cache, protection, scheduling."""
 
 from telegram_me_native._native import (
+    EarlyRefresh,
+    Flights,
+    Gate,
     LocalCache,
+    Overloaded,
     ProofOfWork,
     RankOptions,
     RateLimiter,
@@ -14,7 +18,11 @@ from telegram_me_native._native import (
 )
 
 __all__ = [
+    "EarlyRefresh",
+    "Flights",
+    "Gate",
     "LocalCache",
+    "Overloaded",
     "ProofOfWork",
     "RankOptions",
     "RateLimiter",
