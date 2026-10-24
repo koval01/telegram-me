@@ -29,6 +29,10 @@ services:
     ports:
       # APP_BIND=127.0.0.1 when the `proxy` service is the only way in.
       - "${APP_BIND:-0.0.0.0}:${APP_PORT:-8000}:3000"
+      # Peer layer (ENABLE_PEERS): a port per worker plus one, UDP and TCP, on
+      # the private address remote-deploy.sh sets (loopback while it is off).
+      - "${PEER_BIND:-127.0.0.1}:${PEER_PORTS:-7946-7950}:${PEER_PORTS:-7946-7950}/tcp"
+      - "${PEER_BIND:-127.0.0.1}:${PEER_PORTS:-7946-7950}:${PEER_PORTS:-7946-7950}/udp"
 
   worker:
     <<: *app

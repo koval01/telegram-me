@@ -10,7 +10,8 @@ connection instead; an exhausted pool is a local limit, not an outage.
 The in-process cache is native (`telegram_me_native.LocalCache`, Rust on
 `moka`). With Redis it is a first level that answers repeated requests
 without a network round trip (`TwoLevelCache`); without Redis it is the only
-level (`MemoryCache`).
+level (`MemoryCache`). With the peer layer (`telegram_me.peers`), a miss asks
+the key's owner among the other nodes before Redis (`PeerCache`).
 
 Values are UTF-8 bytes (JSON documents). As `str`, a page with a single
 emoji would take four bytes per character, and the response would have to
@@ -88,6 +89,11 @@ class MemoryCache:
 
     def __init__(self, max_bytes: int) -> None:
         self._native = LocalCache(max_bytes)
+
+    @property
+    def native(self) -> LocalCache:
+        """The native cache (shared with the peer layer, which serves from it)."""
+        return self._native
 
     @property
     def size(self) -> int:
@@ -328,6 +334,79 @@ class TwoLevelCache:
         await self.shared.close()
 
 
+class PeerReader(Protocol):
+    """What `PeerCache` needs of the peer layer (`telegram_me.peers.Peers`)."""
+
+    @property
+    def active(self) -> bool:
+        """Whether any other node is live."""
+        ...
+
+    def owner(self, key: str) -> str | None:
+        """The node owning `key`, or None for this one."""
+        ...
+
+    async def get(self, owner: str, key: str) -> CacheEntry | None:
+        """The owner's cached entry, kept here as well; None when it has none."""
+        ...
+
+
+class PeerCache:
+    """The in-process cache, then the owner of the key among the peers, then Redis.
+
+    An in-process miss of a key another node owns asks that node, which
+    answers from its in-process cache (natively, within PEER_TIMEOUT); the
+    copy is kept here for the entry's remaining TTL. When the owner has
+    nothing (or does not answer), Redis is read as without peers.
+
+    While other nodes are live, writes keep the full TTL in process even with
+    Redis: the owner of a key is its only writer, and other nodes read its
+    copy rather than Redis, so MEMORY_CACHE_MAX_TTL has nothing to bound.
+    Alone, this is the cache it wraps.
+    """
+
+    def __init__(self, inner: "MemoryCache | TwoLevelCache", peers: PeerReader) -> None:
+        self.inner = inner
+        self.local = inner if isinstance(inner, MemoryCache) else inner.local
+        self.shared = inner.shared if isinstance(inner, TwoLevelCache) else None
+        self._peers = peers
+        # Concurrent misses of one key share a single question to the owner.
+        self._reads: SingleFlight[CacheEntry | None] = SingleFlight()
+
+    @property
+    def backend(self) -> str:
+        """`memory+peers` or `memory+peers+redis`."""
+        return "memory+peers" if self.shared is None else "memory+peers+redis"
+
+    async def get(self, key: str) -> CacheEntry | None:  # noqa: D102
+        entry = await self.local.get(key)
+        if entry is not None:
+            return entry
+        if self._peers.owner(key) is not None:
+            entry = await self._reads.run(key, lambda: self._ask(key))
+            if entry is not None:
+                return entry
+        return None if self.shared is None else await self.inner.get(key)
+
+    async def _ask(self, key: str) -> CacheEntry | None:
+        owner = self._peers.owner(key)
+        return None if owner is None else await self._peers.get(owner, key)
+
+    async def set(  # noqa: D102
+        self, key: str, value: bytes, ttl: float, *, stored_at: float | None = None
+    ) -> None:
+        if not self._peers.active:
+            await self.inner.set(key, value, ttl, stored_at=stored_at)
+            return
+        stored_at = time.time() if stored_at is None else stored_at
+        self.local.put(key, value, ttl, stored_at)
+        if self.shared is not None:
+            await self.shared.set(key, value, ttl, stored_at=stored_at)
+
+    async def close(self) -> None:  # noqa: D102
+        await self.inner.close()
+
+
 class WaitingConnectionPool(BlockingConnectionPool):
     """Connection pool where a burst waits up to `timeout` for a free connection.
 
@@ -372,7 +451,7 @@ def create_redis(settings: Settings) -> Redis | None:
     return Redis.from_pool(pool)
 
 
-def create_cache(settings: Settings, redis: Redis | None) -> Cache:
+def create_cache(settings: Settings, redis: Redis | None) -> "MemoryCache | TwoLevelCache":
     """The in-process cache, in front of Redis when there is one."""
     local = MemoryCache(settings.memory_cache_max_mb * 1024 * 1024)
     if redis is None:
@@ -382,6 +461,6 @@ def create_cache(settings: Settings, redis: Redis | None) -> Cache:
 
 def shared_cache(cache: Cache) -> RedisCache | None:
     """The Redis level of `cache`, if it has one."""
-    if isinstance(cache, TwoLevelCache):
+    if isinstance(cache, TwoLevelCache | PeerCache):
         return cache.shared
     return cache if isinstance(cache, RedisCache) else None

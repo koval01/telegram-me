@@ -146,3 +146,71 @@ class EarlyRefresh:
         """True once per entry (key, stored_at) past its renewal point and still fresh."""
     def jitter(self, ttl: float) -> float:
         """`ttl` shortened by a random part of the renewal window."""
+
+type PeerEvent = tuple[str, int, object, object]
+
+class PeerNode:
+    """This process's node of the peer layer; a background thread does the I/O.
+
+    Answers arrive as events: `fileno()` becomes readable and `poll()`
+    returns them as `(kind, token, a, b)`:
+
+    - `("got", token, value | None, stored_at | None)`: a `get()` answer;
+    - `("value", token, value, stored_at)`, `("failed", token, code, message)`,
+      `("unavailable", token, None, None)`: how a `load()` ended;
+    - `("serve", token, key, (newer_than, background))`: another node asks
+      this one to load `key`; answer with `served()` or `serve_failed()`;
+    - `("cast", 0, topic, data)`, `("members", 0, None, None)`.
+    """
+
+    def __new__(
+        cls,
+        *,
+        cache: LocalCache,
+        secret: bytes,
+        ports: list[int],
+        bind: str = ...,
+        advertise: str | None = None,
+        seeds: list[str] = ...,
+        seed_ports: list[int] = ...,
+        allow: list[str] = ...,
+        encrypt: bool = False,
+        refresher: bool = True,
+        ask_timeout: float = 0.05,
+    ) -> PeerNode:
+        """Bind the first free port of `ports` (UDP and TCP) and start; OSError if none."""
+    @property
+    def addr(self) -> str:
+        """`ip:port` other nodes reach this one at: its node id."""
+    def members(self) -> list[str]:
+        """The live members other than this node."""
+    def owner(self, route: str) -> str | None:
+        """The node owning `route`; None when it is this one (or it is alone)."""
+    def is_leader(self) -> bool:
+        """Whether this process should run the feed refresher."""
+    def get(self, to: str, key: str) -> int:
+        """Ask `to` for the cached entry of `key`; returns the event token."""
+    def load(
+        self, to: str, key: str, newer_than: float, wait: float, background: bool = False
+    ) -> int:
+        """Ask `to` to load `key` unless it holds a value stored after `newer_than`."""
+    def served(self, token: int, keys: list[str]) -> None:
+        """Answer a served load with the cached entries of `keys` (requested key first)."""
+    def serve_failed(self, token: int, code: int, message: str) -> None:
+        """Answer a served load with an error of class `code`."""
+    def attach_rate_limiter(self, limiter: RateLimiter, limit: int) -> None:
+        """Block clients whose requests across all nodes go over `limit` a minute."""
+    def share_counts(self, items: list[tuple[str, int]]) -> None:
+        """Add this process's counts per client and send them to every node."""
+    def cast(self, topic: str, data: bytes) -> None:
+        """Send `data` about `topic` to every other node, best effort."""
+    def add_seeds(self, seeds: list[str]) -> None:
+        """More places to look for other nodes (`host`, `host:port`)."""
+    def poll(self) -> list[PeerEvent]:
+        """The events since the last call."""
+    def fileno(self) -> int:
+        """The socket that becomes readable when `poll()` has events."""
+    def stats(self) -> dict[str, int]:
+        """Counters: refused, rejected, asked, unanswered, served_gets, served_loads."""
+    def close(self) -> None:
+        """Leave the cluster and stop the network thread."""

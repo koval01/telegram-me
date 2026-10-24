@@ -3,6 +3,10 @@
 Usage:
     docker run -d --name tme-valkey -p 6390:6379 valkey/valkey:8
     uv run python scripts/coalescing_load.py --redis redis://127.0.0.1:6390/0
+    uv run python scripts/coalescing_load.py --redis '' --peers   # peer layer, no Redis
+
+With `--peers` the processes are nodes of the peer layer on localhost ports
+(PEER_PORT 17946 and up), with or without Redis.
 
 Starts `--processes` worker processes (think 2 servers x 3 granian workers),
 each with its own app, in-process cache and single flights, all on the same
@@ -25,6 +29,7 @@ import json
 import multiprocessing as mp
 import random
 import resource
+import secrets
 import statistics
 import sys
 import time
@@ -92,12 +97,23 @@ def cpu_seconds() -> float:
 
 
 async def drive(args: argparse.Namespace, counter: Any, barrier: Any) -> dict[str, Any]:
+    peers: dict[str, Any] = {}
+    if args.peers:
+        peers = {
+            "enable_peers": True,
+            "peer_secret": args.peer_secret,
+            "peer_port": 17946,
+            "web_concurrency": args.processes,
+            "peers": ["127.0.0.1"],
+            "peer_advertise_addr": "127.0.0.1",
+        }
     settings = make_settings(
-        redis_url=args.redis,
+        redis_url=args.redis or None,
         cache_mode="normal",
         log_level=args.log_level,
         telegram_max_concurrency=32,
         shared_coalescing=not args.no_lease,
+        **peers,
     )
     fetcher = SlowFetcher(args.delay, counter)
     app = create_app(settings, fetcher=fetcher)
@@ -105,6 +121,10 @@ async def drive(args: argparse.Namespace, counter: Any, barrier: Any) -> dict[st
     latencies: list[float] = []
     statuses: Counter[int] = Counter()
     async with app.router.lifespan_context(app):
+        if args.peers:
+            node = app.state.container.peers
+            while len(node._members) < args.processes - 1:  # noqa: ASYNC110 - native state
+                await asyncio.sleep(0.05)
         await asyncio.to_thread(barrier.wait)
         started_cpu, started = cpu_seconds(), time.perf_counter()
         deadline = started + args.duration
@@ -131,7 +151,9 @@ async def drive(args: argparse.Namespace, counter: Any, barrier: Any) -> dict[st
         await asyncio.gather(probe(), *(client() for _ in range(args.clients)))
         elapsed, cpu = time.perf_counter() - started, cpu_seconds() - started_cpu
         lease = getattr(app.state.container, "lease", None)
-        lease_stats = getattr(lease, "stats", {})
+        lease_stats = dict(getattr(lease, "stats", {}))
+        if args.peers:
+            lease_stats.update(app.state.container.peers.node.stats())
     paths = Counter(fetcher.fetched)
     return {
         "requests": len(latencies),
@@ -163,11 +185,14 @@ def main() -> None:
     parser.add_argument("--verbose", action="store_true", help="list upstream requests")
     parser.add_argument("--log-level", default="ERROR")
     parser.add_argument("--no-lease", action="store_true", help="SHARED_COALESCING=false")
+    parser.add_argument("--peers", action="store_true", help="ENABLE_PEERS on localhost")
     args = parser.parse_args()
+    args.peer_secret = secrets.token_hex(32)
 
     import redis  # noqa: PLC0415
 
-    redis.Redis.from_url(args.redis).flushdb()
+    if args.redis:
+        redis.Redis.from_url(args.redis).flushdb()
     context = mp.get_context("spawn")
     counter = context.Value("q", 0)
     barrier = context.Barrier(args.processes)

@@ -12,9 +12,11 @@ proofs count against the rate limit, which bounds how fast anyone can probe.
 Rate limit: GCRA per client IP in every process. With Redis and
 `RATE_LIMIT_SHARED`, each process adds its accepted counts to a per-minute
 counter in Redis once a second and blocks clients that went over the limit
-there, so a client is limited across all workers and servers. The request
-path never waits for Redis; the shared limit may be exceeded by up to one
-second of traffic per process.
+there, so a client is limited across all workers and servers. Without Redis,
+the peer layer does the same: every node sends its counts to the others and
+adds up the minute itself (natively, see `telegram_me_native.PeerNode`). The
+request path never waits for either; the shared limit may be exceeded by up
+to one second of traffic per process.
 
 Proof of work: see `telegram_me_native` (`pow.rs`) for the scheme. Clients
 get a challenge from `GET /v1/pow/challenge` (or from any rejection), reuse
@@ -39,6 +41,7 @@ from starlette.types import ASGIApp, Message, Receive, Scope, Send
 from telegram_me_native import ProofOfWork, RateLimiter
 
 from telegram_me.cache import KEY_PREFIX, RedisCache
+from telegram_me.peers import Peers
 from telegram_me.settings import Settings
 
 logger = logging.getLogger(__name__)
@@ -319,3 +322,30 @@ async def sync_rate_limits(
             limiter.block(client, until_next_window)
             blocked += 1
     return blocked
+
+
+@asynccontextmanager
+async def sharing_rate_limits_with_peers(
+    limiter: RateLimiter, peers: Peers, per_minute: int
+) -> AsyncIterator[None]:
+    """Count each client across the peer nodes while the block runs."""
+    peers.node.attach_rate_limiter(limiter, max(per_minute, limiter.burst))
+
+    async def loop() -> None:
+        while True:
+            await asyncio.sleep(_SYNC_INTERVAL)
+            counts = limiter.take_counts()
+            if not counts or not peers.active:
+                continue
+            if len(counts) > _SYNC_MAX_CLIENTS:
+                counts = sorted(counts, key=lambda item: item[1], reverse=True)
+                counts = counts[:_SYNC_MAX_CLIENTS]
+            peers.node.share_counts(counts)
+
+    task = asyncio.create_task(loop(), name="rate-limit-peers")
+    try:
+        yield
+    finally:
+        task.cancel()
+        with suppress(asyncio.CancelledError):
+            await task

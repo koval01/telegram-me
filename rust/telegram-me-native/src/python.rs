@@ -10,11 +10,18 @@ use pyo3::prelude::*;
 use pyo3::pybacked::{PyBackedBytes, PyBackedStr};
 use pyo3::types::PyBytes;
 
+use std::net::{IpAddr, SocketAddr};
+use std::os::fd::AsRawFd;
+use std::sync::Arc;
 use std::time::Duration;
+
+use pyo3::exceptions::{PyOSError, PyValueError};
+use pyo3::types::{PyBool, PyDict, PyTuple};
 
 use crate::cache;
 use crate::feed;
 use crate::parse;
+use crate::peer;
 use crate::pow;
 use crate::rank as ranking;
 use crate::ratelimit;
@@ -191,7 +198,8 @@ impl PyLocalCache {
 /// Calls keep the GIL: a check is one map lookup, made from the event loop.
 #[pyclass(frozen, module = "telegram_me_native._native", name = "RateLimiter")]
 pub struct PyRateLimiter {
-    inner: ratelimit::RateLimiter,
+    // Shared with the peer layer, which blocks clients over the shared limit.
+    inner: Arc<ratelimit::RateLimiter>,
 }
 
 #[pymethods]
@@ -204,7 +212,7 @@ impl PyRateLimiter {
             ));
         }
         Ok(Self {
-            inner: ratelimit::RateLimiter::new(per_minute, burst),
+            inner: Arc::new(ratelimit::RateLimiter::new(per_minute, burst)),
         })
     }
 
@@ -452,6 +460,252 @@ impl PyEarlyRefresh {
     }
 }
 
+/// This process's node of the peer layer (see `crate::peer`).
+///
+/// Calls keep the GIL: each one queues a command or reads shared state in
+/// well under a microsecond. Answers arrive as events: the socket of
+/// `fileno()` becomes readable and `poll()` returns them.
+#[pyclass(frozen, module = "telegram_me_native._native", name = "PeerNode")]
+pub struct PyPeerNode {
+    inner: peer::node::Node,
+}
+
+fn socket_addr(text: &str) -> PyResult<SocketAddr> {
+    text.parse()
+        .map_err(|_| PyValueError::new_err(format!("not a peer address: {text}")))
+}
+
+#[pymethods]
+impl PyPeerNode {
+    #[new]
+    #[pyo3(signature = (
+        *, cache, secret, ports, bind = "0.0.0.0", advertise = None, seeds = Vec::new(),
+        seed_ports = Vec::new(), allow = Vec::new(), encrypt = false, refresher = true,
+        ask_timeout = 0.05
+    ))]
+    #[allow(clippy::too_many_arguments, clippy::needless_pass_by_value)]
+    fn new(
+        cache: PyRef<'_, PyLocalCache>,
+        secret: &[u8],
+        ports: Vec<u16>,
+        bind: &str,
+        advertise: Option<&str>,
+        seeds: Vec<String>,
+        seed_ports: Vec<u16>,
+        allow: Vec<String>,
+        encrypt: bool,
+        refresher: bool,
+        ask_timeout: f64,
+    ) -> PyResult<Self> {
+        let ip = |text: &str| {
+            text.parse::<IpAddr>()
+                .map_err(|_| PyValueError::new_err(format!("not an IP address: {text}")))
+        };
+        let config = peer::node::Config {
+            ports,
+            bind: ip(bind)?,
+            advertise: advertise.map(ip).transpose()?,
+            seeds,
+            seed_ports,
+            allow: peer::allow::AllowList::parse(allow.iter().map(String::as_str))
+                .map_err(PyValueError::new_err)?,
+            secret: secret.to_vec(),
+            encrypt,
+            refresher,
+            ask_timeout: Duration::try_from_secs_f64(ask_timeout)
+                .map_err(|_| PyValueError::new_err("ask_timeout must be positive"))?,
+            cache: cache.inner.clone(),
+        };
+        let inner = peer::node::Node::start(config)
+            .map_err(|error| PyOSError::new_err(format!("peer layer: {error}")))?;
+        Ok(Self { inner })
+    }
+
+    /// Our address, `ip:port`: the node id.
+    #[getter]
+    fn addr(&self) -> String {
+        self.inner.addr().to_string()
+    }
+
+    /// The live members other than us.
+    fn members(&self) -> Vec<String> {
+        self.inner
+            .members()
+            .iter()
+            .map(ToString::to_string)
+            .collect()
+    }
+
+    /// The node owning `route`; `None` when it is this one (or we are alone).
+    fn owner(&self, route: &str) -> Option<String> {
+        self.inner.owner(route).map(|addr| addr.to_string())
+    }
+
+    /// Whether this process should run the feed refresher.
+    fn is_leader(&self) -> bool {
+        self.inner.is_leader()
+    }
+
+    /// Ask `to` for the cached entry of `key`; returns the event token.
+    fn get(&self, to: &str, key: String) -> PyResult<u64> {
+        Ok(self.inner.get(socket_addr(to)?, key))
+    }
+
+    /// Ask `to` to load `key` unless it holds a value stored after
+    /// `newer_than`, waiting `wait` seconds at most; returns the event token.
+    #[pyo3(signature = (to, key, newer_than, wait, background = false))]
+    fn load(
+        &self,
+        to: &str,
+        key: String,
+        newer_than: f64,
+        wait: f64,
+        background: bool,
+    ) -> PyResult<u64> {
+        let wait = Duration::try_from_secs_f64(wait.max(0.0)).unwrap_or(Duration::MAX);
+        let request = peer::node::LoadRequest {
+            key,
+            newer_than,
+            background,
+        };
+        Ok(self.inner.load(socket_addr(to)?, request, wait))
+    }
+
+    /// Answer a served load with the cached entries of `keys`.
+    #[allow(clippy::needless_pass_by_value)]
+    fn served(&self, token: u64, keys: Vec<String>) {
+        self.inner.served(token, &keys);
+    }
+
+    /// Answer a served load with an error of class `code`.
+    fn serve_failed(&self, token: u64, code: u8, message: String) {
+        self.inner.serve_failed(token, code, message);
+    }
+
+    /// Block clients whose requests across all nodes go over `limit`.
+    fn attach_rate_limiter(&self, limiter: &Bound<'_, PyRateLimiter>, limit: u32) {
+        self.inner
+            .attach_rate_limiter(Arc::clone(&limiter.get().inner), limit);
+    }
+
+    /// Add this process's counts per client and send them to every node.
+    #[allow(clippy::needless_pass_by_value)]
+    fn share_counts(&self, items: Vec<(String, u32)>) {
+        self.inner.share_counts(&items);
+    }
+
+    /// Send `data` about `topic` to every other node, best effort.
+    fn cast(&self, topic: String, data: &[u8]) {
+        self.inner.cast(topic, data.to_vec());
+    }
+
+    /// More places to look for other nodes.
+    fn add_seeds(&self, seeds: Vec<String>) {
+        self.inner.add_seeds(seeds);
+    }
+
+    /// The events since the last call, as tuples:
+    ///
+    /// - `("got", token, value | None, stored_at)`
+    /// - `("value", token, value, stored_at)`: a load ended with a value
+    /// - `("failed", token, code, message)` / `("unavailable", token, None, None)`
+    /// - `("serve", token, key, (newer_than, background))`
+    /// - `("cast", 0, topic, data)` / `("members", 0, None, None)`
+    fn poll<'py>(&self, py: Python<'py>) -> PyResult<Vec<Bound<'py, PyTuple>>> {
+        use peer::node::{Event, Outcome};
+        let none = || py.None().into_bound(py);
+        self.inner
+            .poll()
+            .into_iter()
+            .map(|event| {
+                let (kind, token, first, second) = match event {
+                    Event::Got { token, found } => match found {
+                        Some((value, stored_at)) => (
+                            "got",
+                            token,
+                            PyBytes::new(py, &value).into_any(),
+                            stored_at.into_pyobject(py)?.into_any(),
+                        ),
+                        None => ("got", token, none(), none()),
+                    },
+                    Event::Loaded { token, outcome } => match outcome {
+                        Outcome::Value(value, stored_at) => (
+                            "value",
+                            token,
+                            PyBytes::new(py, &value).into_any(),
+                            stored_at.into_pyobject(py)?.into_any(),
+                        ),
+                        Outcome::Failed(code, message) => (
+                            "failed",
+                            token,
+                            code.into_pyobject(py)?.into_any(),
+                            message.into_pyobject(py)?.into_any(),
+                        ),
+                        Outcome::Unavailable => ("unavailable", token, none(), none()),
+                    },
+                    Event::Serve { token, request } => (
+                        "serve",
+                        token,
+                        request.key.into_pyobject(py)?.into_any(),
+                        PyTuple::new(
+                            py,
+                            [
+                                request.newer_than.into_pyobject(py)?.into_any(),
+                                PyBool::new(py, request.background).to_owned().into_any(),
+                            ],
+                        )?
+                        .into_any(),
+                    ),
+                    Event::Cast { topic, data } => (
+                        "cast",
+                        0,
+                        topic.into_pyobject(py)?.into_any(),
+                        PyBytes::new(py, &data).into_any(),
+                    ),
+                    Event::Members => ("members", 0, none(), none()),
+                };
+                PyTuple::new(
+                    py,
+                    [
+                        kind.into_pyobject(py)?.into_any(),
+                        token.into_pyobject(py)?.into_any(),
+                        first,
+                        second,
+                    ],
+                )
+            })
+            .collect()
+    }
+
+    /// The socket that becomes readable when `poll()` has events.
+    fn fileno(&self) -> i32 {
+        self.inner.waker().as_raw_fd()
+    }
+
+    /// Counters: `refused`, `rejected`, `asked`, `unanswered`, `served_gets`, `served_loads`.
+    fn stats<'py>(&self, py: Python<'py>) -> PyResult<Bound<'py, PyDict>> {
+        use std::sync::atomic::Ordering::Relaxed;
+        let stats = self.inner.stats();
+        let dict = PyDict::new(py);
+        for (name, value) in [
+            ("refused", &stats.refused),
+            ("rejected", &stats.rejected),
+            ("asked", &stats.asked),
+            ("unanswered", &stats.unanswered),
+            ("served_gets", &stats.served_gets),
+            ("served_loads", &stats.served_loads),
+        ] {
+            dict.set_item(name, value.load(Relaxed))?;
+        }
+        Ok(dict)
+    }
+
+    /// Leave the cluster and stop the network thread.
+    fn close(&self, py: Python<'_>) {
+        py.detach(|| self.inner.close());
+    }
+}
+
 /// The extension module.
 #[pymodule]
 fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
@@ -465,6 +719,7 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     module.add_class::<PyFlights>()?;
     module.add_class::<PyGate>()?;
     module.add_class::<PyEarlyRefresh>()?;
+    module.add_class::<PyPeerNode>()?;
     module.add("Overloaded", module.py().get_type::<Overloaded>())?;
     module.add_function(wrap_pyfunction!(parse_channel_page, module)?)?;
     module.add_function(wrap_pyfunction!(parse_more_page, module)?)?;

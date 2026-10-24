@@ -8,6 +8,33 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- **Peer layer** (`ENABLE_PEERS`, off by default): nodes on a private network
+  share their work directly, groupcache-style, with or without Redis. See
+  [Deployment → Peer layer](https://koval01.github.io/telegram-me/deployment/peers/).
+  - Each channel's keys have one owner among the live nodes (rendezvous
+    hashing). Only the owner fetches and renders them; on a miss the other
+    nodes ask it and keep its answer for the remaining TTL. With peers up this
+    replaces the Redis lease.
+  - The owner answers cache reads natively, without Python: 0.18 ms for a
+    56 KB page, against 95 ms through a Redis 90 ms away.
+  - Membership is SWIM gossip (`foca`) over UDP; requests use one multiplexed
+    TCP connection per peer. Nodes find each other through `PEERS`
+    (addresses or DNS names) and the Redis heartbeat markers, which now carry
+    `"peer"`.
+  - Every frame is authenticated (HMAC-SHA256 with `PEER_SECRET`, timestamp,
+    nonce against replays) and optionally encrypted (`PEER_ENCRYPTION`,
+    XChaCha20-Poly1305); peers outside `PEER_ALLOW_CIDR` are refused.
+  - A slow or unreachable peer never fails a request: after `PEER_TIMEOUT`
+    (50 ms) the node does the work itself.
+  - Without Redis, nodes share rate-limit counts and feed popularity, and the
+    live node with the lowest address runs the feed refresher.
+  - New settings: `ENABLE_PEERS`, `PEERS`, `PEER_PORT`, `PEER_ADVERTISE_ADDR`,
+    `PEER_ALLOW_CIDR`, `PEER_SECRET`, `PEER_ENCRYPTION`, `PEER_TIMEOUT`.
+  - `deploy/bootstrap-server.sh` opens the peer ports to the private network
+    (`PEER_CIDR`); the deploy workflow enables the layer with the
+    `ENABLE_PEERS` variable and the `PEER_SECRET` secret.
+  - The standalone feed worker runs with `ENABLE_PEERS` instead of
+    `REDIS_URL` as well.
 - Stricter checks on every commit and pull request (`make lint`, `make
   audit`, `make image-scan`, all in `make check`): clippy restriction lints
   and no panicking slices in the parser; cargo-deny and cargo-machete; more

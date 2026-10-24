@@ -93,6 +93,7 @@ jobs:
       TLS_CERT: ${{ secrets.TLS_CERT }}
       TLS_KEY: ${{ secrets.TLS_KEY }}
       POW_SECRET: ${{ secrets.POW_SECRET }}
+      PEER_SECRET: ${{ secrets.PEER_SECRET }}
       CF_BYPASS_KEY: ${{ secrets.CF_BYPASS_KEY }}
 
   github-release:

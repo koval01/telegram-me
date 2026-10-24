@@ -35,7 +35,7 @@ from telegram_me.schemas.channel import ChannelBody, More, Preview, Previews
 from telegram_me.schemas.post import Post
 from telegram_me.services import upstream
 from telegram_me.services.coalesce import SingleFlight, flight_table
-from telegram_me.services.lease import Lease, LocalLease
+from telegram_me.services.lease import ANY_AGE, Lease, LocalLease, is_newer
 from telegram_me.settings import Settings
 from telegram_me.telegram.client import TelegramClient
 from telegram_me.telegram.errors import (
@@ -147,18 +147,17 @@ class ChannelService:
         """
         key = self.page_key(channel, position)
         limit = self._settings.page_cache_ttl if fresh_for is None else fresh_for
+        newer_than = time.time() - limit
         return await self._pages.run(
-            key, lambda: self._load_page(key, channel, position, lambda e: e.age < limit)
+            key, lambda: self._load_page(key, channel, position, newer_than)
         )
 
     def refresh_page_in_background(self, channel: str) -> None:
         """Start refreshing a channel's latest page without waiting for it."""
         key = self.page_key(channel)
-        fresh_for = self._settings.feed_fresh_ttl
+        newer_than = time.time() - self._settings.feed_fresh_ttl
         self._pages.start(
-            key,
-            lambda: self._load_page(key, channel, None, lambda e: e.age < fresh_for),
-            background=True,
+            key, lambda: self._load_page(key, channel, None, newer_than), background=True
         )
 
     def _renew_if_due(self, entry: CacheEntry, channel: str, position: int | None) -> None:
@@ -174,7 +173,7 @@ class ChannelService:
         self._pages.start(
             key,
             # Any copy newer than this one means another process renewed it.
-            lambda: self._load_page(key, channel, position, lambda e: e.stored_at > stored_at),
+            lambda: self._load_page(key, channel, position, stored_at),
             background=True,
         )
 
@@ -183,7 +182,7 @@ class ChannelService:
         key: str,
         channel: str,
         position: int | None,
-        fresh: Callable[[CacheEntry], bool],
+        newer_than: float,
     ) -> LoadedPage:
         async def fetch() -> LoadedPage:
             html = await self._client.channel_page(channel, position)
@@ -204,7 +203,7 @@ class ChannelService:
         def adopt(entry: CacheEntry) -> LoadedPage:
             return LoadedPage(decode_page(entry.value), entry.value, entry.stored_at)
 
-        return await self._shared_lease().run(key, fetch, adopt, fresh)
+        return await self._shared_lease().run(key, fetch, adopt, newer_than)
 
     # Endpoints -----------------------------------------------------------------------
 
@@ -286,15 +285,13 @@ class ChannelService:
                 stored_at = entry.stored_at
                 self._mores.start(
                     key,
-                    lambda: self._load_more(
-                        key, channel, position, direction, lambda e: e.stored_at > stored_at
-                    ),
+                    lambda: self._load_more(key, channel, position, direction, stored_at),
                     background=True,
                 )
             return entry.value
+        newer_than = time.time() - ttl
         return await self._mores.run(
-            key,
-            lambda: self._load_more(key, channel, position, direction, lambda e: e.age < ttl),
+            key, lambda: self._load_more(key, channel, position, direction, newer_than)
         )
 
     async def _load_more(
@@ -303,7 +300,7 @@ class ChannelService:
         channel: str,
         position: int,
         direction: Literal["before", "after"],
-        fresh: Callable[[CacheEntry], bool],
+        newer_than: float,
     ) -> bytes:
         async def fetch() -> bytes:
             html = await self._client.more_page(channel, position, direction)
@@ -313,7 +310,7 @@ class ChannelService:
             await self._cache.set(key, rendered, self._settings.page_cache_ttl)
             return rendered
 
-        return await self._shared_lease().run(key, fetch, lambda entry: entry.value, fresh)
+        return await self._shared_lease().run(key, fetch, lambda entry: entry.value, newer_than)
 
     async def preview(self, channel: str) -> Preview:
         """Channel preview from its landing page (cached for PREVIEW_CACHE_TTL)."""
@@ -341,7 +338,42 @@ class ChannelService:
             return data
 
         # Previews are cached regardless of CACHE_MODE: any cached one will do.
-        return await self._lease.run(key, fetch, adopt, lambda _entry: True)
+        return await self._lease.run(key, fetch, adopt, ANY_AGE)
+
+    # Peers ---------------------------------------------------------------------------
+
+    async def serve_peer(self, key: str, newer_than: float) -> list[str]:
+        """Load `key` for another node, which asked this process as its owner.
+
+        Joins any identical work in flight here. Returns the cache keys to
+        answer with, `key` first: a page travels with its rendered body.
+        Raises `TelegramError` as the load does, and `ValueError` for a key
+        this process does not make (another `PARSER_MODE`, say).
+        """
+        entry = await self._cache.get(key)
+        if entry is None or not is_newer(entry, newer_than):
+            await self._load_for_peer(key, newer_than)
+        return [key, _rendered(key)] if key.startswith("page:") else [key]
+
+    async def _load_for_peer(self, key: str, newer_than: float) -> None:
+        mode = self._settings.parser_mode
+        match key.split(":"):
+            case ["page", key_mode, channel, position] if key_mode == mode:
+                at = int(position) or None
+                await self._pages.run(key, lambda: self._load_page(key, channel, at, newer_than))
+            case ["more", key_mode, channel, "before" | "after" as direction, position] if (
+                key_mode == mode
+            ):
+                anchor = int(position)
+                side: Literal["before", "after"] = "before" if direction == "before" else "after"
+                await self._mores.run(
+                    key, lambda: self._load_more(key, channel, anchor, side, newer_than)
+                )
+            case ["preview", channel]:
+                await self._previews.run(key, lambda: self._load_preview(key, channel))
+            case _:
+                msg = f"not a key this process loads: {key}"
+                raise ValueError(msg)
 
     async def _offload[**P, T](self, func: Callable[P, T], *args: P.args, **kwargs: P.kwargs) -> T:
         """Run CPU-bound `func` on the parsing executor."""

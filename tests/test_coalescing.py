@@ -11,12 +11,11 @@ import asyncio
 import json
 from collections.abc import AsyncIterator, Mapping, MutableMapping
 from contextlib import AsyncExitStack, asynccontextmanager
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Any, override
 
 import pydantic_core
 import pytest
-import telegram_me_native as native
 import time_machine
 from fakeredis import FakeAsyncRedis, FakeServer
 from fastapi import FastAPI
@@ -24,11 +23,10 @@ from fastapi import FastAPI
 from telegram_me import container as container_module
 from telegram_me.app import create_app
 from telegram_me.container import Container
-from telegram_me.services import channels as channels_module
 from telegram_me.services import feed as feed_module
 from telegram_me.services.lease import RedisLease
 from telegram_me.telegram.client import FetchResult, Method
-from tests.conftest import FROZEN_NOW, MANIFEST, FixtureFetcher, make_settings
+from tests.conftest import FROZEN_NOW, MANIFEST, FixtureFetcher, Work, make_settings
 from tests.workload import CHANNELS, AliasFetcher
 
 CHANNEL = "durov"
@@ -66,40 +64,6 @@ class SlowAliasFetcher(AliasFetcher):
         self.paths.append(path)
         await asyncio.sleep(DELAY)
         return await super().fetch(method, path, **kwargs)
-
-
-@dataclass
-class Work:
-    """CPU-heavy steps performed, counted across all apps of a test."""
-
-    parsed: list[str] = field(default_factory=list)
-    rendered: list[int] = field(default_factory=list)
-    ranked: list[int] = field(default_factory=list)
-
-
-@pytest.fixture
-def work(monkeypatch: pytest.MonkeyPatch) -> Work:
-    counts = Work()
-    process_page = channels_module._process_page
-    render_body = channels_module._render_body
-    build_feed = native.build_feed
-
-    def counting_process_page(html: str, channel: str, **kwargs: Any) -> Any:
-        counts.parsed.append(channel)
-        return process_page(html, channel, **kwargs)
-
-    def counting_render_body(data: Any) -> bytes:
-        counts.rendered.append(1)
-        return render_body(data)
-
-    def counting_build_feed(*args: Any) -> Any:
-        counts.ranked.append(1)
-        return build_feed(*args)
-
-    monkeypatch.setattr(channels_module, "_process_page", counting_process_page)
-    monkeypatch.setattr(channels_module, "_render_body", counting_render_body)
-    monkeypatch.setattr(native, "build_feed", counting_build_feed)
-    return counts
 
 
 @dataclass

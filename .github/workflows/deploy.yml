@@ -38,6 +38,8 @@ on:
         required: false
       POW_SECRET:
         required: false
+      PEER_SECRET:
+        required: false
       CF_BYPASS_KEY:
         required: false
   workflow_dispatch:
@@ -118,10 +120,20 @@ jobs:
           VAR_CACHE_MODE: ${{ vars.CACHE_MODE || 'normal' }}
           VAR_PARSER_MODE: ${{ vars.PARSER_MODE || 'full' }}
           VAR_DISABLE_DOCS: ${{ vars.DISABLE_DOCS || 'false' }}
+          VAR_ENABLE_PEERS: ${{ vars.ENABLE_PEERS || 'false' }}
+          VAR_PEERS: ${{ vars.PEERS }}
+          VAR_PEER_PORT: ${{ vars.PEER_PORT || '7946' }}
+          VAR_PEER_ALLOW_CIDR: ${{ vars.PEER_ALLOW_CIDR }}
+          VAR_PEER_ENCRYPTION: ${{ vars.PEER_ENCRYPTION || 'false' }}
+          PEER_SECRET: ${{ secrets.PEER_SECRET }}
         run: |
           umask 077
           if [ "$ENABLE_POW" = true ] && [ "${#POW_SECRET}" -lt 32 ]; then
             echo "::error::ENABLE_POW needs the POW_SECRET secret (at least 32 characters)"
+            exit 1
+          fi
+          if [ "$VAR_ENABLE_PEERS" = true ] && [ "${#PEER_SECRET}" -lt 32 ]; then
+            echo "::error::ENABLE_PEERS needs the PEER_SECRET secret (at least 32 characters)"
             exit 1
           fi
           [[ "$PUBLIC_HOST" =~ ^[A-Za-z0-9.-]*$ ]] || { echo "::error::invalid PUBLIC_HOST"; exit 1; }
@@ -161,6 +173,9 @@ jobs:
           FORWARDED_ALLOW_IPS=${forwarded_allow_ips}
           DISABLE_DOCS=${VAR_DISABLE_DOCS}
           LOG_FORMAT=json
+          ENABLE_PEERS=${VAR_ENABLE_PEERS}
+          PEER_PORT=${VAR_PEER_PORT}
+          PEER_ENCRYPTION=${VAR_PEER_ENCRYPTION}
           APP_BIND=${app_bind}
           PUBLIC_HOST=${PUBLIC_HOST:-localhost}
           CADDY_TLS=${caddy_tls}
@@ -171,6 +186,12 @@ jobs:
             echo "RATE_LIMIT_BURST=${VAR_RATE_LIMIT_BURST}" >> deploy/.env
           fi
           if [ -n "$POW_SECRET" ]; then echo "POW_SECRET=${POW_SECRET}" >> deploy/.env; fi
+          if [ -n "$PEER_SECRET" ]; then echo "PEER_SECRET=${PEER_SECRET}" >> deploy/.env; fi
+          # Private addresses of the servers, e.g. "10.0.0.108,10.0.0.165".
+          if [ -n "$VAR_PEERS" ]; then echo "PEERS=${VAR_PEERS}" >> deploy/.env; fi
+          if [ -n "$VAR_PEER_ALLOW_CIDR" ]; then
+            echo "PEER_ALLOW_CIDR=${VAR_PEER_ALLOW_CIDR}" >> deploy/.env
+          fi
 
       - name: Roll out ${{ env.IMAGE }}
         env:

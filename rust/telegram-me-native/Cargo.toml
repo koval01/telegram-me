@@ -7,7 +7,7 @@ edition = "2024"
 # need a newer compiler, security fixes included: ctutils 0.4.4
 # (RUSTSEC-2026-0385) needs 1.87.
 rust-version = "1.99"
-description = "Native core of TelegramMe: t.me page parsing, feed ranking and the in-process cache"
+description = "Native core of TelegramMe: t.me page parsing, feed ranking, the in-process cache and the peer layer"
 license = "Apache-2.0"
 publish = false
 
@@ -31,6 +31,12 @@ hmac = "0.13.0"
 sha2 = "0.11.0"
 base64 = "0.23.1"
 getrandom = "0.4.3"
+# Peer layer: SWIM membership (sans-IO), its wire format, the network runtime.
+foca = { version = "2.0.0", default-features = false, features = ["std", "postcard-codec"] }
+bytes = "1.12.1"
+rand = { version = "0.10.3", default-features = false }
+tokio = { version = "1.54.1", default-features = false, features = ["rt", "net", "time", "sync", "io-util", "macros"] }
+chacha20poly1305 = { version = "0.11.0", default-features = false }
 
 # Line coverage `cargo llvm-cov` must reach in CI; raise it with the tests
 # that earn it, never lower it (scripts/coverage_floor.py).

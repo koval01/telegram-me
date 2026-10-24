@@ -6,6 +6,7 @@
 #
 # server-a/server-b: caching and coalescing (no protection);
 # guarded-a/guarded-b: shared rate limit and proof of work;
+# peer-a/peer-b: the peer layer instead of Redis, finding each other by name;
 # previous (profile `previous`): the release before, sharing Valkey with the
 # others, as during a rolling deployment.
 # Ports are bound to 127.0.0.1 only.
@@ -47,6 +48,16 @@ x-guarded-env: &guarded-env
   # Generated for every run by conftest.py.
   POW_SECRET: ${POW_SECRET:?POW_SECRET must be set}
   POW_DIFFICULTY: "8"
+
+x-peer-env: &peer-env
+  <<: *env
+  REDIS_URL: ""
+  ENABLE_PEERS: "true"
+  # Generated for every run by conftest.py.
+  PEER_SECRET: ${PEER_SECRET:?PEER_SECRET must be set}
+  # Compose DNS: each name resolves to that container.
+  PEERS: peer-a,peer-b
+  PEER_PORT: "7946"
 
 services:
   valkey:
@@ -100,6 +111,18 @@ services:
     environment: *guarded-env
     ports:
       - "127.0.0.1:18004:3000"
+
+  peer-a:
+    <<: *app
+    environment: *peer-env
+    ports:
+      - "127.0.0.1:18006:3000"
+
+  peer-b:
+    <<: *app
+    environment: *peer-env
+    ports:
+      - "127.0.0.1:18007:3000"
 
   previous:
     <<: *app

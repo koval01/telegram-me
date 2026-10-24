@@ -46,6 +46,24 @@ cd "$app_dir"
 compose() { APP_IMAGE="${APP_IMAGE:-$image}" docker compose -f compose.prod.yaml "$@"; }
 log() { printf '[deploy %s] %s\n' "$(hostname)" "$*"; }
 
+# The peer layer (ENABLE_PEERS) advertises this server's private address (the
+# source address of its default route) and publishes one port per worker plus
+# one, for every mode: compose must see the same ports each time.
+sed -i.bak '/^PEER_BIND=/d; /^PEER_PORTS=/d' .env && rm -f .env.bak
+if grep -qx 'ENABLE_PEERS=true' .env; then
+  peer_addr="$(sed -n 's/^PEER_ADVERTISE_ADDR=//p' .env)"
+  if [[ -z "$peer_addr" ]]; then
+    peer_addr="$(ip -4 route get 192.0.2.1 | awk '{for (i = 1; i < NF; i++) if ($i == "src") print $(i + 1)}')"
+    echo "PEER_ADVERTISE_ADDR=$peer_addr" >> .env
+  fi
+  peer_port="$(sed -n 's/^PEER_PORT=//p' .env)"
+  peer_port="${peer_port:-7946}"
+  workers="$(sed -n 's/^WEB_CONCURRENCY=//p' .env)"
+  workers="${workers:-$(( $(nproc) < 4 ? $(nproc) : 4 ))}"
+  printf 'PEER_BIND=%s\nPEER_PORTS=%s-%s\n' "$peer_addr" "$peer_port" "$((peer_port + workers))" >> .env
+  log "peer layer on $peer_addr, ports $peer_port-$((peer_port + workers))"
+fi
+
 # Remember $1 as deployed (and $2 as what it replaced) for --rollback and
 # plain `docker compose -f compose.prod.yaml ps|logs|...` on the server.
 record() {

@@ -62,6 +62,14 @@ The source of truth is
 | [`PREVIEW_CACHE_TTL`](#preview_cache_ttl) | `3600` | Cache |
 | [`MEMORY_CACHE_MAX_MB`](#memory_cache_max_mb) | `64` | Cache |
 | [`MEMORY_CACHE_MAX_TTL`](#memory_cache_max_ttl) | `10` | Cache |
+| [`ENABLE_PEERS`](#enable_peers) | `false` | Peers |
+| [`PEERS`](#peers) | — | Peers |
+| [`PEER_PORT`](#peer_port) | `7946` | Peers |
+| [`PEER_ADVERTISE_ADDR`](#peer_advertise_addr) | address of the default route | Peers |
+| [`PEER_ALLOW_CIDR`](#peer_allow_cidr) | private networks | Peers |
+| [`PEER_SECRET`](#peer_secret) | — | Peers |
+| [`PEER_ENCRYPTION`](#peer_encryption) | `false` | Peers |
+| [`PEER_TIMEOUT`](#peer_timeout) | `0.05` | Peers |
 | [`FEED_FRESH_TTL`](#feed_fresh_ttl) | `60` | Feed |
 | [`FEED_STALE_TTL`](#feed_stale_ttl) | `900` | Feed |
 | [`FEED_REFRESH_MODE`](#feed_refresh_mode) | `embedded` | Feed |
@@ -388,6 +396,64 @@ read per key and worker this often, for keys that are being read. Copies
 never outlive the Redis entry. Without Redis, and while Redis is unavailable,
 entries keep their full TTL. See
 [Internals → Caching](internals/caching.md#how-the-levels-work-together).
+
+## Peers
+
+Nodes on one private network can share their work directly: each key is
+fetched from t.me by one node, its owner, and the others ask it. This works
+without Redis. See [Deployment → Peer layer](deployment/peers.md).
+
+### `ENABLE_PEERS`
+
+Turn the peer layer on. Every worker process becomes a node. Needs
+[`PEER_SECRET`](#peer_secret).
+
+### `PEERS`
+
+Where to find other nodes: comma-separated `host` or `host:port` entries, such
+as `PEERS=10.0.0.108,10.0.0.165`. A DNS name may resolve to several addresses,
+and names are resolved again every 30 seconds. An entry without a port is
+tried on every port of [`PEER_PORT`](#peer_port)'s range. One reachable node
+is enough: the others are learned from it. With Redis, nodes also find each
+other through their heartbeat markers, so `PEERS` may stay empty.
+
+### `PEER_PORT`
+
+First port of the peer layer, for both UDP (membership) and TCP (requests).
+Each worker takes the first free port from `PEER_PORT` to
+`PEER_PORT + WEB_CONCURRENCY` (one spare for a worker being replaced).
+`0` lets the OS pick a port; only useful in tests.
+
+### `PEER_ADVERTISE_ADDR`
+
+The IP address other nodes reach this one at. By default, the source address
+of the default route. Inside a container that is the container's own address,
+so set it to the host's private address there (the production deploy does).
+
+### `PEER_ALLOW_CIDR`
+
+Comma-separated networks other nodes may connect from. Connections and
+datagrams from anywhere else are dropped before anything is read. The default
+is every private and loopback range: `10.0.0.0/8`, `172.16.0.0/12`,
+`192.168.0.0/16`, `127.0.0.0/8`, `fc00::/7` and `::1/128`.
+
+### `PEER_SECRET`
+
+Shared secret of the nodes, at least 32 characters, for example from
+`openssl rand -hex 32`. Every message carries an HMAC-SHA256 tag made with it,
+a timestamp and a nonce; forged, replayed and older-than-30-s messages are
+refused.
+
+### `PEER_ENCRYPTION`
+
+Also encrypt every message (XChaCha20-Poly1305 with a key derived from
+`PEER_SECRET`), for networks you do not trust. All nodes must agree.
+
+### `PEER_TIMEOUT`
+
+Seconds a peer has to connect and answer a cache read, or to accept a load,
+before this node does the work itself. A peer that misses it is avoided for
+3 seconds.
 
 ## Feed
 

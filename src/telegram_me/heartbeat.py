@@ -32,10 +32,13 @@ def node_id() -> str:
 
 
 @asynccontextmanager
-async def beating(shared: RedisCache, interval: float) -> AsyncIterator[None]:
+async def beating(
+    shared: RedisCache, interval: float, *, peer: str | None = None
+) -> AsyncIterator[None]:
     """Write this process's marker every `interval` seconds while the block runs.
 
-    An `interval` of 0 disables the heartbeat.
+    An `interval` of 0 disables the heartbeat. `peer` is this process's
+    address in the peer layer, for other nodes to find it (`peers`).
     """
     if interval <= 0:
         yield
@@ -45,10 +48,14 @@ async def beating(shared: RedisCache, interval: float) -> AsyncIterator[None]:
 
     async def loop() -> None:
         while True:
-            marker = json.dumps(
-                {"version": __version__, "started": round(started), "at": round(time.time(), 3)},
-                separators=(",", ":"),
-            )
+            fields: dict[str, object] = {
+                "version": __version__,
+                "started": round(started),
+                "at": round(time.time(), 3),
+            }
+            if peer is not None:
+                fields["peer"] = peer
+            marker = json.dumps(fields, separators=(",", ":"))
             await shared.heartbeat(key, marker, interval * _TTL_INTERVALS)
             await asyncio.sleep(interval)
 

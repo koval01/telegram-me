@@ -7,11 +7,20 @@
 # Installs Docker Engine and the compose plugin from Docker's repository, lets
 # the user run them, adds swap when the server has none (SWAP_MB, default
 # 2048; 0 skips it), and opens HTTPS in the host firewall of Oracle Cloud
-# images, which reject everything but SSH.
+# images, which reject everything but SSH. It also opens the peer layer's
+# ports (PEER_PORT, default 7946, and the 15 after it; UDP and TCP) to the
+# private network only (PEER_CIDR, default 10.0.0.0/16); PEER_CIDR=none skips
+# that.
 set -Eeuo pipefail
 
 user="$(id -un)"
 swap_mb="${SWAP_MB:-2048}"
+peer_port="${PEER_PORT:-7946}"
+peer_cidr="${PEER_CIDR:-10.0.0.0/16}"
+[[ "$peer_port" =~ ^[0-9]+$ ]] || { echo "PEER_PORT must be a number" >&2; exit 1; }
+[[ "$peer_cidr" == none || "$peer_cidr" =~ ^[0-9a-fA-F:.]+/[0-9]+$ ]] \
+  || { echo "PEER_CIDR must be a network such as 10.0.0.0/16" >&2; exit 1; }
+peer_ports="${peer_port}:$((peer_port + 15))"
 log() { printf '[bootstrap %s] %s\n' "$(hostname)" "$*"; }
 
 if ! command -v docker >/dev/null; then
@@ -61,6 +70,23 @@ if sudo iptables -C INPUT "${ssh_rule[@]}" 2>/dev/null \
   && ! sudo iptables -C INPUT "${https_rule[@]}" 2>/dev/null; then
   position="$(sudo iptables -L INPUT --line-numbers -n | awk '/dpt:22$/ {print $1; exit}')"
   sudo iptables -I INPUT "$((position + 1))" "${https_rule[@]}"
+fi
+
+# Peer ports, from the private network only, before the REJECT rule (the same
+# rules in the running firewall and in rules.v4).
+if [[ "$peer_cidr" != none ]]; then
+  for proto in tcp udp; do
+    rule=(-s "$peer_cidr" -p "$proto" -m "$proto" --dport "$peer_ports" -j ACCEPT)
+    if sudo test -f "$rules" && ! sudo grep -qF -- "-A INPUT ${rule[*]}" "$rules"; then
+      log "allowing peer ports $peer_ports/$proto from $peer_cidr in $rules"
+      sudo sed -i "/--dport 22 -j ACCEPT/a -A INPUT ${rule[*]}" "$rules"
+    fi
+    if sudo iptables -C INPUT "${ssh_rule[@]}" 2>/dev/null \
+      && ! sudo iptables -C INPUT "${rule[@]}" 2>/dev/null; then
+      position="$(sudo iptables -L INPUT --line-numbers -n | awk '/dpt:22$/ {print $1; exit}')"
+      sudo iptables -I INPUT "$((position + 1))" "${rule[@]}"
+    fi
+  done
 fi
 
 log "ready: $(docker --version 2>/dev/null || sudo docker --version), $(sudo docker compose version --short)"
