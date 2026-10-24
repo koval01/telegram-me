@@ -123,7 +123,7 @@ async def drive(args: argparse.Namespace, counter: Any, barrier: Any) -> dict[st
     async with app.router.lifespan_context(app):
         if args.peers:
             node = app.state.container.peers
-            while len(node._members) < args.processes - 1:  # noqa: ASYNC110 - native state
+            while len(node.members) < args.processes - 1:  # noqa: ASYNC110 - native state
                 await asyncio.sleep(0.05)
         await asyncio.to_thread(barrier.wait)
         started_cpu, started = cpu_seconds(), time.perf_counter()

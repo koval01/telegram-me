@@ -37,6 +37,8 @@ from telegram_me.settings import Settings
 logger = logging.getLogger(__name__)
 
 KEY_PREFIX = "tme:v2:"
+# Heartbeat markers of the live processes (`heartbeat`), read by the peer layer.
+NODE_PREFIX = "node:"
 
 # Redis connections per worker: a feed or previews request runs up to 100
 # commands at once, so the pool is sized for upstream fetches finishing

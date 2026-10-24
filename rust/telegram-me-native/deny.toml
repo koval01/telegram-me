@@ -28,12 +28,14 @@ allow = [
 confidence-threshold = 0.93
 # MPL-2.0 is file-level copyleft: fine for unmodified crates whose source is
 # on crates.io, but each new one should be a decision, not an accident. These
-# are the CSS parts of scraper (Servo).
+# are the CSS parts of scraper (Servo), and foca (SWIM membership of the peer
+# layer), used as published.
 exceptions = [
     { allow = ["MPL-2.0"], crate = "cssparser" },
     { allow = ["MPL-2.0"], crate = "cssparser-macros" },
     { allow = ["MPL-2.0"], crate = "dtoa-short" },
     { allow = ["MPL-2.0"], crate = "selectors" },
+    { allow = ["MPL-2.0"], crate = "foca" },
 ]
 
 [bans]

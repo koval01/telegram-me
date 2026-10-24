@@ -133,7 +133,8 @@ impl Membership {
             refresher: false,
         };
         if addr != self.identity().addr {
-            let _ = self.foca.announce(target, &mut self.outbox);
+            // Fails only for an undecodable identity, which ours is not.
+            drop(self.foca.announce(target, &mut self.outbox));
         }
     }
 
@@ -148,12 +149,14 @@ impl Membership {
 
     /// Handle a timer foca asked for earlier.
     pub fn handle_timer(&mut self, timer: Timer<PeerId>) {
-        let _ = self.foca.handle_timer(timer, &mut self.outbox);
+        // A stale timer (of an identity renewed since) is refused: harmless.
+        drop(self.foca.handle_timer(timer, &mut self.outbox));
     }
 
     /// Tell the others we are leaving, so they need not detect it.
     pub fn leave(&mut self) {
-        let _ = self.foca.leave_cluster(&mut self.outbox);
+        // Best effort: the others detect our absence anyway.
+        drop(self.foca.leave_cluster(&mut self.outbox));
     }
 
     /// The live members other than us.
@@ -249,7 +252,7 @@ mod tests {
                         continue;
                     }
                     if let Some(peer) = self.nodes.get_mut(&to) {
-                        let _ = peer.handle_data(&data);
+                        drop(peer.handle_data(&data));
                         queue.push(to);
                     }
                 }

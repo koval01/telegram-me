@@ -9,8 +9,8 @@ import pytest
 from fakeredis import FakeAsyncRedis
 from redis.exceptions import ConnectionError as RedisConnectionError
 
-from telegram_me.cache import FAILURES_TO_TRIP, KEY_PREFIX, RedisCache
-from telegram_me.heartbeat import NODE_PREFIX, beating, node_id
+from telegram_me.cache import FAILURES_TO_TRIP, KEY_PREFIX, NODE_PREFIX, RedisCache
+from telegram_me.heartbeat import beating, node_id
 
 
 @pytest.fixture

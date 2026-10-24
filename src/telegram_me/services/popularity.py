@@ -16,7 +16,7 @@ import time
 from collections import Counter
 from collections.abc import AsyncIterator, Iterable
 from contextlib import asynccontextmanager, suppress
-from typing import Protocol, cast
+from typing import Protocol, cast, override
 
 from redis.exceptions import MaxConnectionsError, RedisError
 
@@ -235,12 +235,15 @@ class PeerPopularity(MemoryPopularity):
         self._pending: Counter[str] = Counter()
         peers.on_cast(_HITS_TOPIC, self._received)
 
-    async def hit(self, channels: Iterable[str]) -> None:  # noqa: D102
+    @override
+    async def hit(self, channels: Iterable[str]) -> None:
         channels = [channel.lower() for channel in channels]
         await super().hit(channels)
         self._pending.update(channels)
 
-    async def decay(self, factor: float) -> None:  # noqa: D102
+    @override
+    async def decay(self, factor: float) -> None:
+        # Each node decays its copy on its own clock (`sharing`).
         return None
 
     def _received(self, data: bytes) -> None:

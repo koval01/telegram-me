@@ -28,7 +28,7 @@ from telegram_me import peers as peers_module
 from telegram_me.api import protection
 from telegram_me.app import create_app
 from telegram_me.cache import KEY_PREFIX, MemoryCache, PeerCache, RedisCache
-from telegram_me.peers import Peers, error_code, error_from, route
+from telegram_me.peers import Loaded, Peers, error_code, error_from, route
 from telegram_me.services import popularity as popularity_module
 from telegram_me.services.lease import PeerLease
 from telegram_me.services.popularity import PeerPopularity
@@ -67,7 +67,7 @@ async def joined(apps: list[FastAPI]) -> None:
         lambda: all(len(peers_of(app).node.members()) == len(apps) - 1 for app in apps)
     )
     # And the event loop has seen it too (ownership uses that view).
-    await eventually(lambda: all(len(peers_of(app)._members) == len(apps) - 1 for app in apps))
+    await eventually(lambda: all(len(peers_of(app).members) == len(apps) - 1 for app in apps))
 
 
 def peer_settings(seeds: list[str], key: str, **overrides: Any) -> dict[str, Any]:
@@ -253,7 +253,7 @@ async def test_a_crashed_owner_is_not_waited_for(monkeypatch: pytest.MonkeyPatch
     async with nodes(1, fetcher, monkeypatch, key=key) as apps:
         peers = peers_of(apps[0])
         async with bare_node(key, peers.addr) as (process, addr):
-            await eventually(lambda: peers._members == [addr])
+            await eventually(lambda: peers.members == [addr])
             channel = next(c for c in CHANNELS if peers.owner(f"page:full:{c}:0") == addr)
             process.send_signal(signal.SIGKILL)
             await process.wait()
@@ -274,7 +274,7 @@ async def test_a_stuck_owner_costs_one_wait_then_the_asker_fetches(
     async with nodes(1, fetcher, monkeypatch, key=key, telegram_timeout=0.1) as apps:
         peers = peers_of(apps[0])
         async with bare_node(key, peers.addr) as (_process, addr):
-            await eventually(lambda: peers._members == [addr])
+            await eventually(lambda: peers.members == [addr])
             channel = next(c for c in CHANNELS if peers.owner(f"page:full:{c}:0") == addr)
             started = time.monotonic()
             reply = await call(apps[0], "GET", f"/v1/body/{channel}")
@@ -295,14 +295,19 @@ async def test_nodes_with_another_secret_are_refused(monkeypatch: pytest.MonkeyP
         first = create_app(make_settings(**peer_settings([], secret())), fetcher=fetcher)
         await stack.enter_async_context(first.router.lifespan_context(first))
         seed = [peers_of(first).addr]
-        for encryption in (False, True):
-            settings = peer_settings(seed, secret(), peer_encryption=encryption)
-            stranger = create_app(make_settings(**settings), fetcher=fetcher)
+        strangers = [
+            create_app(
+                make_settings(**peer_settings(seed, secret(), peer_encryption=encryption)),
+                fetcher=fetcher,
+            )
+            for encryption in (False, True)
+        ]
+        for stranger in strangers:
             await stack.enter_async_context(stranger.router.lifespan_context(stranger))
         await eventually(lambda: peers_of(first).node.stats()["rejected"] >= 2)
         peers_of(first).report()
         peers_of(first).report()  # nothing new since
-        replies = [await call(app, *ENDPOINTS["body"]) for app in (first, stranger)]
+        replies = [await call(app, *ENDPOINTS["body"]) for app in (first, strangers[-1])]
         assert peers_of(first).node.members() == []
     assert [reply.status for reply in replies] == [200, 200]
     # Reported once (the second report had nothing new), with the likely cause.
@@ -336,13 +341,13 @@ async def two_peers(**overrides: Any) -> AsyncIterator[tuple[Peers, Peers]]:
     )
     assert second is not None
     async with first.running(), second.running():
-        await eventually(lambda: bool(first._members and second._members))
+        await eventually(lambda: bool(first.members and second.members))
         yield first, second
 
 
 async def test_loads_end_with_the_owners_error_or_unavailable() -> None:
     async with two_peers() as (owner, asker):
-        assert (await asker.load(owner.addr, "preview:x", -math.inf, 5)).unavailable
+        assert await asker.load(owner.addr, "preview:x", -math.inf, 5) == Loaded()
 
         async def serve(key: str, newer_than: float) -> list[str]:
             if key == "preview:gone":
@@ -356,7 +361,7 @@ async def test_loads_end_with_the_owners_error_or_unavailable() -> None:
         busy = await asker.load(owner.addr, "preview:busy", -math.inf, 5)
         odd = await asker.load(owner.addr, "preview:odd", -math.inf, 5)
     assert isinstance(gone.error, TelegramNotFoundError)
-    assert (busy.unavailable, odd.unavailable) == (True, True)
+    assert (busy, odd) == (Loaded(), Loaded())
 
 
 async def test_casts_reach_handlers_and_need_peers() -> None:

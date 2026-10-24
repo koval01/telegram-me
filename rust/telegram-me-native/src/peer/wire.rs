@@ -182,10 +182,6 @@ impl Sealer {
     /// # Errors
     ///
     /// When the header is not one of this protocol, or announces too much.
-    ///
-    /// # Panics
-    ///
-    /// Never: the length was checked.
     pub fn body_len(&self, header: &[u8]) -> Result<usize, Reject> {
         if header.len() < HEADER_LEN || header[..2] != MAGIC || header[2] != VERSION {
             return Err(Reject::Malformed);
@@ -193,7 +189,7 @@ impl Sealer {
         if (header[3] & ENCRYPTED != 0) != self.cipher.is_some() || header[3] & !ENCRYPTED != 0 {
             return Err(Reject::WrongMode);
         }
-        let len = u32::from_be_bytes(header[36..40].try_into().expect("4 bytes")) as usize;
+        let len = u32::from_be_bytes(field(header, 36)) as usize;
         if len > MAX_BODY {
             return Err(Reject::TooLarge);
         }
@@ -218,7 +214,7 @@ impl Sealer {
             return Err(Reject::Malformed);
         }
         let (header, body) = frame.split_at(HEADER_LEN);
-        let nonce: Nonce = header[12..36].try_into().expect("24 bytes");
+        let nonce: Nonce = field(header, 12);
         let payload = if let Some(cipher) = &self.cipher {
             let (ciphertext, tag) = body.split_at(body.len() - AEAD_TAG_LEN);
             let mut payload = ciphertext.to_vec();
@@ -240,19 +236,27 @@ impl Sealer {
             payload.to_vec()
         };
         // Only authentic frames reach the clock and the nonce memory.
-        let sent_ms = u64::from_be_bytes(header[4..12].try_into().expect("8 bytes"));
+        let sent_ms = u64::from_be_bytes(field(header, 4));
         if sent_ms.abs_diff(now_ms) > WINDOW {
             return Err(Reject::Stale);
         }
-        let mut guard = self
+        let admitted = self
             .guard
             .lock()
-            .unwrap_or_else(std::sync::PoisonError::into_inner);
-        if !guard.admit(nonce, now_ms) {
+            .unwrap_or_else(std::sync::PoisonError::into_inner)
+            .admit(nonce, now_ms);
+        if !admitted {
             return Err(Reject::Replayed);
         }
         Ok(payload)
     }
+}
+
+/// The `N` header bytes at `at` (the caller checked the header's length).
+fn field<const N: usize>(header: &[u8], at: usize) -> [u8; N] {
+    let mut bytes = [0; N];
+    bytes.copy_from_slice(&header[at..at + N]);
+    bytes
 }
 
 /// HKDF-SHA256 expand (RFC 5869) of one 32-byte key for `info`.

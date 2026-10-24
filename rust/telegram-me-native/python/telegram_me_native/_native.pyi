@@ -177,7 +177,7 @@ class PeerNode:
         encrypt: bool = False,
         refresher: bool = True,
         ask_timeout: float = 0.05,
-    ) -> PeerNode:
+    ) -> Self:
         """Bind the first free port of `ports` (UDP and TCP) and start; OSError if none."""
     @property
     def addr(self) -> str:

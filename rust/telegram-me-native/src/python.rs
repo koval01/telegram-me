@@ -207,7 +207,7 @@ impl PyRateLimiter {
     #[new]
     fn new(per_minute: u32, burst: u32) -> PyResult<Self> {
         if per_minute == 0 || burst == 0 {
-            return Err(pyo3::exceptions::PyValueError::new_err(
+            return Err(PyValueError::new_err(
                 "per_minute and burst must be positive",
             ));
         }
@@ -258,7 +258,7 @@ impl PyProofOfWork {
     #[pyo3(signature = (secret, bits, ttl, bind_ip = true))]
     fn new(secret: &[u8], bits: u8, ttl: u64, bind_ip: bool) -> PyResult<Self> {
         if bits > 64 || ttl == 0 {
-            return Err(pyo3::exceptions::PyValueError::new_err(
+            return Err(PyValueError::new_err(
                 "bits must be at most 64 and ttl positive",
             ));
         }
@@ -483,7 +483,11 @@ impl PyPeerNode {
         seed_ports = Vec::new(), allow = Vec::new(), encrypt = false, refresher = true,
         ask_timeout = 0.05
     ))]
-    #[allow(clippy::too_many_arguments, clippy::needless_pass_by_value)]
+    #[expect(
+        clippy::too_many_arguments,
+        clippy::needless_pass_by_value,
+        reason = "PyO3 keyword arguments, extracted by value"
+    )]
     fn new(
         cache: PyRef<'_, PyLocalCache>,
         secret: &[u8],
@@ -572,7 +576,10 @@ impl PyPeerNode {
     }
 
     /// Answer a served load with the cached entries of `keys`.
-    #[allow(clippy::needless_pass_by_value)]
+    #[expect(
+        clippy::needless_pass_by_value,
+        reason = "PyO3 extracts arguments by value"
+    )]
     fn served(&self, token: u64, keys: Vec<String>) {
         self.inner.served(token, &keys);
     }
@@ -589,7 +596,10 @@ impl PyPeerNode {
     }
 
     /// Add this process's counts per client and send them to every node.
-    #[allow(clippy::needless_pass_by_value)]
+    #[expect(
+        clippy::needless_pass_by_value,
+        reason = "PyO3 extracts arguments by value"
+    )]
     fn share_counts(&self, items: Vec<(String, u32)>) {
         self.inner.share_counts(&items);
     }

@@ -13,7 +13,7 @@ const LOCALHOST: IpAddr = IpAddr::V4(Ipv4Addr::LOCALHOST);
 
 fn secret() -> Vec<u8> {
     let mut secret = vec![0; 32];
-    getrandom::fill(&mut secret).unwrap();
+    getrandom::fill(&mut secret).expect("OS random numbers");
     secret
 }
 
@@ -32,14 +32,14 @@ fn node(options: Options) -> (Node, LocalCache) {
         advertise: Some(LOCALHOST),
         seeds: options.seeds,
         seed_ports: vec![],
-        allow: AllowList::parse([options.allow]).unwrap(),
+        allow: AllowList::parse([options.allow]).expect("valid networks"),
         secret: options.secret,
         encrypt: options.encrypt,
         refresher: true,
         ask_timeout: Duration::from_millis(200),
         cache: cache.clone(),
     })
-    .unwrap();
+    .expect("a free port");
     (node, cache)
 }
 
@@ -392,6 +392,6 @@ fn busy_ports_are_skipped_and_exhausted_ranges_fail() {
     assert!(Node::start(config(vec![busy])).is_err());
     let node = Node::start(config(vec![busy, 0])).unwrap();
     assert_ne!(node.addr().port(), busy);
-    // Without PEER_ADVERTISE_ADDR: the address of the default route.
-    let _: SocketAddr = node.addr();
+    // Without PEER_ADVERTISE_ADDR: the address of the default route, never unspecified.
+    assert!(!node.addr().ip().is_unspecified());
 }

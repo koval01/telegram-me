@@ -216,7 +216,7 @@ impl Shared {
         }
         if !self.woken.swap(true, Ordering::AcqRel) {
             // Non-blocking; a full socket buffer already holds a wake-up.
-            let _ = (&self.wake).write(&[1]);
+            drop((&self.wake).write(&[1]));
         }
     }
 
@@ -230,13 +230,16 @@ impl Shared {
 
     fn reachable(&self) -> Vec<PeerId> {
         let now = Instant::now();
-        let mut avoid = lock(&self.avoid);
-        avoid.retain(|_, until| *until > now);
+        let avoided: Vec<SocketAddr> = {
+            let mut avoid = lock(&self.avoid);
+            avoid.retain(|_, until| *until > now);
+            avoid.keys().copied().collect()
+        };
         self.view
             .read()
             .unwrap_or_else(PoisonError::into_inner)
             .iter()
-            .filter(|id| !avoid.contains_key(&id.addr))
+            .filter(|id| !avoided.contains(&id.addr))
             .cloned()
             .collect()
     }
@@ -279,7 +282,7 @@ impl Shared {
                 continue;
             };
             // A newer copy written meanwhile stays.
-            let _ = self.cache.fill_stored(&wire.key, entry);
+            let _stored = self.cache.fill_stored(&wire.key, entry);
             if wire.key == key {
                 found = Some((value, wire.stored_at));
             }
@@ -301,7 +304,7 @@ impl Shared {
         if !over.is_empty() {
             let now = unix_ms();
             let window_end = (window + 1) * 60_000;
-            #[allow(clippy::cast_precision_loss)] // under a minute in ms
+            #[expect(clippy::cast_precision_loss, reason = "under a minute in ms")]
             let seconds = window_end.saturating_sub(now) as f64 / 1000.0;
             for client in over {
                 limiter.block(&client, seconds);
@@ -336,7 +339,7 @@ impl Node {
         waker.set_nonblocking(true)?;
         wake.set_nonblocking(true)?;
         let shared = Arc::new(Shared {
-            me: me.clone(),
+            me,
             sealer: Sealer::new(&config.secret, config.encrypt),
             allow: config.allow,
             cache: config.cache,
@@ -483,9 +486,11 @@ impl Node {
                 message: String::new(),
             }
         };
-        let _ = serving
-            .reply
-            .send(self.shared.sealer.seal(&message.encode()));
+        drop(
+            serving
+                .reply
+                .send(self.shared.sealer.seal(&message.encode())),
+        );
     }
 
     /// Answer a [`Event::Serve`] with an error of class `code`.
@@ -498,15 +503,18 @@ impl Node {
             code,
             message,
         };
-        let _ = serving
-            .reply
-            .send(self.shared.sealer.seal(&failed.encode()));
+        drop(
+            serving
+                .reply
+                .send(self.shared.sealer.seal(&failed.encode())),
+        );
     }
 
     /// Count requests per client across nodes: blocks clients over `limit`
     /// (here and, as the counts arrive, on every other node).
     pub fn attach_rate_limiter(&self, limiter: Arc<RateLimiter>, limit: u32) {
-        let _ = self.shared.limiter.set((limiter, limit));
+        // Attached once per process; a second limiter would be a bug upstream.
+        drop(self.shared.limiter.set((limiter, limit)));
     }
 
     /// Add our accepted requests per client and send them to every node.
@@ -521,20 +529,21 @@ impl Node {
                 window,
                 items: chunk.to_vec(),
             };
-            let _ = self.commands.send(Command::Send(message));
+            drop(self.commands.send(Command::Send(message)));
         }
     }
 
     /// Send a message to every other node, best effort.
     pub fn cast(&self, topic: String, data: Vec<u8>) {
-        let _ = self
-            .commands
-            .send(Command::Send(Message::Cast { topic, data }));
+        drop(
+            self.commands
+                .send(Command::Send(Message::Cast { topic, data })),
+        );
     }
 
     /// More places to look for other nodes (for example from Redis).
     pub fn add_seeds(&self, seeds: Vec<String>) {
-        let _ = self.commands.send(Command::Seeds(seeds));
+        drop(self.commands.send(Command::Seeds(seeds)));
     }
 
     /// The events since the last call (drains the wake-up socket as well).
@@ -559,9 +568,12 @@ impl Node {
 
     /// Leave the cluster and stop the thread.
     pub fn close(&self) {
-        let _ = self.commands.send(Command::Stop);
-        if let Some(thread) = lock(&self.thread).take() {
-            let _ = thread.join();
+        // The thread may have stopped already: then there is no one to tell.
+        drop(self.commands.send(Command::Stop));
+        let thread = lock(&self.thread).take();
+        if let Some(thread) = thread {
+            // A panic aborts the process (panic = "abort"): nothing to report.
+            drop(thread.join());
         }
     }
 }
@@ -654,7 +666,10 @@ impl Seeds {
     }
 }
 
-#[allow(clippy::too_many_lines)] // one select loop owning the membership
+#[expect(
+    clippy::too_many_lines,
+    reason = "one select loop owning the membership"
+)]
 async fn run(
     shared: Arc<Shared>,
     mut commands: mpsc::UnboundedReceiver<Command>,
@@ -677,13 +692,14 @@ async fn run(
         for (to, data) in outbox.sends {
             let frame = shared.sealer.seal(&Message::Gossip(data).encode());
             // Gossip tolerates loss; never wait for a full socket buffer.
-            let _ = udp.try_send_to(&frame, to);
+            drop(udp.try_send_to(&frame, to));
         }
         for (timer, after) in outbox.timers {
             let timers = timers.clone();
             tokio::spawn(async move {
                 tokio::time::sleep(after).await;
-                let _ = timers.send(timer);
+                // False once the loop has stopped: the timer has nobody to wake.
+                timers.send(timer).is_ok()
             });
         }
         if outbox.changed {
@@ -715,7 +731,7 @@ async fn run(
                     tokio::spawn(ask_load(Arc::clone(&shared), token, to, request, wait));
                 }
                 Some(Command::Send(message)) => {
-                    let frame = Arc::new(shared.sealer.seal(&message.encode()));
+                    let frame: Arc<[u8]> = Arc::from(shared.sealer.seal(&message.encode()));
                     for id in shared.reachable() {
                         tokio::spawn(send_one_way(Arc::clone(&shared), id.addr, Arc::clone(&frame)));
                     }
@@ -737,7 +753,8 @@ async fn run(
                 }
                 match shared.sealer.open(&buffer[..len]).map(|payload| Message::decode(&payload)) {
                     Ok(Ok(Message::Gossip(data))) => {
-                        let _ = membership.handle_data(&data);
+                        // Refused gossip (stale, from ourselves) changes nothing.
+                        drop(membership.handle_data(&data));
                         flush(&mut membership);
                     }
                     Ok(_) => {}
@@ -756,7 +773,7 @@ async fn run(
                 let (entries, ports, resolved_tx) =
                     (seeds.entries.clone(), seeds.ports.clone(), resolved_tx.clone());
                 tokio::spawn(async move {
-                    let _ = resolved_tx.send(Seeds::resolve(entries, ports).await);
+                    drop(resolved_tx.send(Seeds::resolve(entries, ports).await));
                 });
             },
             Some(addrs) = resolved.recv() => {
@@ -821,7 +838,7 @@ async fn write_frames(mut writer: OwnedWriteHalf, mut frames: mpsc::UnboundedRec
 /// One connection another node opened to us.
 async fn serve(shared: Arc<Shared>, stream: TcpStream) {
     shared.inbound.fetch_add(1, Ordering::Relaxed);
-    let _ = stream.set_nodelay(true);
+    drop(stream.set_nodelay(true));
     let (mut reader, writer) = stream.into_split();
     let (reply, frames) = mpsc::unbounded_channel();
     let writing = tokio::spawn(write_frames(writer, frames));
@@ -843,7 +860,7 @@ async fn serve(shared: Arc<Shared>, stream: TcpStream) {
                 shared.stats.served_gets.fetch_add(1, Ordering::Relaxed);
                 let entries = shared.entries(&keys);
                 let answer = Message::Entries { id, entries };
-                let _ = reply.send(shared.sealer.seal(&answer.encode()));
+                drop(reply.send(shared.sealer.seal(&answer.encode())));
             }
             Message::Load {
                 id,
@@ -877,7 +894,7 @@ async fn serve(shared: Arc<Shared>, stream: TcpStream) {
                         message: String::new(),
                     }
                 };
-                let _ = reply.send(shared.sealer.seal(&answer.encode()));
+                drop(reply.send(shared.sealer.seal(&answer.encode())));
                 if admitted {
                     let request = LoadRequest {
                         key,
@@ -895,7 +912,7 @@ async fn serve(shared: Arc<Shared>, stream: TcpStream) {
     }
     drop(reply);
     // Answers to loads in flight still go out; the writer ends once they did.
-    let _ = writing.await;
+    drop(writing.await);
     shared.inbound.fetch_sub(1, Ordering::Relaxed);
 }
 
@@ -915,7 +932,8 @@ impl Conn {
         let id = self.next_id.fetch_add(1, Ordering::Relaxed);
         let (sender, answers) = mpsc::channel(2);
         lock(&self.waiting).insert(id, sender);
-        let _ = self.frames.send(sealer.seal(&build(id).encode()));
+        // A closed connection ends the request's answers: the caller sees that.
+        drop(self.frames.send(sealer.seal(&build(id).encode())));
         Pending {
             conn: self,
             id,
@@ -953,7 +971,8 @@ async fn read_answers(shared: Arc<Shared>, conn: Arc<Conn>, mut reader: OwnedRea
         };
         let sender = lock(&conn.waiting).get(&id).cloned();
         if let Some(sender) = sender {
-            let _ = sender.try_send(message);
+            // At most two answers per request; a full channel is a duplicate.
+            drop(sender.try_send(message));
         }
     }
     conn.closed.store(true, Ordering::Release);
@@ -974,7 +993,7 @@ async fn connection(shared: &Arc<Shared>, to: SocketAddr) -> Option<Arc<Conn>> {
         .await
         .ok()?
         .ok()?;
-    let _ = stream.set_nodelay(true);
+    drop(stream.set_nodelay(true));
     let (reader, writer) = stream.into_split();
     let (frames, outgoing) = mpsc::unbounded_channel();
     let conn = Arc::new(Conn {
@@ -986,6 +1005,8 @@ async fn connection(shared: &Arc<Shared>, to: SocketAddr) -> Option<Arc<Conn>> {
     tokio::spawn(write_frames(writer, outgoing));
     tokio::spawn(read_answers(Arc::clone(shared), Arc::clone(&conn), reader));
     *slot = Some(Arc::clone(&conn));
+    // Held while connecting: concurrent requests to `to` share this connection.
+    drop(slot);
     Some(conn)
 }
 
@@ -1076,9 +1097,9 @@ async fn load(
     }
 }
 
-async fn send_one_way(shared: Arc<Shared>, to: SocketAddr, frame: Arc<Vec<u8>>) {
+async fn send_one_way(shared: Arc<Shared>, to: SocketAddr, frame: Arc<[u8]>) {
     if let Ok(Some(conn)) = tokio::time::timeout(shared.ask_timeout, connection(&shared, to)).await
     {
-        let _ = conn.frames.send(frame.to_vec());
+        drop(conn.frames.send(frame.to_vec()));
     }
 }

@@ -33,8 +33,7 @@ from dataclasses import dataclass
 import telegram_me_native as native
 from redis.exceptions import RedisError
 
-from telegram_me.cache import KEY_PREFIX, CacheEntry, MemoryCache, RedisCache
-from telegram_me.heartbeat import NODE_PREFIX
+from telegram_me.cache import KEY_PREFIX, NODE_PREFIX, CacheEntry, MemoryCache, RedisCache
 from telegram_me.services import upstream
 from telegram_me.settings import Settings
 from telegram_me.telegram.errors import (
@@ -101,15 +100,13 @@ def error_from(code: int, message: str) -> TelegramError | None:
 
 @dataclass(frozen=True, slots=True)
 class Loaded:
-    """How a load asked of the owner ended."""
+    """How a load asked of the owner ended.
+
+    Neither field set means no usable answer: load it yourself.
+    """
 
     entry: CacheEntry | None = None
     error: TelegramError | None = None
-
-    @property
-    def unavailable(self) -> bool:
-        """No usable answer: load it yourself."""
-        return self.entry is None and self.error is None
 
 
 class Peers:
@@ -152,6 +149,11 @@ class Peers:
     def addr(self) -> str:
         """This node: `ip:port`."""
         return self.node.addr
+
+    @property
+    def members(self) -> list[str]:
+        """The other live nodes, as the event loop last heard of them."""
+        return self._members
 
     @property
     def active(self) -> bool:

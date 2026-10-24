@@ -16,11 +16,10 @@ from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager, suppress
 
 from telegram_me import __version__
-from telegram_me.cache import KEY_PREFIX, RedisCache
+from telegram_me.cache import KEY_PREFIX, NODE_PREFIX, RedisCache
 
 logger = logging.getLogger(__name__)
 
-NODE_PREFIX = "node:"
 # A marker outlives a few missed beats, so one slow write does not make the
 # node look gone.
 _TTL_INTERVALS = 3
