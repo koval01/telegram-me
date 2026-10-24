@@ -59,6 +59,7 @@
 | [`REDIS_URL`](#redis_url) | — | Кэш |
 | [`REDIS_TIMEOUT`](#redis_timeout) | `0.5` | Кэш |
 | [`REDIS_CONNECT_TIMEOUT`](#redis_connect_timeout) | `2` | Кэш |
+| [`REDIS_HEARTBEAT_INTERVAL`](#redis_heartbeat_interval) | `5` | Кэш |
 | [`PREVIEW_CACHE_TTL`](#preview_cache_ttl) | `3600` | Кэш |
 | [`MEMORY_CACHE_MAX_MB`](#memory_cache_max_mb) | `64` | Кэш |
 | [`MEMORY_CACHE_MAX_TTL`](#memory_cache_max_ttl) | `10` | Кэш |
@@ -357,6 +358,19 @@ TLS-эндпоинту занимает несколько обменов: ок�
 время и снова размыкало бы circuit breaker, и Redis продолжал бы отваливаться.
 Кроме того, каждый воркер открывает первое соединение при старте, чтобы за него
 не платил ни один запрос.
+
+### `REDIS_HEARTBEAT_INTERVAL`
+
+Раз в столько секунд каждый воркер пишет в Redis свою метку
+(`tme:v2:node:<host>:<pid>`, TTL — три интервала); `0` отключает это.
+
+- Метка держит соединение открытым, поэтому запросы не платят за
+  переподключение к удалённому TLS-эндпоинту.
+- Сбой замечается не позже чем через один интервал.
+- Метка отправляется даже при разомкнутом circuit breaker: как только Redis
+  снова отвечает, breaker замыкается, не дожидаясь конца 30-секундной паузы.
+- Живые метки показывают, какие процессы на каких серверах работают:
+  `redis-cli --scan --pattern 'tme:v2:node:*'`.
 
 ### `PREVIEW_CACHE_TTL`
 

@@ -193,6 +193,23 @@ class RedisCache:
         if self._failures:
             self._failures.clear()
 
+    async def heartbeat(self, key: str, value: str, ttl: float) -> bool:
+        """Write a short-lived marker; True when Redis answered.
+
+        It is sent even while the circuit breaker is open, as a probe: an answer
+        closes the breaker at once instead of after the rest of the cooldown.
+        """
+        try:
+            await self.client.set(KEY_PREFIX + key, value, px=max(int(ttl * 1000), 1))
+        except (RedisError, OSError) as exc:
+            self.trip(exc)
+            return False
+        if not self.available:
+            logger.warning("Redis answers again, using it")
+            self._disabled_until = 0.0
+        self.succeeded()
+        return True
+
     async def warm_up(self) -> bool:
         """Open a connection now, so the first request does not pay for it."""
         try:

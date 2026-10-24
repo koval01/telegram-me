@@ -58,6 +58,7 @@ The source of truth is
 | [`REDIS_URL`](#redis_url) | — | Cache |
 | [`REDIS_TIMEOUT`](#redis_timeout) | `0.5` | Cache |
 | [`REDIS_CONNECT_TIMEOUT`](#redis_connect_timeout) | `2` | Cache |
+| [`REDIS_HEARTBEAT_INTERVAL`](#redis_heartbeat_interval) | `5` | Cache |
 | [`PREVIEW_CACHE_TTL`](#preview_cache_ttl) | `3600` | Cache |
 | [`MEMORY_CACHE_MAX_MB`](#memory_cache_max_mb) | `64` | Cache |
 | [`MEMORY_CACHE_MAX_TTL`](#memory_cache_max_ttl) | `10` | Cache |
@@ -349,6 +350,19 @@ takes several round trips: about 0.3–0.7 s at 90 ms. Under the command timeout
 every reconnect after an error would time out and reopen the circuit breaker,
 so Redis would keep dropping out. Each worker also opens its first connection
 at startup, so no request pays for it.
+
+### `REDIS_HEARTBEAT_INTERVAL`
+
+Every worker writes its own marker to Redis every this many seconds
+(`tme:v2:node:<host>:<pid>`, with a TTL of three intervals); `0` disables it.
+
+- It keeps a connection open, so requests do not pay for reconnecting to a
+  distant TLS endpoint.
+- It notices an outage within one interval.
+- It is sent even while the circuit breaker is open: as soon as Redis answers
+  again the breaker closes, without waiting for the rest of the 30 s cooldown.
+- The live markers show which processes of which servers are running:
+  `redis-cli --scan --pattern 'tme:v2:node:*'`.
 
 ### `PREVIEW_CACHE_TTL`
 
