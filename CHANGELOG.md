@@ -6,92 +6,6 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
-### Changed
-
-- **The rate limit is native (Rust) and shared.** It uses GCRA (a burst of
-  `RATE_LIMIT_BURST`, then `RATE_LIMIT_RPM` per minute) instead of a Python
-  sliding window. With Redis, a client is counted across all workers and
-  servers without requests ever waiting for Redis.
-  - `Retry-After` is now the actual wait instead of a fixed 60 s.
-  - The `429` body is JSON (`{"detail": "Rate limit exceeded"}`).
-  - CORS preflights are no longer counted, and `429` responses carry CORS
-    headers.
-- **The feed is built natively.** `POST /v1/feed` hands the cached pages to
-  the Rust extension and gets the response back in one call with the GIL
-  released (`telegram_me_native.build_feed`): reading the pages, the ranking
-  signals, ranking and rendering. A 100-channel feed takes about half the
-  time (84 → 43 ms in process), allocates half as much Python memory, and no
-  longer stalls the worker's other requests: a cached `/v1/body` next to a
-  feed loop went from 62 to 10 ms at p99. Responses are byte-for-byte the
-  same. Resident memory is unchanged within noise.
-- **Identical concurrent requests do the work once, across all workers and
-  servers.** With Redis, the process that fetches a page from t.me takes a
-  short lease (extended while it runs); every other worker and server waits
-  for its result in the cache instead of fetching the same page. Under a
-  duplicate-heavy load on 6 processes, upstream requests dropped from 15–16
-  to 2.8 per distinct page over 25 s (one per TTL period, 75 instead of
-  ~420), also with Redis 90 ms away, and CPU per request from 1.4 ms to
-  0.27–0.29 ms. When Redis is slow or down, each worker still coalesces on
-  its own.
-- Rendering is shared too: concurrent misses of `/v1/body` render the page
-  once (it was rendered once per request), `/v1/post` responses are cached
-  rendered (a hit takes 0.07 ms instead of 0.24 ms), and identical
-  `/v1/feed` requests (REST or GraphQL, channel names in any case) are built
-  once, and decoded once for GraphQL.
-- Popular pages are renewed in the background shortly before they expire,
-  so they no longer expire under load and nobody waits for t.me at expiry.
-- The per-worker cap on requests to t.me (`TELEGRAM_MAX_CONCURRENCY`) is
-  shared fairly: round-robin over channels and feed requests instead of
-  first come, first served, and background refreshes only use spare
-  capacity. The feed refresher no longer fetches pages that any process
-  fetched moments ago.
-- Requests beyond the new queue bounds are answered `503` with
-  `Retry-After` instead of queueing without limit.
-- **Repeated requests no longer wait for Redis.** Each worker keeps an
-  in-process cache in front of Redis: a repeated `/v1/body`, `/v1/post`,
-  `/v1/more` or `/v1/preview` takes 0.1–0.25 ms instead of one Redis round
-  trip (~95 ms with Upstash). Misses read Redis once (`GET` and `PTTL` in one
-  pipeline) and keep a copy for the entry's remaining TTL, at most
-  `MEMORY_CACHE_MAX_TTL` seconds; writes go to both levels. While Redis is
-  down the in-process cache works alone.
-- The in-process cache is native (Rust, `moka`, zstd) instead of a Python
-  `OrderedDict`: LRU bounded by `MEMORY_CACHE_MAX_MB` of real memory as
-  before, per-entry expiry, and a hit is up to a third faster without Redis.
-- With Redis, each worker now also uses up to `MEMORY_CACHE_MAX_MB` (64 MiB by
-  default) for the in-process cache; in practice only what was read in the
-  last `MEMORY_CACHE_MAX_TTL` seconds.
-
-### Added
-
-- **Optional proof of work** (`ENABLE_POW`). Each request carries an
-  `X-PoW: <challenge>:<nonce>` header, and its SHA-256 must start with
-  `POW_DIFFICULTY` zero bits (18 by default).
-  - Challenges come from `GET /v1/pow/challenge` or any rejection. They are
-    stateless and HMAC-signed (`POW_SECRET`), bound to the client IP
-    (`POW_BIND_IP`), and reusable until they expire (`POW_CHALLENGE_TTL`).
-  - Each solution is tied to its method and target, and accepted once.
-  - Rejections answer `428`, `400` or `403` with a fresh challenge.
-  - Verification is native (Rust) and takes under a microsecond.
-- `RATE_LIMIT_BURST` and `RATE_LIMIT_SHARED`.
-- `scripts/audit.py`: wall time, CPU time and Python allocations per
-  endpoint, an event-loop stall test, the cost of each stage of the cold page
-  pipeline and the memory of a feed loop. The findings and the plan for the
-  rest of the hot path are in `docs/internals/rust-roadmap.md`.
-- The contract snapshots also pin every REST response byte for byte
-  (`tests/snapshots/raw_digests.json`), and a synthetic feed covers
-  duplicates and malformed pages.
-- `UPSTREAM_QUEUE_LIMIT` (default 16 × `TELEGRAM_MAX_CONCURRENCY`) and
-  `MAX_WAITING_REQUESTS` (default 4096): per-worker bounds beyond which
-  requests are shed with `503`.
-- `SHARED_COALESCING` (default `true`): the cross-process fetch lease.
-- `EARLY_REFRESH_WINDOW` (default `0.1`): how close to expiry popular entries
-  are renewed in the background; `0` disables it.
-- `scripts/coalescing_load.py`: duplicate-heavy load over several worker
-  processes sharing one Redis.
-- `MEMORY_CACHE_MAX_TTL` (default 10 s): with Redis, the longest a worker
-  keeps its own copy of an entry, which bounds how late it sees an entry
-  another server or the feed worker wrote.
-
 ## [2.0.0] - 2026-10-24
 
 A rewrite of the internals with the same `/v1` API. Existing clients keep
@@ -115,6 +29,14 @@ working; see the upgrade guide for the few behaviour changes.
   engagement relative to each channel, freshness half-life, duplicate stories
   collapsed across channels, topics inferred from the texts and diversity
   re-ranking. `_score` values and the feed order differ from 1.x.
+- **The rate limit is native (Rust) and shared.** It uses GCRA (a burst of
+  `RATE_LIMIT_BURST`, then `RATE_LIMIT_RPM` per minute) instead of a Python
+  sliding window. With Redis, a client is counted across all workers and
+  servers without requests ever waiting for Redis.
+  - `Retry-After` is now the actual wait instead of a fixed 60 s.
+  - The `429` body is JSON (`{"detail": "Rate limit exceeded"}`).
+  - CORS preflights are no longer counted, and `429` responses carry CORS
+    headers.
 
 ### Added
 
@@ -153,6 +75,34 @@ working; see the upgrade guide for the few behaviour changes.
 - Documentation site on GitHub Pages.
 - Offline test suite with recorded t.me pages and contract snapshots of every
   endpoint, strict mypy, ruff, pre-commit.
+- **Optional proof of work** (`ENABLE_POW`). Each request carries an
+  `X-PoW: <challenge>:<nonce>` header, and its SHA-256 must start with
+  `POW_DIFFICULTY` zero bits (18 by default).
+  - Challenges come from `GET /v1/pow/challenge` or any rejection. They are
+    stateless and HMAC-signed (`POW_SECRET`), bound to the client IP
+    (`POW_BIND_IP`), and reusable until they expire (`POW_CHALLENGE_TTL`).
+  - Each solution is tied to its method and target, and accepted once.
+  - Rejections answer `428`, `400` or `403` with a fresh challenge.
+  - Verification is native (Rust) and takes under a microsecond.
+- `RATE_LIMIT_BURST` and `RATE_LIMIT_SHARED`.
+- `scripts/audit.py`: wall time, CPU time and Python allocations per
+  endpoint, an event-loop stall test, the cost of each stage of the cold page
+  pipeline and the memory of a feed loop. The findings and the plan for the
+  rest of the hot path are in `docs/internals/rust-roadmap.md`.
+- The contract snapshots also pin every REST response byte for byte
+  (`tests/snapshots/raw_digests.json`), and a synthetic feed covers
+  duplicates and malformed pages.
+- `UPSTREAM_QUEUE_LIMIT` (default 16 × `TELEGRAM_MAX_CONCURRENCY`) and
+  `MAX_WAITING_REQUESTS` (default 4096): per-worker bounds beyond which
+  requests are shed with `503`.
+- `SHARED_COALESCING` (default `true`): the cross-process fetch lease.
+- `EARLY_REFRESH_WINDOW` (default `0.1`): how close to expiry popular entries
+  are renewed in the background; `0` disables it.
+- `scripts/coalescing_load.py`: duplicate-heavy load over several worker
+  processes sharing one Redis.
+- `MEMORY_CACHE_MAX_TTL` (default 10 s): with Redis, the longest a worker
+  keeps its own copy of an entry, which bounds how late it sees an entry
+  another server or the feed worker wrote.
 
 ### Fixed
 
@@ -199,6 +149,50 @@ working; see the upgrade guide for the few behaviour changes.
   with Redis.
 - Cached `/v1/body` responses take about 1 ms; a cached 6-channel feed about
   6 ms (82 ms for 5 channels in 1.x).
+- **The feed is built natively.** `POST /v1/feed` hands the cached pages to
+  the Rust extension and gets the response back in one call with the GIL
+  released (`telegram_me_native.build_feed`): reading the pages, the ranking
+  signals, ranking and rendering. A 100-channel feed takes about half the
+  time (84 → 43 ms in process), allocates half as much Python memory, and no
+  longer stalls the worker's other requests: a cached `/v1/body` next to a
+  feed loop went from 62 to 10 ms at p99. Responses are byte-for-byte the
+  same. Resident memory is unchanged within noise.
+- **Identical concurrent requests do the work once, across all workers and
+  servers.** With Redis, the process that fetches a page from t.me takes a
+  short lease (extended while it runs); every other worker and server waits
+  for its result in the cache instead of fetching the same page. Under a
+  duplicate-heavy load on 6 processes, upstream requests dropped from 15–16
+  to 2.8 per distinct page over 25 s (one per TTL period, 75 instead of
+  ~420), also with Redis 90 ms away, and CPU per request from 1.4 ms to
+  0.27–0.29 ms. When Redis is slow or down, each worker still coalesces on
+  its own.
+- Rendering is shared too: concurrent misses of `/v1/body` render the page
+  once (it was rendered once per request), `/v1/post` responses are cached
+  rendered (a hit takes 0.07 ms instead of 0.24 ms), and identical
+  `/v1/feed` requests (REST or GraphQL, channel names in any case) are built
+  once, and decoded once for GraphQL.
+- Popular pages are renewed in the background shortly before they expire,
+  so they no longer expire under load and nobody waits for t.me at expiry.
+- The per-worker cap on requests to t.me (`TELEGRAM_MAX_CONCURRENCY`) is
+  shared fairly: round-robin over channels and feed requests instead of
+  first come, first served, and background refreshes only use spare
+  capacity. The feed refresher no longer fetches pages that any process
+  fetched moments ago.
+- Requests beyond the new queue bounds are answered `503` with
+  `Retry-After` instead of queueing without limit.
+- **Repeated requests no longer wait for Redis.** Each worker keeps an
+  in-process cache in front of Redis: a repeated `/v1/body`, `/v1/post`,
+  `/v1/more` or `/v1/preview` takes 0.1–0.25 ms instead of one Redis round
+  trip (~95 ms with Upstash). Misses read Redis once (`GET` and `PTTL` in one
+  pipeline) and keep a copy for the entry's remaining TTL, at most
+  `MEMORY_CACHE_MAX_TTL` seconds; writes go to both levels. While Redis is
+  down the in-process cache works alone.
+- The in-process cache is native (Rust, `moka`, zstd) instead of a Python
+  `OrderedDict`: LRU bounded by `MEMORY_CACHE_MAX_MB` of real memory as
+  before, per-entry expiry, and a hit is up to a third faster without Redis.
+- With Redis, each worker now also uses up to `MEMORY_CACHE_MAX_MB` (64 MiB by
+  default) for the in-process cache; in practice only what was read in the
+  last `MEMORY_CACHE_MAX_TTL` seconds.
 
 ### Removed
 
