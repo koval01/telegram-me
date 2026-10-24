@@ -6,6 +6,16 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Added
+
+- **Redis heartbeat** (`REDIS_HEARTBEAT_INTERVAL`, default 5 s). Every worker
+  writes its marker `tme:v2:node:<host>:<pid>` with a TTL of three intervals.
+  - It keeps a connection to Redis open.
+  - It notices outages within one interval.
+  - It shows which processes are running.
+  - It probes while the circuit breaker is open: the breaker closes as soon as
+    Redis answers again, instead of after the full 30 s cooldown.
+
 ### Changed
 
 - **The Redis circuit breaker opens after three failures in a row within
