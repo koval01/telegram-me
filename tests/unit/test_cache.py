@@ -173,6 +173,17 @@ async def test_redis_outage_opens_circuit_breaker(caplog: pytest.LogCaptureFixtu
     assert "Redis unavailable" in caplog.text
 
 
+async def test_warm_up_opens_a_connection(redis_cache: RedisCache) -> None:
+    assert await redis_cache.warm_up()
+    assert redis_cache.available
+
+
+async def test_failed_warm_up_opens_circuit_breaker() -> None:
+    cache = RedisCache(_BrokenRedis(decode_responses=True), cooldown=30)
+    assert not await cache.warm_up()
+    assert not cache.available
+
+
 async def test_redis_get_with_ttl_trips_circuit_breaker() -> None:
     cache = RedisCache(_BrokenRedis(decode_responses=True), cooldown=30)
     assert await cache.get_with_ttl("k") is None
@@ -253,6 +264,9 @@ async def test_create_redis_pool_is_sized_from_upstream_concurrency() -> None:
     assert isinstance(pool, WaitingConnectionPool)
     assert pool.max_connections == 2 * settings.telegram_max_concurrency
     assert pool.timeout == 0.25
+    # Commands keep the short timeout; opening a connection (TLS included) gets longer.
+    assert pool.connection_kwargs["socket_timeout"] == 0.25
+    assert pool.connection_kwargs["socket_connect_timeout"] == settings.redis_connect_timeout == 2.0
     await client.aclose()
 
     small = create_redis(make_settings(redis_url="redis://localhost", telegram_max_concurrency=4))

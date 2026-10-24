@@ -156,6 +156,15 @@ class RedisCache:
             logger.warning("Redis unavailable, bypassing it for %.0fs: %s", self._cooldown, exc)
         self._disabled_until = time.monotonic() + self._cooldown
 
+    async def warm_up(self) -> bool:
+        """Open a connection now, so the first request does not pay for it."""
+        try:
+            await self.client.ping()
+        except (RedisError, OSError) as exc:
+            self.trip(exc)
+            return False
+        return True
+
     async def get(self, key: str) -> CacheEntry | None:  # noqa: D102
         if not self.available:
             return None
@@ -304,7 +313,11 @@ def create_redis(settings: Settings) -> Redis | None:
         timeout=settings.redis_timeout,
         decode_responses=True,
         socket_timeout=settings.redis_timeout,
-        socket_connect_timeout=settings.redis_timeout,
+        # Opening a connection to a distant TLS endpoint takes several round
+        # trips (TCP, TLS, then AUTH/HELLO under socket_timeout): ~0.3-0.7 s
+        # at 90 ms. Under REDIS_TIMEOUT every reconnect after an error would
+        # time out and reopen the breaker, so Redis would never come back.
+        socket_connect_timeout=settings.redis_connect_timeout,
         health_check_interval=30,
     )
     return Redis.from_pool(pool)

@@ -6,6 +6,20 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Fixed
+
+- **Redis no longer keeps dropping out when it is far away.** Opening a
+  connection used the 0.5 s command timeout, and a TLS connection to a Redis
+  90 ms away takes 0.3–0.7 s. After any error, every reconnect timed out and
+  reopened the circuit breaker, which bypassed Redis for 30 s every 30–60 s in
+  production. Connections now get `REDIS_CONNECT_TIMEOUT` (default 2 s), and
+  each worker opens its first connection at startup.
+
+### Added
+
+- `REDIS_CONNECT_TIMEOUT` (default 2 s): seconds to open a Redis connection,
+  TLS handshake included.
+
 ## [2.0.0] - 2026-10-24
 
 A rewrite of the internals with the same `/v1` API. Existing clients keep

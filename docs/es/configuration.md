@@ -57,6 +57,7 @@ La fuente de verdad es
 | [`EARLY_REFRESH_WINDOW`](#early_refresh_window) | `0.1` | Origen |
 | [`REDIS_URL`](#redis_url) | — | Caché |
 | [`REDIS_TIMEOUT`](#redis_timeout) | `0.5` | Caché |
+| [`REDIS_CONNECT_TIMEOUT`](#redis_connect_timeout) | `2` | Caché |
 | [`PREVIEW_CACHE_TTL`](#preview_cache_ttl) | `3600` | Caché |
 | [`MEMORY_CACHE_MAX_MB`](#memory_cache_max_mb) | `64` | Caché |
 | [`MEMORY_CACHE_MAX_TTL`](#memory_cache_max_ttl) | `10` | Caché |
@@ -341,8 +342,18 @@ trata como un fallo de caché sin abrir el circuit breaker.
 
 ### `REDIS_TIMEOUT`
 
-Tiempo de espera de conexión y de comando en segundos, y lo máximo que un
-comando espera a que quede libre una conexión del pool.
+Tiempo de espera de un comando en segundos, y lo máximo que un comando espera a
+que quede libre una conexión del pool. Un comando más lento abre el circuit
+breaker.
+
+### `REDIS_CONNECT_TIMEOUT`
+
+Segundos para abrir una conexión nueva con Redis, incluido el handshake TLS. Es
+mayor que `REDIS_TIMEOUT` porque conectar con un endpoint TLS lejano requiere
+varios viajes de ida y vuelta: unos 0,3–0,7 s a 90 ms. Con el tiempo de espera
+de los comandos, cada reconexión tras un error agotaría su tiempo y volvería a
+abrir el circuit breaker, y Redis seguiría desconectándose. Además, cada worker
+abre su primera conexión al arrancar, para que ninguna petición la pague.
 
 ### `PREVIEW_CACHE_TTL`
 
