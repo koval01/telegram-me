@@ -60,7 +60,7 @@ su ID a `EXTRA_POSTS` en `scripts/record_fixtures.py`.
 |---|---|
 | `test_client.py` | Construcción de URL, correspondencia de códigos de estado, validación, el único reintento de red |
 | `test_fetcher.py` | `ReqwestFetcher` contra un servidor HTTP local real: gzip, cabeceras, cuerpos POST vacíos |
-| `test_cache.py` | LRU en memoria con límite de memoria, compresión y caducidad, backend de Redis, circuit breaker |
+| `test_cache.py` | Caché dentro del proceso (límite, compresión, caducidad), backend de Redis, circuit breaker, lecturas de dos niveles, rellenos, caídas |
 | `test_memory_trim.py` | `malloc_trim` periódico (solo glibc), su desactivación |
 | `test_coalesce.py` | Compartición single-flight, propagación de errores, seguridad ante cancelaciones |
 | `test_popularity.py` | Decaimiento de la popularidad y elección de líder en Redis (fakeredis con Lua) |
@@ -81,9 +81,12 @@ advertencias se tratan como errores.
 `tests/test_memory.py` (marcador `memory`) envía miles de solicitudes
 directamente a la app ASGI sobre alias de los canales grabados
 (`tests/workload.py`) y falla cuando las asignaciones de Python o, en Linux, la
-memoria residente siguen creciendo tras un calentamiento, o cuando la caché en
-memoria supera su límite. Forma parte de la ejecución por defecto, así que la
-CI la ejecuta; en local puedes omitirla con `-m "not memory"`.
+memoria residente siguen creciendo tras un calentamiento, o cuando la caché
+dentro del proceso supera su límite. Forma parte de la ejecución por defecto,
+así que la CI la ejecuta; en local puedes omitirla con `-m "not memory"`. Las
+entradas de la caché viven en el heap de Rust, que `tracemalloc` no ve: que el
+límite cuenta lo que realmente ocupan lo comprueba
+`rust/telegram-me-native/tests/cache_memory.rs` con un asignador que cuenta.
 
 `scripts/memory_profile.py` muestra las cifras que hay detrás: el coste de
 importación del proceso principal y de un worker, el tamaño de una página en

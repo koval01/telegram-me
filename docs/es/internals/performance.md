@@ -18,6 +18,46 @@ Latencia mediana de una solicitud, con el origen servido desde fixtures:
 | `/v1/body/tginfo`, en caché | — | 1.1 ms | 22× más rápido |
 | `/v1/feed`, 5 canales, páginas en caché | 81.9 ms | 5.4 ms | 15× más rápido |
 
+## Caché de dos niveles { #two-level-cache }
+
+Una solicitud repetida costaba un viaje de ida y vuelta a Redis cuando
+`REDIS_URL` estaba definida: el Upstash de producción está a ~90 ms por TLS,
+así que casi todo el tiempo de una respuesta en caché era el `GET`. Ahora cada
+worker responde primero desde su caché dentro del proceso (Rust, moka) y solo
+va a Redis en un fallo (consulta [Caché](caching.md#levels)).
+
+Mediana / p95 de 200 solicitudes repetidas para `@durov` (un worker, ASGI
+llamado directamente, origen servido desde fixtures, Apple serie M,
+Python 3.13). El Redis a 90 ms es un Valkey 9.1 local detrás de un proxy que
+retrasa cada dirección 45 ms; "caché" es el tiempo dedicado a `cache.get` por
+solicitud:
+
+| Solicitud | Redis 90 ms: 2.0.0 | Redis 90 ms: ahora | Redis local: 2.0.0 | Redis local: ahora | Sin Redis: 2.0.0 | Sin Redis: ahora |
+|---|---|---|---|---|---|---|
+| `/v1/body/durov` | 95.0 / 97.4 ms (caché 94.3) | 0.10 / 0.12 ms (caché 0.04) | 0.35 / 0.69 ms | 0.10 / 0.13 ms | 0.15 / 0.16 ms | 0.10 / 0.11 ms |
+| `/v1/post/durov/<id>` | 96.7 / 98.5 ms (caché 94.7) | 0.25 / 0.28 ms (caché 0.04) | 0.88 / 1.08 ms | 0.25 / 0.36 ms | 0.29 / 0.33 ms | 0.25 / 0.26 ms |
+| `/v1/more/durov/before/<id>` | 95.0 / 96.1 ms (caché 94.4) | 0.09 / 0.10 ms (caché 0.03) | 0.34 / 0.54 ms | 0.09 / 0.12 ms | 0.11 / 0.12 ms | 0.09 / 0.10 ms |
+| `/v1/preview/durov` | 94.4 / 96.0 ms (caché 93.9) | 0.08 / 0.08 ms (caché 0.003) | 0.30 / 0.53 ms | 0.08 / 0.11 ms | 0.08 / 0.09 ms | 0.08 / 0.08 ms |
+| Carga mixta, 3 000 solicitudes, 8 clientes | 51.7 s | 33.3 s | 2.31 s | 2.33 s | 2.27 s | 2.04 s |
+| RSS máximo de esa ejecución | 101 MiB | 120 MiB | 135 MiB | 166 MiB | 153 MiB | 152 MiB |
+
+- La primera lectura de una clave en un worker sigue costando un viaje de ida
+  y vuelta a Redis (`GET` y `PTTL` en un solo pipeline), como antes; también
+  una escritura. La carga mixta es sobre todo de primeras lecturas (cada
+  solicitud nombra un alias de canal nuevo), por eso gana menos.
+- Sin Redis, la caché nativa sustituye al LRU de Python: un acierto ya no se
+  descomprime en Python (`/v1/body` 0.15 → 0.10 ms) y una página de 95 KB se
+  guarda en 83 µs en lugar de 461 µs (zlib en 3.13; el zstd de Python 3.14 se
+  acerca más).
+- Con Redis, cada worker ahora también guarda lo que leyó o escribió en los
+  últimos `MEMORY_CACHE_MAX_TTL` (10) segundos, limitado por
+  `MEMORY_CACHE_MAX_MB`: +19–31 MiB de RSS máximo en esta ejecución, en la que
+  todo se leyó en menos de 10 s.
+- Se midió y descartó liberar el GIL en lecturas y escrituras: junto a dos
+  hilos de Python que consumen CPU (pydantic en los hilos de análisis), una
+  lectura de 95 KB tardó 6.3 ms (p50) con el GIL liberado y 38 µs con él
+  retenido.
+
 ## Análisis de páginas: Python + lexbor → Rust { #page-parsing-python-lexbor-rust }
 
 Tiempo mediano para analizar una página de canal grabada
@@ -32,6 +72,29 @@ La diferencia mayor se nota bajo carga: el parser de Rust libera el GIL, así
 que las solicitudes concurrentes analizan páginas en paralelo en lugar de
 hacer cola en un solo núcleo (24 páginas en 24 hilos: 111 ms → 67 ms en 8
 núcleos, antes de las optimizaciones de arriba).
+
+## El event loop durante un ciclo del actualizador { #event-loop-under-a-refresher-tick }
+
+Retardo del event loop de un worker con Redis (Valkey) y el actualizador
+integrado, con una carga dentro del proceso de 8 clientes × 3 000 solicitudes
+dos veces y, entre ambas, un ciclo del actualizador que refresca los ~200
+canales que la primera pasada hizo populares:
+
+| | Retardo máximo | Retardo mediano | Duración | Aperturas del breaker |
+|---|---|---|---|---|
+| Análisis en el event loop, ciclo sin límite | 0.87–1.31 s | 9 ms | 32–36 s | 1 por ejecución |
+| 2 hilos de análisis, ≤ 16 actualizaciones a la vez | 25–122 ms | 1.1 ms | 13 s | ninguna |
+
+Cada descarga terminada analizaba su página (~3 ms en nativo) y la validaba y
+renderizaba (~0.5–2 ms en pydantic) directamente en el event loop. Cuando las
+descargas de un ciclo terminaban juntas, se ejecutaban una tras otra durante
+alrededor de un segundo, más que `REDIS_TIMEOUT`, así que un comando de Redis
+en curso agotaba su tiempo de espera y abría el circuit breaker durante 30 s.
+Ahora las páginas se analizan en dos hilos dedicados: el executor por defecto
+(hasta `cpu + 4` hilos) no era más rápido y, al competir con el event loop por
+el GIL, triplicaba su retardo p99 (~21 ms en lugar de ~7 ms). El actualizador
+refresca como mucho 16 canales a la vez, lo que además deja huecos hacia el
+origen para las solicitudes de los usuarios.
 
 ## Cliente HTTP saliente { #outgoing-http-client }
 
@@ -147,7 +210,10 @@ veces más páginas que antes dentro de un presupuesto fijo.
 `tests/test_memory.py` ejecuta miles de solicitudes a través de la app y falla
 cuando la memoria sigue creciendo tras un calentamiento o la caché supera su
 límite; detecta tanto una página analizada que se pierde en cada solicitud
-como memoria nativa que se pierde. Para ver las cifras:
+como memoria nativa que se pierde.
+`rust/telegram-me-native/tests/cache_memory.rs` cuenta cada asignación de la
+caché dentro del proceso y falla cuando su contabilidad ya no las cubre. Para
+ver las cifras:
 
 ```bash
 uv run python scripts/memory_profile.py --requests 20000 --channels 200

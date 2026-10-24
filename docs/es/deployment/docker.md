@@ -60,9 +60,10 @@ Medido en 2.0.0 (arm64), consulta
 | 2 | ~180 MB | ~225 MB |
 
 Calcula aproximadamente 40 MB para el proceso del servidor y 70–110 MB por
-worker, más hasta `MEMORY_CACHE_MAX_MB` por worker cuando se ejecuta sin Redis
-(un worker con tráfico intenso se mantiene en torno a 170 MB con el valor por
-defecto de 64). La memoria liberada se devuelve al sistema cada
+worker, más hasta `MEMORY_CACHE_MAX_MB` por worker para la caché dentro del
+proceso (un worker con tráfico intenso sin Redis se mantiene en torno a 170 MB
+con el valor por defecto de 64; con Redis solo guarda las entradas de los
+últimos `MEMORY_CACHE_MAX_TTL` segundos). La memoria liberada se devuelve al sistema cada
 [`MEMORY_TRIM_INTERVAL`](../configuration.md#memory_trim_interval) segundos.
 [`WORKERS_MAX_RSS_MB`](../configuration.md#workers_max_rss_mb) añade una red de
 seguridad. `WEB_CONCURRENCY` toma por defecto el número de CPU disponibles para

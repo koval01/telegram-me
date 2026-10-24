@@ -98,9 +98,9 @@ curl https://tme.koval-dev.org/v1/body/durov
   (html5ever) y la clasificación del feed.
 - **granian** (Rust) como servidor HTTP, con **uvloop** (C) como bucle de
   eventos.
-- **Redis / Valkey** (opcional) con **hiredis** (C) para una caché compartida
-  por todos los workers y servidores; en caso contrario, una caché dentro del
-  proceso.
+- Una caché dentro del proceso en Rust (**moka**, zstd) por worker, delante de
+  **Redis / Valkey** (opcional, con **hiredis**, C), compartido por todos los
+  workers y servidores.
 
 Consulta [Rendimiento](internals/performance.md) para ver cifras medidas.
 
