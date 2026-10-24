@@ -19,6 +19,7 @@ be encoded again on every cache hit.
 
 import logging
 import time
+from collections import deque
 from dataclasses import dataclass
 from typing import Protocol
 
@@ -124,14 +125,33 @@ class MemoryCache:
         self._native.clear()
 
 
+# One failed command is not an outage: a slow TLS connect to a distant Redis
+# or a lost packet would otherwise bypass Redis for the whole cooldown. The
+# breaker opens after this many failures in a row within the window; any
+# command that reaches Redis resets the count. Each failing command still
+# waits only for its own timeout.
+FAILURES_TO_TRIP = 3
+FAILURE_WINDOW = 10.0
+
+
 class RedisCache:
     """Redis-backed cache that degrades to "always miss" while Redis is down."""
 
     backend = "redis"
 
-    def __init__(self, client: Redis, cooldown: float = 30.0) -> None:
+    def __init__(
+        self,
+        client: Redis,
+        cooldown: float = 30.0,
+        *,
+        failures_to_trip: int = FAILURES_TO_TRIP,
+        failure_window: float = FAILURE_WINDOW,
+    ) -> None:
         self.client = client
         self._cooldown = cooldown
+        self._failures_to_trip = max(failures_to_trip, 1)
+        self._failure_window = failure_window
+        self._failures: deque[float] = deque()
         self._disabled_until = 0.0
         self._pool_warned_at = -cooldown
 
@@ -141,20 +161,37 @@ class RedisCache:
         return time.monotonic() >= self._disabled_until
 
     def trip(self, exc: Exception) -> None:
-        """Open the circuit breaker after a failed Redis command.
+        """Count a failed Redis command; open the circuit breaker after several.
 
-        An exhausted connection pool leaves it closed: the command never reached
-        Redis, and skipping Redis would send every worker to t.me instead.
+        An exhausted connection pool counts for nothing: the command never
+        reached Redis, and skipping Redis would send every worker to t.me instead.
         """
+        now = time.monotonic()
         if isinstance(exc, MaxConnectionsError):
-            now = time.monotonic()
             if now - self._pool_warned_at >= self._cooldown:
                 self._pool_warned_at = now
                 logger.warning("Redis connection pool exhausted, skipping a command: %s", exc)
             return
+        while self._failures and now - self._failures[0] > self._failure_window:
+            self._failures.popleft()
+        self._failures.append(now)
+        if len(self._failures) < self._failures_to_trip:
+            logger.info(
+                "Redis command failed (%d of %d before bypassing it): %s",
+                len(self._failures),
+                self._failures_to_trip,
+                exc,
+            )
+            return
+        self._failures.clear()
         if self.available:
             logger.warning("Redis unavailable, bypassing it for %.0fs: %s", self._cooldown, exc)
-        self._disabled_until = time.monotonic() + self._cooldown
+        self._disabled_until = now + self._cooldown
+
+    def succeeded(self) -> None:
+        """Reset the failure count: a command reached Redis."""
+        if self._failures:
+            self._failures.clear()
 
     async def warm_up(self) -> bool:
         """Open a connection now, so the first request does not pay for it."""
@@ -163,6 +200,7 @@ class RedisCache:
         except (RedisError, OSError) as exc:
             self.trip(exc)
             return False
+        self.succeeded()
         return True
 
     async def get(self, key: str) -> CacheEntry | None:  # noqa: D102
@@ -176,6 +214,7 @@ class RedisCache:
         except (RedisError, OSError) as exc:
             self.trip(exc)
             return None
+        self.succeeded()
         return decode_entry(raw)
 
     async def get_with_ttl(self, key: str) -> tuple[CacheEntry, float | None] | None:
@@ -193,6 +232,7 @@ class RedisCache:
         except (RedisError, OSError) as exc:
             self.trip(exc)
             return None
+        self.succeeded()
         entry = decode_entry(raw)
         if entry is None:
             return None
@@ -211,6 +251,8 @@ class RedisCache:
             )
         except (RedisError, OSError) as exc:
             self.trip(exc)
+        else:
+            self.succeeded()
 
     async def close(self) -> None:  # noqa: D102
         await self.client.aclose()

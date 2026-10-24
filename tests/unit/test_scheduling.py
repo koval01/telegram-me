@@ -376,7 +376,7 @@ async def test_redis_failure_falls_back_to_fetching(caplog: pytest.LogCaptureFix
         async def execute_command(self, *_args: Any, **_kwargs: Any) -> None:
             raise ConnectionError("down")
 
-    cache = RedisCache(Broken())  # type: ignore[arg-type]
+    cache = RedisCache(Broken(), failures_to_trip=1)  # type: ignore[arg-type]
     lease = RedisLease(cache, ttl=1.0, max_wait=1.0)
     fetch = Upstream(RedisCache(FakeAsyncRedis(decode_responses=True)))
     assert await lease.run("k", fetch, _value, _always) == b"page"

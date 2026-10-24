@@ -317,9 +317,11 @@ first ([`MEMORY_CACHE_MAX_MB`](#memory_cache_max_mb),
 [`MEMORY_CACHE_MAX_TTL`](#memory_cache_max_ttl)), so only its misses wait for
 a Redis round trip. When unset, the in-process cache is the only one.
 
-A Redis outage never slows requests down: commands time out after
-[`REDIS_TIMEOUT`](#redis_timeout) and Redis is then bypassed for 30 seconds
-(circuit breaker), the API working on its in-process cache meanwhile.
+A Redis outage never slows requests down for long: commands time out after
+[`REDIS_TIMEOUT`](#redis_timeout), and after three failures in a row within
+10 seconds Redis is bypassed for 30 seconds (circuit breaker), the API working
+on its in-process cache meanwhile. A single failed command does not trigger
+it.
 
 Each worker keeps up to `2 × TELEGRAM_MAX_CONCURRENCY` (at least 32)
 connections to Redis. A burst of commands beyond that, such as several

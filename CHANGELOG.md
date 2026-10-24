@@ -6,6 +6,15 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Changed
+
+- **The Redis circuit breaker opens after three failures in a row within
+  10 seconds** instead of after the first one. Any command that reaches Redis
+  resets the count. A single slow TLS connect to a distant Redis, or one lost
+  packet, no longer takes the shared cache, the shared rate limit and the
+  cross-server lease offline for 30 seconds. Failures below the threshold are
+  logged at `INFO`.
+
 ### Fixed
 
 - **Redis no longer keeps dropping out when it is far away.** Opening a
