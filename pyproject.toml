@@ -45,7 +45,9 @@ dev = [
     "pytest-cov>=7.1.0",
     "ruff>=0.17.2",
     "time-machine>=3.5.1",
+    "typos>=1.51.1",
     "vulture>=2.16",
+    "zizmor>=1.31.1",
 ]
 docs = [
     "zensical>=0.0.71",

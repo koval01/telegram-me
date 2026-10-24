@@ -28,9 +28,15 @@ Prepara el proyecto como se describe en
   JSON sin procesar.
 - Docstrings: en cada módulo, clase y función públicos, con el estilo de
   Google.
-- Capas: `api` → `services` → `telegram` / `cache`; nada por debajo de `api`
-  importa FastAPI. Conecta los nuevos objetos de larga duración en
+- Capas: `api` → `services` → `cache` → `telegram`; nada por debajo de `api`
+  importa FastAPI. import-linter comprueba ambas cosas (`[tool.importlinter]`
+  en `pyproject.toml`). Conecta los nuevos objetos de larga duración en
   `container.py`.
+- Rust: nada de `unwrap()` en código de producción (un `expect("...")`
+  enuncia el invariante), y en `src/parse/` nada de indexación ni cortes que
+  puedan entrar en pánico: usa `get`, `split_once`, `strip_prefix`. La
+  extensión aborta ante un pánico, lo que tumba el worker. Consulta
+  [Comprobaciones estáticas](testing.md#static-checks) para cada herramienta.
 - Errores: lanza los errores de dominio de `telegram/errors.py`; la API los
   traduce a códigos de estado en un único lugar (`api/errors.py`).
 - Mantén estable el contrato de `/v1`. Los campos nuevos están bien; eliminar o
@@ -47,14 +53,17 @@ uv lock --upgrade            # refresh everything to the newest versions
 ```
 
 Dependabot abre actualizaciones semanales agrupadas para los paquetes de
-Python, las GitHub Actions y las imágenes base de Docker.
+Python, las GitHub Actions y las imágenes base de Docker, para versiones con
+al menos una semana (las actualizaciones de seguridad llegan enseguida).
 
 ## Pre-commit { #pre-commit }
 
-`make install` instala hooks de git que ejecutan ruff (con corrección
-automática), ruff format, mypy y algunas comprobaciones de higiene en cada
-commit, con las versiones de `uv.lock`. Ejecútalos cuando quieras con
-`uv run pre-commit run --all-files`.
+`make install` instala hooks de git que se ejecutan en cada commit: ruff (con
+corrección automática), ruff format, mypy, import-linter, vulture, typos,
+zizmor, gitleaks sobre los cambios preparados, cargo fmt y clippy y, cuando
+cambian sus archivos, hadolint, cargo-deny y cargo-machete. Las herramientas
+de Python vienen de `uv.lock`; `make tools` instala las demás. Ejecútalos
+cuando quieras con `uv run pre-commit run --all-files`.
 
 ## Documentación { #documentation }
 

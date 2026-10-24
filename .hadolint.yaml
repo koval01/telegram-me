@@ -1,0 +1,3 @@
+# hadolint (Dockerfile lint), run by `make lint` and the CI Lint job.
+# Every rule applies, down to style; exceptions are inline, with the reason.
+failure-threshold: style

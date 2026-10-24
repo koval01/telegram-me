@@ -1,6 +1,7 @@
 .DEFAULT_GOAL := help
-.PHONY: help install dev test snapshots contract lint format typecheck check rust native fixtures \
-        smoke integration deploy-test docker up down logs docs docs-serve docs-preview
+.PHONY: help install tools dev test snapshots contract lint format typecheck check rust native \
+        audit image-scan fixtures smoke integration deploy-test docker up down logs docs docs-serve \
+        docs-preview
 
 help: ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-12s\033[0m %s\n", $$1, $$2}'
@@ -8,6 +9,16 @@ help: ## Show this help
 install: ## Install dependencies and git hooks
 	uv sync
 	uv run pre-commit install
+
+# The checks' own binaries, at the versions CI pins (.github/workflows/ci.yml).
+# typos, zizmor, vulture and import-linter come with `uv sync` (uv.lock).
+CARGO_DENY_VERSION = 0.20.2
+CARGO_MACHETE_VERSION = 0.9.2
+
+tools: ## Install cargo-deny and cargo-machete; gitleaks, hadolint and trivy from Homebrew
+	cargo install --locked cargo-deny@$(CARGO_DENY_VERSION) cargo-machete@$(CARGO_MACHETE_VERSION)
+	@if command -v brew >/dev/null; then brew install gitleaks hadolint trivy shellcheck actionlint; \
+	else echo "Install gitleaks, hadolint, trivy, shellcheck and actionlint (see docs/contributing/testing.md)"; fi
 
 dev: ## Run the API locally with auto-reload on :3000
 	uv run telegram-me serve --reload
@@ -22,9 +33,16 @@ contract: ## Breaking REST/GraphQL changes against BASE (default origin/main)
 	uv run python scripts/api_contract.py --base $${BASE:-origin/main}
 	python3 scripts/coverage_floor.py --base $${BASE:-origin/main}
 
-lint: ## Lint and check formatting
+lint: ## Lint: ruff, layering, dead code, spelling, workflows, Dockerfile, shell scripts
 	uv run ruff check .
 	uv run ruff format --check .
+	uv run lint-imports
+	uv run vulture
+	uv run typos
+	uv run zizmor --offline .github
+	hadolint Dockerfile
+	shellcheck deploy/*.sh
+	actionlint
 
 format: ## Format and autofix
 	uv run ruff format .
@@ -42,7 +60,17 @@ rust: ## Rust: fmt check, clippy (pedantic, both feature sets), tests
 native: ## Rebuild the Rust extension into the virtualenv after editing rust/
 	uv sync --reinstall-package telegram-me-native
 
-check: rust lint typecheck test ## Everything CI runs before building the image
+audit: ## Dependencies and secrets: RustSec, licenses, unused crates, PyPI advisories, git history
+	cd rust/telegram-me-native && cargo deny --locked check && cargo machete
+	uv audit --locked --preview-features audit-command
+	gitleaks git --redact --no-banner .
+
+IMAGE ?= telegram-me:dev
+
+image-scan: ## Fixable high and critical vulnerabilities in IMAGE (default telegram-me:dev, `make docker`)
+	trivy image --scanners vuln --severity HIGH,CRITICAL --ignore-unfixed --exit-code 1 $(IMAGE)
+
+check: rust lint typecheck test audit ## Everything CI runs before building the image
 
 fixtures: ## Re-record t.me fixtures (CHANNELS="a b" for some only)
 	uv run python scripts/record_fixtures.py $(CHANNELS)

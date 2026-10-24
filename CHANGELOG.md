@@ -8,6 +8,13 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- Stricter checks on every commit and pull request (`make lint`, `make
+  audit`, `make image-scan`, all in `make check`): clippy restriction lints
+  and no panicking slices in the parser; cargo-deny and cargo-machete; more
+  mypy error codes and ruff rule families; import-linter layer contracts;
+  vulture; `uv audit`; gitleaks; zizmor; hadolint; typos; trivy on the built
+  image; dependency review on pull requests; OpenSSF Scorecard.
+
 - `REDIS_CONNECT_TIMEOUT` (default 2 s): seconds to open a Redis connection,
   TLS handshake included.
 - **Deployment gates.** Every server runs the smoke test (status codes and
@@ -52,6 +59,7 @@ All notable changes to this project are documented here. The format follows
 
 ### Changed
 
+- The image runs as `USER 10001:10001` (the same `app` user, by number).
 - The image's health check probes every 2 s during the first 30 s, so a new
   container is healthy (and a deployment done) within seconds instead of 30 s.
 - **The Redis circuit breaker opens after three failures in a row within
@@ -71,6 +79,18 @@ All notable changes to this project are documented here. The format follows
   each worker opens its first connection at startup.
 - Deeply nested markup (tens of thousands of levels) no longer overflows the
   stack while a post is serialized, which aborted the worker process.
+
+### Security
+
+- ctutils 0.4.5 (RUSTSEC-2026-0385, non-constant-time comparisons under the
+  proof-of-work HMAC). The crate declared Rust 1.85, which kept the resolver
+  on the vulnerable release; it now declares 1.99, what it is built with.
+- The image no longer contains pip, whose vendored urllib3, msgpack and
+  setuptools had fixable high-severity advisories; it was never used at run
+  time.
+- The deploy workflow passes only the secrets it needs to the reusable
+  deployment, reads repository variables from the environment instead of
+  expanding them into the script, and keeps no git credentials after checkout.
 
 ## [2.0.0] - 2026-10-24
 

@@ -14,6 +14,9 @@ FROM python:${PYTHON_VERSION}-slim-trixie AS build
 COPY --from=uv /uv /usr/local/bin/uv
 COPY --from=rust /usr/local/cargo /usr/local/cargo
 COPY --from=rust /usr/local/rustup /usr/local/rustup
+# Not pinned (DL3008): Debian replaces versions with every security update,
+# so a pin breaks the build. Build stage only; the runtime image has none.
+# hadolint ignore=DL3008
 RUN apt-get update \
     && apt-get install --yes --no-install-recommends gcc libc6-dev \
     && rm -rf /var/lib/apt/lists/*
@@ -59,8 +62,12 @@ LABEL org.opencontainers.image.title="telegram-me" \
       org.opencontainers.image.version="${VERSION}" \
       org.opencontainers.image.revision="${REVISION}"
 
+# The base image's pip (with the copies of urllib3, msgpack and setuptools
+# it vendors) is never used here: the app runs from its own virtualenv.
 RUN groupadd --system --gid 10001 app \
-    && useradd --system --uid 10001 --gid app --no-create-home --shell /usr/sbin/nologin app
+    && useradd --system --uid 10001 --gid app --no-create-home --shell /usr/sbin/nologin app \
+    && python -m pip uninstall --yes --no-cache-dir pip \
+    && rm -rf /usr/local/lib/python*/ensurepip
 
 COPY --from=build --chown=root:root /app/.venv /app/.venv
 
@@ -70,7 +77,9 @@ ENV PATH="/app/.venv/bin:${PATH}" \
     PORT=3000
 
 WORKDIR /app
-USER app
+# Numeric, so the runtime can tell it is not root without /etc/passwd
+# (Kubernetes runAsNonRoot).
+USER 10001:10001
 EXPOSE 3000
 
 HEALTHCHECK --interval=30s --timeout=3s --start-period=30s --start-interval=2s --retries=3 \

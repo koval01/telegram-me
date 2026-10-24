@@ -23,8 +23,14 @@ Set up the project as described in
 - Types: **mypy --strict** over `src` and `tests`, with the Pydantic plugin.
   Public functions are fully annotated; `Any` is reserved for raw JSON.
 - Docstrings: every public module, class and function, Google style.
-- Layering: `api` → `services` → `telegram` / `cache`; nothing below `api`
-  imports FastAPI. Wire new long-lived objects in `container.py`.
+- Layering: `api` → `services` → `cache` → `telegram`; nothing below `api`
+  imports FastAPI. import-linter checks both (`[tool.importlinter]` in
+  `pyproject.toml`). Wire new long-lived objects in `container.py`.
+- Rust: no `unwrap()` in production code (an `expect("...")` states the
+  invariant instead), and in `src/parse/` no indexing or slicing that can
+  panic: use `get`, `split_once`, `strip_prefix`. The extension aborts on a
+  panic, which takes the worker down. See
+  [Static checks](testing.md#static-checks) for every tool.
 - Errors: raise the domain errors from `telegram/errors.py`; the API maps them
   to status codes in one place (`api/errors.py`).
 - Keep the `/v1` contract stable. New fields are fine; removing or renaming
@@ -41,13 +47,17 @@ uv lock --upgrade            # refresh everything to the newest versions
 ```
 
 Dependabot opens grouped weekly updates for Python packages, GitHub Actions
-and Docker base images.
+and Docker base images, for releases at least a week old (security updates
+come at once).
 
 ## Pre-commit
 
-`make install` installs git hooks that run ruff (with autofix), ruff format,
-mypy and a few hygiene checks on every commit, using the versions from
-`uv.lock`. Run them on demand with `uv run pre-commit run --all-files`.
+`make install` installs git hooks that run on every commit: ruff (with
+autofix), ruff format, mypy, import-linter, vulture, typos, zizmor, gitleaks
+on the staged changes, cargo fmt and clippy, and, when their files change,
+hadolint, cargo-deny and cargo-machete. The Python tools come from
+`uv.lock`; `make tools` installs the others. Run them on demand with
+`uv run pre-commit run --all-files`.
 
 ## Documentation
 

@@ -243,17 +243,51 @@ servidor y a través de la URL pública (véase
 [Producción](../deployment/production.md#how-a-deployment-works)), y el
 workflow **Nightly** la ejecuta contra t.me real y contra producción.
 
+## Comprobaciones estáticas { #static-checks }
+
+Además de las pruebas, cada commit pasa por comprobaciones que leen el código
+sin ejecutarlo. `make lint` y `make audit` las ejecutan en local (`make check`
+incluye ambas); `make tools` instala los binarios que `uv sync` no trae.
+
+| Herramienta | Encuentra | Configuración |
+|---|---|---|
+| clippy, pedantic y una selección de lints restriction y nursery | en el crate nativo: `unwrap()`, `panic!`, `todo!`, `dbg!`, impresión, `#[allow]` sin motivo; indexación y cortes de cadenas sin comprobar en el parser | `[lints]` en `rust/telegram-me-native/Cargo.toml`, `clippy.toml` |
+| cargo-deny | avisos de RustSec, crates sin mantenimiento o retirados (yanked), licencias fuera de la lista permitida, dos versiones de un crate, registros y fuentes git desconocidos | `rust/telegram-me-native/deny.toml` |
+| cargo-machete | dependencias de Rust que ningún código usa | |
+| mypy `--strict`, más `warn_unreachable` y doce códigos de error más | código inalcanzable, overrides sin `@override`, nombres posiblemente indefinidos, condiciones siempre verdaderas, `match` no exhaustivo | `[tool.mypy]` |
+| ruff | bugbear, bandit, ... y ahora también argumentos sin usar, `except` ciego, fechas sin zona horaria, código comentado, miembros privados de otras clases, imports relativos y `telegram_me_native._native` | `[tool.ruff]` |
+| import-linter | un import contra las capas: `api` → `container` → `services` → `cache` → `telegram` → `schemas` → `settings`, y FastAPI o strawberry por debajo de `api` | `[tool.importlinter]` |
+| vulture | funciones, atributos y variables de `src/` que nada en `src/` usa (que solo lo usen las pruebas no basta) | `[tool.vulture]`, `tests/vulture_whitelist.py` |
+| `uv audit` | vulnerabilidades conocidas de los paquetes de `uv.lock` | |
+| gitleaks | secretos en los archivos preparados (pre-commit) y en cada commit (CI), entre ellos la clave de bypass de Cloudflare | `.gitleaks.toml` |
+| zizmor | riesgos de GitHub Actions: inyección en plantillas, credenciales persistidas, secretos heredados, Dependabot sin espera | `.github/zizmor.yml` |
+| hadolint | errores del Dockerfile, hasta los de estilo | `.hadolint.yaml` |
+| typos | palabras mal escritas en código y documentación (páginas en inglés y ruso; las españolas se omiten) | `.typos.toml` |
+| shellcheck, actionlint | los scripts de despliegue y los workflows | |
+| trivy | vulnerabilidades altas y críticas con corrección en la imagen construida | `make image-scan` |
+| revisión de dependencias | dependencias vulnerables o con licencia GPL que añade un pull request | `.github/workflows/dependency-review.yml` |
+| OpenSSF Scorecard | prácticas de cadena de suministro del repositorio, como alertas de code scanning | `.github/workflows/scorecard.yml` |
+
+Un hallazgo se corrige, o se permite de la forma más acotada que admita la
+herramienta y con el motivo al lado: `#[expect(lint, reason = "...")]` en Rust
+(un `#[allow]` falla), `# noqa: CODE - por qué` en Python, una entrada con un
+comentario en la configuración de la herramienta. Nada se desactiva para un
+archivo entero para que una comprobación pase.
+
 ## Trabajos de CI { #ci-jobs }
 
 | Workflow, trabajo | Cuándo | Duración | Detecta |
 |---|---|---|---|
-| CI: Rust | cada push | ~3 min | fmt, clippy, pruebas de Rust (HTML hostil), umbral de cobertura de Rust |
-| CI: Lint & types | cada push | ~3,5 min | ruff, mypy, shellcheck, actionlint |
+| CI: Rust | cada push | ~3 min | fmt, clippy, cargo-deny y cargo-machete (+15 s), pruebas de Rust (HTML hostil), umbral de cobertura de Rust |
+| CI: Lint & types | cada push | ~4 min | ruff, mypy, import-linter, vulture, `uv audit`, typos, shellcheck, actionlint, zizmor, hadolint, gitleaks sobre el historial (en total +30 s) |
 | CI: Tests | cada push | ~2 min | la batería anterior en Python 3.13 y 3.14, umbral de cobertura de Python |
 | CI: Docker image smoke test | tras los tres anteriores | ~2 min | la imagen arranca endurecida, matriz de humo contra t.me real, parada ordenada |
+| CI: Image vulnerabilities | tras la imagen | ~1 min | trivy: vulnerabilidades altas y críticas con corrección |
 | CI: Integration | tras la imagen | ~2 min | [pruebas de integración](#integration-tests) |
 | CI: Deploy scripts | tras la imagen | ~2 min | [pruebas de los scripts de despliegue](#deploy-scripts) |
 | Guards | cada pull request, cambios de etiquetas | ~10 s | [cambios incompatibles de la API](#breaking-changes), umbrales de cobertura rebajados |
+| Dependency review | cada pull request | ~15 s | dependencias añadidas con vulnerabilidades conocidas o licencia GPL |
+| Scorecard | pushes a `main`, los lunes | ~1 min | OpenSSF Scorecard (solo lee la rama por defecto) |
 | Nightly | 03:23 UTC a diario | ~15 min | pruebas de humo contra t.me real y producción, 10 min de fuzzing, ejecuciones largas de propiedades; abre una issue con la etiqueta `nightly` |
 
 Release (pushes a `main`) ejecuta CI y Guards antes de construir y desplegar

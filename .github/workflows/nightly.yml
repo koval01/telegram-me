@@ -37,6 +37,8 @@ jobs:
       APP_IMAGE: ${{ vars.DEPLOY_IMAGE || 'docker.io/koval01/telegram-me' }}:latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - name: Start the image with Valkey (compose.yaml, preset full)
         run: PRESET=full docker compose up -d --wait --wait-timeout 120 --pull always
       - name: Smoke matrix, every channel
@@ -51,6 +53,8 @@ jobs:
     if: vars.PUBLIC_URL != '' || vars.PUBLIC_HOST != ''
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - name: Smoke matrix
         env:
           URL: ${{ vars.PUBLIC_URL || format('https://{0}', vars.PUBLIC_HOST) }}
@@ -68,6 +72,8 @@ jobs:
         working-directory: rust/telegram-me-native/fuzz
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - name: Install nightly Rust and cargo-fuzz
         run: rustup toolchain install nightly --profile minimal
       - uses: taiki-e/install-action@1e29709c0ec63babbe8f266397a465f29a825f91 # v2.87.31
@@ -93,6 +99,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - uses: astral-sh/setup-uv@07a047e608db84b3d8c06cd9a7c7dcc9c355c18e # v10.3.2
         with:
           version: ${{ env.UV_VERSION }}

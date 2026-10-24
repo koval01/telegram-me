@@ -270,7 +270,7 @@ def test_upstream_unavailable(
     assert [record.levelno for record in caplog.records] == [logging.WARNING]
 
 
-def test_unparseable_upstream() -> None:
+def test_unparsable_upstream() -> None:
     with serve(StaticFetcher(200, "<not json>")) as client:
         result = gql.execute(
             client, '{ more(channel: "durov", direction: before, position: 5) { posts { id } } }'

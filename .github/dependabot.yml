@@ -1,9 +1,14 @@
 version: 2
+# A release waits a week before Dependabot proposes it, so a compromised
+# version is usually yanked before it reaches a pull request. Security
+# updates do not wait.
 updates:
   - package-ecosystem: uv
     directory: /
     schedule:
       interval: weekly
+    cooldown:
+      default-days: 7
     groups:
       python:
         patterns: ["*"]
@@ -13,6 +18,8 @@ updates:
     directory: /rust/telegram-me-native
     schedule:
       interval: weekly
+    cooldown:
+      default-days: 7
     groups:
       rust:
         patterns: ["*"]
@@ -21,6 +28,8 @@ updates:
     directory: /
     schedule:
       interval: weekly
+    cooldown:
+      default-days: 7
     groups:
       actions:
         patterns: ["*"]
@@ -29,8 +38,12 @@ updates:
     directory: /
     schedule:
       interval: weekly
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: docker-compose
     directory: /
     schedule:
       interval: weekly
+    cooldown:
+      default-days: 7

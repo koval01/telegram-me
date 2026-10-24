@@ -1,0 +1,26 @@
+# gitleaks (secrets in files and history): pre-commit scans what is staged,
+# CI scans the commits of the push or pull request, `make audit` everything.
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Signed URLs of public t.me media (cdnN.telesco.pe) in recorded pages and snapshots"
+regexTarget = "line"
+regexes = ['''https://cdn\d*\.telesco\.pe/file/[\w.-]+\?token=''']
+
+# The Cloudflare skip-rule key of production (CF_BYPASS_KEY, header
+# x-bypass-key) is 128 hex digits: the default rules miss it in a curl
+# command or a bare value.
+[[rules]]
+id = "cloudflare-bypass-key"
+description = "Cloudflare WAF skip-rule key (x-bypass-key)"
+regex = '''(?i)(?:x-bypass-key|bypass[_-]?key)["']?\s*[:=]\s*["']?([0-9a-f]{32,})'''
+secretGroup = 1
+keywords = ["bypass"]
+
+[[rules]]
+id = "hex-512-bit-secret"
+description = "512-bit hex value, the size of the bypass key (hashes in the lockfiles are 256-bit)"
+regex = '''\b([0-9a-f]{128})\b'''
+secretGroup = 1
+entropy = 3.5

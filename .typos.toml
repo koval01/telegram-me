@@ -1,0 +1,18 @@
+# typos (spelling in code and docs), run by `make lint`, pre-commit and CI.
+[files]
+extend-exclude = [
+    # typos knows English only and flags Spanish words (`cliente`, `hace`).
+    # The Russian pages are checked: it leaves Cyrillic alone, and still
+    # reads their code and English terms.
+    "docs/es/",
+    # Recorded t.me pages and the responses built from them.
+    "tests/fixtures/",
+    "tests/snapshots/",
+    "*.lock",
+]
+
+[default.extend-words]
+# TelegramMe's short name: TME_TEST_IMAGE, tme.koval-dev.org.
+tme = "tme"
+# The HTTP benchmarking tool.
+wrk = "wrk"

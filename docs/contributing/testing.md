@@ -227,17 +227,51 @@ image on every pull request, every deployment runs it on every server and
 through the public URL (see [Production](../deployment/production.md#how-a-deployment-works)),
 and the **Nightly** workflow runs it against live t.me and production.
 
+## Static checks
+
+Besides the tests, every commit goes through checks that read the code
+without running it. `make lint` and `make audit` run them locally (`make
+check` includes both); `make tools` installs the binaries that `uv sync` does
+not bring.
+
+| Tool | Finds | Settings |
+|---|---|---|
+| clippy, pedantic and selected restriction and nursery lints | in the native crate: `unwrap()`, `panic!`, `todo!`, `dbg!`, printing, `#[allow]` without a reason; unchecked indexing and string slicing in the parser | `[lints]` in `rust/telegram-me-native/Cargo.toml`, `clippy.toml` |
+| cargo-deny | RustSec advisories, unmaintained and yanked crates, licenses outside the allow list, two versions of a crate, unknown registries and git sources | `rust/telegram-me-native/deny.toml` |
+| cargo-machete | Rust dependencies no code uses | |
+| mypy `--strict`, plus `warn_unreachable` and twelve more error codes | unreachable code, overrides without `@override`, possibly undefined names, always-true conditions, non-exhaustive `match` | `[tool.mypy]` |
+| ruff | bugbear, bandit, ... and now also unused arguments, blind `except`, naive datetimes, commented-out code, private members of other classes, relative imports and `telegram_me_native._native` | `[tool.ruff]` |
+| import-linter | an import against the layering: `api` → `container` → `services` → `cache` → `telegram` → `schemas` → `settings`, and FastAPI or strawberry below `api` | `[tool.importlinter]` |
+| vulture | functions, attributes and variables in `src/` that nothing in `src/` uses (only tests is not enough) | `[tool.vulture]`, `tests/vulture_whitelist.py` |
+| `uv audit` | known vulnerabilities of the packages in `uv.lock` | |
+| gitleaks | secrets in staged files (pre-commit) and in every commit (CI), among them the Cloudflare bypass key | `.gitleaks.toml` |
+| zizmor | GitHub Actions risks: template injection, persisted credentials, inherited secrets, Dependabot without cooldown | `.github/zizmor.yml` |
+| hadolint | Dockerfile mistakes, down to style | `.hadolint.yaml` |
+| typos | misspelled words in code and docs (English and Russian pages; Spanish ones are skipped) | `.typos.toml` |
+| shellcheck, actionlint | the deploy scripts and the workflows | |
+| trivy | high and critical vulnerabilities with a fix in the built image | `make image-scan` |
+| dependency review | vulnerable or GPL-licensed dependencies a pull request adds | `.github/workflows/dependency-review.yml` |
+| OpenSSF Scorecard | supply-chain practices of the repository, as code-scanning alerts | `.github/workflows/scorecard.yml` |
+
+A finding is fixed, or allowed as narrowly as the tool permits with the
+reason next to it: `#[expect(lint, reason = "...")]` in Rust (an `#[allow]`
+fails), `# noqa: CODE - why` in Python, an entry with a comment in the tool's
+settings. Nothing is switched off for a whole file to make a check pass.
+
 ## CI jobs { #ci-jobs }
 
 | Workflow, job | When | Takes | Catches |
 |---|---|---|---|
-| CI: Rust | every push | ~3 min | fmt, clippy, Rust tests (hostile HTML), Rust coverage floor |
-| CI: Lint & types | every push | ~3.5 min | ruff, mypy, shellcheck, actionlint |
+| CI: Rust | every push | ~3 min | fmt, clippy, cargo-deny and cargo-machete (+15 s), Rust tests (hostile HTML), Rust coverage floor |
+| CI: Lint & types | every push | ~4 min | ruff, mypy, import-linter, vulture, `uv audit`, typos, shellcheck, actionlint, zizmor, hadolint, gitleaks over the history (together +30 s) |
 | CI: Tests | every push | ~2 min | the suite above on Python 3.13 and 3.14, Python coverage floor |
 | CI: Docker image smoke test | after the three above | ~2 min | the image starts hardened, smoke matrix against live t.me, graceful stop |
+| CI: Image vulnerabilities | after the image | ~1 min | trivy: high and critical vulnerabilities with a fix |
 | CI: Integration | after the image | ~2 min | [integration tests](#integration-tests) |
 | CI: Deploy scripts | after the image | ~2 min | [deploy script tests](#deploy-scripts) |
 | Guards | every pull request, label changes | ~10 s | [breaking API changes](#breaking-changes), lowered coverage floors |
+| Dependency review | every pull request | ~15 s | added dependencies with known vulnerabilities or a GPL license |
+| Scorecard | pushes to `main`, Mondays | ~1 min | OpenSSF Scorecard (it reads only the default branch) |
 | Nightly | 03:23 UTC daily | ~15 min | live t.me and production smoke tests, 10 min of fuzzing, long property runs; opens an issue labelled `nightly` |
 
 Release (pushes to `main`) runs CI and Guards before the image is built and
