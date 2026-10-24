@@ -14,7 +14,8 @@
 //! Without encryption the body is the payload and an HMAC-SHA256 tag over
 //! header and payload. With it the body is the payload encrypted with
 //! XChaCha20-Poly1305 (the header is the associated data) and its 16-byte
-//! tag. Both keys are derived from `PEER_SECRET` (HKDF-SHA256).
+//! tag. Both keys are derived from `PEER_SECRET` (HKDF-SHA256 expand, one
+//! label per key in its `info`).
 //!
 //! A frame is accepted only if its tag verifies, its time is within
 //! [`WINDOW`] of ours and its nonce was not seen before (a replay). Nonces
@@ -50,7 +51,9 @@ const ENCRYPTED: u8 = 1;
 const MAC_LEN: usize = 32;
 const AEAD_TAG_LEN: usize = 16;
 const NONCE_LEN: usize = 24;
-const SALT: &[u8] = b"telegram-me peer v1";
+// HKDF `info` labels: domain separation between the protocol's keys.
+const MAC_INFO: &[u8] = b"telegram-me peer v1 mac";
+const ENCRYPTION_INFO: &[u8] = b"telegram-me peer v1 encryption";
 
 type Nonce = [u8; NONCE_LEN];
 
@@ -101,10 +104,9 @@ impl Sealer {
     /// When the OS random number generator fails.
     #[must_use]
     pub fn new(secret: &[u8], encrypt: bool) -> Self {
-        let prk = hmac(SALT, &[secret]);
-        let mac_key = hmac(&prk, &[b"mac", &[1]]);
+        let mac_key = expand(secret, MAC_INFO);
         let cipher = encrypt.then(|| {
-            let key = hmac(&prk, &[b"enc", &[1]]);
+            let key = expand(secret, ENCRYPTION_INFO);
             XChaCha20Poly1305::new_from_slice(&key).expect("the key is 32 bytes")
         });
         // A random prefix and a counter: unique nonces without a system call
@@ -253,11 +255,15 @@ impl Sealer {
     }
 }
 
-fn hmac(key: &[u8], parts: &[&[u8]]) -> [u8; 32] {
-    let mut mac = HmacSha256::new_from_slice(key).expect("HMAC takes keys of any length");
-    for part in parts {
-        mac.update(part);
-    }
+/// HKDF-SHA256 expand (RFC 5869) of one 32-byte key for `info`.
+///
+/// The secret is the pseudorandom key itself: the extract step, with no salt,
+/// may be skipped for input that is already a strong key (RFC 5869 §3.3), and
+/// `PEER_SECRET` must be at least 32 characters.
+fn expand(secret: &[u8], info: &[u8]) -> [u8; 32] {
+    let mut mac = HmacSha256::new_from_slice(secret).expect("HMAC takes keys of any length");
+    mac.update(info);
+    mac.update(&[1]);
     mac.finalize().into_bytes().into()
 }
 
@@ -340,6 +346,14 @@ mod tests {
     }
 
     #[test]
+    fn each_key_has_its_own_label() {
+        let secret = secret();
+        assert_ne!(expand(&secret, MAC_INFO), expand(&secret, ENCRYPTION_INFO));
+        assert_ne!(expand(&secret, MAC_INFO), expand(&self::secret(), MAC_INFO));
+        assert_eq!(expand(&secret, MAC_INFO), expand(&secret, MAC_INFO));
+    }
+
+    #[test]
     fn encryption_hides_the_payload() {
         let sealer = Sealer::new(&secret(), true);
         let frame = sealer.seal_at(b"durov durov durov", NOW);
@@ -400,7 +414,8 @@ mod tests {
     #[test]
     fn nonces_are_remembered_as_long_as_frames_pass_the_clock() {
         let mut guard = ReplayGuard::new(2 * WINDOW);
-        let nonce = [7; NONCE_LEN];
+        let mut nonce = [0; NONCE_LEN];
+        getrandom::fill(&mut nonce).unwrap();
         assert!(guard.admit(nonce, NOW));
         for later in [1, WINDOW, 2 * WINDOW, 3 * WINDOW, 4 * WINDOW - 1] {
             assert!(!guard.admit(nonce, NOW + later), "{later}");
