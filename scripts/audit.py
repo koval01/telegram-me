@@ -7,7 +7,8 @@ Drives the ASGI app directly (no HTTP client) over the recorded fixtures, so
 only the service is measured. For every endpoint it prints the median wall
 time, the median CPU time of the whole process (all threads) and the bytes
 Python allocates per request (tracemalloc, measured separately). `--stages`
-adds a breakdown of the cold page pipeline and of a feed build.
+adds a breakdown of the cold page pipeline and of a feed build; `--memory N`
+only measures the resident memory of N 100-channel feeds (run it on Linux).
 
 Feed and previews requests use made-up aliases of the recorded channels
 (`durov_m3`) that also get their own username, so a 100-channel feed ranks
@@ -218,6 +219,27 @@ async def mixed(runs: int, results: dict[str, Any]) -> None:
         print(f"  {name:16} {value:8.2f}")
 
 
+async def feed_memory(requests: int, results: dict[str, Any]) -> None:
+    """Resident memory of a worker serving 100-channel feeds (Linux: current RSS)."""
+    from tests.workload import peak_rss_mb, rss_mb  # noqa: PLC0415
+
+    settings = make_settings(log_level="ERROR")
+    app = create_app(settings, fetcher=DistinctFetcher())
+    method, path, body = _feed(100)
+    async with app.router.lifespan_context(app):
+        await call(app, method, path, body)
+        gc.collect()
+        warm = rss_mb()
+        for _ in range(requests):
+            await call(app, method, path, body)
+        gc.collect()
+        row = {"rss_warm_mb": warm, "rss_after_mb": rss_mb(), "peak_rss_mb": peak_rss_mb()}
+    results["feed_memory"] = row
+    print(f"\n{requests} x 100-channel feed, memory (MiB)")
+    for name, value in row.items():
+        print(f"  {name:16} {value if value is None else round(value, 1)}")
+
+
 def _median_ms(action: Callable[[], object], runs: int) -> float:
     action()
     samples = []
@@ -290,8 +312,16 @@ def main() -> None:
     parser.add_argument("--runs", type=int, default=200)
     parser.add_argument("--stages", action="store_true", help="add the per-stage breakdown")
     parser.add_argument("--json", type=Path, help="also write the numbers to this file")
+    parser.add_argument(
+        "--memory", type=int, metavar="N", help="only measure memory over N feed requests"
+    )
     args = parser.parse_args()
     results: dict[str, Any] = {}
+    if args.memory:
+        asyncio.run(feed_memory(args.memory, results))
+        if args.json:
+            args.json.write_text(json.dumps(results, indent=2) + "\n")
+        return
     asyncio.run(endpoints(args.runs, results))
     asyncio.run(mixed(args.runs, results))
     if args.stages:
