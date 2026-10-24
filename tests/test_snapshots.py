@@ -167,7 +167,7 @@ SYNTHETIC_PAGES: dict[str, dict[str, Any]] = {
                 ),
                 _synthetic_post(1, "repeated id, dropped"),
                 _synthetic_post(
-                    3, 'ctl \u0001 sep   "quoted" back\\slash / 😀  ', views="n/a"
+                    3, 'ctl \u0001 sep \u2028 "quoted" back\\slash / 😀 \u00a0', views="n/a"
                 ),
                 _synthetic_post(4, "overrides", channel="replaced in place", _score=-1),
             ]
@@ -194,7 +194,7 @@ SYNTHETIC_PAGES: dict[str, dict[str, Any]] = {
                 _synthetic_post(20, "Старт ракеты с космодрома: запуск ракеты назначен на утро"),
                 {"id": 21, "view": "no footer, no content"},
                 {"id": 22, "content": None, "footer": None, "view": "nulls"},
-                _synthetic_post(23, None, views="10 281"),
+                _synthetic_post(23, None, views="10\u00a0281"),
             ]
         },
     },

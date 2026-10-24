@@ -5,6 +5,7 @@
 //! optional `python` feature adds the `PyO3` bindings built by maturin.
 
 pub mod cache;
+pub mod feed;
 pub mod parse;
 pub mod pow;
 pub mod rank;

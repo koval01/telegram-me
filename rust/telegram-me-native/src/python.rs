@@ -1,76 +1,21 @@
 //! `PyO3` bindings: `telegram_me_native._native`.
 //!
-//! Inputs are copied into Rust structures while holding the GIL; the ranking
-//! itself runs detached from the interpreter, so other Python threads (and the
-//! event loop, when called through `asyncio.to_thread`) keep running.
+//! Every call does its work detached from the interpreter, so other Python
+//! threads (and the event loop, when called through `asyncio.to_thread` or an
+//! executor) keep running.
 
 use pyo3::prelude::*;
+use pyo3::pybacked::{PyBackedBytes, PyBackedStr};
 use pyo3::types::PyBytes;
 
 use std::time::Duration;
 
 use crate::cache;
+use crate::feed;
 use crate::parse;
 use crate::pow;
 use crate::rank as ranking;
 use crate::ratelimit;
-
-/// One post to rank.
-#[pyclass(frozen, module = "telegram_me_native._native", name = "Candidate")]
-pub struct PyCandidate {
-    inner: ranking::Candidate,
-}
-
-#[pymethods]
-impl PyCandidate {
-    #[new]
-    #[pyo3(signature = (
-        *, channel, post_id, published_at, views = 0, subscribers = 0,
-        positive_reactions = 0, negative_reactions = 0, photos = 0, videos = 0,
-        gifs = 0, polls = 0, text = String::new(), edited = false
-    ))]
-    #[allow(clippy::too_many_arguments)]
-    fn new(
-        channel: String,
-        post_id: u64,
-        published_at: i64,
-        views: u64,
-        subscribers: u64,
-        positive_reactions: u64,
-        negative_reactions: u64,
-        photos: u32,
-        videos: u32,
-        gifs: u32,
-        polls: u32,
-        text: String,
-        edited: bool,
-    ) -> Self {
-        Self {
-            inner: ranking::Candidate {
-                channel,
-                post_id,
-                published_at,
-                views,
-                subscribers,
-                positive_reactions,
-                negative_reactions,
-                photos,
-                videos,
-                gifs,
-                polls,
-                text,
-                edited,
-            },
-        }
-    }
-
-    fn __repr__(&self) -> String {
-        format!(
-            "Candidate(channel={:?}, post_id={})",
-            self.inner.channel, self.inner.post_id
-        )
-    }
-}
 
 /// Ranking parameters.
 #[pyclass(frozen, module = "telegram_me_native._native", name = "RankOptions")]
@@ -114,57 +59,27 @@ impl PyRankOptions {
     }
 }
 
-/// A ranked post: `index` into the candidate list.
-#[pyclass(
-    frozen,
-    get_all,
-    module = "telegram_me_native._native",
-    name = "RankedItem"
-)]
-pub struct PyRankedItem {
-    index: usize,
-    score: f64,
-    duplicates: Vec<usize>,
-    topic: Option<usize>,
-}
-
-/// A group of posts about the same subject.
-#[pyclass(frozen, get_all, module = "telegram_me_native._native", name = "Topic")]
-pub struct PyTopic {
-    keywords: Vec<String>,
-    members: Vec<usize>,
-}
-
-/// Rank candidates; returns `(items in feed order, topics)`.
+/// Rank the posts of cached channel pages and render the `/v1/feed` body.
+///
+/// `pages` are `(requested username, cached page JSON)`. Returns the response
+/// JSON and the indices of pages that could not be read (they are left out).
+/// The work runs detached from the interpreter, reading the page bytes in place.
 #[pyfunction]
 #[allow(clippy::needless_pass_by_value)] // PyO3 extracts arguments by value
-fn rank(
-    py: Python<'_>,
-    candidates: Vec<PyRef<'_, PyCandidate>>,
-    options: PyRef<'_, PyRankOptions>,
-) -> (Vec<PyRankedItem>, Vec<PyTopic>) {
-    let inputs: Vec<ranking::Candidate> = candidates.iter().map(|c| c.inner.clone()).collect();
+fn build_feed<'py>(
+    py: Python<'py>,
+    pages: Vec<(PyBackedStr, PyBackedBytes)>,
+    options: PyRef<'py, PyRankOptions>,
+) -> (Bound<'py, PyBytes>, Vec<usize>) {
     let options = options.inner.clone();
-    let ranking = py.detach(move || ranking::rank(&inputs, &options));
-    let items = ranking
-        .items
-        .into_iter()
-        .map(|item| PyRankedItem {
-            index: item.index,
-            score: item.score,
-            duplicates: item.duplicates,
-            topic: item.topic,
-        })
-        .collect();
-    let topics = ranking
-        .topics
-        .into_iter()
-        .map(|topic| PyTopic {
-            keywords: topic.keywords,
-            members: topic.members,
-        })
-        .collect();
-    (items, topics)
+    let built = py.detach(|| {
+        let pages: Vec<feed::Page<'_>> = pages
+            .iter()
+            .map(|(channel, json)| feed::Page { channel, json })
+            .collect();
+        feed::build(&pages, &options)
+    });
+    (PyBytes::new(py, &built.json), built.unreadable)
 }
 
 /// Skipped posts as `(data-post, reason)`.
@@ -373,15 +288,12 @@ fn solve_pow(challenge: &str, method: &str, target: &str, bits: u8) -> String {
 #[pymodule]
 fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     module.add("__version__", env!("CARGO_PKG_VERSION"))?;
-    module.add_class::<PyCandidate>()?;
     module.add_class::<PyRankOptions>()?;
-    module.add_class::<PyRankedItem>()?;
-    module.add_class::<PyTopic>()?;
     module.add_class::<PyLocalCache>()?;
     module.add_class::<PyRateLimiter>()?;
     module.add_class::<PyProofOfWork>()?;
     module.add_function(wrap_pyfunction!(solve_pow, module)?)?;
-    module.add_function(wrap_pyfunction!(rank, module)?)?;
+    module.add_function(wrap_pyfunction!(build_feed, module)?)?;
     module.add_function(wrap_pyfunction!(parse_channel_page, module)?)?;
     module.add_function(wrap_pyfunction!(parse_more_page, module)?)?;
     module.add_function(wrap_pyfunction!(parse_preview_page, module)?)?;
