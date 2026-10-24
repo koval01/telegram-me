@@ -24,6 +24,29 @@ All notable changes to this project are documented here. The format follows
   longer stalls the worker's other requests: a cached `/v1/body` next to a
   feed loop went from 62 to 10 ms at p99. Responses are byte-for-byte the
   same. Resident memory is unchanged within noise.
+- **Identical concurrent requests do the work once, across all workers and
+  servers.** With Redis, the process that fetches a page from t.me takes a
+  short lease (extended while it runs); every other worker and server waits
+  for its result in the cache instead of fetching the same page. Under a
+  duplicate-heavy load on 6 processes, upstream requests dropped from 15–16
+  to 2.8 per distinct page over 25 s (one per TTL period, 75 instead of
+  ~420), also with Redis 90 ms away, and CPU per request from 1.4 ms to
+  0.27–0.29 ms. When Redis is slow or down, each worker still coalesces on
+  its own.
+- Rendering is shared too: concurrent misses of `/v1/body` render the page
+  once (it was rendered once per request), `/v1/post` responses are cached
+  rendered (a hit takes 0.07 ms instead of 0.24 ms), and identical
+  `/v1/feed` requests (REST or GraphQL, channel names in any case) are built
+  once, and decoded once for GraphQL.
+- Popular pages are renewed in the background shortly before they expire,
+  so they no longer expire under load and nobody waits for t.me at expiry.
+- The per-worker cap on requests to t.me (`TELEGRAM_MAX_CONCURRENCY`) is
+  shared fairly: round-robin over channels and feed requests instead of
+  first come, first served, and background refreshes only use spare
+  capacity. The feed refresher no longer fetches pages that any process
+  fetched moments ago.
+- Requests beyond the new queue bounds are answered `503` with
+  `Retry-After` instead of queueing without limit.
 - **Repeated requests no longer wait for Redis.** Each worker keeps an
   in-process cache in front of Redis: a repeated `/v1/body`, `/v1/post`,
   `/v1/more` or `/v1/preview` takes 0.1–0.25 ms instead of one Redis round
@@ -57,6 +80,14 @@ All notable changes to this project are documented here. The format follows
 - The contract snapshots also pin every REST response byte for byte
   (`tests/snapshots/raw_digests.json`), and a synthetic feed covers
   duplicates and malformed pages.
+- `UPSTREAM_QUEUE_LIMIT` (default 16 × `TELEGRAM_MAX_CONCURRENCY`) and
+  `MAX_WAITING_REQUESTS` (default 4096): per-worker bounds beyond which
+  requests are shed with `503`.
+- `SHARED_COALESCING` (default `true`): the cross-process fetch lease.
+- `EARLY_REFRESH_WINDOW` (default `0.1`): how close to expiry popular entries
+  are renewed in the background; `0` disables it.
+- `scripts/coalescing_load.py`: duplicate-heavy load over several worker
+  processes sharing one Redis.
 - `MEMORY_CACHE_MAX_TTL` (default 10 s): with Redis, the longest a worker
   keeps its own copy of an entry, which bounds how late it sees an entry
   another server or the feed worker wrote.

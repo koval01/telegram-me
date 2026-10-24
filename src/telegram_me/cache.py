@@ -67,8 +67,14 @@ class Cache(Protocol):
         """Return the entry for `key`, or None when missing or unavailable."""
         ...
 
-    async def set(self, key: str, value: bytes, ttl: float) -> None:
-        """Store `value` under `key` for `ttl` seconds (best effort)."""
+    async def set(
+        self, key: str, value: bytes, ttl: float, *, stored_at: float | None = None
+    ) -> None:
+        """Store `value` under `key` for `ttl` seconds (best effort).
+
+        `stored_at` (default: now) is the time the value counts as fresh from,
+        for a value derived from an older one.
+        """
         ...
 
     async def close(self) -> None:
@@ -101,8 +107,10 @@ class MemoryCache:
         found = self._native.get(key)
         return None if found is None else CacheEntry(*found)
 
-    async def set(self, key: str, value: bytes, ttl: float) -> None:  # noqa: D102
-        self._native.set(key, value, ttl, time.time())
+    async def set(  # noqa: D102
+        self, key: str, value: bytes, ttl: float, *, stored_at: float | None = None
+    ) -> None:
+        self._native.set(key, value, ttl, time.time() if stored_at is None else stored_at)
 
     def put(self, key: str, value: bytes, ttl: float, stored_at: float) -> None:
         """Store `value` with a given store time (synchronous)."""
@@ -159,7 +167,7 @@ class RedisCache:
         except (RedisError, OSError) as exc:
             self.trip(exc)
             return None
-        return _decode_entry(raw)
+        return decode_entry(raw)
 
     async def get_with_ttl(self, key: str) -> tuple[CacheEntry, float | None] | None:
         """The entry for `key` and its remaining TTL in seconds (None if unknown).
@@ -176,7 +184,7 @@ class RedisCache:
         except (RedisError, OSError) as exc:
             self.trip(exc)
             return None
-        entry = _decode_entry(raw)
+        entry = decode_entry(raw)
         if entry is None:
             return None
         # PTTL is -1 for a key without expiry and -2 for one gone meanwhile.
@@ -199,7 +207,7 @@ class RedisCache:
         await self.client.aclose()
 
 
-def _decode_entry(raw: object) -> CacheEntry | None:
+def decode_entry(raw: object) -> CacheEntry | None:
     """Parse a stored value: the Unix time it was stored at, a newline, the payload."""
     if not isinstance(raw, bytes):
         return None
@@ -250,8 +258,10 @@ class TwoLevelCache:
         self.local.fill(key, entry.value, local_ttl, entry.stored_at)
         return entry
 
-    async def set(self, key: str, value: bytes, ttl: float) -> None:  # noqa: D102
-        stored_at = time.time()
+    async def set(  # noqa: D102
+        self, key: str, value: bytes, ttl: float, *, stored_at: float | None = None
+    ) -> None:
+        stored_at = time.time() if stored_at is None else stored_at
         local_ttl = min(ttl, self._max_local_ttl) if self.shared.available else ttl
         self.local.put(key, value, local_ttl, stored_at)
         await self.shared.set(key, value, ttl, stored_at=stored_at)

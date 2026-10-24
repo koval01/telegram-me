@@ -7,10 +7,11 @@ from concurrent.futures import ThreadPoolExecutor
 from contextlib import AsyncExitStack, asynccontextmanager, suppress
 from dataclasses import dataclass
 
-from telegram_me.cache import Cache, create_cache, create_redis, shared_cache
+from telegram_me.cache import Cache, TwoLevelCache, create_cache, create_redis, shared_cache
 from telegram_me.memory import trimming_memory
 from telegram_me.services.channels import ChannelService
 from telegram_me.services.feed import FeedRefresher, FeedService
+from telegram_me.services.lease import Lease, LocalLease, RedisLease
 from telegram_me.services.popularity import (
     LeaderLock,
     LocalLeaderLock,
@@ -19,12 +20,15 @@ from telegram_me.services.popularity import (
     RedisLeaderLock,
     RedisPopularity,
 )
+from telegram_me.services.upstream import FairGate
 from telegram_me.settings import Settings
 from telegram_me.telegram.client import Fetcher, ReqwestFetcher, TelegramClient
 
 logger = logging.getLogger(__name__)
 
 _LEADER_TTL = 30.0
+# A fetch lease lives this long unless its holder extends it (see RedisLease).
+_LEASE_TTL = 3.0
 # Threads that parse and render fetched pages off the event loop. The native
 # parser releases the GIL, so two keep up with a busy worker; more would only
 # contend with the event loop for the GIL and each add a malloc arena.
@@ -42,6 +46,7 @@ class Container:
     feed: FeedService
     popularity: Popularity
     leader_lock: LeaderLock
+    lease: Lease
 
     def refresher(self) -> FeedRefresher:
         """A refresher wired to this container's services."""
@@ -59,7 +64,8 @@ async def build_container(
         stack.push_async_callback(cache.close)
 
         fetcher = fetcher or ReqwestFetcher(timeout=settings.telegram_timeout)
-        client = TelegramClient(fetcher, max_concurrency=settings.telegram_max_concurrency)
+        gate = FairGate(settings.telegram_max_concurrency, settings.upstream_queue_limit)
+        client = TelegramClient(fetcher, settings.telegram_max_concurrency, gate)
         stack.push_async_callback(client.close)
 
         popularity: Popularity
@@ -71,10 +77,23 @@ async def build_container(
             popularity = MemoryPopularity()
             leader_lock = LocalLeaderLock()
 
+        lease: Lease = LocalLease()
+        if shared is not None and settings.shared_coalescing:
+            lease = RedisLease(
+                shared,
+                ttl=_LEASE_TTL,
+                # A live holder may retry once after a network error.
+                max_wait=2 * settings.telegram_timeout + _LEASE_TTL,
+                local=cache.local if isinstance(cache, TwoLevelCache) else None,
+                max_local_ttl=settings.memory_cache_max_ttl,
+            )
+            # Runs before the cache closes: pending lease releases still reach Redis.
+            stack.push_async_callback(lease.drain)
+
         executor = stack.enter_context(
             ThreadPoolExecutor(_PARSE_THREADS, thread_name_prefix="telegram-me-parse")
         )
-        channels = ChannelService(client, cache, settings, executor)
+        channels = ChannelService(client, cache, settings, executor, lease)
         yield Container(
             settings=settings,
             cache=cache,
@@ -83,6 +102,7 @@ async def build_container(
             feed=FeedService(channels, popularity, settings),
             popularity=popularity,
             leader_lock=leader_lock,
+            lease=lease,
         )
 
 

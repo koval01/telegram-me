@@ -6,7 +6,6 @@ pyreqwest, so HTTP/2, TLS, connection pooling and decompression run in Rust
 hands the HTML to the lexbor-based parser.
 """
 
-import asyncio
 import json
 import logging
 from collections.abc import Mapping
@@ -16,6 +15,7 @@ from typing import Literal, NamedTuple, Protocol
 from pyreqwest.client import Client, ClientBuilder
 from pyreqwest.exceptions import NetworkError, PyreqwestError
 
+from telegram_me.services.upstream import FairGate
 from telegram_me.telegram.errors import (
     TelegramNotFoundError,
     TelegramParseError,
@@ -129,11 +129,15 @@ class ReqwestFetcher:
 class TelegramClient:
     """Typed access to the three kinds of t.me pages the API is built on."""
 
-    def __init__(self, fetcher: Fetcher, max_concurrency: int) -> None:
+    def __init__(
+        self, fetcher: Fetcher, max_concurrency: int, gate: FairGate | None = None
+    ) -> None:
         self._fetcher = fetcher
         # Caps simultaneous requests to t.me across the whole process, so one
-        # large feed or previews call can not trigger upstream rate limiting.
-        self._semaphore = asyncio.Semaphore(max_concurrency)
+        # large feed or previews call can not trigger upstream rate limiting,
+        # and shares the slots fairly (see `services.upstream`).
+        self.gate = gate or FairGate(max_concurrency)
+        self.requests = 0
 
     async def channel_page(self, channel: str, position: int | None = None) -> str:
         """HTML of `t.me/s/<channel>`, optionally centered around post `position`."""
@@ -141,7 +145,7 @@ class TelegramClient:
         if position is not None:
             _check_position(position)
         path = f"/s/{channel}/{position}" if position else f"/s/{channel}"
-        return await self._get_text("GET", path)
+        return await self._get_text("GET", path, flow=channel)
 
     async def more_page(self, channel: str, position: int, direction: Direction) -> str:
         """HTML fragment with posts before/after `position` (infinite scroll endpoint)."""
@@ -152,6 +156,7 @@ class TelegramClient:
             f"/s/{channel}",
             query={direction: position},
             headers={"x-requested-with": "XMLHttpRequest"},
+            flow=channel,
         )
         try:
             payload = json.loads(raw)
@@ -164,7 +169,7 @@ class TelegramClient:
     async def preview_page(self, channel: str) -> str:
         """HTML of the `t.me/<channel>` landing page."""
         _check_channel(channel)
-        return await self._get_text("GET", f"/{channel}")
+        return await self._get_text("GET", f"/{channel}", flow=channel)
 
     async def close(self) -> None:
         """Close the underlying fetcher."""
@@ -177,8 +182,10 @@ class TelegramClient:
         *,
         query: Mapping[str, int] | None = None,
         headers: Mapping[str, str] | None = None,
+        flow: str,
     ) -> str:
-        async with self._semaphore:
+        async with self.gate.slot(flow.lower()):
+            self.requests += 1
             try:
                 result = await self._fetcher.fetch(method, path, query=query, headers=headers)
             except TelegramUpstreamError as exc:

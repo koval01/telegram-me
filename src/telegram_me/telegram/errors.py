@@ -19,3 +19,11 @@ class TelegramNotFoundError(TelegramError):
 
 class TelegramParseError(TelegramError):
     """The t.me response did not have the expected shape."""
+
+
+class OverloadedError(TelegramUpstreamError):
+    """Too much upstream work is queued; the request is shed instead of waiting."""
+
+    def __init__(self, message: str = "Server is overloaded, retry later", retry_after: int = 1):
+        super().__init__(message)
+        self.retry_after = retry_after

@@ -10,6 +10,7 @@ pub mod parse;
 pub mod pow;
 pub mod rank;
 pub mod ratelimit;
+pub mod sched;
 pub mod simhash;
 pub mod text;
 pub mod topics;

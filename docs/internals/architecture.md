@@ -53,9 +53,13 @@ Taking `GET /v1/body/durov` as an example:
 4. **`ChannelService.body_json`** looks for the *rendered* response in the
    cache. A hit is returned as bytes — no parsing, no validation.
 5. On a miss, **SingleFlight** makes sure only one coroutine fetches
-   `t.me/s/durov`; concurrent requests await the same task.
-6. **`TelegramClient`** takes a slot of the per-process concurrency semaphore
-   and asks **`ReqwestFetcher`** for the page; pyreqwest performs the request on
+   `t.me/s/durov`; concurrent requests await the same task. With Redis, that
+   coroutine takes a short lease so that only one process of all servers
+   fetches it; the others pick its result up from the cache (see
+   [Caching](caching.md#request-coalescing)).
+6. **`TelegramClient`** takes a slot of the per-process upstream gate (fair
+   across channels and feed requests, `503` when its queue is full) and asks
+   **`ReqwestFetcher`** for the page; pyreqwest performs the request on
    a pooled HTTP/2 connection in Rust, outside the GIL, and returns the decoded
    body. A dropped connection is retried once.
 7. On one of two parsing threads, **`parse_channel_page`** hands the HTML to
@@ -99,6 +103,7 @@ background work off the API processes.
 | Redis protocol | hiredis | C |
 | Feed assembly: signals, ranking, duplicates, topics, response | `telegram-me-native` (this project) | Rust (PyO3) |
 | In-process cache | `telegram-me-native` (moka, libzstd) | Rust (PyO3), C |
+| Request scheduling: flights, fair upstream gate, renewal points | `telegram-me-native` (this project) | Rust (PyO3) |
 
 Native code written for this project lives in the Rust crate
 [`rust/telegram-me-native`](https://github.com/koval01/telegram-me/tree/main/rust/telegram-me-native),

@@ -34,7 +34,7 @@ _ERRORS: dict[int | str, dict[str, Any]] = {
 }
 
 
-def _json(model: Post | Preview | PreviewsModel) -> Response:
+def _json(model: Preview | PreviewsModel) -> Response:
     # Models are validated once and serialized by pydantic-core directly;
     # returning a Response skips FastAPI's second validation pass.
     return Response(dump_json(model), media_type="application/json")
@@ -89,7 +89,7 @@ async def more(
 )
 async def post(channel: ChannelName, identifier: PostId, service: Channels) -> Response:
     """A single post."""
-    return _json(await service.post(channel, identifier))
+    return _raw_json(await service.post_json(channel, identifier))
 
 
 @channels.get(

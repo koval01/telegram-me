@@ -106,6 +106,15 @@ class Settings(BaseSettings):
     # Upstream (t.me)
     telegram_timeout: PositiveFloat = 10.0
     telegram_max_concurrency: PositiveInt = 32
+    upstream_queue_limit: PositiveInt | None = None
+    """Requests a worker lets wait for a free upstream slot; beyond it, 503 with
+    Retry-After (default: 16 per TELEGRAM_MAX_CONCURRENCY slot)."""
+    max_waiting_requests: PositiveInt = 4096
+    """Requests a worker lets wait for upstream work at once; beyond it, 503."""
+    shared_coalescing: bool = True
+    """With Redis, fetch each key once across all workers and servers (a lease)."""
+    early_refresh_window: float = Field(default=0.1, ge=0.0, le=0.5)
+    """Renew hot entries early, within this fraction of their TTL (0 disables)."""
 
     # Cache: in-process, in front of Redis when REDIS_URL is set
     redis_url: str | None = None

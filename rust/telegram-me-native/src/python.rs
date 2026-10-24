@@ -4,6 +4,8 @@
 //! threads (and the event loop, when called through `asyncio.to_thread` or an
 //! executor) keep running.
 
+use pyo3::create_exception;
+use pyo3::exceptions::PyException;
 use pyo3::prelude::*;
 use pyo3::pybacked::{PyBackedBytes, PyBackedStr};
 use pyo3::types::PyBytes;
@@ -16,6 +18,7 @@ use crate::parse;
 use crate::pow;
 use crate::rank as ranking;
 use crate::ratelimit;
+use crate::sched;
 
 /// Ranking parameters.
 #[pyclass(frozen, module = "telegram_me_native._native", name = "RankOptions")]
@@ -284,6 +287,165 @@ fn solve_pow(challenge: &str, method: &str, target: &str, bits: u8) -> String {
     pow::solve(challenge, method, target, bits)
 }
 
+create_exception!(
+    _native,
+    Overloaded,
+    PyException,
+    "A scheduling bound was reached; the argument names it: keys, waiters or queue."
+);
+
+fn overloaded(shed: sched::Shed) -> PyErr {
+    Overloaded::new_err(match shed {
+        sched::Shed::Keys => "keys",
+        sched::Shed::Waiters => "waiters",
+        sched::Shed::Queue => "queue",
+    })
+}
+
+/// Work in flight per key (see `crate::sched::Flights`); values are the
+/// shared Python tasks. Calls keep the GIL: they take well under a microsecond.
+#[pyclass(module = "telegram_me_native._native", name = "Flights")]
+pub struct PyFlights {
+    inner: sched::Flights<Py<PyAny>>,
+}
+
+#[pymethods]
+impl PyFlights {
+    #[new]
+    fn new(max_keys: usize, max_waiters: usize) -> Self {
+        Self {
+            inner: sched::Flights::new(max_keys, max_waiters),
+        }
+    }
+
+    /// The task in flight for `key`, or `None` when the caller leads.
+    fn join(&mut self, py: Python<'_>, key: &str, wait: bool) -> PyResult<Option<Py<PyAny>>> {
+        match self.inner.join(key, wait) {
+            Ok(sched::Join::Lead) => Ok(None),
+            Ok(sched::Join::Follow(task)) => Ok(Some(task.clone_ref(py))),
+            Err(shed) => Err(overloaded(shed)),
+        }
+    }
+
+    /// Record `task` as in flight for `key`.
+    fn lead(&mut self, key: &str, task: Py<PyAny>) {
+        self.inner.lead(key, task);
+    }
+
+    /// A waiting caller is done.
+    fn leave(&mut self) {
+        self.inner.leave();
+    }
+
+    /// Forget `key` if `task` is still the work in flight for it.
+    fn finish(&mut self, key: &str, task: &Bound<'_, PyAny>) {
+        if self.inner.get(key).is_some_and(|current| current.is(task)) {
+            self.inner.finish(key);
+        }
+    }
+
+    /// Number of waiting callers.
+    #[getter]
+    fn waiters(&self) -> usize {
+        self.inner.waiters()
+    }
+
+    fn __len__(&self) -> usize {
+        self.inner.len()
+    }
+}
+
+/// Fair admission to the upstream slots (see `crate::sched::Gate`).
+#[pyclass(module = "telegram_me_native._native", name = "Gate")]
+pub struct PyGate {
+    inner: sched::Gate,
+}
+
+#[pymethods]
+impl PyGate {
+    #[new]
+    fn new(capacity: usize, flow_cap: usize, background_cap: usize, max_queue: usize) -> Self {
+        Self {
+            inner: sched::Gate::new(capacity, flow_cap, background_cap, max_queue),
+        }
+    }
+
+    /// `(ticket, granted)`; a ticket that is not granted yet is queued.
+    fn acquire(&mut self, flow: &str, background: bool) -> PyResult<(u64, bool)> {
+        let priority = if background {
+            sched::Priority::Background
+        } else {
+            sched::Priority::Interactive
+        };
+        match self.inner.acquire(flow, priority) {
+            Ok(sched::Admit::Granted(ticket)) => Ok((ticket, true)),
+            Ok(sched::Admit::Queued(ticket)) => Ok((ticket, false)),
+            Err(shed) => Err(overloaded(shed)),
+        }
+    }
+
+    /// Give up a held or queued ticket; returns the tickets granted meanwhile.
+    fn release(&mut self, ticket: u64) -> Vec<u64> {
+        self.inner.release(ticket)
+    }
+
+    /// Raise a queued background ticket to user priority; returns the
+    /// tickets granted meanwhile.
+    fn promote(&mut self, ticket: u64) -> Vec<u64> {
+        self.inner.promote(ticket)
+    }
+
+    /// Suggested client back-off in seconds.
+    #[getter]
+    fn retry_after(&self) -> f64 {
+        self.inner.retry_after()
+    }
+
+    /// Slots held now.
+    #[getter]
+    fn active(&self) -> usize {
+        self.inner.active()
+    }
+
+    /// Requests waiting for a slot.
+    #[getter]
+    fn queued(&self) -> usize {
+        self.inner.queued()
+    }
+
+    /// Flows with held or queued requests.
+    #[getter]
+    fn flows(&self) -> usize {
+        self.inner.flows()
+    }
+}
+
+/// Early renewal and TTL jitter (see `crate::sched::EarlyRefresh`).
+#[pyclass(frozen, module = "telegram_me_native._native", name = "EarlyRefresh")]
+pub struct PyEarlyRefresh {
+    inner: sched::EarlyRefresh,
+}
+
+#[pymethods]
+impl PyEarlyRefresh {
+    #[new]
+    fn new(window: f64, seed: u64) -> Self {
+        Self {
+            inner: sched::EarlyRefresh::new(window, seed),
+        }
+    }
+
+    /// True once per entry when it is past its renewal point and still fresh.
+    fn claim(&self, key: &str, age: f64, ttl: f64, stored_at: f64) -> bool {
+        self.inner.claim(key, age, ttl, stored_at)
+    }
+
+    /// `ttl` shortened by a random part of the renewal window.
+    fn jitter(&self, ttl: f64) -> f64 {
+        self.inner.jitter(ttl)
+    }
+}
+
 /// The extension module.
 #[pymodule]
 fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
@@ -294,6 +456,10 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     module.add_class::<PyProofOfWork>()?;
     module.add_function(wrap_pyfunction!(solve_pow, module)?)?;
     module.add_function(wrap_pyfunction!(build_feed, module)?)?;
+    module.add_class::<PyFlights>()?;
+    module.add_class::<PyGate>()?;
+    module.add_class::<PyEarlyRefresh>()?;
+    module.add("Overloaded", module.py().get_type::<Overloaded>())?;
     module.add_function(wrap_pyfunction!(parse_channel_page, module)?)?;
     module.add_function(wrap_pyfunction!(parse_more_page, module)?)?;
     module.add_function(wrap_pyfunction!(parse_preview_page, module)?)?;

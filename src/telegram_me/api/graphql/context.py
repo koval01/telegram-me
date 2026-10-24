@@ -21,8 +21,10 @@ class RequestLoader:
 
     Equal calls, from aliased fields, repeated fragments or the operations of
     a batch, share one result, so each page is fetched (or read from the
-    cache) at most once per request. Results are the JSON-compatible data the
-    REST endpoints serialize; callers must treat them as read-only.
+    cache) at most once per request; channel names compare case-insensitively.
+    Across requests, and with the REST endpoints, the services coalesce.
+    Results are the JSON-compatible data the REST endpoints serialize; callers
+    must treat them as read-only.
     """
 
     def __init__(self, container: Container) -> None:
@@ -43,7 +45,9 @@ class RequestLoader:
 
     async def body(self, channel: str, position: int | None) -> JSONDict:
         """Channel page, as returned by `GET /v1/body/{channel}`."""
-        return await self._once(("body", channel, position), lambda: self._body(channel, position))
+        return await self._once(
+            ("body", channel.lower(), position or 0), lambda: self._body(channel, position)
+        )
 
     async def _body(self, channel: str, position: int | None) -> JSONDict:
         data: JSONDict = decode(await self._channels.body_json(channel, position))
@@ -54,7 +58,7 @@ class RequestLoader:
     ) -> JSONDict:
         """Posts around `position`, as returned by `GET /v1/more/...`."""
         return await self._once(
-            ("more", channel, position, direction),
+            ("more", channel.lower(), position, direction),
             lambda: self._more(channel, position, direction),
         )
 
@@ -67,11 +71,12 @@ class RequestLoader:
     async def post(self, channel: str, identifier: int) -> JSONDict:
         """One post, as returned by `GET /v1/post/{channel}/{identifier}`."""
         return await self._once(
-            ("post", channel, identifier), lambda: self._post(channel, identifier)
+            ("post", channel.lower(), identifier), lambda: self._post(channel, identifier)
         )
 
     async def _post(self, channel: str, identifier: int) -> JSONDict:
-        return (await self._channels.post(channel, identifier)).model_dump(mode="json")
+        data: JSONDict = decode(await self._channels.post_json(channel, identifier))
+        return data
 
     async def previews(self, channels: tuple[str, ...]) -> dict[str, JSONDict]:
         """Previews keyed by username, as returned by `POST /v1/previews`."""
@@ -83,7 +88,7 @@ class RequestLoader:
 
     async def preview(self, channel: str) -> JSONDict:
         """Channel preview, as returned by `GET /v1/preview/{channel}`."""
-        return await self._once(("preview", channel), lambda: self._preview(channel))
+        return await self._once(("preview", channel.lower()), lambda: self._preview(channel))
 
     async def _preview(self, channel: str) -> JSONDict:
         return (await self._channels.preview(channel)).model_dump(mode="json")
