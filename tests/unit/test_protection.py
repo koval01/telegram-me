@@ -1,5 +1,6 @@
 """Rate limit and proof of work: middleware behaviour and the shared limit."""
 
+import secrets
 from collections.abc import AsyncIterator
 
 import pytest
@@ -12,7 +13,8 @@ from telegram_me.api.protection import sync_rate_limits
 from telegram_me.cache import KEY_PREFIX, RedisCache
 from tests.conftest import ClientFactory, make_settings
 
-SECRET = "s" * 32
+# Random per run: tests never embed a key.
+SECRET = secrets.token_hex(32)
 
 
 def pow_client(make_client: ClientFactory, **overrides: object) -> TestClient:
@@ -194,7 +196,7 @@ def test_bad_proofs(make_client: ClientFactory, header: str, status: int, code: 
 
 
 def test_forged_challenge_from_another_secret(make_client: ClientFactory) -> None:
-    other = make_client(enable_pow=True, pow_secret="o" * 32, pow_difficulty=8)
+    other = make_client(enable_pow=True, pow_secret=secrets.token_hex(32), pow_difficulty=8)
     challenge = challenge_of(other)
     response = pow_client(make_client).get(
         "/v1/body/durov", headers=answer(challenge, "GET", "/v1/body/durov")

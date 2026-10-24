@@ -307,13 +307,21 @@ mod tests {
 
     const NOW: u64 = 1_800_000_000;
 
+    /// A random key: tests never embed one (and it differs on every run).
+    fn random_secret() -> [u8; 32] {
+        let mut key = [0u8; 32];
+        getrandom::fill(&mut key).expect("the OS random number generator works");
+        key
+    }
+
+    /// The key shared by every `pow()` of a test run.
+    fn secret() -> &'static [u8; 32] {
+        static SECRET: std::sync::OnceLock<[u8; 32]> = std::sync::OnceLock::new();
+        SECRET.get_or_init(random_secret)
+    }
+
     fn pow(bits: u8) -> ProofOfWork {
-        ProofOfWork::new(
-            b"0123456789abcdef0123456789abcdef",
-            bits,
-            Duration::from_secs(300),
-            true,
-        )
+        ProofOfWork::new(secret(), bits, Duration::from_secs(300), true)
     }
 
     fn header(challenge: &str, method: &str, target: &str, bits: u8) -> String {
@@ -371,12 +379,7 @@ mod tests {
             Err(Rejection::Forged)
         );
 
-        let unbound = ProofOfWork::new(
-            b"0123456789abcdef0123456789abcdef",
-            4,
-            Duration::from_secs(300),
-            false,
-        );
+        let unbound = ProofOfWork::new(secret(), 4, Duration::from_secs(300), false);
         let issued = unbound.issue_at("203.0.113.7", NOW);
         let h = header(&issued.challenge, "GET", "/x", 4);
         assert_eq!(
@@ -406,12 +409,7 @@ mod tests {
     #[test]
     fn other_secret_or_tampered_fields_are_forged() {
         let pow = pow(4);
-        let other = ProofOfWork::new(
-            b"another secret of enough length!",
-            4,
-            Duration::from_secs(300),
-            true,
-        );
+        let other = ProofOfWork::new(&random_secret(), 4, Duration::from_secs(300), true);
         let issued = other.issue_at("ip", NOW);
         let h = header(&issued.challenge, "GET", "/x", 4);
         assert_eq!(
