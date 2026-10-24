@@ -107,6 +107,7 @@ su ID a `EXTRA_POSTS` en `scripts/record_fixtures.py`.
 | `test_runtime.py` | Ciclo de vida del actualizador integrado, logs en JSON |
 | `test_docs_config.py` | Las traducciones de la documentación: todas las páginas presentes, configuración sincronizada con el inglés |
 | `test_api_contract.py` | Qué cambios del contrato `scripts/api_contract.py` considera incompatibles |
+| `test_layers.py` | Cada módulo del paquete tiene su sitio en las capas de import-linter |
 | `test_properties.py` | Pruebas basadas en propiedades, véase [más abajo](#property-and-fuzz-tests) |
 
 Las pruebas admiten código asíncrono (`pytest-asyncio` en modo auto) y las

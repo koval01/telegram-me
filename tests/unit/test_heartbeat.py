@@ -3,6 +3,7 @@
 import asyncio
 import json
 from collections.abc import AsyncIterator
+from typing import override
 
 import pytest
 from fakeredis import FakeAsyncRedis
@@ -19,11 +20,18 @@ async def redis_cache() -> AsyncIterator[RedisCache]:
     await cache.close()
 
 
+def _available(cache: RedisCache) -> bool:
+    # A call, not the property: mypy would keep `available` narrowed to False
+    # across the awaits that change it, and call the rest unreachable.
+    return cache.available
+
+
 class _Flaky(FakeAsyncRedis):
     """Fails while `down` is set."""
 
     down = False
 
+    @override
     async def set(self, *args: object, **kwargs: object) -> object:  # type: ignore[override]
         if self.down:
             raise RedisConnectionError("down")
@@ -54,7 +62,7 @@ async def test_heartbeat_probes_and_closes_an_open_breaker(
     cache = RedisCache(client, cooldown=30, failures_to_trip=1)
     client.down = True
     await cache.heartbeat("node:a", "x", ttl=15)
-    assert not cache.available
+    assert not _available(cache)
     client.down = False
     # Sent despite the open breaker; the answer closes it without the cooldown.
     assert await cache.heartbeat("node:a", "x", ttl=15)
@@ -98,7 +106,7 @@ async def test_beating_survives_an_outage() -> None:
     client.down = True
     async with beating(cache, interval=0.02):
         await asyncio.sleep(0.05)
-        assert not cache.available
+        assert not _available(cache)
         client.down = False
         await asyncio.sleep(0.05)
         assert cache.available

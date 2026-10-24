@@ -101,6 +101,7 @@ rare post type, add its ID to `EXTRA_POSTS` in `scripts/record_fixtures.py`.
 | `test_runtime.py` | Embedded refresher lifecycle, JSON logging |
 | `test_docs_config.py` | Documentation translations: every page present, configuration in sync with English |
 | `test_api_contract.py` | Which contract changes `scripts/api_contract.py` reports as breaking |
+| `test_layers.py` | Every module of the package has a place in the import-linter layers |
 | `test_properties.py` | Property-based tests, see [below](#property-and-fuzz-tests) |
 
 Tests are async-aware (`pytest-asyncio` in auto mode) and warnings are

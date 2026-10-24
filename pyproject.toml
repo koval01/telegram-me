@@ -213,7 +213,7 @@ layers = [
     "app",
     "api",
     "container",
-    "services",
+    "services | heartbeat",
     "cache",
     "telegram",
     "schemas",
@@ -234,6 +234,7 @@ type = "forbidden"
 source_modules = [
     "telegram_me.cache",
     "telegram_me.container",
+    "telegram_me.heartbeat",
     "telegram_me.log",
     "telegram_me.memory",
     "telegram_me.schemas",

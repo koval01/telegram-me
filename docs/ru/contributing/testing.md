@@ -102,6 +102,7 @@ make fixtures CHANNELS="nebudetgg"     # add or refresh specific channels
 | `test_runtime.py` | Жизненный цикл встроенного рефрешера, JSON-логи |
 | `test_docs_config.py` | Переводы документации: наличие всех страниц, согласованность конфигурации с английской |
 | `test_api_contract.py` | Какие изменения контракта `scripts/api_contract.py` считает несовместимыми |
+| `test_layers.py` | У каждого модуля пакета есть место в слоях import-linter |
 | `test_properties.py` | Тесты на основе свойств, см. [ниже](#property-and-fuzz-tests) |
 
 Тесты поддерживают async (`pytest-asyncio` в режиме auto), а предупреждения
