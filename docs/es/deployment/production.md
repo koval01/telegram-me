@@ -58,30 +58,52 @@ script de despliegue y el `.env` en cada despliegue.
 ```mermaid
 sequenceDiagram
     participant GH as GitHub Actions
-    participant S as Servidor N
-    GH->>GH: CI: lint, tipos, pruebas, prueba de humo de la imagen
+    participant S1 as Servidor 1 (canary)
+    participant SN as Servidores 2…N
+    GH->>GH: CI y Guards: lint, tipos, pruebas, contrato, imagen, integración, scripts de despliegue
     GH->>GH: build y push de linux/amd64 + linux/arm64
-    loop cada servidor, de uno en uno
-        GH->>S: scp compose.prod.yaml, remote-deploy.sh, .env
-        GH->>S: remote-deploy.sh <image:sha-…>
-        S->>S: docker pull, compose up --wait (healthcheck)
-        alt sano
-            S-->>GH: ok, recordar la imagen
-        else no sano en 90 s
-            S->>S: arrancar de nuevo la imagen anterior
-            S-->>GH: fallo → el despliegue se detiene aquí
-        end
+    GH->>S1: remote-deploy.sh <image:sha-…>
+    S1->>S1: compose up --wait (healthcheck), prueba de humo dentro del contenedor
+    alt sano y prueba de humo superada
+        S1-->>GH: ok, recordar la imagen
+    else si no
+        S1->>S1: arrancar de nuevo la imagen anterior
+        S1-->>GH: fallo → el despliegue se detiene, nada más cambia
     end
+    GH->>GH: CANARY_SOAK segundos de tráfico real en el servidor 1
+    GH->>S1: remote-deploy.sh --verify (misma imagen, sano, sin reinicios, prueba de humo)
+    loop cada otro servidor, de uno en uno
+        GH->>SN: remote-deploy.sh <image:sha-…> (mismas comprobaciones)
+    end
+    GH->>GH: prueba de humo a través de la URL pública
+    Note over GH,SN: un fallo después del servidor 1 revierte todos los servidores que recibieron la versión
 ```
 
-- Un push a `main` ejecuta la CI, construye la imagen (etiquetas `latest` y
-  `sha-…`) y despliega `sha-…` en todos los servidores listados en
-  `SERVERS_IPS`, uno tras otro.
+- Un push a `main` ejecuta la CI y Guards, construye la imagen (etiquetas
+  `latest` y `sha-…`) y despliega `sha-…` en todos los servidores listados en
+  `SERVERS_IPS`, uno tras otro
+  ([`deploy/rollout.sh`](https://github.com/koval01/telegram-me/blob/main/deploy/rollout.sh)).
 - [`deploy/remote-deploy.sh`](https://github.com/koval01/telegram-me/blob/main/deploy/remote-deploy.sh)
-  espera hasta que el nuevo contenedor está sano. Si no, reinicia la imagen
-  desplegada anteriormente (registrada en `~/telegram-me/.deployed-image`) y
-  falla, lo que detiene el despliegue: los servidores restantes conservan la
-  versión anterior.
+  espera hasta que el nuevo contenedor está sano y luego ejecuta la prueba de
+  humo (`scripts/smoke_matrix.py`: códigos de estado y contenido de cada
+  endpoint, dentro del contenedor contra t.me real, con un reintento). El
+  healthcheck por sí solo solo demuestra que el proceso responde a
+  `/healthz`; la prueba de humo demuestra que sirve páginas con la
+  configuración y el Redis de este servidor. Si cualquiera de los dos falla,
+  reinicia la imagen desplegada anteriormente (registrada en
+  `~/telegram-me/.deployed-image`) y falla.
+- El servidor 1 es el canary: tras recibir la versión sirve tráfico real
+  durante `CANARY_SOAK` segundos (60 por defecto) y se verifica de nuevo: debe
+  seguir ejecutando la imagen, estar sano, no haberse reiniciado ni haber sido
+  matado por memoria, y superar la prueba de humo. Solo entonces se despliegan
+  los demás servidores.
+- Por último, la prueba de humo se ejecuta a través de la URL pública
+  (`PUBLIC_URL`, o `https://PUBLIC_HOST`), es decir, a través de Cloudflare y
+  Caddy, con la cabecera `CF_BYPASS_KEY`.
+- Si alguna de estas comprobaciones falla después de que un servidor haya
+  recibido la versión, se revierten todos los servidores que la recibieron
+  (`remote-deploy.sh --rollback`), de modo que la flota nunca queda dividida
+  entre dos versiones.
 - El primer despliegue de 2.0 sustituye el contenedor 1.x (llamado
   `telegram-me`, arrancado con `docker run`). Si 2.0 no llega a estar sano, el
   contenedor 1.x se arranca de nuevo a partir de su imagen y de `~/env.app`.
@@ -98,7 +120,7 @@ sequenceDiagram
 | `SSH_KEY` | sí | Clave privada para `SSH_USER` |
 | `SSH_KNOWN_HOSTS` | recomendado | Salida de `ssh-keyscan` para los servidores; sin ella, las claves de host se aceptan en el primer uso (con una advertencia) |
 | `REDIS_URL` | sí | Redis compartido por todos los servidores |
-| `CF_BYPASS_KEY` | no | La comprobación de salud pública lo envía como `x-bypass-key`, para una regla WAF de Cloudflare que la exime de la protección contra bots |
+| `CF_BYPASS_KEY` | no | La prueba de humo y la comprobación de salud públicas lo envían como `x-bypass-key`, para una regla WAF de Cloudflare que las exime de la protección contra bots |
 | `POW_SECRET` | con `ENABLE_POW` | Firma los desafíos de prueba de trabajo; al menos 32 caracteres ([`POW_SECRET`](../configuration.md#pow_secret)) |
 | `TLS_CERT`, `TLS_KEY` | con `PUBLIC_HOST` | Certificado y clave de Cloudflare Origin CA (PEM) para Caddy; sin ellos Caddy usa un certificado autofirmado |
 | `DOCKER_USERNAME`, `DOCKERHUB_TOKEN` | sí | Push a Docker Hub (se acepta `DOCKER_PASSWORD` en lugar del token) |
@@ -123,6 +145,8 @@ escribe en cada despliegue:
 | `DEPLOY_IMAGE` | `docker.io/koval01/telegram-me` | Repositorio desde el que se despliega |
 | `SSH_USER` | `ubuntu` | |
 | `PUBLIC_HEALTHCHECK_URL` | — | Se comprueba tras el despliegue, p. ej. `https://api.example.com/healthz` |
+| `PUBLIC_URL` | `https://PUBLIC_HOST` | URL base de la prueba de humo pública tras el despliegue; sin ella ni `PUBLIC_HOST` la prueba se omite |
+| `CANARY_SOAK` | `60` | Segundos que el servidor 1 sirve una versión nueva antes de verificarse de nuevo y de que le sigan los demás servidores; `0` omite la comprobación canary |
 
 Usa el entorno `production` en la configuración del repositorio para añadir
 revisores obligatorios o restringir qué ramas pueden desplegar.
@@ -157,8 +181,9 @@ Desactívala si la API está pensada para programas. Si se queda activada (por
 ejemplo, en una demo), añade una regla WAF personalizada que la omita para las
 peticiones cuya cabecera coincida con una clave aleatoria larga, por ejemplo
 `any(http.request.headers["x-bypass-key"][*] eq "<key>")`. Guarda la clave en
-el secreto `CF_BYPASS_KEY` para la comprobación de salud y pásala al smoke test
-con `--header "x-bypass-key:$KEY"`.
+el secreto `CF_BYPASS_KEY` para la prueba de humo y la comprobación de salud
+públicas del despliegue, y pásala a mano al smoke test con
+`--header "x-bypass-key:$KEY"`.
 
 Cloudflare elige uno de los registros DNS por conexión. Mientras un servidor se
 reinicia durante un despliegue escalonado, algunas solicitudes dirigidas a él
@@ -169,11 +194,14 @@ pueden fallar durante unos segundos.
 Ejecuta manualmente el workflow **Deploy** (*Actions → Deploy → Run workflow*)
 con la etiqueta a la que quieras volver, por ejemplo `sha-0123456789ab` (todas
 las builds se conservan en el registro). Se usa el mismo procedimiento
-escalonado.
+escalonado, con las mismas comprobaciones; desmarca **smoke** solo mientras
+el propio t.me esté caído, cuando ninguna versión puede superarla.
 
-En un único servidor también puedes revertir a mano:
+En un único servidor también puedes revertir a mano, a la imagen desplegada
+antes de la última o a cualquier otra:
 
 ```bash
+bash ~/telegram-me/remote-deploy.sh --rollback
 cd ~/telegram-me
 APP_IMAGE=docker.io/koval01/telegram-me:sha-0123456789ab \
   docker compose -f compose.prod.yaml up -d --wait

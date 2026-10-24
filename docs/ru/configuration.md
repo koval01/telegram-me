@@ -49,6 +49,7 @@
 | [`CACHE_MODE`](#cache_mode) | `normal` | Производительность |
 | [`PARSER_MODE`](#parser_mode) | `full` | Производительность |
 | [`MEMORY_TRIM_INTERVAL`](#memory_trim_interval) | `10` | Производительность |
+| [`TELEGRAM_BASE_URL`](#telegram_base_url) | `https://t.me` | Источник |
 | [`TELEGRAM_TIMEOUT`](#telegram_timeout) | `10` | Источник |
 | [`TELEGRAM_MAX_CONCURRENCY`](#telegram_max_concurrency) | `32` | Источник |
 | [`UPSTREAM_QUEUE_LIMIT`](#upstream_queue_limit) | 16 × `TELEGRAM_MAX_CONCURRENCY` | Источник |
@@ -269,6 +270,12 @@ Redis. При `false` или без Redis каждый процесс огран
 такой свободной кучи. Одна очистка занимает около 1 мс. `0` отключает её.
 
 ## Источник { #upstream }
+
+### `TELEGRAM_BASE_URL`
+
+Адрес, с которого загружаются страницы t.me, — `схема://хост[:порт]` без пути.
+Позволяет направить сервис на зеркало или на поддельный t.me: так
+интеграционные тесты запускают образ против `tests/integration/fake_telegram.py`.
 
 ### `TELEGRAM_TIMEOUT`
 

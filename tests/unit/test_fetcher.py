@@ -8,9 +8,12 @@ from collections.abc import Iterator
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 import pytest
+from pydantic import ValidationError
 
+from telegram_me.container import build_container
 from telegram_me.telegram.client import ReqwestFetcher
 from telegram_me.telegram.errors import TelegramUpstreamError
+from tests.conftest import make_settings
 
 
 class _Handler(BaseHTTPRequestHandler):
@@ -108,3 +111,15 @@ async def test_connection_failure_is_upstream_error() -> None:
             await fetcher.fetch("GET", "/s/durov")
     finally:
         await fetcher.close()
+
+
+async def test_container_fetches_from_telegram_base_url(server_url: str) -> None:
+    async with build_container(make_settings(telegram_base_url=server_url)) as container:
+        page = await container.client.preview_page("durov")
+    assert json.loads(page)["path"] == "/durov"
+
+
+@pytest.mark.parametrize("url", ["t.me", "https://t.me/s", "ftp://t.me", "https://t.me?x=1"])
+def test_telegram_base_url_is_an_origin(url: str) -> None:
+    with pytest.raises(ValidationError, match="telegram_base_url"):
+        make_settings(telegram_base_url=url)

@@ -65,7 +65,9 @@ async def build_container(
         if (shared := shared_cache(cache)) is not None:
             await shared.warm_up()
 
-        fetcher = fetcher or ReqwestFetcher(timeout=settings.telegram_timeout)
+        fetcher = fetcher or ReqwestFetcher(
+            timeout=settings.telegram_timeout, base_url=settings.telegram_base_url
+        )
         gate = FairGate(settings.telegram_max_concurrency, settings.upstream_queue_limit)
         client = TelegramClient(fetcher, settings.telegram_max_concurrency, gate)
         stack.push_async_callback(client.close)

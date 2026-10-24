@@ -1,0 +1,139 @@
+name: Nightly
+
+# What changes without a commit, checked every night:
+#
+# - live t.me: the image production runs, with Valkey, through the smoke
+#   matrix (status codes and content), so a change of the t.me markup shows
+#   up here before users report it;
+# - production: the same matrix through the public URL (Cloudflare, Caddy);
+# - deeper searches than CI has time for: the parser fuzzer, the hostile-HTML
+#   harness with more cases and the property tests with random seeds.
+#
+# Any failure opens an issue labelled `nightly` (or comments on the open one).
+
+on:
+  schedule:
+    - cron: "23 3 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nightly
+  cancel-in-progress: false
+
+env:
+  UV_VERSION: "0.13.5"
+  RUST_VERSION: "1.99"
+  FORCE_COLOR: "1"
+  CARGO_TERM_COLOR: always
+
+jobs:
+  live-tme:
+    name: Production image against live t.me
+    runs-on: ubuntu-latest
+    env:
+      APP_IMAGE: ${{ vars.DEPLOY_IMAGE || 'docker.io/koval01/telegram-me' }}:latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Start the image with Valkey (compose.yaml, preset full)
+        run: PRESET=full docker compose up -d --wait --wait-timeout 120 --pull always
+      - name: Smoke matrix, every channel
+        run: python3 scripts/smoke_matrix.py --base-url http://127.0.0.1:8000 --preset full
+      - name: Logs
+        if: failure()
+        run: docker compose logs --tail 200
+
+  production:
+    name: Production through the public URL
+    runs-on: ubuntu-latest
+    if: vars.PUBLIC_URL != '' || vars.PUBLIC_HOST != ''
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Smoke matrix
+        env:
+          URL: ${{ vars.PUBLIC_URL || format('https://{0}', vars.PUBLIC_HOST) }}
+          BYPASS_KEY: ${{ secrets.CF_BYPASS_KEY }}
+        run: |
+          headers=()
+          if [ -n "$BYPASS_KEY" ]; then headers=(--header "x-bypass-key:$BYPASS_KEY"); fi
+          python3 scripts/smoke_matrix.py --base-url "$URL" --preset auto --timeout 30 "${headers[@]}"
+
+  fuzz:
+    name: Parser fuzzing (10 min)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: rust/telegram-me-native/fuzz
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Install nightly Rust and cargo-fuzz
+        run: rustup toolchain install nightly --profile minimal
+      - uses: taiki-e/install-action@1e29709c0ec63babbe8f266397a465f29a825f91 # v2.87.31
+        with:
+          tool: cargo-fuzz
+      - name: Seed corpus from the recorded pages
+        run: python3 ../../../scripts/fuzz_corpus.py corpus/pages
+      # Without sanitizer (`-s none`): the crate forbids unsafe code, and
+      # several times more inputs per second find more.
+      - name: Fuzz
+        run: >-
+          cargo +nightly fuzz run -s none pages corpus/pages --
+          -max_total_time=600 -max_len=65536 -timeout=10 -rss_limit_mb=2048
+      - name: Crashing inputs
+        if: failure()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: fuzz-artifacts
+          path: rust/telegram-me-native/fuzz/artifacts
+
+  deep:
+    name: Long property and hostile-HTML runs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: astral-sh/setup-uv@07a047e608db84b3d8c06cd9a7c7dcc9c355c18e # v10.3.2
+        with:
+          version: ${{ env.UV_VERSION }}
+          enable-cache: true
+      - name: Install Rust ${{ env.RUST_VERSION }}
+        run: rustup toolchain install "$RUST_VERSION" --profile minimal && rustup default "$RUST_VERSION"
+      - name: Hostile HTML, 300 mutations per page, random seed
+        working-directory: rust/telegram-me-native
+        run: |
+          seed="$(date +%s)"
+          echo "HOSTILE_SEED=$seed"
+          HOSTILE_CASES=300 HOSTILE_SEED="$seed" cargo test --locked --release --test hostile_html
+      - run: uv sync --locked
+      - name: Property tests, nightly profile
+        env:
+          HYPOTHESIS_PROFILE: nightly
+        run: uv run pytest tests/unit/test_properties.py
+
+  report:
+    name: Report failures
+    runs-on: ubuntu-latest
+    needs: [live-tme, production, fuzz, deep]
+    if: failure()
+    permissions:
+      issues: write
+    steps:
+      - name: Open or update the nightly issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          RESULTS: ${{ toJSON(needs) }}
+        run: |
+          failed="$(jq -r 'to_entries | map(select(.value.result == "failure") | .key) | join(", ")' <<< "$RESULTS")"
+          body="Nightly checks failed: **${failed}**. See $RUN_URL"
+          gh label create nightly --repo "$GITHUB_REPOSITORY" --color B60205 \
+            --description "Failure of the nightly checks" 2>/dev/null || true
+          issue="$(gh issue list --repo "$GITHUB_REPOSITORY" --label nightly --state open \
+            --json number --jq '.[0].number')"
+          if [ -n "$issue" ]; then
+            gh issue comment "$issue" --repo "$GITHUB_REPOSITORY" --body "$body"
+          else
+            gh issue create --repo "$GITHUB_REPOSITORY" --label nightly \
+              --title "Nightly checks failed" --body "$body"
+          fi

@@ -48,6 +48,7 @@ The source of truth is
 | [`CACHE_MODE`](#cache_mode) | `normal` | Performance |
 | [`PARSER_MODE`](#parser_mode) | `full` | Performance |
 | [`MEMORY_TRIM_INTERVAL`](#memory_trim_interval) | `10` | Performance |
+| [`TELEGRAM_BASE_URL`](#telegram_base_url) | `https://t.me` | Upstream |
 | [`TELEGRAM_TIMEOUT`](#telegram_timeout) | `10` | Upstream |
 | [`TELEGRAM_MAX_CONCURRENCY`](#telegram_max_concurrency) | `32` | Upstream |
 | [`UPSTREAM_QUEUE_LIMIT`](#upstream_queue_limit) | 16 × `TELEGRAM_MAX_CONCURRENCY` | Upstream |
@@ -265,6 +266,12 @@ under load held ~80 MiB of such free heap. One trim takes about 1 ms. `0`
 disables it.
 
 ## Upstream
+
+### `TELEGRAM_BASE_URL`
+
+Origin the t.me pages are fetched from, `scheme://host[:port]` without a path.
+Point it at a mirror, or at a fake t.me: the integration tests run the image
+against `tests/integration/fake_telegram.py` this way.
 
 ### `TELEGRAM_TIMEOUT`
 
