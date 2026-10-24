@@ -76,6 +76,10 @@ jobs:
           persist-credentials: false
       - name: Install nightly Rust and cargo-fuzz
         run: rustup toolchain install nightly --profile minimal
+      - name: BoringSSL build tools (wreq's btls-sys runs cmake and bindgen)
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install --yes --no-install-recommends cmake libclang-dev
       - uses: taiki-e/install-action@1e29709c0ec63babbe8f266397a465f29a825f91 # v2.87.31
         with:
           tool: cargo-fuzz
@@ -107,6 +111,10 @@ jobs:
           enable-cache: true
       - name: Install Rust ${{ env.RUST_VERSION }}
         run: rustup toolchain install "$RUST_VERSION" --profile minimal && rustup default "$RUST_VERSION"
+      - name: BoringSSL build tools (wreq's btls-sys runs cmake and bindgen)
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install --yes --no-install-recommends cmake libclang-dev
       - name: Hostile HTML, 300 mutations per page, random seed
         working-directory: rust/telegram-me-native
         run: |
