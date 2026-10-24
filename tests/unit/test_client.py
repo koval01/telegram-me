@@ -1,10 +1,10 @@
 from collections.abc import Mapping
 
 import pytest
-from pyreqwest.exceptions import ConnectError, StatusError
 
 from telegram_me.telegram.client import FetchResult, Method, TelegramClient
 from telegram_me.telegram.errors import (
+    TelegramNetworkError,
     TelegramNotFoundError,
     TelegramParseError,
     TelegramUpstreamError,
@@ -40,9 +40,7 @@ class ScriptedFetcher:
 
 
 def _network_error() -> TelegramUpstreamError:
-    error = TelegramUpstreamError("boom")
-    error.__cause__ = ConnectError("connection reset", {"causes": None})
-    return error
+    return TelegramNetworkError("connection reset")
 
 
 async def test_channel_page_paths() -> None:
@@ -117,9 +115,7 @@ async def test_retries_once_on_network_error() -> None:
 
 
 async def test_does_not_retry_other_errors() -> None:
-    error = TelegramUpstreamError("bad")
-    error.__cause__ = StatusError("status", {"status": 500, "causes": None})
-    fetcher = ScriptedFetcher(error, FetchResult(200, "never"))
+    fetcher = ScriptedFetcher(TelegramUpstreamError("bad"), FetchResult(200, "never"))
     with pytest.raises(TelegramUpstreamError):
         await TelegramClient(fetcher, 1).channel_page("durov")
     assert len(fetcher.calls) == 1

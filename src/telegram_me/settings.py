@@ -10,13 +10,17 @@ from pydantic import (
     PositiveFloat,
     PositiveInt,
     SecretStr,
+    field_validator,
     model_validator,
 )
 from pydantic_settings import BaseSettings, SettingsConfigDict
+from telegram_me_native import browser_profiles
 
 type CacheMode = Literal["off", "normal", "aggressive"]
 type ParserMode = Literal["full", "simplified"]
 type LogFormat = Literal["text", "json"]
+type TelegramClientKind = Literal["reqwest", "browser"]
+type BrowserPlatform = Literal["android", "windows", "macos", "linux", "ios"]
 
 # How long parsed t.me pages stay cached for each cache mode, in seconds.
 # The values match the Cache-Control max-age advertised to Cloudflare.
@@ -27,6 +31,11 @@ _EDGE_CACHE_CONTROL: dict[CacheMode, str | None] = {
     "normal": "public, max-age=10, stale-while-revalidate=10",
     "aggressive": "public, max-age=120, stale-while-revalidate=240",
 }
+
+
+def _newest_chrome(profiles: list[str]) -> str:
+    chrome = [int(name[len("chrome_") :]) for name in profiles if name.startswith("chrome_")]
+    return f"chrome_{max(chrome)}"
 
 
 def _default_workers() -> int:
@@ -108,6 +117,14 @@ class Settings(BaseSettings):
     """Where t.me pages are fetched from: a mirror, or a fake in integration tests."""
     telegram_timeout: PositiveFloat = 10.0
     telegram_max_concurrency: PositiveInt = 32
+    telegram_client: TelegramClientKind = "browser"
+    """HTTP client for t.me. `browser`: TLS handshake, HTTP/2 settings and headers
+    all come from TELEGRAM_BROWSER_PROFILE (wreq, BoringSSL). `reqwest`: the
+    profile's headers over rustls and hyper, whose fingerprints differ."""
+    telegram_browser_profile: str = "chrome_149"
+    """Browser the requests to t.me claim to be (a Chromium profile of wreq-util)."""
+    telegram_browser_platform: BrowserPlatform = "android"
+    """Platform of that browser: its User-Agent and sec-ch-ua-platform/-mobile."""
     upstream_queue_limit: PositiveInt | None = None
     """Requests a worker lets wait for a free upstream slot; beyond it, 503 with
     Retry-After (default: 16 per TELEGRAM_MAX_CONCURRENCY slot)."""
@@ -149,6 +166,16 @@ class Settings(BaseSettings):
     # Logging
     log_level: Literal["DEBUG", "INFO", "WARNING", "ERROR"] = "INFO"
     log_format: LogFormat = "text"
+
+    @field_validator("telegram_browser_profile")
+    @classmethod
+    def _known_browser_profile(cls, value: str) -> str:
+        profiles = browser_profiles()
+        if value not in profiles:
+            newest = _newest_chrome(profiles)
+            msg = f"unknown browser profile {value!r}; the newest Chrome is {newest}"
+            raise ValueError(msg)
+        return value
 
     @model_validator(mode="after")
     def _require_pow_secret(self) -> "Settings":

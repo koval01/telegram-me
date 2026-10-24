@@ -13,6 +13,13 @@ class TelegramUpstreamError(TelegramError):
     """t.me could not be reached or answered with an error status."""
 
 
+class TelegramNetworkError(TelegramUpstreamError):
+    """The connection failed or broke before t.me answered.
+
+    Every request we send is read-only, so one retry on a fresh connection is safe.
+    """
+
+
 class TelegramNotFoundError(TelegramError):
     """The requested channel or post does not exist (or is not public)."""
 

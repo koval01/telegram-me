@@ -95,7 +95,7 @@ building 100-channel feeds in a loop:
 | Feed assembly | see above: 41 ms of GIL-held Python per 100 channels | CPU (Python) | **stage 1** |
 | Popularity, leader lock | one Redis pipeline per feed (`ZINCRBY` × channels), one `EVAL` per tick | I/O | redis-py builds the pipeline in Python |
 | Refresher loop | scheduling only; the pages go through the page pipeline | I/O + page pipeline | ≤ 16 refreshes at a time |
-| HTTP client (`client.py`) | a semaphore and an await; `/v1/more` also `json.loads` of the reply (~0.2 ms) | I/O (Rust, pyreqwest) | |
+| HTTP client (`client.py`) | a semaphore and an await; `/v1/more` also `json.loads` of the reply (~0.2 ms) | I/O (Rust, wreq) | |
 | GraphQL (strawberry) | ~0.85 ms per query on top of the services | CPU (Python) | query parsing, validation, resolver per field |
 | Worker model | one process per worker, each with its own interpreter, L1 cache and HTTP pool | memory | see below |
 

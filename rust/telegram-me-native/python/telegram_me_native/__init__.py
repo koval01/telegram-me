@@ -1,7 +1,11 @@
-"""Native (Rust) core of TelegramMe: parsing, feed assembly, local cache, protection, scheduling."""
+"""Native (Rust) core of TelegramMe: parsing, feeds, cache, protection, scheduling, HTTP."""
 
 from telegram_me_native._native import (
+    BrowserClient,
     EarlyRefresh,
+    FetchError,
+    FetchNetworkError,
+    FetchTimeoutError,
     Flights,
     Gate,
     LocalCache,
@@ -10,6 +14,8 @@ from telegram_me_native._native import (
     RankOptions,
     RateLimiter,
     __version__,
+    browser_headers,
+    browser_profiles,
     build_feed,
     parse_channel_page,
     parse_more_page,
@@ -18,7 +24,11 @@ from telegram_me_native._native import (
 )
 
 __all__ = [
+    "BrowserClient",
     "EarlyRefresh",
+    "FetchError",
+    "FetchNetworkError",
+    "FetchTimeoutError",
     "Flights",
     "Gate",
     "LocalCache",
@@ -27,6 +37,8 @@ __all__ = [
     "RankOptions",
     "RateLimiter",
     "__version__",
+    "browser_headers",
+    "browser_profiles",
     "build_feed",
     "parse_channel_page",
     "parse_more_page",

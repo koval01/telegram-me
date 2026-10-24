@@ -31,6 +31,10 @@ hmac = "0.13.0"
 sha2 = "0.11.0"
 base64 = "0.23.1"
 getrandom = "0.4.3"
+wreq = { version = "0.16.1", default-features = false, features = ["tokio-rt", "webpki-roots", "gzip", "brotli", "zstd", "deflate"] }
+wreq-util = { version = "0.2.0", default-features = false, features = ["emulation", "emulation-compression", "emulation-serde", "tokio-rt"] }
+tokio = { version = "1", default-features = false, features = ["rt-multi-thread", "time"] }
+pyo3-async-runtimes = { version = "0.30.0", features = ["tokio-runtime"], optional = true }
 
 # Line coverage `cargo llvm-cov` must reach in CI; raise it with the tests
 # that earn it, never lower it (scripts/coverage_floor.py).
@@ -39,7 +43,7 @@ fail-under-lines = 96
 
 [features]
 default = []
-python = ["dep:pyo3"]
+python = ["dep:pyo3", "dep:pyo3-async-runtimes"]
 
 # CI and pre-commit turn every warning into an error (`-D warnings`).
 [lints.rust]
@@ -127,6 +131,7 @@ strip = true
 [dev-dependencies]
 cap = "0.1.2"
 flate2 = "1.1.10"
+tokio = { version = "1", features = ["macros", "net", "io-util", "rt-multi-thread", "time"] }
 
 # Dependencies (html5ever, regex, ...) optimised in tests too: the parser
 # tests run whole pages thousands of times (tests/hostile_html.rs).
