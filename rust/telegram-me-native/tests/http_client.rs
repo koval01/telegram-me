@@ -12,25 +12,47 @@ use tokio::net::TcpListener;
 /// Serve until the test ends: `/slow` never answers, `/missing` is a 404,
 /// anything else echoes the request head back gzip-compressed.
 async fn serve() -> String {
-    let listener = TcpListener::bind("127.0.0.1:0").await.unwrap();
-    let address = listener.local_addr().unwrap();
+    let listener = TcpListener::bind("127.0.0.1:0")
+        .await
+        .expect("bind a local port");
+    let address = listener.local_addr().expect("bound address");
     tokio::spawn(async move {
         loop {
-            let (mut socket, _) = listener.accept().await.unwrap();
+            let (mut socket, _) = listener.accept().await.expect("accept a connection");
             tokio::spawn(async move {
                 let mut head = Vec::new();
                 let mut buf = [0_u8; 4096];
                 while !head.windows(4).any(|w| w == b"\r\n\r\n") {
-                    let read = socket.read(&mut buf).await.unwrap();
+                    let read = socket.read(&mut buf).await.expect("read the request");
                     if read == 0 {
                         return;
                     }
                     head.extend_from_slice(&buf[..read]);
                 }
-                let head = String::from_utf8(head).unwrap();
+                let head = String::from_utf8(head).expect("ASCII request head");
                 let target = head.split(' ').nth(1).unwrap_or_default().to_owned();
                 if target.starts_with("/slow") {
                     tokio::time::sleep(Duration::from_secs(30)).await;
+                    return;
+                }
+                if target.starts_with("/truncated") {
+                    // Promises 100 bytes, sends 10, closes.
+                    let reply = "HTTP/1.1 200 OK\r\ncontent-length: 100\r\n\r\n0123456789";
+                    socket
+                        .write_all(reply.as_bytes())
+                        .await
+                        .expect("send the reply");
+                    return;
+                }
+                if target.starts_with("/corrupt") {
+                    let reply = "HTTP/1.1 200 OK\r\ncontent-encoding: gzip\r\n\
+                                 content-length: 10\r\nconnection: close\r\n\r\nnot gzip!!";
+                    socket
+                        .write_all(reply.as_bytes())
+                        .await
+                        .expect("send the reply");
+                    // The client may have hung up already.
+                    let _closed = socket.shutdown().await.is_ok();
                     return;
                 }
                 let status = if target.starts_with("/missing") {
@@ -39,16 +61,20 @@ async fn serve() -> String {
                     "200 OK"
                 };
                 let mut gz = GzEncoder::new(Vec::new(), Compression::fast());
-                gz.write_all(head.as_bytes()).unwrap();
-                let body = gz.finish().unwrap();
+                gz.write_all(head.as_bytes()).expect("compress in memory");
+                let body = gz.finish().expect("compress in memory");
                 let reply = format!(
                     "HTTP/1.1 {status}\r\ncontent-type: text/plain\r\ncontent-encoding: gzip\r\n\
                      content-length: {}\r\nconnection: close\r\n\r\n",
                     body.len()
                 );
-                socket.write_all(reply.as_bytes()).await.unwrap();
-                socket.write_all(&body).await.unwrap();
-                socket.shutdown().await.ok();
+                socket
+                    .write_all(reply.as_bytes())
+                    .await
+                    .expect("send the reply");
+                socket.write_all(&body).await.expect("send the body");
+                // The client may have hung up already.
+                let _closed = socket.shutdown().await.is_ok();
             });
         }
     });
@@ -63,7 +89,7 @@ fn client(base_url: String, timeout: Duration) -> Client {
         accept_language: "ru".into(),
         timeout,
     })
-    .unwrap()
+    .expect("valid options")
 }
 
 /// Header names of an echoed request head, lower-cased, in order.
@@ -166,6 +192,23 @@ async fn slow_answer_is_a_timeout() {
     let client = client(serve().await, Duration::from_millis(300));
     let err = client.fetch("GET", "/slow", &[], &[]).await.unwrap_err();
     assert!(matches!(err, Error::Timeout(_)), "{err:?}");
+}
+
+#[tokio::test]
+async fn body_cut_short_is_a_network_error() {
+    let client = client(serve().await, Duration::from_secs(5));
+    let err = client
+        .fetch("GET", "/truncated", &[], &[])
+        .await
+        .unwrap_err();
+    assert!(matches!(err, Error::Network(_)), "{err:?}");
+}
+
+#[tokio::test]
+async fn corrupt_compression_is_not_retried() {
+    let client = client(serve().await, Duration::from_secs(5));
+    let err = client.fetch("GET", "/corrupt", &[], &[]).await.unwrap_err();
+    assert!(matches!(err, Error::Other(_)), "{err:?}");
 }
 
 #[tokio::test]

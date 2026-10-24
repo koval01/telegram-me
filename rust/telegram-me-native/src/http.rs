@@ -286,10 +286,7 @@ fn emulation(
 pub fn profiles() -> Vec<String> {
     Profile::VARIANTS
         .iter()
-        .filter_map(|profile| match serde_json::to_value(profile) {
-            Ok(serde_json::Value::String(name)) => Some(name),
-            _ => None,
-        })
+        .filter_map(|profile| Some(serde_json::to_value(profile).ok()?.as_str()?.to_owned()))
         .filter(|name| is_chromium(name))
         .collect()
 }
@@ -403,11 +400,26 @@ fn classify(err: &wreq::Error) -> Error {
         || err.is_tls()
         || err.is_request()
         || err.is_body()
+        || broke_connection(err)
     {
         Error::Network(message)
     } else {
         Error::Other(message)
     }
+}
+
+/// Whether the connection failed under the error: wreq reports a body cut
+/// short as a decode error, but its cause is a protocol error, unlike a body
+/// that does not decompress.
+fn broke_connection(err: &wreq::Error) -> bool {
+    let mut source = std::error::Error::source(err);
+    while let Some(cause) = source {
+        if let Some(proto) = cause.downcast_ref::<wreq_proto::Error>() {
+            return !proto.is_user() && !proto.is_parse();
+        }
+        source = cause.source();
+    }
+    false
 }
 
 /// The error and its sources, as "outer: inner: ...".
@@ -528,6 +540,27 @@ mod tests {
         for name in names(xhr) {
             assert!(XHR_ORDER.contains(&name), "{name}");
         }
+    }
+
+    #[tokio::test]
+    async fn debug_names_base_and_user_agent() {
+        let client = Client::new(&options("chrome_149", "android")).unwrap();
+        let debug = format!("{client:?}");
+        assert!(
+            debug.contains("https://t.me") && debug.contains("Chrome/149."),
+            "{debug}"
+        );
+    }
+
+    #[test]
+    fn xhr_headers_fill_in_what_a_profile_lacks() {
+        let mut navigation = HeaderMap::new();
+        navigation.insert(USER_AGENT, HeaderValue::from_static("agent"));
+        let xhr = xhr_headers(&navigation);
+        assert_eq!(xhr[ACCEPT_ENCODING], "gzip, deflate, br, zstd");
+        assert_eq!(xhr[USER_AGENT], "agent");
+        assert!(!xhr.contains_key("priority"));
+        assert!(!xhr.contains_key(ACCEPT_LANGUAGE));
     }
 
     #[test]
