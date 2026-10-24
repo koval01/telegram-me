@@ -14,6 +14,7 @@ import hashlib
 import itertools
 import json
 import os
+import secrets
 import subprocess
 import time
 import uuid
@@ -26,6 +27,8 @@ import httpx2
 import pytest
 
 IMAGE = os.environ.get("TME_TEST_IMAGE", "")
+# Shared by the guarded servers, new for every run.
+POW_SECRET = secrets.token_hex(32)
 # The release before, for the rolling-upgrade test (test_rolling_upgrade.py).
 PREVIOUS_IMAGE = os.environ.get("TME_PREVIOUS_IMAGE", "")
 COMPOSE_FILE = Path(__file__).with_name("compose.yaml")
@@ -46,6 +49,7 @@ def compose(*args: str, check: bool = True) -> subprocess.CompletedProcess[str]:
         env={
             **os.environ,
             "APP_IMAGE": IMAGE,
+            "POW_SECRET": POW_SECRET,
             "PREVIOUS_IMAGE": PREVIOUS_IMAGE or IMAGE,
             "COMPOSE_PROFILES": "previous" if PREVIOUS_IMAGE else "",
         },

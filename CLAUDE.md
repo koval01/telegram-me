@@ -41,10 +41,10 @@ It serves REST `/v1` and GraphQL `/graphql`. Demo: https://tme.koval-dev.org
 | `src/telegram_me/cache.py` | `MemoryCache` (native L1), `RedisCache` (circuit breaker), `TwoLevelCache` |
 | `src/telegram_me/settings.py` | Every setting; env var = upper-case field name |
 | `rust/telegram-me-native/` | The native crate and its Python package (`python/telegram_me_native`, stubs in `_native.pyi`) |
-| `tests/` | Contract snapshots, coalescing, memory guards, unit tests |
+| `tests/` | Contract snapshots, coalescing, memory guards, unit and property tests; `integration/` (the image as two servers with Valkey) and `deploy/` (deploy scripts), both need Docker and `TME_TEST_IMAGE` |
 | `docs/`, `docs/es/`, `docs/ru/` | Documentation site in English, Spanish and Russian (Zensical) |
-| `deploy/` | Production compose, Caddyfile, `remote-deploy.sh`, `bootstrap-server.sh` |
-| `scripts/` | Smoke matrix, benchmarks, audits, fixture recording |
+| `deploy/` | Production compose, Caddyfile, `remote-deploy.sh` (one server), `rollout.sh` (the fleet), `bootstrap-server.sh` |
+| `scripts/` | Smoke matrix, API contract and coverage-floor checks, benchmarks, audits, fixture recording |
 
 ## Commands
 
@@ -58,6 +58,8 @@ make rust           # cargo fmt --check, clippy pedantic (both feature sets), ca
 make snapshots      # rewrite contract snapshots; review the diff!
 make docs           # build en/es/ru (CI adds --strict)
 make up && make smoke   # compose stack with Valkey + live smoke test
+make contract       # breaking REST/GraphQL changes and lowered coverage floors vs origin/main
+make docker && make integration deploy-test   # the image with real Valkey and deploy scripts
 ```
 
 Before you open a PR, everything below must pass:
@@ -80,6 +82,12 @@ Before you open a PR, everything below must pass:
     and add a CHANGELOG entry.
   - Never update snapshots to make a failing test pass without understanding
     why it failed.
+  - The **Guards** workflow (`scripts/api_contract.py`) fails a breaking
+    change of `tests/snapshots/openapi.json` or `schema.graphql` against the
+    base unless the PR is labelled `breaking-change`, which means a major
+    version. Do not add the label yourself.
+- **Coverage floors only go up:** `fail_under` in `pyproject.toml`,
+  `fail-under-lines` in the crate's `Cargo.toml`. Never lower them.
 - **The docs are in three languages.** `tests/unit/test_docs_config.py`
   fails when a setting is missing from any `configuration.md`, or when a
   translated page lacks a section of the English one. A new setting or docs
@@ -105,10 +113,12 @@ Before you open a PR, everything below must pass:
 
 ## Deployment: merging to `main` deploys production
 
-- `.github/workflows/release.yml` runs CI, builds and pushes the multi-arch
-  image (Docker Hub and GHCR), then `deploy.yml` rolls it out to every server
-  over SSH, one server at a time. `deploy/remote-deploy.sh` rolls a server back
-  when it is unhealthy.
+- `.github/workflows/release.yml` runs CI and Guards, builds and pushes the
+  multi-arch image (Docker Hub and GHCR), then `deploy.yml` rolls it out to
+  every server over SSH, one server at a time (`deploy/rollout.sh`).
+  `deploy/remote-deploy.sh` rolls a server back when it is unhealthy or fails
+  the smoke test; server 1 is a canary; a later failure rolls back every
+  server that took the release.
 - **Do not merge PRs into `main` unless the maintainer asks you to.** Open the
   PR and stop.
 - Pushing a `v*` tag publishes semver image tags and a GitHub release built

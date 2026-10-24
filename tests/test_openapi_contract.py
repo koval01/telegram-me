@@ -6,6 +6,7 @@ breaking changes; the GraphQL schema is pinned the same way by
 `test_graphql_contract.py::test_schema_sdl`.
 """
 
+import secrets
 from typing import Any
 
 from tests.conftest import ClientFactory, Snapshot
@@ -17,7 +18,7 @@ ALL_FEATURES: dict[str, Any] = {
     "enable_graphql": True,
     "enable_rate_limit": True,
     "enable_pow": True,
-    "pow_secret": "contract-snapshot-only-secret-0123456789",
+    "pow_secret": secrets.token_hex(32),
 }
 
 

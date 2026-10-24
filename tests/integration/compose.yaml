@@ -44,7 +44,8 @@ x-guarded-env: &guarded-env
   ENABLE_RATE_LIMIT: "true"
   RATE_LIMIT_RPM: "20"
   ENABLE_POW: "true"
-  POW_SECRET: integration-tests-only-secret-0123456789
+  # Generated for every run by conftest.py.
+  POW_SECRET: ${POW_SECRET:?POW_SECRET must be set}
   POW_DIFFICULTY: "8"
 
 services:

@@ -19,6 +19,7 @@ import hashlib
 import itertools
 import json
 import os
+import secrets
 from collections.abc import Iterator, Mapping
 from typing import Any
 
@@ -177,10 +178,13 @@ async def _ok(scope: Scope, receive: Receive, send: Send) -> None:
     await send({"type": "http.response.body", "body": b"{}"})
 
 
+SECRET = secrets.token_hex(32)
+
+
 def _guard(**overrides: Any) -> ProtectionMiddleware:
     options = {
         "enable_pow": True,
-        "pow_secret": "property-tests-only-secret-0123456789",
+        "pow_secret": SECRET,
         "pow_difficulty": 8,
         "enable_rate_limit": True,
         "rate_limit_rpm": 100_000,
