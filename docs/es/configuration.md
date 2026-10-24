@@ -336,10 +336,11 @@ proceso ([`MEMORY_CACHE_MAX_MB`](#memory_cache_max_mb),
 de caché esperan un viaje de ida y vuelta a Redis. Si no se define, la caché
 dentro del proceso es la única.
 
-Una caída de Redis nunca ralentiza las solicitudes: los comandos agotan su
-tiempo de espera tras [`REDIS_TIMEOUT`](#redis_timeout) y, a continuación,
-Redis se omite durante 30 segundos (circuit breaker), mientras la API funciona
-con su caché dentro del proceso.
+Una caída de Redis no ralentiza las solicitudes durante mucho tiempo: los
+comandos agotan su tiempo de espera tras [`REDIS_TIMEOUT`](#redis_timeout) y,
+tras tres fallos seguidos en 10 segundos, Redis se omite durante 30 segundos
+(circuit breaker), mientras la API funciona con su caché dentro del proceso.
+Un solo comando fallido no lo activa.
 
 Cada worker mantiene hasta `2 × TELEGRAM_MAX_CONCURRENCY` (al menos 32)
 conexiones a Redis. Una ráfaga de comandos que supere esa cifra, como varias

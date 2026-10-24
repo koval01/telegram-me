@@ -59,10 +59,12 @@ See [Performance](performance.md#two-level-cache) for every endpoint.
 
 ### Redis level
 
-Commands time out after `REDIS_TIMEOUT` (0.5 s). The first failure opens a
-circuit breaker: Redis is skipped for 30 seconds, so a Redis outage costs at
-most one slow request per worker, not one per request. Responses are parsed
-by hiredis (C).
+Commands time out after `REDIS_TIMEOUT` (0.5 s). Three failures in a row
+within 10 seconds open a circuit breaker: Redis is then skipped for 30
+seconds, so an outage costs a few slow requests per worker, not one per
+request. A single failure, such as a slow TLS connect to a distant Redis or a
+lost packet, does not open it, and any command that reaches Redis resets the
+count. Responses are parsed by hiredis (C).
 
 A feed or previews request runs up to 100 cache lookups at once, so the
 connection pool (`2 × TELEGRAM_MAX_CONCURRENCY` per worker, at least 32) makes

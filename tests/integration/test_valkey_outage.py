@@ -32,5 +32,6 @@ def test_valkey_outage_is_survived_and_sharing_resumes(stack: Stack, upstream: U
         body_json(stack.get("server-b", f"/v1/body/{channel}"))
         return upstream.fetches(f"/s/{channel}") == 1
 
-    # The circuit breaker bypasses Redis for 30 s after the outage.
+    # A process that saw three failures in 10 s bypasses Redis for 30 s;
+    # one that saw fewer uses it again at once.
     stack.wait_until(shared_again, timeout=60, what="servers sharing the cache again")
