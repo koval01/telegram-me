@@ -66,25 +66,32 @@ async def test_concurrent_misses_on_both_servers_fetch_once(
 
 
 def test_shared_rate_limit_counts_a_client_on_every_server(stack: Stack) -> None:
-    """RATE_LIMIT_RPM=20: no process alone sees 20 requests of this client."""
-    if time.time() % 60 > 40:
+    """RATE_LIMIT_RPM=20: no process alone sees 20 requests of this client.
+
+    One connection per server, so one worker of each counts the client: 11
+    requests each, 22 together. Each process pushes its counts to Redis once
+    a second and blocks the client when the shared total is over the limit.
+    """
+    if time.time() % 60 > 45:
         # Counters are per minute; start in a fresh one.
         time.sleep(61 - time.time() % 60)
     ip = client_ip()
     servers = ["guarded-a", "guarded-b"]
-    accepted = [stack.get(server, "/healthz", ip=ip).status_code for server in servers * 6]
-    assert accepted == [200] * 12
+    burst = [stack.get(server, "/healthz", ip=ip).status_code for server in servers * 11]
+    assert burst == [200] * 22
+    time.sleep(2.5)
 
-    later: list[int] = []
-    for server in servers * 10:
+    later: list[tuple[str, int]] = []
+    for server in servers * 6:
         response = stack.get(server, "/healthz", ip=ip)
-        later.append(response.status_code)
+        later.append((server, response.status_code))
         if response.status_code == 429:
             assert int(response.headers["retry-after"]) >= 1
         time.sleep(0.25)
-    # Each process sees at most ~11 requests, below its own burst of 20: only
-    # the counters shared in Redis can block the client, within a second or two.
-    assert later[-8:] == [429] * 8, later
+    # At most 17 requests per process, below its own burst of 20: only the
+    # counters shared in Redis block the client, on both servers.
+    assert [status for _, status in later[-6:]] == [429] * 6, later
+    assert {server for server, status in later if status == 429} == set(servers)
     # Other clients are not affected.
     assert stack.get("guarded-a", "/healthz", ip=client_ip()).status_code == 200
 
