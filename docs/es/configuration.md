@@ -58,6 +58,7 @@ La fuente de verdad es
 | [`REDIS_URL`](#redis_url) | — | Caché |
 | [`REDIS_TIMEOUT`](#redis_timeout) | `0.5` | Caché |
 | [`REDIS_CONNECT_TIMEOUT`](#redis_connect_timeout) | `2` | Caché |
+| [`REDIS_HEARTBEAT_INTERVAL`](#redis_heartbeat_interval) | `5` | Caché |
 | [`PREVIEW_CACHE_TTL`](#preview_cache_ttl) | `3600` | Caché |
 | [`MEMORY_CACHE_MAX_MB`](#memory_cache_max_mb) | `64` | Caché |
 | [`MEMORY_CACHE_MAX_TTL`](#memory_cache_max_ttl) | `10` | Caché |
@@ -355,6 +356,19 @@ varios viajes de ida y vuelta: unos 0,3–0,7 s a 90 ms. Con el tiempo de espera
 de los comandos, cada reconexión tras un error agotaría su tiempo y volvería a
 abrir el circuit breaker, y Redis seguiría desconectándose. Además, cada worker
 abre su primera conexión al arrancar, para que ninguna petición la pague.
+
+### `REDIS_HEARTBEAT_INTERVAL`
+
+Cada worker escribe su propia marca en Redis cada tantos segundos
+(`tme:v2:node:<host>:<pid>`, con un TTL de tres intervalos); `0` lo desactiva.
+
+- Mantiene una conexión abierta, para que las peticiones no paguen la
+  reconexión a un endpoint TLS lejano.
+- Detecta una caída en un intervalo como mucho.
+- Se envía incluso con el circuit breaker abierto: en cuanto Redis vuelve a
+  responder, el breaker se cierra sin esperar al resto de los 30 s.
+- Las marcas vivas muestran qué procesos de qué servidores están en marcha:
+  `redis-cli --scan --pattern 'tme:v2:node:*'`.
 
 ### `PREVIEW_CACHE_TTL`
 

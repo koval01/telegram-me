@@ -8,6 +8,7 @@ from contextlib import AsyncExitStack, asynccontextmanager, suppress
 from dataclasses import dataclass
 
 from telegram_me.cache import Cache, TwoLevelCache, create_cache, create_redis, shared_cache
+from telegram_me.heartbeat import beating
 from telegram_me.memory import trimming_memory
 from telegram_me.services.channels import ChannelService
 from telegram_me.services.feed import FeedRefresher, FeedService
@@ -64,6 +65,7 @@ async def build_container(
         stack.push_async_callback(cache.close)
         if (shared := shared_cache(cache)) is not None:
             await shared.warm_up()
+            await stack.enter_async_context(beating(shared, settings.redis_heartbeat_interval))
 
         fetcher = fetcher or ReqwestFetcher(timeout=settings.telegram_timeout)
         gate = FairGate(settings.telegram_max_concurrency, settings.upstream_queue_limit)
