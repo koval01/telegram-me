@@ -119,6 +119,9 @@ class Settings(BaseSettings):
     # Cache: in-process, in front of Redis when REDIS_URL is set
     redis_url: str | None = None
     redis_timeout: PositiveFloat = 0.5
+    """Seconds a Redis command may take; a slower one opens the circuit breaker."""
+    redis_connect_timeout: PositiveFloat = 2.0
+    """Seconds to open a new Redis connection, TLS handshake included."""
     preview_cache_ttl: PositiveInt = 3600
     memory_cache_max_mb: PositiveInt = 64
     memory_cache_max_ttl: PositiveFloat = 10.0

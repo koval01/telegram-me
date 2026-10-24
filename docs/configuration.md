@@ -56,6 +56,7 @@ The source of truth is
 | [`EARLY_REFRESH_WINDOW`](#early_refresh_window) | `0.1` | Upstream |
 | [`REDIS_URL`](#redis_url) | — | Cache |
 | [`REDIS_TIMEOUT`](#redis_timeout) | `0.5` | Cache |
+| [`REDIS_CONNECT_TIMEOUT`](#redis_connect_timeout) | `2` | Cache |
 | [`PREVIEW_CACHE_TTL`](#preview_cache_ttl) | `3600` | Cache |
 | [`MEMORY_CACHE_MAX_MB`](#memory_cache_max_mb) | `64` | Cache |
 | [`MEMORY_CACHE_MAX_TTL`](#memory_cache_max_ttl) | `10` | Cache |
@@ -328,8 +329,17 @@ opening the circuit breaker.
 
 ### `REDIS_TIMEOUT`
 
-Connect and command timeout in seconds, and the longest a command waits for a
-free pooled connection.
+Command timeout in seconds, and the longest a command waits for a free pooled
+connection. A command slower than this opens the circuit breaker.
+
+### `REDIS_CONNECT_TIMEOUT`
+
+Seconds to open a new connection to Redis, TLS handshake included. It is
+longer than `REDIS_TIMEOUT` because a connection to a distant TLS endpoint
+takes several round trips: about 0.3–0.7 s at 90 ms. Under the command timeout
+every reconnect after an error would time out and reopen the circuit breaker,
+so Redis would keep dropping out. Each worker also opens its first connection
+at startup, so no request pays for it.
 
 ### `PREVIEW_CACHE_TTL`
 
