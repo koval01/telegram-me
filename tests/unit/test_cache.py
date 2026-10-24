@@ -11,6 +11,8 @@ from redis.asyncio import ConnectionPool, Redis
 from redis.exceptions import ConnectionError as RedisConnectionError
 
 from telegram_me.cache import (
+    FAILURE_WINDOW,
+    FAILURES_TO_TRIP,
     KEY_PREFIX,
     CacheEntry,
     MemoryCache,
@@ -164,13 +166,47 @@ class _BrokenPipeline:
 
 
 async def test_redis_outage_opens_circuit_breaker(caplog: pytest.LogCaptureFixture) -> None:
+    _BrokenRedis.calls = 0
     cache = RedisCache(_BrokenRedis(decode_responses=True), cooldown=30)
+    for _ in range(FAILURES_TO_TRIP - 1):
+        assert await cache.get("k") is None
+        assert cache.available  # one failure is not an outage
+    assert "Redis unavailable" not in caplog.text
     assert await cache.get("k") is None
     assert not cache.available
     assert await cache.get("k") is None  # skipped without touching Redis
     await cache.set("k", b"v", ttl=60)  # no-op while open
-    assert _BrokenRedis.calls == 1
+    assert _BrokenRedis.calls == FAILURES_TO_TRIP
     assert "Redis unavailable" in caplog.text
+
+
+async def test_a_success_resets_the_failure_count(redis_cache: RedisCache) -> None:
+    for _ in range(5):
+        for _ in range(FAILURES_TO_TRIP - 1):
+            redis_cache.trip(RedisConnectionError("slow connect"))
+        assert await redis_cache.get("k") is None  # reaches Redis: a miss, not a failure
+    assert redis_cache.available
+
+
+def test_failures_outside_the_window_do_not_add_up(
+    redis_cache: RedisCache, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    now = [1000.0]
+    monkeypatch.setattr("telegram_me.cache.time.monotonic", lambda: now[0])
+    for _ in range(5):
+        for _ in range(FAILURES_TO_TRIP - 1):
+            redis_cache.trip(RedisConnectionError("slow connect"))
+        now[0] += FAILURE_WINDOW + 1
+    assert redis_cache.available
+    for _ in range(FAILURES_TO_TRIP):
+        redis_cache.trip(RedisConnectionError("down"))
+    assert not redis_cache.available
+
+
+def test_failure_threshold_is_configurable() -> None:
+    cache = RedisCache(FakeAsyncRedis(), failures_to_trip=1)
+    cache.trip(RedisConnectionError("down"))
+    assert not cache.available
 
 
 async def test_warm_up_opens_a_connection(redis_cache: RedisCache) -> None:
@@ -178,15 +214,17 @@ async def test_warm_up_opens_a_connection(redis_cache: RedisCache) -> None:
     assert redis_cache.available
 
 
-async def test_failed_warm_up_opens_circuit_breaker() -> None:
+async def test_failed_warm_up_counts_as_one_failure() -> None:
     cache = RedisCache(_BrokenRedis(decode_responses=True), cooldown=30)
     assert not await cache.warm_up()
-    assert not cache.available
+    assert cache.available
+    assert not await RedisCache(_BrokenRedis(), failures_to_trip=1).warm_up()
 
 
 async def test_redis_get_with_ttl_trips_circuit_breaker() -> None:
     cache = RedisCache(_BrokenRedis(decode_responses=True), cooldown=30)
-    assert await cache.get_with_ttl("k") is None
+    for _ in range(FAILURES_TO_TRIP):
+        assert await cache.get_with_ttl("k") is None
     assert not cache.available
     assert await cache.get_with_ttl("k") is None
 
@@ -421,9 +459,8 @@ async def test_two_level_runs_on_local_cache_while_redis_is_down(
     caplog: pytest.LogCaptureFixture,
 ) -> None:
     _BrokenRedis.calls = 0
-    cache = TwoLevelCache(
-        MemoryCache(2**20), RedisCache(_BrokenRedis(decode_responses=True)), max_local_ttl=0.05
-    )
+    shared = RedisCache(_BrokenRedis(decode_responses=True), failures_to_trip=1)
+    cache = TwoLevelCache(MemoryCache(2**20), shared, max_local_ttl=0.05)
     await cache.set("k", b"v", ttl=60)  # opens the circuit breaker
     assert _BrokenRedis.calls == 1
     assert not cache.shared.available
@@ -442,6 +479,7 @@ async def test_two_level_runs_on_local_cache_while_redis_is_down(
 async def test_two_level_open_breaker_skips_redis_reads(two_level: TwoLevelCache) -> None:
     await two_level.shared.set("k", b"v", ttl=60)
     reads = _CountingReads(two_level.shared)
-    two_level.shared.trip(RedisConnectionError("down"))
+    for _ in range(FAILURES_TO_TRIP):
+        two_level.shared.trip(RedisConnectionError("down"))
     assert await two_level.get("k") is None
     assert reads.calls == 0

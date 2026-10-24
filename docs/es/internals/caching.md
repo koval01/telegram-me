@@ -65,10 +65,13 @@ Consulta [Rendimiento](performance.md#two-level-cache) para cada endpoint.
 
 ### Nivel Redis { #redis-level }
 
-Los comandos agotan su tiempo de espera tras `REDIS_TIMEOUT` (0.5 s). El primer
-fallo abre un circuit breaker: Redis se omite durante 30 segundos, así que una
-caída de Redis cuesta como mucho una solicitud lenta por worker, no una por
-solicitud. Las respuestas las analiza hiredis (C).
+Los comandos agotan su tiempo de espera tras `REDIS_TIMEOUT` (0.5 s). Tres
+fallos seguidos en 10 segundos abren un circuit breaker: a partir de ahí Redis
+se omite durante 30 segundos, así que una caída cuesta unas pocas solicitudes
+lentas por worker, no una por solicitud. Un fallo aislado, como una conexión
+TLS lenta a un Redis lejano o un paquete perdido, no lo abre, y cualquier
+comando que llega a Redis reinicia la cuenta. Las respuestas las analiza
+hiredis (C).
 
 Una solicitud de feed o de vistas previas ejecuta hasta 100 consultas a la
 caché a la vez, así que el pool de conexiones
