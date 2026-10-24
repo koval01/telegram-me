@@ -102,6 +102,7 @@ make fixtures CHANNELS="nebudetgg"     # add or refresh specific channels
 | `test_runtime.py` | Жизненный цикл встроенного рефрешера, JSON-логи |
 | `test_docs_config.py` | Переводы документации: наличие всех страниц, согласованность конфигурации с английской |
 | `test_api_contract.py` | Какие изменения контракта `scripts/api_contract.py` считает несовместимыми |
+| `test_layers.py` | У каждого модуля пакета есть место в слоях import-linter |
 | `test_properties.py` | Тесты на основе свойств, см. [ниже](#property-and-fuzz-tests) |
 
 Тесты поддерживают async (`pytest-asyncio` в режиме auto), а предупреждения
@@ -234,17 +235,52 @@ uv run --no-project python scripts/smoke_matrix.py --base-url https://api.exampl
 [Продакшен](../deployment/production.md#how-a-deployment-works)), а workflow
 **Nightly** — на живом t.me и на продакшене.
 
+## Статические проверки { #static-checks }
+
+Помимо тестов, каждый коммит проходит проверки, которые читают код, не
+запуская его. Локально их запускают `make lint` и `make audit` (`make check`
+включает обе); `make tools` устанавливает бинарники, которые не приносит
+`uv sync`.
+
+| Инструмент | Находит | Настройки |
+|---|---|---|
+| clippy, pedantic и отобранные линты restriction и nursery | в нативном крейте: `unwrap()`, `panic!`, `todo!`, `dbg!`, печать, `#[allow]` без причины; непроверенную индексацию и срезы строк в парсере | `[lints]` в `rust/telegram-me-native/Cargo.toml`, `clippy.toml` |
+| cargo-deny | уязвимости из RustSec, заброшенные и отозванные (yanked) крейты, лицензии вне списка разрешённых, две версии одного крейта, неизвестные реестры и git-источники | `rust/telegram-me-native/deny.toml` |
+| cargo-machete | зависимости Rust, которые не использует никакой код | |
+| mypy `--strict`, плюс `warn_unreachable` и ещё двенадцать кодов ошибок | недостижимый код, переопределения без `@override`, возможно неопределённые имена, всегда истинные условия, неполный `match` | `[tool.mypy]` |
+| ruff | bugbear, bandit, ... а теперь и неиспользуемые аргументы, слепой `except`, даты без часового пояса, закомментированный код, приватные члены чужих классов, относительные импорты и `telegram_me_native._native` | `[tool.ruff]` |
+| import-linter | импорт вопреки слоям: `api` → `container` → `services` → `cache` → `telegram` → `schemas` → `settings`, и FastAPI или strawberry ниже `api` | `[tool.importlinter]` |
+| vulture | функции, атрибуты и переменные в `src/`, которые ничто в `src/` не использует (использования только в тестах мало) | `[tool.vulture]`, `tests/vulture_whitelist.py` |
+| `uv audit` | известные уязвимости пакетов из `uv.lock` | |
+| gitleaks | секреты в подготовленных файлах (pre-commit) и в каждом коммите (CI), в том числе ключ обхода Cloudflare | `.gitleaks.toml` |
+| zizmor | риски GitHub Actions: инъекции в шаблонах, сохранённые учётные данные, унаследованные секреты, Dependabot без выдержки | `.github/zizmor.yml` |
+| hadolint | ошибки Dockerfile, вплоть до стиля | `.hadolint.yaml` |
+| typos | опечатки в коде и документации (английские и русские страницы; испанские пропускаются) | `.typos.toml` |
+| shellcheck, actionlint | скрипты развёртывания и workflows | |
+| trivy | высокие и критические уязвимости с исправлением в собранном образе | `make image-scan` |
+| проверка зависимостей | уязвимые или под лицензией GPL зависимости, которые добавляет pull request | `.github/workflows/dependency-review.yml` |
+| OpenSSF Scorecard | практики цепочки поставок репозитория, в виде оповещений code scanning | `.github/workflows/scorecard.yml` |
+
+Замечание исправляют или разрешают настолько узко, насколько позволяет
+инструмент, с причиной рядом: `#[expect(lint, reason = "...")]` в Rust
+(`#[allow]` не проходит), `# noqa: CODE - почему` в Python, запись с
+комментарием в настройках инструмента. Ничто не отключается для целого
+файла ради того, чтобы проверка прошла.
+
 ## Задачи CI { #ci-jobs }
 
 | Workflow, задача | Когда | Длится | Ловит |
 |---|---|---|---|
-| CI: Rust | каждый push | ~3 мин | fmt, clippy, тесты Rust (враждебный HTML), порог покрытия Rust |
-| CI: Lint & types | каждый push | ~3,5 мин | ruff, mypy, shellcheck, actionlint |
+| CI: Rust | каждый push | ~3 мин | fmt, clippy, cargo-deny и cargo-machete (+15 с), тесты Rust (враждебный HTML), порог покрытия Rust |
+| CI: Lint & types | каждый push | ~4 мин | ruff, mypy, import-linter, vulture, `uv audit`, typos, shellcheck, actionlint, zizmor, hadolint, gitleaks по всей истории (вместе +30 с) |
 | CI: Tests | каждый push | ~2 мин | набор выше на Python 3.13 и 3.14, порог покрытия Python |
 | CI: Docker image smoke test | после трёх выше | ~2 мин | образ стартует в защищённом режиме, smoke-матрица на живом t.me, корректная остановка |
+| CI: Image vulnerabilities | после образа | ~1 мин | trivy: высокие и критические уязвимости с исправлением |
 | CI: Integration | после образа | ~2 мин | [интеграционные тесты](#integration-tests) |
 | CI: Deploy scripts | после образа | ~2 мин | [тесты скриптов развёртывания](#deploy-scripts) |
 | Guards | каждый pull request, изменение меток | ~10 с | [несовместимые изменения API](#breaking-changes), пониженные пороги покрытия |
+| Dependency review | каждый pull request | ~15 с | добавленные зависимости с известными уязвимостями или лицензией GPL |
+| Scorecard | push в `main`, по понедельникам | ~1 мин | OpenSSF Scorecard (читает только ветку по умолчанию) |
 | Nightly | ежедневно в 03:23 UTC | ~15 мин | smoke-тесты на живом t.me и продакшене, 10 мин фаззинга, долгие прогоны свойств; открывает issue с меткой `nightly` |
 
 Release (push в `main`) запускает CI и Guards до сборки и развёртывания

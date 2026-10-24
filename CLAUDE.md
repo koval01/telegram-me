@@ -52,9 +52,13 @@ The toolchain is uv, Rust (stable) and Docker. `make help` lists every target.
 
 ```bash
 make install        # uv sync + pre-commit hooks
+make tools          # cargo-deny, cargo-machete; gitleaks, hadolint, trivy (Homebrew)
 make native         # rebuild the Rust extension after editing rust/
-make check          # what CI runs: make rust + lint + typecheck + test
+make check          # what CI runs: make rust + lint + typecheck + test + audit
 make rust           # cargo fmt --check, clippy pedantic (both feature sets), cargo test
+make lint           # ruff, import-linter, vulture, typos, zizmor, hadolint, shellcheck, actionlint
+make audit          # cargo-deny, cargo-machete, uv audit, gitleaks over the history
+make image-scan     # trivy on IMAGE (default telegram-me:dev, from `make docker`)
 make snapshots      # rewrite contract snapshots; review the diff!
 make docs           # build en/es/ru (CI adds --strict)
 make up && make smoke   # compose stack with Valkey + live smoke test
@@ -64,8 +68,7 @@ make docker && make integration deploy-test   # the image with real Valkey and d
 
 Before you open a PR, everything below must pass:
 
-- `make rust`
-- `uv run ruff check . && uv run ruff format --check . && uv run mypy && uv run pytest -q`
+- `make check` (it needs uv 0.13.5 or later, for `uv audit`, and `make tools`)
 - `make snapshots` with **no diff**
 - the three strict docs builds:
   `uv run --only-group docs zensical build --clean --strict [-f zensical.es.toml | -f zensical.ru.toml]`
@@ -110,6 +113,27 @@ Before you open a PR, everything below must pass:
 - **Style:** match the surrounding code. Python is typed for `mypy --strict`
   and linted with ruff's broad rule set. Rust is checked with clippy pedantic
   and `-D warnings`. Comments explain *why*, briefly.
+- **Static checks** (all in `make check`; the list with settings is in
+  `docs/contributing/testing.md#static-checks`):
+  - Rust: no `unwrap()` outside tests, state the invariant with
+    `expect("...")`. No `#[allow]`: use `#[expect(lint, reason = "...")]`.
+    In `src/parse/` no indexing or slicing that can panic (`get`,
+    `split_once`, `strip_prefix`): the release build aborts on panic, and
+    takes the worker with it.
+  - New crates must pass `deny.toml` (licenses, advisories, one version
+    each). Bump `rust-version` with `RUST_VERSION`: an older value makes
+    the resolver keep vulnerable releases.
+  - Python layering is enforced by import-linter (`[tool.importlinter]`):
+    a module imports only from layers below it. Never add to
+    `ignore_imports` to make it pass.
+  - vulture checks `src/` alone: code that only tests use is dead. A name
+    used by a framework goes in `tests/vulture_whitelist.py` with the
+    reason.
+  - Allows are narrow and explained (`# noqa: CODE - why`, an entry with a
+    comment). No new per-file ignores just to pass.
+  - gitleaks runs on staged changes (pre-commit) and the whole history
+    (CI). `.env.local` holds the production bypass key: never copy values
+    from it into a tracked file, a test or a command in the docs.
 
 ## Deployment: merging to `main` deploys production
 

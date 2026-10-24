@@ -23,7 +23,7 @@ import time
 from collections import Counter
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
-from typing import Any
+from typing import Any, override
 from urllib.parse import parse_qsl, urlsplit
 
 FIXTURES = Path(os.environ.get("FIXTURES_DIR", Path(__file__).parents[1] / "fixtures" / "telegram"))
@@ -73,7 +73,8 @@ class Handler(BaseHTTPRequestHandler):
 
     protocol_version = "HTTP/1.1"
 
-    def log_message(self, format: str, *args: Any) -> None:  # noqa: A002
+    @override
+    def log_message(self, format: str, *args: Any) -> None:
         """Quiet: the tests read the counters instead."""
 
     def _send(self, status: int, body: bytes, content_type: str = "application/json") -> None:

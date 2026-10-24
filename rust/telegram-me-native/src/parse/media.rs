@@ -4,7 +4,7 @@ use scraper::ElementRef;
 use serde_json::Value;
 
 use super::dom::{attr, css, first, select, text};
-use super::{background_url, object, opt_str};
+use super::{background_url, map, object, opt_str};
 
 /// `MM:SS` or `HH:MM:SS` in seconds.
 #[must_use]
@@ -41,12 +41,11 @@ fn video(node: ElementRef<'_>) -> Value {
         .and_then(|p| attr(p, "src"))
         .filter(|s| !s.is_empty());
 
-    let mut media = object! {
+    let mut map = map! {
         "url" => opt_str(source),
         "thumb" => opt_str(thumb.and_then(|t| background_url(attr(t, "style")))),
         "type" => "video",
     };
-    let map = media.as_object_mut().expect("object");
     if source.is_none() {
         map.insert("available".into(), Value::Bool(false));
     }
@@ -55,7 +54,7 @@ fn video(node: ElementRef<'_>) -> Value {
     } else {
         map.insert("type".into(), Value::from("gif"));
     }
-    media
+    Value::Object(map)
 }
 
 fn voice(node: ElementRef<'_>) -> Option<Value> {
@@ -104,14 +103,11 @@ fn sticker(node: ElementRef<'_>) -> Option<Value> {
             continue;
         };
         let source = first(container, source_selector)?;
-        let mut media = object! {"url" => opt_str(attr(source, attribute)), "type" => "sticker"};
+        let mut media = map! {"url" => opt_str(attr(source, attribute)), "type" => "sticker"};
         if let Some(thumb) = first(source, css!("img")) {
-            media
-                .as_object_mut()
-                .expect("object")
-                .insert("thumb".into(), opt_str(attr(thumb, "src")));
+            media.insert("thumb".into(), opt_str(attr(thumb, "src")));
         }
-        return Some(media);
+        return Some(Value::Object(media));
     }
     None
 }

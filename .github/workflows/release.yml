@@ -34,6 +34,8 @@ jobs:
       sha_tag: ${{ steps.vars.outputs.sha_tag }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - id: vars
         run: echo "sha_tag=sha-${GITHUB_SHA::12}" >> "$GITHUB_OUTPUT"
       - uses: docker/setup-qemu-action@99012661954931238ded8c8b007157a8430204e1 # v4.4.0
@@ -82,7 +84,16 @@ jobs:
     uses: ./.github/workflows/deploy.yml
     with:
       image_tag: ${{ needs.image.outputs.sha_tag }}
-    secrets: inherit
+    # Only what the deployment uses, not every secret of the repository.
+    secrets:
+      SSH_KEY: ${{ secrets.SSH_KEY }}
+      SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
+      SERVERS_IPS: ${{ secrets.SERVERS_IPS }}
+      REDIS_URL: ${{ secrets.REDIS_URL }}
+      TLS_CERT: ${{ secrets.TLS_CERT }}
+      TLS_KEY: ${{ secrets.TLS_KEY }}
+      POW_SECRET: ${{ secrets.POW_SECRET }}
+      CF_BYPASS_KEY: ${{ secrets.CF_BYPASS_KEY }}
 
   github-release:
     name: GitHub release
@@ -93,6 +104,8 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - name: Release notes from CHANGELOG.md
         run: |
           version="${GITHUB_REF_NAME#v}"
@@ -102,6 +115,12 @@ jobs:
             found {print}
           ' CHANGELOG.md > notes.md
           test -s notes.md || echo "See CHANGELOG.md" > notes.md
-      - uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64 # v3.0.3
-        with:
-          body_path: notes.md
+      - name: Create or update the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            gh release edit "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" --notes-file notes.md
+          else
+            gh release create "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" --verify-tag --title "$GITHUB_REF_NAME" --notes-file notes.md
+          fi

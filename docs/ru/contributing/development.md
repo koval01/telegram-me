@@ -24,9 +24,16 @@
 - Типы: **mypy --strict** для `src` и `tests` с плагином Pydantic. Публичные
   функции полностью аннотированы; `Any` используется только для сырого JSON.
 - Docstrings: у каждого публичного модуля, класса и функции, в стиле Google.
-- Слои: `api` → `services` → `telegram` / `cache`; ничто ниже `api` не
-  импортирует FastAPI. Новые долгоживущие объекты подключайте в
-  `container.py`.
+- Слои: `api` → `services` → `cache` → `telegram`; ничто ниже `api` не
+  импортирует FastAPI. Оба правила проверяет import-linter
+  (`[tool.importlinter]` в `pyproject.toml`). Новые долгоживущие объекты
+  подключайте в `container.py`.
+- Rust: никаких `unwrap()` в рабочем коде (вместо этого `expect("...")`
+  называет инвариант), а в `src/parse/` никакой индексации и срезов, которые
+  могут вызвать панику: используйте `get`, `split_once`, `strip_prefix`.
+  Расширение при панике аварийно завершается, и вместе с ним падает worker.
+  Все инструменты описаны в разделе
+  [Статические проверки](testing.md#static-checks).
 - Ошибки: выбрасывайте доменные ошибки из `telegram/errors.py`; API
   сопоставляет их с кодами статуса в одном месте (`api/errors.py`).
 - Сохраняйте стабильность контракта `/v1`. Новые поля — можно; удаление или
@@ -43,14 +50,17 @@ uv lock --upgrade            # refresh everything to the newest versions
 ```
 
 Dependabot раз в неделю открывает сгруппированные обновления для пакетов
-Python, GitHub Actions и базовых образов Docker.
+Python, GitHub Actions и базовых образов Docker, для версий не моложе недели
+(обновления безопасности приходят сразу).
 
 ## Pre-commit { #pre-commit }
 
-`make install` устанавливает git-хуки, которые при каждом коммите запускают
-ruff (с автоисправлением), ruff format, mypy и несколько гигиенических
-проверок с версиями из `uv.lock`. Запустить их вручную можно командой
-`uv run pre-commit run --all-files`.
+`make install` устанавливает git-хуки, которые запускаются при каждом
+коммите: ruff (с автоисправлением), ruff format, mypy, import-linter,
+vulture, typos, zizmor, gitleaks по подготовленным изменениям, cargo fmt и
+clippy, а при изменении их файлов ещё hadolint, cargo-deny и cargo-machete.
+Инструменты Python берутся из `uv.lock`; остальные ставит `make tools`.
+Запустить их вручную можно командой `uv run pre-commit run --all-files`.
 
 ## Документация { #documentation }
 

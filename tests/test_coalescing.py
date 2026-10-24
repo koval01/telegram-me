@@ -12,7 +12,7 @@ import json
 from collections.abc import AsyncIterator, Mapping, MutableMapping
 from contextlib import AsyncExitStack, asynccontextmanager
 from dataclasses import dataclass, field
-from typing import Any
+from typing import Any, override
 
 import pydantic_core
 import pytest
@@ -43,6 +43,7 @@ class SlowFetcher(FixtureFetcher):
         super().__init__()
         self.delay = delay
 
+    @override
     async def fetch(
         self,
         method: Method,
@@ -60,6 +61,7 @@ class SlowAliasFetcher(AliasFetcher):
         super().__init__()
         self.paths: list[str] = []
 
+    @override
     async def fetch(self, method: Method, path: str, **kwargs: Any) -> FetchResult:
         self.paths.append(path)
         await asyncio.sleep(DELAY)

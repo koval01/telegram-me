@@ -30,6 +30,8 @@ def main(argv: list[str] | None = None) -> None:
             asyncio.run(run_worker(Settings()))
         case "version":
             print(__version__)  # noqa: T201
+        case command:  # argparse only accepts the commands above
+            parser.error(f"unknown command {command!r}")
 
 
 if __name__ == "__main__":

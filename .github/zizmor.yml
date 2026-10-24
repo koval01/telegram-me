@@ -1,0 +1,8 @@
+# zizmor (GitHub Actions security), run by `make lint` and the CI Lint job
+# at its default persona. https://docs.zizmor.sh/configuration/
+rules:
+  # Wants `uses: $/...` (GitHub, July 2026) for the reusable workflows in this
+  # repository instead of `./...`. Same trust either way (this repository, at
+  # this commit); keep `./` until actionlint and Dependabot know the new form.
+  self-repository:
+    disable: true

@@ -15,8 +15,55 @@ repos:
       - id: check-added-large-files
         args: [--maxkb=1024]
 
+  # Secrets in what is staged (the rules: .gitleaks.toml). Built from
+  # source on first use (Go), so nothing to install by hand.
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: 83d9cd684c87d95d656c1458ef04895a7f1cbd8e # frozen: v8.30.1
+    hooks:
+      - id: gitleaks
+
   - repo: local
     hooks:
+      - id: typos
+        name: typos
+        entry: uv run typos --force-exclude
+        language: system
+        types: [text]
+      - id: lint-imports
+        name: import-linter (layers)
+        entry: uv run lint-imports
+        language: system
+        types_or: [python, pyi]
+        pass_filenames: false
+      - id: vulture
+        name: vulture (dead code)
+        entry: uv run vulture
+        language: system
+        types_or: [python, pyi]
+        pass_filenames: false
+      - id: zizmor
+        name: zizmor (workflow security)
+        entry: uv run zizmor --offline
+        language: system
+        files: ^\.github/
+        types: [yaml]
+      - id: hadolint
+        name: hadolint (needs hadolint on PATH)
+        entry: hadolint
+        language: system
+        types: [dockerfile]
+      - id: cargo-deny
+        name: cargo deny (needs cargo-deny; advisories run in CI)
+        entry: cargo deny --manifest-path rust/telegram-me-native/Cargo.toml check bans licenses sources
+        language: system
+        files: ^rust/telegram-me-native/(Cargo\.(toml|lock)|deny\.toml)$
+        pass_filenames: false
+      - id: cargo-machete
+        name: cargo machete (needs cargo-machete)
+        entry: cargo machete rust/telegram-me-native
+        language: system
+        files: ^rust/telegram-me-native/(Cargo\.toml|.*\.rs)$
+        pass_filenames: false
       - id: ruff-check
         name: ruff check
         entry: uv run ruff check --fix

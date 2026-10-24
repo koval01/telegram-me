@@ -34,8 +34,9 @@ with all of them.
 ## What is inside
 
 - Python 3.14 on Debian (slim), the locked dependencies in `/app/.venv`,
-  nothing else — no compilers, no curl.
-- Runs as the unprivileged user `app` (uid/gid `10001`).
+  nothing else — no compilers, no curl, no pip.
+- Runs as the unprivileged user `app`, set by number (`USER 10001:10001`), so
+  a runtime can verify it is not root.
 - `ENTRYPOINT ["telegram-me"]`, `CMD ["serve"]`: the server is PID 1 and gets
   `SIGTERM` directly, so `docker stop` finishes in well under a second after
   in-flight requests complete.

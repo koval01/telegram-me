@@ -19,7 +19,12 @@ fn emoji_image(node: ElementRef<'_>) -> Option<String> {
         return None;
     }
     let url = EMOJI_URL.captures(style)?.get(1)?.as_str();
-    let host = url[2..].split('/').next().unwrap_or_default();
+    let host = url
+        .get(2..)
+        .unwrap_or_default()
+        .split('/')
+        .next()
+        .unwrap_or_default();
     (!host.is_empty()).then(|| format!("https:{url}"))
 }
 

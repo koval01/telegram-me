@@ -16,7 +16,7 @@ import resource
 import sys
 from collections.abc import Awaitable, Callable, Iterator, Mapping
 from pathlib import Path
-from typing import Any
+from typing import Any, override
 
 from starlette.types import ASGIApp, Message
 
@@ -40,6 +40,7 @@ class AliasFetcher(FixtureFetcher):
         super().__init__()
         self.count = 0
 
+    @override
     async def fetch(
         self,
         method: Method,

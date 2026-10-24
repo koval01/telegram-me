@@ -34,7 +34,10 @@ impl PyRankOptions {
         duplicate_distance = 20, duplicate_containment = 0.7, duplicate_min_tokens = 10,
         topic_threshold = 0.3, topic_keywords = 5
     ))]
-    #[allow(clippy::too_many_arguments)]
+    #[expect(
+        clippy::too_many_arguments,
+        reason = "keyword arguments of the Python constructor"
+    )]
     fn new(
         now: i64,
         half_life_hours: f64,
@@ -68,7 +71,10 @@ impl PyRankOptions {
 /// JSON and the indices of pages that could not be read (they are left out).
 /// The work runs detached from the interpreter, reading the page bytes in place.
 #[pyfunction]
-#[allow(clippy::needless_pass_by_value)] // PyO3 extracts arguments by value
+#[expect(
+    clippy::needless_pass_by_value,
+    reason = "PyO3 extracts arguments by value"
+)]
 fn build_feed<'py>(
     py: Python<'py>,
     pages: Vec<(PyBackedStr, PyBackedBytes)>,

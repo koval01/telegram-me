@@ -34,8 +34,9 @@ pensada para funcionar con todas ellas.
 ## Qué hay dentro { #what-is-inside }
 
 - Python 3.14 sobre Debian (slim), las dependencias fijadas en `/app/.venv` y
-  nada más: ni compiladores ni curl.
-- Se ejecuta como el usuario sin privilegios `app` (uid/gid `10001`).
+  nada más: ni compiladores, ni curl, ni pip.
+- Se ejecuta como el usuario sin privilegios `app`, indicado por número
+  (`USER 10001:10001`), para que el runtime pueda comprobar que no es root.
 - `ENTRYPOINT ["telegram-me"]`, `CMD ["serve"]`: el servidor es el PID 1 y
   recibe `SIGTERM` directamente, así que `docker stop` termina en mucho menos
   de un segundo una vez completadas las solicitudes en curso.

@@ -8,7 +8,7 @@ return data.
 """
 
 from functools import partial
-from typing import TYPE_CHECKING, Annotated, Any, Literal
+from typing import TYPE_CHECKING, Annotated, Any, Literal, override
 
 import strawberry
 from graphql import GraphQLError
@@ -182,7 +182,8 @@ def _is_introspection(context: IgnoreContext) -> bool:
 class Schema(strawberry.Schema):
     """Schema that logs resolver errors like the REST error handlers."""
 
-    def process_errors(  # noqa: D102
+    @override
+    def process_errors(
         self, errors: list[GraphQLError], execution_context: ExecutionContext | None = None
     ) -> None:
         for error in errors:

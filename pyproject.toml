@@ -37,6 +37,7 @@ dev = [
     "granian[reload]>=2.8.5",
     "httpx2>=2.16.0",
     "hypothesis>=6.170.9",
+    "import-linter>=2.15",
     "mypy>=2.4.0",
     "pre-commit>=4.7.0",
     "pytest>=9.1.1",
@@ -44,6 +45,9 @@ dev = [
     "pytest-cov>=7.1.0",
     "ruff>=0.17.2",
     "time-machine>=3.5.1",
+    "typos>=1.51.1",
+    "vulture>=2.16",
+    "zizmor>=1.31.1",
 ]
 docs = [
     "zensical>=0.0.71",
@@ -80,26 +84,43 @@ select = [
     "ASYNC", # async pitfalls
     "B",     # bugbear
     "C4",    # comprehensions
+    "ARG",   # unused arguments
+    "BLE",   # blind `except Exception`
     "D",     # docstrings
+    "DTZ",   # naive datetimes
     "E", "W",
+    "ERA",   # commented-out code
+    "EXE",   # shebangs
     "F",
     "FAST",  # FastAPI
+    "FLY",
     "FURB",
     "I",     # isort
+    "ICN",
+    "INP",   # implicit namespace packages
+    "INT",   # gettext
+    "ISC002", "ISC003",  # implicit string concatenation (ISC001 is the formatter's)
     "LOG", "G",
     "N",
     "PERF",
+    "PGH",   # blanket `type: ignore` / `noqa`
     "PIE",
     "PL",
     "PT",    # pytest
     "PTH",
+    "PYI",   # stubs (the native module's _native.pyi)
     "RET",
+    "RSE",
     "RUF",
     "S",     # bandit
     "SIM",
+    "SLF",   # private members of other classes
+    "SLOT",
     "T20",   # print
     "TC",    # type-checking imports
+    "TID",   # banned imports, see below
     "UP",
+    "YTT",
 ]
 ignore = [
     "D105", "D107",   # magic methods / __init__ are self-explanatory
@@ -108,8 +129,22 @@ ignore = [
 ]
 
 [tool.ruff.lint.per-file-ignores]
-"tests/**" = ["D", "S101", "PLR2004", "RUF001"]  # Cyrillic test data is intended
+# Cyrillic test data is intended; tests reach into internals and take
+# fixtures they only need for their side effects.
+"tests/**" = ["D", "S101", "PLR2004", "RUF001", "SLF001", "ARG"]
 "scripts/**" = ["T201", "D103", "S101"]
+# The stubs document the native API for editors.
+"**/*.pyi" = ["PYI021"]
+# Names vulture can not see used: bare expressions are the point.
+"tests/vulture_whitelist.py" = ["B018"]
+# The package is the one place that may import its extension module.
+"rust/telegram-me-native/python/telegram_me_native/__init__.py" = ["TID251"]
+
+[tool.ruff.lint.flake8-tidy-imports]
+ban-relative-imports = "all"
+
+[tool.ruff.lint.flake8-tidy-imports.banned-api]
+"telegram_me_native._native".msg = "Import from `telegram_me_native`: _native is its private extension module."
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"
@@ -123,10 +158,92 @@ strict = true
 plugins = ["pydantic.mypy"]
 mypy_path = "src"
 files = ["src", "tests"]
+warn_unreachable = true
+# Beyond --strict. Not `unused-awaitable`: redis types pipeline commands as
+# awaitable, and ruff's RUF006 already catches dropped tasks.
+enable_error_code = [
+    "deprecated",
+    "exhaustive-match",
+    "explicit-override",
+    "ignore-without-code",
+    "mutable-override",
+    "narrowed-type-not-subtype",
+    "possibly-undefined",
+    "redundant-expr",
+    "redundant-self",
+    "truthy-bool",
+    "truthy-iterable",
+    "unimported-reveal",
+]
 
 [[tool.mypy.overrides]]
 module = ["time_machine.*"]
 ignore_missing_imports = true
+
+# Dead code in src/ (`make lint`). Only src/ is scanned: code that only
+# tests use is dead as well.
+[tool.vulture]
+paths = ["src", "tests/vulture_whitelist.py"]
+min_confidence = 60
+# Called by the frameworks: routes, pydantic validators, overridden hooks.
+ignore_decorators = [
+    "@*.get",
+    "@*.post",
+    "@field_validator",
+    "@model_serializer",
+    "@model_validator",
+    "@override",
+]
+# Response models and GraphQL types: every field is part of the pinned API
+# contract (tests/snapshots), read by pydantic and strawberry.
+exclude = ["src/telegram_me/schemas/", "src/telegram_me/api/graphql/types.py"]
+
+# The layering (`make lint`): a module may import only from layers below it.
+[tool.importlinter]
+root_packages = ["telegram_me"]
+include_external_packages = true
+
+[[tool.importlinter.contracts]]
+name = "Layers: api, then services, then cache and the t.me client"
+type = "layers"
+containers = ["telegram_me"]
+layers = [
+    "__main__",
+    "server",
+    "app",
+    "api",
+    "container",
+    "services | heartbeat",
+    "cache",
+    "telegram",
+    "schemas",
+    "validation | log | memory",
+    "settings",
+]
+ignore_imports = [
+    # The scheduling and coalescing primitives in services/ (they need only
+    # the native crate and telegram.errors) are used by the layers below.
+    # TODO: move them below telegram/.
+    "telegram_me.telegram.client -> telegram_me.services.upstream",
+    "telegram_me.cache -> telegram_me.services.coalesce",
+]
+
+[[tool.importlinter.contracts]]
+name = "Only the API layer and the app know the web frameworks"
+type = "forbidden"
+source_modules = [
+    "telegram_me.cache",
+    "telegram_me.container",
+    "telegram_me.heartbeat",
+    "telegram_me.log",
+    "telegram_me.memory",
+    "telegram_me.schemas",
+    "telegram_me.services",
+    "telegram_me.settings",
+    "telegram_me.telegram",
+    "telegram_me.validation",
+]
+forbidden_modules = ["fastapi", "starlette", "strawberry"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

@@ -49,6 +49,10 @@ class UpstreamJob:
         if self._gate is not None and self._ticket is not None:
             self._gate.promote(self._ticket)
 
+    def wait_for(self, gate: "FairGate | None", ticket: int | None) -> None:
+        """Record the queued ticket this job waits on, so `promote` can move it."""
+        self._gate, self._ticket = gate, ticket
+
 
 _job: ContextVar[UpstreamJob | None] = ContextVar("upstream_job", default=None)
 
@@ -119,11 +123,11 @@ class FairGate:
             if not granted:
                 waiter = asyncio.get_running_loop().create_future()
                 self._waiting[ticket] = waiter
-                job._gate, job._ticket = self, ticket
+                job.wait_for(self, ticket)
                 try:
                     await waiter
                 finally:
-                    job._gate = job._ticket = None
+                    job.wait_for(None, None)
                     self._waiting.pop(ticket, None)
             yield
         finally:

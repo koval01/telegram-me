@@ -1,7 +1,7 @@
 import asyncio
 import gzip
 from collections.abc import Mapping
-from typing import Any
+from typing import Any, override
 
 import pytest
 
@@ -104,6 +104,7 @@ async def test_previews_skip_missing_channels() -> None:
     missing_html = _fixture("preview_missing")
 
     class PreviewFetcher(PageFetcher):
+        @override
         async def fetch(self, method: Method, path: str, **kwargs: Any) -> FetchResult:
             await super().fetch(method, path, **kwargs)
             return FetchResult(200, preview_html if path == "/durov" else missing_html)

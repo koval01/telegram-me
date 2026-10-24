@@ -2,7 +2,11 @@
 name = "telegram-me-native"
 version = "0.1.0"
 edition = "2024"
-rust-version = "1.85"
+# The toolchain CI, nightly and the image build with (RUST_VERSION). An older
+# value makes the MSRV-aware resolver (and Dependabot) hold back releases that
+# need a newer compiler, security fixes included: ctutils 0.4.4
+# (RUSTSEC-2026-0385) needs 1.87.
+rust-version = "1.99"
 description = "Native core of TelegramMe: t.me page parsing, feed ranking and the in-process cache"
 license = "Apache-2.0"
 publish = false
@@ -37,12 +41,82 @@ fail-under-lines = 96
 default = []
 python = ["dep:pyo3"]
 
+# CI and pre-commit turn every warning into an error (`-D warnings`).
 [lints.rust]
 unsafe_code = "forbid"
 missing_docs = "warn"
+let_underscore_drop = "warn"
+meta_variable_misuse = "warn"
+redundant_lifetimes = "warn"
+rust_2018_idioms = { level = "warn", priority = -1 }
+trivial_casts = "warn"
+trivial_numeric_casts = "warn"
+unit_bindings = "warn"
+unused_lifetimes = "warn"
+unused_macro_rules = "warn"
+unused_qualifications = "warn"
 
 [lints.clippy]
 pedantic = { level = "warn", priority = -1 }
+# Restriction lints. The release build aborts on panic (`panic = "abort"`),
+# so a panic takes the whole worker down. Production code states the
+# invariant behind every panic (`expect("why")`, never a bare `unwrap()`);
+# tests may unwrap (clippy.toml). The parser also slices only through
+# checked accessors (`#![warn]` in src/parse/mod.rs): it reads hostile HTML.
+allow_attributes = "warn"
+allow_attributes_without_reason = "warn"
+clone_on_ref_ptr = "warn"
+dbg_macro = "warn"
+exit = "warn"
+float_cmp_const = "warn"
+fn_to_numeric_cast_any = "warn"
+get_unwrap = "warn"
+infinite_loop = "warn"
+let_underscore_must_use = "warn"
+lossy_float_literal = "warn"
+mem_forget = "warn"
+mixed_read_write_in_expression = "warn"
+panic = "warn"
+panic_in_result_fn = "warn"
+print_stderr = "warn"
+print_stdout = "warn"
+rc_buffer = "warn"
+rest_pat_in_fully_bound_structs = "warn"
+str_to_string = "warn"
+string_add = "warn"
+todo = "warn"
+try_err = "warn"
+unimplemented = "warn"
+unreachable = "warn"
+unused_result_ok = "warn"
+unwrap_in_result = "warn"
+unwrap_used = "warn"
+verbose_file_reads = "warn"
+# Nursery lints that catch bugs (held locks, needless clones and
+# allocations) rather than style; the group as a whole is too unstable.
+collection_is_never_read = "warn"
+debug_assert_with_mut_call = "warn"
+derive_partial_eq_without_eq = "warn"
+fallible_impl_from = "warn"
+iter_on_empty_collections = "warn"
+iter_on_single_items = "warn"
+literal_string_with_formatting_args = "warn"
+mutex_integer = "warn"
+needless_collect = "warn"
+needless_pass_by_ref_mut = "warn"
+or_fun_call = "warn"
+path_buf_push_overwrite = "warn"
+read_zero_byte_vec = "warn"
+redundant_clone = "warn"
+set_contains_or_insert = "warn"
+significant_drop_in_scrutinee = "warn"
+significant_drop_tightening = "warn"
+string_lit_as_bytes = "warn"
+suspicious_operation_groupings = "warn"
+trait_duplication_in_bounds = "warn"
+trivial_regex = "warn"
+type_repetition_in_bounds = "warn"
+useless_let_if_seq = "warn"
 
 [profile.release]
 lto = "fat"

@@ -50,7 +50,10 @@ impl Corpus {
             counts.push(tf);
         }
 
-        #[allow(clippy::cast_precision_loss)]
+        #[expect(
+            clippy::cast_precision_loss,
+            reason = "document counts are far below 2^24"
+        )]
         let n = documents.len().max(1) as f32;
         let vectors = counts
             .into_iter()
@@ -58,9 +61,15 @@ impl Corpus {
                 let mut vector: SparseVector = tf
                     .into_iter()
                     .map(|(id, count)| {
-                        #[allow(clippy::cast_precision_loss)]
+                        #[expect(
+                            clippy::cast_precision_loss,
+                            reason = "document counts are far below 2^24"
+                        )]
                         let df = doc_freq[id as usize] as f32;
-                        #[allow(clippy::cast_precision_loss)]
+                        #[expect(
+                            clippy::cast_precision_loss,
+                            reason = "term counts are far below 2^24"
+                        )]
                         let weight = (1.0 + (count as f32).ln()) * ((1.0 + n) / (1.0 + df)).ln();
                         (id, weight + 1e-6)
                     })
@@ -118,7 +127,7 @@ pub fn cosine(a: &SparseVector, b: &SparseVector) -> f32 {
 }
 
 /// A group of posts about the same subject.
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Topic {
     /// Indices of member documents, in the order they were added.
     pub members: Vec<usize>,

@@ -137,7 +137,6 @@ class TelegramClient:
         # large feed or previews call can not trigger upstream rate limiting,
         # and shares the slots fairly (see `services.upstream`).
         self.gate = gate or FairGate(max_concurrency)
-        self.requests = 0
 
     async def channel_page(self, channel: str, position: int | None = None) -> str:
         """HTML of `t.me/s/<channel>`, optionally centered around post `position`."""
@@ -185,7 +184,6 @@ class TelegramClient:
         flow: str,
     ) -> str:
         async with self.gate.slot(flow.lower()):
-            self.requests += 1
             try:
                 result = await self._fetcher.fetch(method, path, query=query, headers=headers)
             except TelegramUpstreamError as exc:
