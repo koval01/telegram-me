@@ -238,7 +238,7 @@ def _call(
         preview = raw.decode("utf-8", errors="replace")[:200].replace("\n", " ")
         challenge = pow_challenge(raw) if exc.code in {400, 403, 428} and not extra else None
         return ScenarioResult(scenario, exc.code, elapsed, len(raw), preview), challenge
-    except Exception as exc:  # pylint: disable=broad-exception-caught
+    except Exception as exc:  # noqa: BLE001 - every failure is a row of the report
         elapsed = int((time.time() - started) * 1000)
         result = ScenarioResult(
             scenario=scenario,

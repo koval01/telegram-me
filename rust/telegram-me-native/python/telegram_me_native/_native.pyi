@@ -1,5 +1,7 @@
 """Type stubs for the Rust extension module."""
 
+from typing import Self
+
 __version__: str
 
 class RankOptions:
@@ -17,7 +19,7 @@ class RankOptions:
         duplicate_min_tokens: int = 10,
         topic_threshold: float = 0.3,
         topic_keywords: int = 5,
-    ) -> RankOptions: ...
+    ) -> Self: ...
 
 def build_feed(pages: list[tuple[str, bytes]], options: RankOptions) -> tuple[bytes, list[int]]:
     """Rank the posts of cached pages and render the `/v1/feed` body.
@@ -42,7 +44,7 @@ class LocalCache:
     expires after its own TTL and carries the wall-clock time it was stored at.
     """
 
-    def __new__(cls, max_bytes: int) -> LocalCache: ...
+    def __new__(cls, max_bytes: int) -> Self: ...
     def get(self, key: str) -> tuple[bytes, float] | None:
         """(value, stored_at) for `key`, or None when missing or expired."""
     def set(self, key: str, value: bytes, ttl: float, stored_at: float) -> None:
@@ -95,7 +97,7 @@ class Overloaded(Exception):  # noqa: N818 - mirrors the Rust name
 class Flights:
     """Work in flight per key, with bounded keys and waiting callers."""
 
-    def __new__(cls, max_keys: int, max_waiters: int) -> Flights: ...
+    def __new__(cls, max_keys: int, max_waiters: int) -> Self: ...
     def join(self, key: str, wait: bool) -> object | None:
         """The task in flight for `key`, or None when the caller leads.
 
@@ -116,7 +118,7 @@ class Flights:
 class Gate:
     """Fair admission to upstream slots: per-flow round robin, user before background."""
 
-    def __new__(cls, capacity: int, flow_cap: int, background_cap: int, max_queue: int) -> Gate: ...
+    def __new__(cls, capacity: int, flow_cap: int, background_cap: int, max_queue: int) -> Self: ...
     def acquire(self, flow: str, background: bool) -> tuple[int, bool]:
         """(ticket, granted); raises `Overloaded` when the queue is full."""
     def release(self, ticket: int) -> list[int]:
@@ -139,7 +141,7 @@ class Gate:
 class EarlyRefresh:
     """Early renewal of hot entries within the last `window` of their TTL, and TTL jitter."""
 
-    def __new__(cls, window: float, seed: int) -> EarlyRefresh: ...
+    def __new__(cls, window: float, seed: int) -> Self: ...
     def claim(self, key: str, age: float, ttl: float, stored_at: float) -> bool:
         """True once per entry (key, stored_at) past its renewal point and still fresh."""
     def jitter(self, ttl: float) -> float:

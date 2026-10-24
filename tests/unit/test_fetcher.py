@@ -6,6 +6,7 @@ import socketserver
 import threading
 from collections.abc import Iterator
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from typing import override
 
 import pytest
 from pydantic import ValidationError
@@ -43,11 +44,13 @@ class _Handler(BaseHTTPRequestHandler):
     do_GET = _reply  # noqa: N815
     do_POST = _reply  # noqa: N815
 
+    @override
     def log_message(self, *_args: object) -> None:
         return
 
 
 class _Server(ThreadingHTTPServer):
+    @override
     def server_bind(self) -> None:
         # HTTPServer.server_bind() resolves the host name (getfqdn), which can
         # take tens of seconds on some machines; it is not needed here.

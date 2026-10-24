@@ -9,7 +9,7 @@ so internals never leak to clients.
 import logging
 from collections.abc import Iterator
 from enum import StrEnum
-from typing import Any
+from typing import Any, override
 
 from graphql import GraphQLError
 from strawberry.extensions import SchemaExtension
@@ -118,15 +118,18 @@ def _tag(errors: list[GraphQLError] | None, code: ErrorCode) -> None:
 class ErrorCodes(SchemaExtension):
     """Attach `extensions.code` to every error and mask unexpected ones."""
 
-    def on_parse(self) -> Iterator[None]:  # noqa: D102
+    @override
+    def on_parse(self) -> Iterator[None]:
         yield
         _tag(self.execution_context.pre_execution_errors, ErrorCode.GRAPHQL_PARSE_FAILED)
 
-    def on_validate(self) -> Iterator[None]:  # noqa: D102
+    @override
+    def on_validate(self) -> Iterator[None]:
         yield
         _tag(self.execution_context.pre_execution_errors, ErrorCode.GRAPHQL_VALIDATION_FAILED)
 
-    def on_execute(self) -> Iterator[None]:  # noqa: D102
+    @override
+    def on_execute(self) -> Iterator[None]:
         yield
         result: Any = self.execution_context.result
         if result is not None and result.errors:

@@ -21,7 +21,7 @@ import logging
 import time
 from collections import deque
 from dataclasses import dataclass
-from typing import Protocol
+from typing import Protocol, override
 
 from redis.asyncio import BlockingConnectionPool, Redis
 from redis.asyncio.connection import Connection
@@ -59,11 +59,6 @@ class CacheEntry:
 class Cache(Protocol):
     """Asynchronous bytes cache."""
 
-    @property
-    def backend(self) -> str:
-        """Short backend name for logs and diagnostics."""
-        ...
-
     async def get(self, key: str) -> CacheEntry | None:
         """Return the entry for `key`, or None when missing or unavailable."""
         ...
@@ -90,8 +85,6 @@ class MemoryCache:
     entries are evicted first, values are kept zstd-compressed, and the bound
     counts what entries really occupy (compressed value, key and bookkeeping).
     """
-
-    backend = "memory"
 
     def __init__(self, max_bytes: int) -> None:
         self._native = LocalCache(max_bytes)
@@ -136,8 +129,6 @@ FAILURE_WINDOW = 10.0
 
 class RedisCache:
     """Redis-backed cache that degrades to "always miss" while Redis is down."""
-
-    backend = "redis"
 
     def __init__(
         self,
@@ -301,8 +292,6 @@ class TwoLevelCache:
     the page TTL.
     """
 
-    backend = "memory+redis"
-
     def __init__(self, local: MemoryCache, shared: RedisCache, max_local_ttl: float) -> None:
         self.local = local
         self.shared = shared
@@ -347,7 +336,8 @@ class WaitingConnectionPool(BlockingConnectionPool):
     `RedisCache.trip` tells apart from a Redis failure.
     """
 
-    async def get_connection(self, *args: object, **kwargs: object) -> Connection:  # noqa: D102
+    @override
+    async def get_connection(self, *args: object, **kwargs: object) -> Connection:
         try:
             return await super().get_connection(*args, **kwargs)  # type: ignore[no-untyped-call,no-any-return]
         except RedisConnectionError as exc:

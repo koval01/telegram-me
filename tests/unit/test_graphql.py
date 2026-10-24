@@ -6,7 +6,7 @@ import logging
 import types as pytypes
 from collections.abc import Iterator, Mapping
 from contextlib import contextmanager
-from typing import Any, Literal, get_args, get_origin
+from typing import Any, Literal, get_args, get_origin, override
 
 import pytest
 from fastapi.testclient import TestClient
@@ -69,6 +69,7 @@ class BarrierFetcher(FixtureFetcher):
         self.peak = 0
         self._all_arrived = asyncio.Event()
 
+    @override
     async def fetch(
         self,
         method: Method,

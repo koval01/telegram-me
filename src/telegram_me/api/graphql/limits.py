@@ -10,7 +10,7 @@ The cost is computed before execution, with the operation's variables, so
 """
 
 from collections.abc import Iterator, Mapping
-from typing import Any
+from typing import Any, override
 
 from graphql import (
     ExecutionResult,
@@ -112,7 +112,8 @@ class MaxComplexityLimiter(SchemaExtension):
     def __init__(self, max_complexity: int) -> None:
         self.max_complexity = max_complexity
 
-    def on_execute(self) -> Iterator[None]:  # noqa: D102
+    @override
+    def on_execute(self) -> Iterator[None]:
         context = self.execution_context
         document = context.graphql_document
         if document is not None and context.result is None:

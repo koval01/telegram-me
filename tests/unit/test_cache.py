@@ -1,7 +1,7 @@
 import asyncio
 import os
 from collections.abc import AsyncIterator
-from typing import Any
+from typing import Any, Self, override
 
 import pytest
 import time_machine
@@ -142,16 +142,18 @@ async def test_redis_cache_ignores_foreign_values(redis_cache: RedisCache) -> No
 class _BrokenRedis(FakeAsyncRedis):
     calls = 0
 
+    @override
     async def execute_command(self, *_args: object, **_kwargs: object) -> None:
         type(self).calls += 1
         raise RedisConnectionError("down")
 
+    @override
     def pipeline(self, *_args: object, **_kwargs: object) -> Any:
         return _BrokenPipeline()
 
 
 class _BrokenPipeline:
-    async def __aenter__(self) -> "_BrokenPipeline":
+    async def __aenter__(self) -> Self:
         return self
 
     async def __aexit__(self, *_exc: object) -> None:
@@ -232,6 +234,7 @@ async def test_redis_get_with_ttl_trips_circuit_breaker() -> None:
 class _SlowConnection(FakeAsyncRedisConnection):
     """Holds its pooled connection across an await, like a network round trip."""
 
+    @override
     async def read_response(self, *args: Any, **kwargs: Any) -> Any:
         await asyncio.sleep(0.001)
         return await super().read_response(*args, **kwargs)
@@ -316,12 +319,10 @@ async def test_create_redis_pool_is_sized_from_upstream_concurrency() -> None:
 def test_create_cache_picks_backend() -> None:
     memory = create_cache(make_settings(memory_cache_max_mb=3), None)
     assert isinstance(memory, MemoryCache)
-    assert memory.backend == "memory"
     assert shared_cache(memory) is None
 
     two_level = create_cache(make_settings(), FakeAsyncRedis())
     assert isinstance(two_level, TwoLevelCache)
-    assert two_level.backend == "memory+redis"
     assert shared_cache(two_level) is two_level.shared
     assert shared_cache(two_level.shared) is two_level.shared
 

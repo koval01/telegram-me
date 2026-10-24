@@ -114,10 +114,10 @@ class LocalLease:
 
     async def run[T](  # noqa: D102
         self,
-        key: str,
+        key: str,  # noqa: ARG002 - the Lease protocol
         fetch: Callable[[], Awaitable[T]],
-        adopt: Adopt[T],
-        fresh: Callable[[CacheEntry], bool],
+        adopt: Adopt[T],  # noqa: ARG002
+        fresh: Callable[[CacheEntry], bool],  # noqa: ARG002
     ) -> T:
         return await fetch()
 

@@ -79,7 +79,6 @@ class Protection:
     limiter: RateLimiter | None
     per_minute: int
     pow: ProofOfWork | None
-    pow_ttl: int
 
     @classmethod
     def from_settings(cls, settings: Settings) -> "Protection":
@@ -96,7 +95,7 @@ class Protection:
                 settings.pow_challenge_ttl,
                 bind_ip=settings.pow_bind_ip,
             )
-        return cls(limiter, settings.rate_limit_rpm, pow_, settings.pow_challenge_ttl)
+        return cls(limiter, settings.rate_limit_rpm, pow_)
 
     @property
     def enabled(self) -> bool:
