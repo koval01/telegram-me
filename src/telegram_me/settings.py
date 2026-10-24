@@ -104,6 +104,8 @@ class Settings(BaseSettings):
     """Return freed heap memory to the OS every this many seconds (glibc; 0 disables)."""
 
     # Upstream (t.me)
+    telegram_base_url: str = Field(default="https://t.me", pattern=r"^https?://[^/?#]+$")
+    """Where t.me pages are fetched from: a mirror, or a fake in integration tests."""
     telegram_timeout: PositiveFloat = 10.0
     telegram_max_concurrency: PositiveInt = 32
     upstream_queue_limit: PositiveInt | None = None

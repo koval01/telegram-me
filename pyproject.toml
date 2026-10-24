@@ -36,6 +36,7 @@ dev = [
     "fakeredis[lua]>=2.40.0",
     "granian[reload]>=2.8.5",
     "httpx2>=2.16.0",
+    "hypothesis>=6.170.9",
     "mypy>=2.4.0",
     "pre-commit>=4.7.0",
     "pytest>=9.1.1",
@@ -46,6 +47,13 @@ dev = [
 ]
 docs = [
     "zensical>=0.0.71",
+]
+# Black-box tests of the built image (tests/integration, tests/deploy): they
+# only talk HTTP and Docker, so they run without building the project.
+integration = [
+    "httpx2>=2.16.0",
+    "pytest>=9.1.1",
+    "pytest-asyncio>=1.4.0",
 ]
 
 [build-system]
@@ -126,13 +134,21 @@ addopts = ["--strict-markers", "--strict-config", "-ra"]
 asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"
 filterwarnings = ["error"]
-markers = ["memory: memory regression guards (part of the default run and CI)"]
+markers = [
+    "memory: memory regression guards (part of the default run and CI)",
+    "integration: the built image with real Valkey (needs Docker and TME_TEST_IMAGE)",
+    "deploy: deploy/ scripts with real Docker Compose (needs Docker and TME_TEST_IMAGE)",
+]
 
 [tool.coverage.run]
 source = ["telegram_me"]
 branch = true
 
 [tool.coverage.report]
+# CI fails below this; raise it with the tests that earn it, never lower it
+# (scripts/coverage_floor.py checks pull requests). 3.14 counts ~150 fewer
+# statements than 3.13 and lands lowest.
+fail_under = 92.5
 show_missing = true
 skip_covered = true
 exclude_also = ["if TYPE_CHECKING:", "raise NotImplementedError"]

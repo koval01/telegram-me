@@ -1,0 +1,1826 @@
+{
+  "components": {
+    "schemas": {
+      "Channel": {
+        "description": "Channel profile shown above the posts.",
+        "properties": {
+          "avatar": {
+            "anyOf": [
+              {
+                "format": "uri",
+                "maxLength": 2083,
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Avatar"
+          },
+          "counters": {
+            "$ref": "#/components/schemas/Counter"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ParsedAndRaw"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "labels": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Labels"
+          },
+          "title": {
+            "$ref": "#/components/schemas/ParsedAndRaw"
+          },
+          "username": {
+            "title": "Username",
+            "type": "string"
+          }
+        },
+        "required": [
+          "username",
+          "title",
+          "description",
+          "counters"
+        ],
+        "title": "Channel",
+        "type": "object"
+      },
+      "ChannelBody": {
+        "description": "Channel page: profile, posts and pagination.",
+        "properties": {
+          "channel": {
+            "$ref": "#/components/schemas/Channel"
+          },
+          "content": {
+            "$ref": "#/components/schemas/Content"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/Meta"
+          }
+        },
+        "required": [
+          "channel",
+          "content",
+          "meta"
+        ],
+        "title": "ChannelBody",
+        "type": "object"
+      },
+      "ChannelsRequest": {
+        "description": "A list of channel usernames.",
+        "properties": {
+          "channels": {
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 100,
+            "minItems": 1,
+            "title": "Channels",
+            "type": "array"
+          }
+        },
+        "required": [
+          "channels"
+        ],
+        "title": "ChannelsRequest",
+        "type": "object"
+      },
+      "Content": {
+        "description": "Posts of a channel page.",
+        "properties": {
+          "posts": {
+            "items": {
+              "$ref": "#/components/schemas/Post"
+            },
+            "title": "Posts",
+            "type": "array"
+          }
+        },
+        "required": [
+          "posts"
+        ],
+        "title": "Content",
+        "type": "object"
+      },
+      "ContentPost": {
+        "description": "Everything a post can contain.",
+        "properties": {
+          "inline": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/Inline"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Inline"
+          },
+          "media": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/MediaItem"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Media"
+          },
+          "poll": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Poll"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "preview_link": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PreviewLink"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "reacts": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/Reacts"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reacts"
+          },
+          "reply": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Reply"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "text": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Text"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "title": "ContentPost",
+        "type": "object"
+      },
+      "Counter": {
+        "description": "Channel statistics as formatted by Telegram (e.g. `1.2M`).",
+        "properties": {
+          "files": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Files"
+          },
+          "links": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Links"
+          },
+          "photos": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Photos"
+          },
+          "subscribers": {
+            "title": "Subscribers",
+            "type": "string"
+          },
+          "videos": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Videos"
+          }
+        },
+        "required": [
+          "subscribers"
+        ],
+        "title": "Counter",
+        "type": "object"
+      },
+      "Date": {
+        "description": "Publication time.",
+        "properties": {
+          "string": {
+            "title": "String",
+            "type": "string"
+          },
+          "unix": {
+            "title": "Unix",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "string",
+          "unix"
+        ],
+        "title": "Date",
+        "type": "object"
+      },
+      "Duration": {
+        "description": "Duration of time-based media.",
+        "properties": {
+          "formatted": {
+            "title": "Formatted",
+            "type": "string"
+          },
+          "raw": {
+            "title": "Raw",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "formatted",
+          "raw"
+        ],
+        "title": "Duration",
+        "type": "object"
+      },
+      "FeedRequest": {
+        "description": "Channels to build the feed from.",
+        "properties": {
+          "channels": {
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 100,
+            "minItems": 1,
+            "title": "Channels",
+            "type": "array"
+          }
+        },
+        "required": [
+          "channels"
+        ],
+        "title": "FeedRequest",
+        "type": "object"
+      },
+      "FeedResponse": {
+        "description": "Feed posts ordered by score, each with its `channel` and `_score`.",
+        "properties": {
+          "result": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Result",
+            "type": "array"
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "title": "FeedResponse",
+        "type": "object"
+      },
+      "Footer": {
+        "description": "Post metadata shown under the message.",
+        "properties": {
+          "author": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ParsedAndRaw"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "date": {
+            "$ref": "#/components/schemas/Date"
+          },
+          "edited": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": false,
+            "title": "Edited"
+          },
+          "views": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Views"
+          }
+        },
+        "required": [
+          "date"
+        ],
+        "title": "Footer",
+        "type": "object"
+      },
+      "Forwarded": {
+        "description": "Original source of a forwarded post.",
+        "properties": {
+          "author": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ParsedAndRaw"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "name": {
+            "$ref": "#/components/schemas/ParsedAndRaw"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "format": "uri",
+                "maxLength": 2083,
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Url"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "title": "Forwarded",
+        "type": "object"
+      },
+      "HTTPError": {
+        "description": "Error response.",
+        "properties": {
+          "detail": {
+            "title": "Detail",
+            "type": "string"
+          }
+        },
+        "required": [
+          "detail"
+        ],
+        "title": "HTTPError",
+        "type": "object"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "title": "Detail",
+            "type": "array"
+          }
+        },
+        "title": "HTTPValidationError",
+        "type": "object"
+      },
+      "HealthzResponse": {
+        "description": "Health endpoint response payload.",
+        "properties": {
+          "status": {
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "status"
+        ],
+        "title": "HealthzResponse",
+        "type": "object"
+      },
+      "Inline": {
+        "description": "Inline keyboard button.",
+        "properties": {
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "url": {
+            "format": "uri",
+            "minLength": 1,
+            "title": "Url",
+            "type": "string"
+          }
+        },
+        "required": [
+          "title",
+          "url"
+        ],
+        "title": "Inline",
+        "type": "object"
+      },
+      "MediaItem": {
+        "description": "Media attachment of a post.",
+        "properties": {
+          "available": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Available"
+          },
+          "duration": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Duration"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "thumb": {
+            "anyOf": [
+              {
+                "format": "uri",
+                "maxLength": 2083,
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Thumb"
+          },
+          "type": {
+            "enum": [
+              "image",
+              "video",
+              "voice",
+              "roundvideo",
+              "sticker",
+              "gif"
+            ],
+            "title": "Type",
+            "type": "string"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "format": "uri",
+                "maxLength": 2083,
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Url"
+          },
+          "waves": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Waves"
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "title": "MediaItem",
+        "type": "object"
+      },
+      "Meta": {
+        "description": "Pagination metadata.",
+        "properties": {
+          "offset": {
+            "$ref": "#/components/schemas/OffsetItem"
+          }
+        },
+        "required": [
+          "offset"
+        ],
+        "title": "Meta",
+        "type": "object"
+      },
+      "More": {
+        "description": "A batch of posts loaded relative to a position.",
+        "properties": {
+          "meta": {
+            "$ref": "#/components/schemas/Meta"
+          },
+          "posts": {
+            "items": {
+              "$ref": "#/components/schemas/Post"
+            },
+            "title": "Posts",
+            "type": "array"
+          }
+        },
+        "required": [
+          "posts",
+          "meta"
+        ],
+        "title": "More",
+        "type": "object"
+      },
+      "OffsetItem": {
+        "description": "Pagination cursors: pass them to `/v1/more` to load adjacent posts.",
+        "properties": {
+          "after": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "After"
+          },
+          "before": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Before"
+          }
+        },
+        "title": "OffsetItem",
+        "type": "object"
+      },
+      "ParsedAndRaw": {
+        "description": "Text in two forms: plain `string` and the original `html`.",
+        "properties": {
+          "html": {
+            "title": "Html",
+            "type": "string"
+          },
+          "string": {
+            "title": "String",
+            "type": "string"
+          }
+        },
+        "required": [
+          "string",
+          "html"
+        ],
+        "title": "ParsedAndRaw",
+        "type": "object"
+      },
+      "Poll": {
+        "description": "Poll attached to a post.",
+        "properties": {
+          "options": {
+            "items": {
+              "$ref": "#/components/schemas/PollOptions"
+            },
+            "title": "Options",
+            "type": "array"
+          },
+          "question": {
+            "title": "Question",
+            "type": "string"
+          },
+          "type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Type"
+          },
+          "votes": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Votes"
+          }
+        },
+        "required": [
+          "question",
+          "options"
+        ],
+        "title": "Poll",
+        "type": "object"
+      },
+      "PollOptions": {
+        "description": "One answer option of a poll.",
+        "properties": {
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "percent": {
+            "title": "Percent",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "name",
+          "percent"
+        ],
+        "title": "PollOptions",
+        "type": "object"
+      },
+      "Post": {
+        "description": "A channel post.",
+        "properties": {
+          "content": {
+            "$ref": "#/components/schemas/ContentPost"
+          },
+          "footer": {
+            "$ref": "#/components/schemas/Footer"
+          },
+          "forwarded": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Forwarded"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          },
+          "view": {
+            "title": "View",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "content",
+          "footer",
+          "view"
+        ],
+        "title": "Post",
+        "type": "object"
+      },
+      "PowChallenge": {
+        "description": "A proof-of-work challenge and how to answer it.",
+        "properties": {
+          "algorithm": {
+            "description": "Hash function: `sha256`.",
+            "title": "Algorithm",
+            "type": "string"
+          },
+          "challenge": {
+            "description": "Send back unchanged as `<challenge>:<nonce>`.",
+            "title": "Challenge",
+            "type": "string"
+          },
+          "difficulty": {
+            "description": "Leading zero bits the SHA-256 hash must have.",
+            "title": "Difficulty",
+            "type": "integer"
+          },
+          "expires": {
+            "description": "Unix time after which the challenge is rejected.",
+            "title": "Expires",
+            "type": "integer"
+          },
+          "header": {
+            "description": "Request header that carries the answer: `X-PoW`.",
+            "title": "Header",
+            "type": "string"
+          },
+          "input": {
+            "description": "What is hashed, with `\\n` as newlines; `target` is the request path and query exactly as sent.",
+            "title": "Input",
+            "type": "string"
+          }
+        },
+        "required": [
+          "challenge",
+          "difficulty",
+          "expires",
+          "algorithm",
+          "header",
+          "input"
+        ],
+        "title": "PowChallenge",
+        "type": "object"
+      },
+      "Preview": {
+        "description": "Channel preview.",
+        "properties": {
+          "channel": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PreviewChannel"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "title": "Preview",
+        "type": "object"
+      },
+      "PreviewChannel": {
+        "description": "Channel summary from the `t.me/<channel>` landing page.",
+        "properties": {
+          "avatar": {
+            "anyOf": [
+              {
+                "format": "uri",
+                "maxLength": 2083,
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Avatar"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "is_verified": {
+            "title": "Is Verified",
+            "type": "boolean"
+          },
+          "subscribers": {
+            "title": "Subscribers",
+            "type": "string"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "title",
+          "subscribers",
+          "is_verified"
+        ],
+        "title": "PreviewChannel",
+        "type": "object"
+      },
+      "PreviewLink": {
+        "description": "Link preview card generated by Telegram.",
+        "properties": {
+          "description": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ParsedAndRaw"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "site_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Site Name"
+          },
+          "thumb": {
+            "anyOf": [
+              {
+                "format": "uri",
+                "maxLength": 2083,
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Thumb"
+          },
+          "title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title"
+          },
+          "url": {
+            "format": "uri",
+            "maxLength": 2083,
+            "minLength": 1,
+            "title": "Url",
+            "type": "string"
+          }
+        },
+        "required": [
+          "url"
+        ],
+        "title": "PreviewLink",
+        "type": "object"
+      },
+      "Previews": {
+        "additionalProperties": {
+          "$ref": "#/components/schemas/Preview"
+        },
+        "description": "Previews keyed by the requested username; unknown channels are omitted.",
+        "title": "Previews",
+        "type": "object"
+      },
+      "Reacts": {
+        "description": "One reaction counter of a post.",
+        "properties": {
+          "count": {
+            "title": "Count",
+            "type": "string"
+          },
+          "emoji": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Emoji"
+          },
+          "emoji_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Emoji Id"
+          },
+          "emoji_image": {
+            "anyOf": [
+              {
+                "format": "uri",
+                "maxLength": 2083,
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Emoji Image"
+          },
+          "type": {
+            "enum": [
+              "telegram_stars",
+              "emoji",
+              "custom_emoji"
+            ],
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "count",
+          "type"
+        ],
+        "title": "Reacts",
+        "type": "object"
+      },
+      "Reply": {
+        "description": "The message this post replies to.",
+        "properties": {
+          "cover": {
+            "anyOf": [
+              {
+                "format": "uri",
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cover"
+          },
+          "name": {
+            "$ref": "#/components/schemas/ParsedAndRaw"
+          },
+          "text": {
+            "$ref": "#/components/schemas/ParsedAndRaw"
+          },
+          "to_message": {
+            "title": "To Message",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "name",
+          "text",
+          "to_message"
+        ],
+        "title": "Reply",
+        "type": "object"
+      },
+      "Text": {
+        "description": "Post text with optional formatting entities.",
+        "properties": {
+          "entities": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/TextEntities"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Entities"
+          },
+          "html": {
+            "title": "Html",
+            "type": "string"
+          },
+          "string": {
+            "title": "String",
+            "type": "string"
+          }
+        },
+        "required": [
+          "string",
+          "html"
+        ],
+        "title": "Text",
+        "type": "object"
+      },
+      "TextEntities": {
+        "description": "Formatting entity inside a post text; offsets refer to `Text.string`.",
+        "properties": {
+          "language": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Language"
+          },
+          "length": {
+            "title": "Length",
+            "type": "integer"
+          },
+          "offset": {
+            "title": "Offset",
+            "type": "integer"
+          },
+          "type": {
+            "enum": [
+              "italic",
+              "bold",
+              "code",
+              "spoiler",
+              "strikethrough",
+              "underline",
+              "text_link",
+              "url",
+              "pre",
+              "emoji",
+              "animoji",
+              "hashtag"
+            ],
+            "title": "Type",
+            "type": "string"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "format": "uri",
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Url"
+          }
+        },
+        "required": [
+          "offset",
+          "length",
+          "type"
+        ],
+        "title": "TextEntities",
+        "type": "object"
+      },
+      "ValidationError": {
+        "properties": {
+          "ctx": {
+            "title": "Context",
+            "type": "object"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "title": "Location",
+            "type": "array"
+          },
+          "msg": {
+            "title": "Message",
+            "type": "string"
+          },
+          "type": {
+            "title": "Error Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "description": "REST API for public Telegram channels, built on t.me web previews.",
+    "title": "TelegramMe API"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/graphql": {
+      "get": {
+        "operationId": "handle_http_get_graphql_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "The GraphiQL integrated development environment."
+          },
+          "404": {
+            "description": "Not found if GraphiQL or query via GET are not enabled."
+          }
+        },
+        "summary": "Handle Http Get",
+        "tags": [
+          "GraphQL"
+        ]
+      },
+      "post": {
+        "operationId": "handle_http_post_graphql_post",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Handle Http Post",
+        "tags": [
+          "GraphQL"
+        ]
+      }
+    },
+    "/healthz": {
+      "get": {
+        "description": "Liveness probe.",
+        "operationId": "healthz_healthz_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthzResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Health status",
+        "tags": [
+          "Service"
+        ]
+      }
+    },
+    "/v1/body/{channel}": {
+      "get": {
+        "description": "Channel profile, its latest posts (or posts around `position`) and pagination.",
+        "operationId": "body_v1_body__channel__get",
+        "parameters": [
+          {
+            "description": "Telegram channel username, e.g. `durov`",
+            "in": "path",
+            "name": "channel",
+            "required": true,
+            "schema": {
+              "description": "Telegram channel username, e.g. `durov`",
+              "pattern": "^[a-zA-Z][a-zA-Z0-9_]{3,31}$",
+              "title": "Channel",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Open the page around this post ID",
+            "in": "query",
+            "name": "position",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "exclusiveMinimum": 0,
+                  "maximum": 10000000,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Open the page around this post ID",
+              "title": "Position"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChannelBody"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPError"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          },
+          "502": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPError"
+                }
+              }
+            },
+            "description": "Unexpected response from t.me"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPError"
+                }
+              }
+            },
+            "description": "t.me unavailable or feature disabled"
+          }
+        },
+        "summary": "Get basic information about the channel",
+        "tags": [
+          "Channel"
+        ]
+      }
+    },
+    "/v1/feed": {
+      "post": {
+        "description": "Create feed for given channels and return sorted posts.",
+        "operationId": "create_feed_v1_feed_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FeedRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FeedResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPError"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          },
+          "502": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPError"
+                }
+              }
+            },
+            "description": "Unexpected response from t.me"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPError"
+                }
+              }
+            },
+            "description": "t.me unavailable or feature disabled"
+          }
+        },
+        "summary": "Create Feed",
+        "tags": [
+          "Feed"
+        ]
+      }
+    },
+    "/v1/more/{channel}/{direction}/{position}": {
+      "get": {
+        "description": "Posts newer or older than `position`; use `meta.offset` to keep paginating.",
+        "operationId": "more_v1_more__channel___direction___position__get",
+        "parameters": [
+          {
+            "description": "Telegram channel username, e.g. `durov`",
+            "in": "path",
+            "name": "channel",
+            "required": true,
+            "schema": {
+              "description": "Telegram channel username, e.g. `durov`",
+              "pattern": "^[a-zA-Z][a-zA-Z0-9_]{3,31}$",
+              "title": "Channel",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Load posts newer (`after`) or older (`before`)",
+            "in": "path",
+            "name": "direction",
+            "required": true,
+            "schema": {
+              "description": "Load posts newer (`after`) or older (`before`)",
+              "enum": [
+                "after",
+                "before"
+              ],
+              "title": "Direction",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Anchor post ID",
+            "in": "path",
+            "name": "position",
+            "required": true,
+            "schema": {
+              "description": "Anchor post ID",
+              "exclusiveMinimum": 0,
+              "maximum": 10000000,
+              "title": "Position",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/More"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPError"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          },
+          "502": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPError"
+                }
+              }
+            },
+            "description": "Unexpected response from t.me"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPError"
+                }
+              }
+            },
+            "description": "t.me unavailable or feature disabled"
+          }
+        },
+        "summary": "Get more posts from the channel",
+        "tags": [
+          "Channel"
+        ]
+      }
+    },
+    "/v1/post/{channel}/{identifier}": {
+      "get": {
+        "description": "A single post.",
+        "operationId": "post_v1_post__channel___identifier__get",
+        "parameters": [
+          {
+            "description": "Telegram channel username, e.g. `durov`",
+            "in": "path",
+            "name": "channel",
+            "required": true,
+            "schema": {
+              "description": "Telegram channel username, e.g. `durov`",
+              "pattern": "^[a-zA-Z][a-zA-Z0-9_]{3,31}$",
+              "title": "Channel",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Post ID",
+            "in": "path",
+            "name": "identifier",
+            "required": true,
+            "schema": {
+              "description": "Post ID",
+              "exclusiveMinimum": 0,
+              "maximum": 10000000,
+              "title": "Identifier",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Post"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPError"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          },
+          "502": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPError"
+                }
+              }
+            },
+            "description": "Unexpected response from t.me"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPError"
+                }
+              }
+            },
+            "description": "t.me unavailable or feature disabled"
+          }
+        },
+        "summary": "Get one post from the channel",
+        "tags": [
+          "Channel"
+        ]
+      }
+    },
+    "/v1/pow/challenge": {
+      "get": {
+        "description": "Only when the server requires proof of work (`ENABLE_POW`). A challenge can be reused for any number of requests until it expires; each request needs its own nonce.",
+        "operationId": "pow_challenge_v1_pow_challenge_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PowChallenge"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Get a proof-of-work challenge",
+        "tags": [
+          "service"
+        ]
+      }
+    },
+    "/v1/preview/{channel}": {
+      "get": {
+        "description": "Short channel summary: title, subscribers, description, avatar.",
+        "operationId": "preview_v1_preview__channel__get",
+        "parameters": [
+          {
+            "description": "Telegram channel username, e.g. `durov`",
+            "in": "path",
+            "name": "channel",
+            "required": true,
+            "schema": {
+              "description": "Telegram channel username, e.g. `durov`",
+              "pattern": "^[a-zA-Z][a-zA-Z0-9_]{3,31}$",
+              "title": "Channel",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Preview"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPError"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          },
+          "502": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPError"
+                }
+              }
+            },
+            "description": "Unexpected response from t.me"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPError"
+                }
+              }
+            },
+            "description": "t.me unavailable or feature disabled"
+          }
+        },
+        "summary": "Get preview information of channel",
+        "tags": [
+          "Channel"
+        ]
+      }
+    },
+    "/v1/previews": {
+      "post": {
+        "description": "Previews of up to 100 channels at once; unknown channels are omitted.",
+        "operationId": "previews_v1_previews_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChannelsRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Previews"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPError"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          },
+          "502": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPError"
+                }
+              }
+            },
+            "description": "Unexpected response from t.me"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPError"
+                }
+              }
+            },
+            "description": "t.me unavailable or feature disabled"
+          }
+        },
+        "summary": "Get preview data about the channel group",
+        "tags": [
+          "Channel"
+        ]
+      }
+    }
+  }
+}

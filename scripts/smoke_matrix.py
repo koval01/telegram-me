@@ -1,5 +1,15 @@
 #!/usr/bin/env python3
-"""Extended smoke matrix for local/API contract verification."""
+"""Extended smoke matrix for local/API contract verification.
+
+Besides status codes, the main successful responses are checked for content
+(`Check`): a change of the t.me markup that the parser no longer understands
+usually still answers 200, just with empty posts or titles.
+
+The strict scenarios only ask for pages recorded in tests/fixtures/telegram,
+so the matrix also passes against the fake t.me of the integration and deploy
+tests (tests/integration/fake_telegram.py). Standard library only: the deploy
+runs it inside the production container.
+"""
 
 from __future__ import annotations
 
@@ -9,9 +19,13 @@ import itertools
 import json
 import sys
 import time
+from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Any
 from urllib import error, request
+
+# Inspects a parsed 200 response; returns what is wrong with it, or None.
+type Check = Callable[[Any], str | None]
 
 
 @dataclass
@@ -24,6 +38,7 @@ class Scenario:
     expected_statuses: set[int]
     payload: dict[str, Any] | list[Any] | None = None
     strict: bool = True
+    check: Check | None = None
 
 
 @dataclass
@@ -35,11 +50,126 @@ class ScenarioResult:
     elapsed_ms: int
     body_size: int
     body_preview: str
+    problem: str | None = None
 
     @property
     def ok(self) -> bool:
-        """Return True when status matches expected contract."""
-        return isinstance(self.status, int) and self.status in self.scenario.expected_statuses
+        """Return True when status and content match the expected contract."""
+        return (
+            isinstance(self.status, int)
+            and self.status in self.scenario.expected_statuses
+            and self.problem is None
+        )
+
+
+def _get(data: Any, *path: str) -> Any:
+    for key in path:
+        data = data.get(key) if isinstance(data, dict) else None
+    return data
+
+
+def _post_problem(post: Any) -> str | None:
+    """What a parsed post lacks: an id, a date, or any content."""
+    if not isinstance(_get(post, "id"), int) or post["id"] <= 0:
+        return "a post without a valid id"
+    if not isinstance(_get(post, "footer", "date", "unix"), int):
+        return f"post {post['id']} without a date"
+    content = _get(post, "content") or {}
+    if not any(content.get(kind) for kind in ("text", "media", "poll", "preview_link")):
+        return f"post {post['id']} without text, media, poll or link preview"
+    return None
+
+
+def _posts_problem(
+    posts: Any, *, before: int | None = None, after: int | None = None
+) -> str | None:
+    if not isinstance(posts, list) or not posts:
+        return "no posts"
+    problems = [problem for post in posts if (problem := _post_problem(post))]
+    # A few posts may be empty for real (service messages); most must not.
+    if len(problems) * 2 > len(posts):
+        return f"{len(problems)} of {len(posts)} posts are incomplete, e.g. {problems[0]}"
+    ids = [post["id"] for post in posts if isinstance(_get(post, "id"), int)]
+    if before is not None and any(i >= before for i in ids):
+        return f"posts at or after {before} in a page before it"
+    if after is not None and any(i <= after for i in ids):
+        return f"posts at or before {after} in a page after it"
+    return None
+
+
+def channel_page(channel: str) -> Check:
+    """`/v1/body/<channel>`: the channel's identity and a page of complete posts."""
+
+    def check(body: Any) -> str | None:
+        username = _get(body, "channel", "username")
+        if not isinstance(username, str) or username.lower() != channel.lower():
+            return f"channel.username is {username!r}, not {channel!r}"
+        if not _get(body, "channel", "title", "string"):
+            return "channel without a title"
+        return _posts_problem(_get(body, "content", "posts"))
+
+    return check
+
+
+def more_page(direction: str, position: int) -> Check:
+    """`/v1/more/...`: complete posts on the requested side of `position`."""
+
+    def check(body: Any) -> str | None:
+        side = {"before": position} if direction == "before" else {"after": position}
+        return _posts_problem(_get(body, "posts"), **side)
+
+    return check
+
+
+def single_post(post_id: int) -> Check:
+    """`/v1/post/...`: the requested post, complete."""
+
+    def check(body: Any) -> str | None:
+        if _get(body, "id") != post_id:
+            return f"post id is {_get(body, 'id')!r}, not {post_id}"
+        return _post_problem(body)
+
+    return check
+
+
+def preview(body: Any) -> str | None:
+    """`/v1/preview/...`: a channel card with a title."""
+    return None if _get(body, "channel", "title") else "preview without a channel title"
+
+
+def previews(channels: list[str]) -> Check:
+    """`/v1/previews`: a card with a title for each channel that exists."""
+
+    def check(body: Any) -> str | None:
+        if not isinstance(body, dict) or not body:
+            return "no previews"
+        for channel in channels:
+            if channel in body and not _get(body, channel, "channel", "title"):
+                return f"preview of {channel} without a channel title"
+        return None
+
+    return check
+
+
+def feed(body: Any) -> str | None:
+    """`/v1/feed`: ranked, complete posts."""
+    result = _get(body, "result")
+    if not isinstance(result, list) or not result:
+        return "empty feed"
+    if any(not isinstance(_get(item, "_score"), int | float) for item in result):
+        return "feed item without a score"
+    return _posts_problem(result)
+
+
+def graphql_ok(body: Any) -> str | None:
+    """A GraphQL result (or batch of results) with data and without errors."""
+    results = body if isinstance(body, list) else [body]
+    for result in results:
+        if _get(result, "errors"):
+            return f"GraphQL errors: {str(result['errors'])[:120]}"
+        if not _get(result, "data"):
+            return "GraphQL result without data"
+    return None
 
 
 # Sent with every request (--header), e.g. the key of a Cloudflare WAF skip rule.
@@ -99,7 +229,9 @@ def _call(
             raw = response.read()
             elapsed = int((time.time() - started) * 1000)
             preview = raw.decode("utf-8", errors="replace")[:200].replace("\n", " ")
-            return ScenarioResult(scenario, response.status, elapsed, len(raw), preview), None
+            problem = _content_problem(scenario, response.status, raw)
+            result = ScenarioResult(scenario, response.status, elapsed, len(raw), preview, problem)
+            return result, None
     except error.HTTPError as exc:
         raw = exc.read()
         elapsed = int((time.time() - started) * 1000)
@@ -116,6 +248,16 @@ def _call(
             body_preview=f"{type(exc).__name__}: {exc}",
         )
         return result, None
+
+
+def _content_problem(scenario: Scenario, status: int, raw: bytes) -> str | None:
+    if scenario.check is None or status != 200:
+        return None
+    try:
+        body = json.loads(raw)
+    except ValueError:
+        return "response is not JSON"
+    return scenario.check(body)
 
 
 def parse_args() -> argparse.Namespace:
@@ -188,13 +330,21 @@ def graphql_scenarios(enabled: bool) -> list[Scenario]:
     body = '{ body(channel: "durov") { channel { username } meta { offset { before } } } }'
     post = '{ post(channel: "stranaua", id: 252483) { id content { text { string } } } }'
     return [
-        Scenario("graphql_body", "POST", "/graphql", {200 if enabled else 404}, {"query": body}),
+        Scenario(
+            "graphql_body",
+            "POST",
+            "/graphql",
+            {200 if enabled else 404},
+            {"query": body},
+            check=graphql_ok,
+        ),
         Scenario(
             "graphql_batch",
             "POST",
             "/graphql",
             {200 if enabled else 404},
             payload=[{"query": body}, {"query": post}],
+            check=graphql_ok,
         ),
         Scenario(
             "graphql_batch_too_large",
@@ -220,7 +370,7 @@ def build_scenarios(
         Scenario("body_invalid_short", "GET", "/v1/body/ab", {422}),
         Scenario("body_invalid_chars", "GET", "/v1/body/durov-chan", {422}),
         Scenario("body_not_found_like", "GET", "/v1/body/zzzzzznotexistingchannelzzzz", {404}),
-        Scenario("more_invalid_direction", "GET", "/v1/more/stranaua/sideways/229311", {422}),
+        Scenario("more_invalid_direction", "GET", "/v1/more/stranaua/sideways/252483", {422}),
         Scenario("more_invalid_position", "GET", "/v1/more/stranaua/after/0", {422}),
         Scenario("post_invalid_nonint", "GET", "/v1/post/stranaua/notint", {422}),
         Scenario("post_invalid_too_big", "GET", "/v1/post/stranaua/10000001", {422}),
@@ -267,27 +417,55 @@ def build_scenarios(
     ]
 
     for channel in strict_channels:
-        scenarios.append(Scenario(f"body_valid_{channel}", "GET", f"/v1/body/{channel}", {200}))
+        scenarios.append(
+            Scenario(
+                f"body_valid_{channel}",
+                "GET",
+                f"/v1/body/{channel}",
+                {200},
+                check=channel_page(channel),
+            )
+        )
         scenarios.append(
             Scenario(
                 f"preview_valid_{channel}",
                 "GET",
                 f"/v1/preview/{channel}",
                 {200 if previews_enabled else 503},
+                check=preview,
             )
         )
 
     scenarios.extend(
         [
-            Scenario("more_after_valid", "GET", "/v1/more/stranaua/after/229311", {200}),
-            Scenario("more_before_valid", "GET", "/v1/more/stranaua/before/229311", {200}),
-            Scenario("post_valid", "GET", "/v1/post/stranaua/229311", {200}),
+            Scenario(
+                "more_after_valid",
+                "GET",
+                "/v1/more/stranaua/after/252483",
+                {200},
+                check=more_page("after", 252483),
+            ),
+            Scenario(
+                "more_before_valid",
+                "GET",
+                "/v1/more/stranaua/before/252483",
+                {200},
+                check=more_page("before", 252483),
+            ),
+            Scenario(
+                "post_valid",
+                "GET",
+                "/v1/post/stranaua/252483",
+                {200},
+                check=single_post(252483),
+            ),
             Scenario(
                 "previews_valid",
                 "POST",
                 "/v1/previews",
                 {200 if previews_enabled else 503},
-                payload={"channels": ["durov", "stranaua", "nebudetafk"]},
+                payload={"channels": ["durov", "stranaua", "telegram"]},
+                check=previews(["durov", "stranaua", "telegram"]),
             ),
             Scenario(
                 "previews_partial_result",
@@ -296,14 +474,27 @@ def build_scenarios(
                 {200 if previews_enabled else 503},
                 payload={"channels": ["durov", "zzzzzznotexistingchannelzzzz"]},
             ),
-            Scenario("post_with_inline_button", "GET", "/v1/post/nebudetgg/6209", {200}),
-            Scenario("body_around_post", "GET", "/v1/body/stranaua?position=252483", {200}),
+            Scenario(
+                "post_with_inline_button",
+                "GET",
+                "/v1/post/nebudetgg/6209",
+                {200},
+                check=single_post(6209),
+            ),
+            Scenario(
+                "body_around_post",
+                "GET",
+                "/v1/body/stranaua?position=252483",
+                {200},
+                check=channel_page("stranaua"),
+            ),
             Scenario(
                 "feed_valid",
                 "POST",
                 "/v1/feed",
                 {200 if feed_enabled else 503},
                 payload={"channels": ["durov", "stranaua", "nebudetafk"]},
+                check=feed,
             ),
         ]
     )
@@ -334,7 +525,7 @@ def build_scenarios(
 
 def print_results(results: list[ScenarioResult]) -> None:
     """Print table-like output for easy scanning."""
-    print("name|strict|method|path|status|ms|bytes|ok|preview")
+    print("name|strict|method|path|status|ms|bytes|ok|problem|preview")
     for result in results:
         print(
             "|".join(
@@ -347,6 +538,7 @@ def print_results(results: list[ScenarioResult]) -> None:
                     str(result.elapsed_ms),
                     str(result.body_size),
                     str(result.ok),
+                    result.problem or "",
                     result.body_preview,
                 ]
             )
@@ -417,6 +609,7 @@ def main() -> int:
             print(
                 f"- {result.scenario.name}: status={result.status}, "
                 f"expected={sorted(result.scenario.expected_statuses)}, path={result.scenario.path}"
+                + (f", problem: {result.problem}" if result.problem else "")
             )
         return 1
 

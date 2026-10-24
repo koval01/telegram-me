@@ -1,12 +1,21 @@
 name: Deploy
 
-# Rolling deployment to every server in SERVERS_IPS, one at a time. Each
-# server runs deploy/remote-deploy.sh, which rolls back to the previous image
-# if the new one does not become healthy; the rollout stops at the first
-# failing server. Run it manually with an older tag to roll back everything.
-# Server addresses are masked in the logs; servers are shown as 1, 2, ...
-# With the PUBLIC_HOST variable set, every server also runs Caddy on :443
-# (deploy/Caddyfile) for Cloudflare to connect to.
+# Rolling deployment to every server in SERVERS_IPS (deploy/rollout.sh):
+#
+# - Server 1 is the canary. deploy/remote-deploy.sh starts the image, waits
+#   for its health check and runs the smoke test (scripts/smoke_matrix.py)
+#   inside the container; on failure that server goes back to its previous
+#   image. The canary then serves real traffic for CANARY_SOAK seconds and is
+#   verified again before any other server is touched.
+# - The other servers follow one at a time, with the same checks.
+# - Last, the smoke test runs through the public URL (Cloudflare, Caddy).
+#
+# When a check fails after some servers took the release, all of them are
+# rolled back, so the fleet never stays split. Run the workflow manually with
+# an older tag to roll back everything; uncheck "smoke" only when t.me itself
+# is down. Server addresses are masked in the logs; servers are shown as
+# 1, 2, ... With the PUBLIC_HOST variable set, every server also runs Caddy on
+# :443 (deploy/Caddyfile) for Cloudflare to connect to.
 
 on:
   workflow_call:
@@ -25,6 +34,10 @@ on:
         description: "Also run the standalone feed worker"
         type: boolean
         default: false
+      smoke:
+        description: "Smoke-test every server and the public URL (uncheck only while t.me is down)"
+        type: boolean
+        default: true
 
 permissions:
   contents: read
@@ -42,6 +55,8 @@ jobs:
       SSH_USER: ${{ vars.SSH_USER || 'ubuntu' }}
       PUBLIC_HOST: ${{ vars.PUBLIC_HOST }}
       WITH_WORKER: ${{ inputs.with_worker && 'true' || 'false' }}
+      # Only a manual run can skip it: a release (workflow_call) is always smoke-tested.
+      SMOKE: ${{ (github.event_name == 'workflow_dispatch' && !inputs.smoke) && '0' || '1' }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
@@ -124,34 +139,20 @@ jobs:
       - name: Roll out ${{ env.IMAGE }}
         env:
           SERVERS: ${{ secrets.SERVERS_IPS }}
+          CANARY_SOAK: ${{ vars.CANARY_SOAK || '60' }}
+          PUBLIC_URL: ${{ vars.PUBLIC_URL || (vars.PUBLIC_HOST && format('https://{0}', vars.PUBLIC_HOST)) || '' }}
+          # Key of a Cloudflare WAF skip rule, so bot protection lets the smoke test through.
+          BYPASS_KEY: ${{ secrets.CF_BYPASS_KEY }}
         run: |
-          set -euo pipefail
-          # Values below are interpolated into the remote command on purpose.
-          [[ "$IMAGE" =~ ^[A-Za-z0-9./:_@-]+$ ]] || { echo "::error::invalid image: $IMAGE"; exit 1; }
           profiles=()
           if [ -n "$PUBLIC_HOST" ]; then profiles+=(proxy); fi
           if [ "$WITH_WORKER" = true ]; then profiles+=(worker); fi
-          COMPOSE_PROFILES="$(IFS=,; echo "${profiles[*]}")"
-          ssh_opts=(-i ~/.ssh/id_deploy -o BatchMode=yes -o ConnectTimeout=15 -o LogLevel=ERROR)
-          number=0
-          for server in $SERVERS; do
-            number=$((number + 1))
-            echo "::group::server $number"
-            target="$SSH_USER@$server"
-            ssh "${ssh_opts[@]}" "$target" 'mkdir -p ~/telegram-me && chmod 700 ~/telegram-me'
-            scp -q -r "${ssh_opts[@]}" deploy/compose.prod.yaml deploy/remote-deploy.sh deploy/.env \
-              deploy/Caddyfile deploy/certs "$target:telegram-me/"
-            # shellcheck disable=SC2029
-            ssh "${ssh_opts[@]}" "$target" \
-              "chmod 600 ~/telegram-me/.env && COMPOSE_PROFILES='$COMPOSE_PROFILES' bash ~/telegram-me/remote-deploy.sh '$IMAGE'"
-            echo "::endgroup::"
-          done
+          COMPOSE_PROFILES="$(IFS=,; echo "${profiles[*]}")" bash deploy/rollout.sh
 
       - name: Public health check
         if: vars.PUBLIC_HEALTHCHECK_URL != ''
         env:
           URL: ${{ vars.PUBLIC_HEALTHCHECK_URL }}
-          # Key of a Cloudflare WAF skip rule, so bot protection lets the check through.
           BYPASS_KEY: ${{ secrets.CF_BYPASS_KEY }}
         run: |
           headers=()

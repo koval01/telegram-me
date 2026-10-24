@@ -97,6 +97,16 @@ impl Document {
     }
 }
 
+/// One step of the iterative serialisation: deeply nested markup must not
+/// recurse (the release profile aborts on a stack overflow like on a panic).
+enum Step<'a> {
+    /// Serialise this node; `raw` when it sits in a raw-text element.
+    Enter(NodeRef<'a, Node>, bool),
+    /// After an element's children: its end tag, if any, and the unwrap
+    /// rules it added.
+    Leave(Option<&'a str>, usize),
+}
+
 fn serialize(
     node: NodeRef<'_, Node>,
     unwrapped: &[(NodeId, &'static [&'static str])],
@@ -104,69 +114,74 @@ fn serialize(
     out: &mut String,
     raw_text: bool,
 ) {
-    match node.value() {
-        Node::Element(element) => {
-            let pushed = unwrapped
-                .iter()
-                .filter(|(id, _)| *id == node.id())
-                .map(|(_, tags)| active.push(tags))
-                .count();
-            let name = element.name();
-            let skip_tag = active.iter().any(|tags| tags.contains(&name));
-            if !skip_tag {
-                out.push('<');
-                out.push_str(name);
-                for (attribute, value) in &element.attrs {
-                    out.push(' ');
-                    if let Some(prefix) = &attribute.prefix {
-                        out.push_str(prefix);
-                        out.push(':');
-                    }
-                    out.push_str(&attribute.local);
-                    out.push_str("=\"");
-                    escape_attribute(value, out);
-                    out.push('"');
-                }
-                out.push('>');
-            }
-            if !VOID_ELEMENTS.contains(&name) || skip_tag {
-                let raw = RAW_TEXT_ELEMENTS.contains(&name);
-                for child in node.children() {
-                    serialize(child, unwrapped, active, out, raw);
-                }
-                if !skip_tag && !VOID_ELEMENTS.contains(&name) {
+    let mut steps = vec![Step::Enter(node, raw_text)];
+    while let Some(step) = steps.pop() {
+        let (node, raw_text) = match step {
+            Step::Leave(end_tag, pushed) => {
+                if let Some(name) = end_tag {
                     out.push_str("</");
                     out.push_str(name);
                     out.push('>');
                 }
+                active.truncate(active.len() - pushed);
+                continue;
             }
-            for _ in 0..pushed {
-                active.pop();
+            Step::Enter(node, raw_text) => (node, raw_text),
+        };
+        match node.value() {
+            Node::Element(element) => {
+                let pushed = unwrapped
+                    .iter()
+                    .filter(|(id, _)| *id == node.id())
+                    .map(|(_, tags)| active.push(tags))
+                    .count();
+                let name = element.name();
+                let skip_tag = active.iter().any(|tags| tags.contains(&name));
+                if !skip_tag {
+                    out.push('<');
+                    out.push_str(name);
+                    for (attribute, value) in &element.attrs {
+                        out.push(' ');
+                        if let Some(prefix) = &attribute.prefix {
+                            out.push_str(prefix);
+                            out.push(':');
+                        }
+                        out.push_str(&attribute.local);
+                        out.push_str("=\"");
+                        escape_attribute(value, out);
+                        out.push('"');
+                    }
+                    out.push('>');
+                }
+                let void = VOID_ELEMENTS.contains(&name);
+                steps.push(Step::Leave((!skip_tag && !void).then_some(name), pushed));
+                if !void || skip_tag {
+                    let raw = RAW_TEXT_ELEMENTS.contains(&name);
+                    steps.extend(node.children().rev().map(|child| Step::Enter(child, raw)));
+                }
             }
-        }
-        Node::Text(text) => {
-            if raw_text {
-                out.push_str(text);
-            } else {
-                escape_text(text, out);
+            Node::Text(text) => {
+                if raw_text {
+                    out.push_str(text);
+                } else {
+                    escape_text(text, out);
+                }
             }
-        }
-        Node::Comment(comment) => {
-            out.push_str("<!--");
-            out.push_str(comment);
-            out.push_str("-->");
-        }
-        Node::Document | Node::Fragment => {
-            for child in node.children() {
-                serialize(child, unwrapped, active, out, false);
+            Node::Comment(comment) => {
+                out.push_str("<!--");
+                out.push_str(comment);
+                out.push_str("-->");
             }
+            Node::Document | Node::Fragment => {
+                steps.extend(node.children().rev().map(|child| Step::Enter(child, false)));
+            }
+            Node::Doctype(doctype) => {
+                out.push_str("<!DOCTYPE ");
+                out.push_str(doctype.name());
+                out.push('>');
+            }
+            Node::ProcessingInstruction(_) => {}
         }
-        Node::Doctype(doctype) => {
-            out.push_str("<!DOCTYPE ");
-            out.push_str(doctype.name());
-            out.push('>');
-        }
-        Node::ProcessingInstruction(_) => {}
     }
 }
 

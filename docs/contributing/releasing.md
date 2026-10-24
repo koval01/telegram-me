@@ -21,6 +21,11 @@ in `pyproject.toml` and is exposed in the OpenAPI document and by
 The tag builds and pushes `X.Y.Z`, `X.Y` and `X` image tags to GHCR and
 Docker Hub and creates a GitHub release with the changelog section as notes.
 
+A pull request that changes the REST or GraphQL contract incompatibly fails
+the **Guards** workflow ([Breaking changes](testing.md#breaking-changes)). Such
+a change needs a major version: label the pull request `breaking-change` and
+describe the change under **Changed** in `CHANGELOG.md`.
+
 ## Hotfix rollback
 
 If a release misbehaves, run **Actions → Deploy** with the previous `sha-…`

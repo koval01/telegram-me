@@ -73,7 +73,7 @@ WORKDIR /app
 USER app
 EXPOSE 3000
 
-HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
+HEALTHCHECK --interval=30s --timeout=3s --start-period=30s --start-interval=2s --retries=3 \
     CMD ["python", "-c", "import os, urllib.request as r; r.urlopen(f\"http://127.0.0.1:{os.environ.get('PORT', '3000')}/healthz\", timeout=2)"]
 
 STOPSIGNAL SIGTERM

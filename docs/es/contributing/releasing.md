@@ -22,6 +22,12 @@ La etiqueta construye y publica las etiquetas de imagen `X.Y.Z`, `X.Y` y `X`
 en GHCR y Docker Hub, y crea una release de GitHub con la sección del registro
 de cambios como notas.
 
+Un pull request que cambia el contrato REST o GraphQL de forma incompatible
+hace fallar el workflow **Guards**
+([Cambios incompatibles](testing.md#breaking-changes)). Un cambio así necesita
+una versión mayor: etiqueta el pull request con `breaking-change` y describe el
+cambio en **Changed** de `CHANGELOG.md`.
+
 ## Reversión urgente { #hotfix-rollback }
 
 Si una versión se comporta mal, ejecuta **Actions → Deploy** con la etiqueta

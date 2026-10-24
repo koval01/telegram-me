@@ -1,0 +1,81 @@
+name: Guards
+
+# Checks of a change against what production runs now (the base commit:
+# every merge to main is deployed), separate from CI so that adding or
+# removing a label re-runs only this:
+#
+# - breaking changes of the REST (OpenAPI) and GraphQL contract
+#   (scripts/api_contract.py), allowed only with the `breaking-change` label;
+# - coverage floors that went down (scripts/coverage_floor.py).
+#
+# Release runs it on pushes to main too, where the labels come from the
+# merged pull request.
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, labeled, unlabeled]
+  workflow_call:
+
+permissions:
+  contents: read
+  pull-requests: read
+
+concurrency:
+  group: guards-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  UV_VERSION: "0.13.5"
+
+jobs:
+  guards:
+    name: API contract and coverage floors
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - name: Base commit and labels
+        id: base
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EVENT: ${{ github.event_name }}
+          PR_BASE: ${{ github.event.pull_request.base.sha }}
+          PR_LABELS: ${{ toJSON(github.event.pull_request.labels.*.name) }}
+          PUSH_BEFORE: ${{ github.event.before }}
+        run: |
+          if [ "$EVENT" = pull_request ]; then
+            base="$PR_BASE"
+            labels="$PR_LABELS"
+          else
+            base="$PUSH_BEFORE"
+            labels="$(gh api "repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA/pulls" \
+              --jq '[.[0].labels[]?.name]' 2>/dev/null || echo '[]')"
+          fi
+          if [ -z "$base" ] || [ "$base" = 0000000000000000000000000000000000000000 ]; then
+            echo "::notice::No base commit (new branch or tag): nothing to compare"
+            base=""
+          fi
+          allow=false
+          if jq -e 'index("breaking-change")' <<< "$labels" >/dev/null; then allow=true; fi
+          echo "base=$base" >> "$GITHUB_OUTPUT"
+          echo "allow_breaking=$allow" >> "$GITHUB_OUTPUT"
+          echo "Comparing with ${base:-nothing}; breaking changes allowed: $allow"
+      - uses: astral-sh/setup-uv@07a047e608db84b3d8c06cd9a7c7dcc9c355c18e # v10.3.2
+        if: steps.base.outputs.base != ''
+        with:
+          version: ${{ env.UV_VERSION }}
+      - name: Breaking API changes
+        if: steps.base.outputs.base != ''
+        env:
+          BASE: ${{ steps.base.outputs.base }}
+          ALLOW: ${{ steps.base.outputs.allow_breaking }}
+        run: |
+          args=(--base "$BASE")
+          if [ "$ALLOW" = true ]; then args+=(--allow-breaking); fi
+          uv run --no-project --with graphql-core==3.3.0 python scripts/api_contract.py "${args[@]}"
+      - name: Coverage floors only go up
+        if: steps.base.outputs.base != ''
+        env:
+          BASE: ${{ steps.base.outputs.base }}
+        run: python3 scripts/coverage_floor.py --base "$BASE"

@@ -49,6 +49,7 @@ La fuente de verdad es
 | [`CACHE_MODE`](#cache_mode) | `normal` | Rendimiento |
 | [`PARSER_MODE`](#parser_mode) | `full` | Rendimiento |
 | [`MEMORY_TRIM_INTERVAL`](#memory_trim_interval) | `10` | Rendimiento |
+| [`TELEGRAM_BASE_URL`](#telegram_base_url) | `https://t.me` | Origen |
 | [`TELEGRAM_TIMEOUT`](#telegram_timeout) | `10` | Origen |
 | [`TELEGRAM_MAX_CONCURRENCY`](#telegram_max_concurrency) | `32` | Origen |
 | [`UPSTREAM_QUEUE_LIMIT`](#upstream_queue_limit) | 16 × `TELEGRAM_MAX_CONCURRENCY` | Origen |
@@ -272,6 +273,12 @@ grandes de vida corta para reutilizarla: un worker bajo carga retenía ~80 MiB
 de ese heap libre. Un recorte tarda alrededor de 1 ms. `0` lo desactiva.
 
 ## Origen { #upstream }
+
+### `TELEGRAM_BASE_URL`
+
+Origen del que se descargan las páginas de t.me, `esquema://host[:puerto]` sin
+ruta. Sirve para apuntar a un espejo o a un t.me falso: así ejecutan la imagen
+las pruebas de integración contra `tests/integration/fake_telegram.py`.
 
 ### `TELEGRAM_TIMEOUT`
 

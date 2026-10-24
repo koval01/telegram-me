@@ -67,7 +67,9 @@ async def build_container(
             await shared.warm_up()
             await stack.enter_async_context(beating(shared, settings.redis_heartbeat_interval))
 
-        fetcher = fetcher or ReqwestFetcher(timeout=settings.telegram_timeout)
+        fetcher = fetcher or ReqwestFetcher(
+            timeout=settings.telegram_timeout, base_url=settings.telegram_base_url
+        )
         gate = FairGate(settings.telegram_max_concurrency, settings.upstream_queue_limit)
         client = TelegramClient(fetcher, settings.telegram_max_concurrency, gate)
         stack.push_async_callback(client.close)

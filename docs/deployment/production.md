@@ -55,28 +55,49 @@ deploy script and the `.env` on every deployment.
 ```mermaid
 sequenceDiagram
     participant GH as GitHub Actions
-    participant S as Server N
-    GH->>GH: CI: lint, types, tests, image smoke test
+    participant S1 as Server 1 (canary)
+    participant SN as Servers 2…N
+    GH->>GH: CI and Guards: lint, types, tests, contract, image, integration, deploy scripts
     GH->>GH: build & push linux/amd64 + linux/arm64
-    loop each server, one at a time
-        GH->>S: scp compose.prod.yaml, remote-deploy.sh, .env
-        GH->>S: remote-deploy.sh <image:sha-…>
-        S->>S: docker pull, compose up --wait (healthcheck)
-        alt healthy
-            S-->>GH: ok, remember image
-        else unhealthy within 90 s
-            S->>S: start previous image again
-            S-->>GH: failure → rollout stops here
-        end
+    GH->>S1: remote-deploy.sh <image:sha-…>
+    S1->>S1: compose up --wait (health check), smoke test inside the container
+    alt healthy and smoke test passed
+        S1-->>GH: ok, remember image
+    else otherwise
+        S1->>S1: start previous image again
+        S1-->>GH: failure → rollout stops, nothing else changed
     end
+    GH->>GH: CANARY_SOAK seconds of real traffic on server 1
+    GH->>S1: remote-deploy.sh --verify (same image, healthy, no restart, smoke test)
+    loop each other server, one at a time
+        GH->>SN: remote-deploy.sh <image:sha-…> (same checks)
+    end
+    GH->>GH: smoke test through the public URL
+    Note over GH,SN: a failure after server 1 rolls back every server that took the release
 ```
 
-- Pushing to `main` runs CI, builds the image (`latest` and `sha-…` tags) and
-  deploys `sha-…` to every server listed in `SERVERS_IPS`, one after another.
+- Pushing to `main` runs CI and Guards, builds the image (`latest` and
+  `sha-…` tags) and deploys `sha-…` to every server listed in `SERVERS_IPS`,
+  one after another
+  ([`deploy/rollout.sh`](https://github.com/koval01/telegram-me/blob/main/deploy/rollout.sh)).
 - [`deploy/remote-deploy.sh`](https://github.com/koval01/telegram-me/blob/main/deploy/remote-deploy.sh)
-  waits until the new container is healthy. Otherwise it restarts the
-  previously deployed image (recorded in `~/telegram-me/.deployed-image`) and
-  fails, which stops the rollout — the remaining servers keep the old version.
+  waits until the new container is healthy, then runs the smoke test
+  (`scripts/smoke_matrix.py`, status codes and content of every endpoint,
+  inside the container against live t.me, one retry). The health check alone
+  only proves that the process answers `/healthz`; the smoke test proves that
+  it serves pages through this server's configuration and Redis. When either
+  fails, it restarts the previously deployed image (recorded in
+  `~/telegram-me/.deployed-image`) and fails.
+- Server 1 is the canary: after it took the release it serves real traffic
+  for `CANARY_SOAK` seconds (default 60) and is verified again: it must still
+  run the image, be healthy, not have restarted or been killed for memory,
+  and pass the smoke test. Only then are the other servers deployed.
+- Last, the smoke test runs through the public URL (`PUBLIC_URL`, or
+  `https://PUBLIC_HOST`), that is through Cloudflare and Caddy, with the
+  `CF_BYPASS_KEY` header.
+- When any of these checks fails after a server took the release, every
+  server that took it is rolled back (`remote-deploy.sh --rollback`), so the
+  fleet never stays split between two releases.
 - The first 2.0 deployment replaces the 1.x container (named `telegram-me`,
   started with `docker run`). If 2.0 does not become healthy, the 1.x container
   is started again from its image and `~/env.app`.
@@ -93,7 +114,7 @@ sequenceDiagram
 | `SSH_KEY` | yes | Private key for `SSH_USER` |
 | `SSH_KNOWN_HOSTS` | recommended | `ssh-keyscan` output for the servers; without it host keys are trusted on first use (with a warning) |
 | `REDIS_URL` | yes | Shared Redis for all servers |
-| `CF_BYPASS_KEY` | no | Sent as `x-bypass-key` by the public health check, for a Cloudflare WAF rule that skips bot protection for it |
+| `CF_BYPASS_KEY` | no | Sent as `x-bypass-key` by the public smoke test and health check, for a Cloudflare WAF rule that skips bot protection for them |
 | `POW_SECRET` | with `ENABLE_POW` | Signs proof-of-work challenges; at least 32 characters ([`POW_SECRET`](../configuration.md#pow_secret)) |
 | `TLS_CERT`, `TLS_KEY` | with `PUBLIC_HOST` | Cloudflare Origin CA certificate and key (PEM) for Caddy; without them Caddy uses a self-signed certificate |
 | `DOCKER_USERNAME`, `DOCKERHUB_TOKEN` | yes | Push to Docker Hub (`DOCKER_PASSWORD` is accepted instead of the token) |
@@ -118,6 +139,8 @@ deployment:
 | `DEPLOY_IMAGE` | `docker.io/koval01/telegram-me` | Repository to deploy from |
 | `SSH_USER` | `ubuntu` | |
 | `PUBLIC_HEALTHCHECK_URL` | — | Checked after the rollout, e.g. `https://api.example.com/healthz` |
+| `PUBLIC_URL` | `https://PUBLIC_HOST` | Base URL of the public smoke test after the rollout; without it and `PUBLIC_HOST` the test is skipped |
+| `CANARY_SOAK` | `60` | Seconds server 1 serves a new release before it is verified again and the other servers follow; `0` skips the canary check |
 
 Use the `production` environment in the repository settings to add required
 reviewers or restrict which branches may deploy.
@@ -148,8 +171,8 @@ deployment's public health check. Keep it off when programs are meant to use
 the API. When it stays on (a demo, say), add a WAF custom rule that skips it
 for requests whose header matches a long random key, for example
 `any(http.request.headers["x-bypass-key"][*] eq "<key>")`. Store the key as
-the `CF_BYPASS_KEY` secret for the health check, and pass it to the smoke
-test with `--header "x-bypass-key:$KEY"`.
+the `CF_BYPASS_KEY` secret for the deployment's public smoke test and health
+check, and pass it to the smoke test by hand with `--header "x-bypass-key:$KEY"`.
 
 Cloudflare picks one of the DNS records per connection. While one server
 restarts during a rolling deployment, some requests to it can fail for a few
@@ -159,11 +182,14 @@ seconds.
 
 Run the **Deploy** workflow manually (*Actions → Deploy → Run workflow*) with
 the tag to go back to, for example `sha-0123456789ab` (every build is kept in
-the registry). The same rolling procedure is used.
+the registry). The same rolling procedure is used, with the same checks;
+uncheck **smoke** only while t.me itself is down, when no release can pass.
 
-On a single server you can also roll back by hand:
+On a single server you can also roll back by hand, to the image deployed
+before the last one or to any other:
 
 ```bash
+bash ~/telegram-me/remote-deploy.sh --rollback
 cd ~/telegram-me
 APP_IMAGE=docker.io/koval01/telegram-me:sha-0123456789ab \
   docker compose -f compose.prod.yaml up -d --wait

@@ -8,6 +8,40 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- `REDIS_CONNECT_TIMEOUT` (default 2 s): seconds to open a Redis connection,
+  TLS handshake included.
+- **Deployment gates.** Every server runs the smoke test (status codes and
+  content) inside the new container after its health check and goes back to
+  the previous image when it fails. Server 1 is a canary: it serves real
+  traffic for `CANARY_SOAK` seconds and is verified again before the other
+  servers follow. The rollout ends with the smoke test through the public URL
+  (`PUBLIC_URL` or `https://PUBLIC_HOST`, with `CF_BYPASS_KEY`), and a
+  failure after the first server rolls back every server that took the
+  release (`deploy/rollout.sh`, `remote-deploy.sh --verify` and `--rollback`).
+  Manual deploys can skip the smoke test while t.me is down.
+- CI runs the built image as two servers with two workers each and a real
+  Valkey (`tests/integration`): shared cache, cross-process fetch lease,
+  shared rate limit, proof of work, a rolling upgrade from the release in
+  production and a Valkey outage. `deploy/remote-deploy.sh` is tested with
+  real Docker Compose (upgrade, unhealthy and broken releases, rollback, the
+  Caddy proxy) and the fleet logic with stub servers (`tests/deploy`).
+- **Guards** workflow: breaking changes of the REST (OpenAPI) and GraphQL
+  contract against the base of a pull request fail it unless it is labelled
+  `breaking-change` (`scripts/api_contract.py`, `make contract`); coverage
+  floors may only go up (`scripts/coverage_floor.py`).
+- Coverage floors in CI: Python 92.5 % (`fail_under`), Rust 96 % lines
+  (`cargo llvm-cov`).
+- Property-based tests (hypothesis): no 500 whatever t.me returns, the
+  protection middleware on any input, feed invariants. Hostile-HTML tests of
+  the Rust parsers (mutated pages, deep nesting, linear parse time) and a
+  `cargo fuzz` target.
+- **Nightly** workflow: the production image against live t.me, production
+  through the public URL, 10 minutes of fuzzing and long property runs; a
+  failure opens an issue labelled `nightly`.
+- The smoke matrix checks the content of the main responses, not only status
+  codes, and uses recorded pages only, so it also runs against a fake t.me.
+- `TELEGRAM_BASE_URL`: where t.me pages are fetched from (a mirror, or a fake
+  t.me in tests).
 - **Redis heartbeat** (`REDIS_HEARTBEAT_INTERVAL`, default 5 s). Every worker
   writes its marker `tme:v2:node:<host>:<pid>` with a TTL of three intervals.
   - It keeps a connection to Redis open.
@@ -18,6 +52,8 @@ All notable changes to this project are documented here. The format follows
 
 ### Changed
 
+- The image's health check probes every 2 s during the first 30 s, so a new
+  container is healthy (and a deployment done) within seconds instead of 30 s.
 - **The Redis circuit breaker opens after three failures in a row within
   10 seconds** instead of after the first one. Any command that reaches Redis
   resets the count. A single slow TLS connect to a distant Redis, or one lost
@@ -33,11 +69,8 @@ All notable changes to this project are documented here. The format follows
   reopened the circuit breaker, which bypassed Redis for 30 s every 30–60 s in
   production. Connections now get `REDIS_CONNECT_TIMEOUT` (default 2 s), and
   each worker opens its first connection at startup.
-
-### Added
-
-- `REDIS_CONNECT_TIMEOUT` (default 2 s): seconds to open a Redis connection,
-  TLS handshake included.
+- Deeply nested markup (tens of thousands of levels) no longer overflows the
+  stack while a post is serialized, which aborted the worker process.
 
 ## [2.0.0] - 2026-10-24
 
