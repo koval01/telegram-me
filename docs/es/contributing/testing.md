@@ -13,7 +13,12 @@ mantienen honesto al servicio.
 grabadas** y compara la respuesta JSON completa con un archivo de
 `tests/snapshots/`. Cualquier cambio en lo que devuelve la API (un campo
 renombrado, un número distinto, una publicación que falta) hace fallar una
-prueba y aparece como un diff legible.
+prueba y aparece como un diff legible. Los archivos JSON se comparan ya
+analizados, así que también se fijan los bytes exactos de cada respuesta,
+mediante su SHA-256 en `tests/snapshots/raw_digests.json`: tampoco pueden
+cambiar el orden de las claves, el formato de los números ni el escapado de
+las cadenas, y eso es lo que permite mover código de pydantic a Rust sin tocar
+el contrato.
 
 Las páginas grabadas están en `tests/fixtures/telegram/` (gzip), con un
 `manifest.json` que describe a qué solicitud responde cada archivo. Un
@@ -25,7 +30,10 @@ La cobertura incluye seis canales (`durov`, `telegram`, `stranaua`, `tginfo`,
 `nebudetafk`, `nebudetgg`), los dos modos del parser, la paginación en ambas
 direcciones, las vistas previas, un canal inexistente, el feed y publicaciones
 individuales con un botón inline, una encuesta, un sticker, una respuesta, una
-vista previa de enlace y un mensaje de voz.
+vista previa de enlace y un mensaje de voz. Un feed sintético, sembrado
+directamente en la caché, añade duplicados agrupados y páginas que el parser
+nunca produciría (sin nombre de usuario, sin información del canal,
+publicaciones sin footer ni content).
 
 `tests/test_graphql_contract.py` hace lo mismo para GraphQL: el esquema
 completo (SDL) en `tests/snapshots/graphql/schema.graphql`, un snapshot por

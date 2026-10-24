@@ -125,16 +125,114 @@ solicitud (consulta [Rendimiento](performance.md)).
 
 ## Agrupación de solicitudes { #request-coalescing }
 
-`SingleFlight` indexa el trabajo en curso por clave de caché. Mientras se pide
-una página a t.me, cualquier otra solicitud de la misma página espera a esa
-tarea en lugar de enviar su propia solicitud: una ráfaga de 1000 solicitudes
-para un canal sin caché produce una sola solicitud al origen. Un cliente que se
-desconecta no cancela la tarea compartida.
+Las solicitudes concurrentes idénticas hacen el trabajo una sola vez: una
+solicitud a t.me y un renderizado, lleguen donde lleguen. Las piezas de abajo
+se miden en [Rendimiento](performance.md#request-coalescing); el núcleo de la
+planificación (tabla de vuelos, puerta hacia el origen, puntos de renovación)
+está en Rust, en
+[`sched.rs`](https://github.com/koval01/telegram-me/blob/main/rust/telegram-me-native/src/sched.rs),
+y los servicios de Python solo lo conectan.
+
+### En un worker { #in-one-worker }
+
+`SingleFlight` indexa el trabajo en curso por clave de caché, por separado para
+páginas analizadas, cuerpos renderizados, publicaciones renderizadas,
+fragmentos de `/v1/more` y vistas previas. Mientras se pide una página a t.me,
+cualquier otra solicitud de ella espera a esa tarea en lugar de enviar la suya:
+una ráfaga de 1000 solicitudes para un canal sin caché produce una sola
+solicitud al origen. Un cliente que se desconecta no cancela la tarea
+compartida. Como REST y GraphQL se resuelven a través de los mismos servicios,
+un `GET /v1/body/durov` y un `body(channel: "durov")` de GraphQL también
+comparten la descarga y el renderizado; `/v1/post/durov/531` y
+`/v1/body/durov?position=531` comparten la página alrededor de la publicación
+531; un feed y una solicitud de un solo canal comparten la página más reciente
+del canal; las solicitudes de feed idénticas se montan, clasifican y renderizan
+una sola vez.
+
+Las claves se normalizan antes de compararlas: los nombres de canal no
+distinguen mayúsculas (`Durov` y `durov` son una sola clave, también en los
+feeds) y una posición ausente es la posición 0. Las páginas alrededor de
+posiciones *distintas* no se tratan como intercambiables aunque contengan la
+misma publicación: cada carga de página trae sus propios tokens `view` por
+publicación (y t.me renderiza los footers y los reenvíos de forma ligeramente
+distinta alrededor del ancla), así que servir una en lugar de otra cambiaría
+las respuestas.
+
+### Entre workers y servidores { #across-workers-and-servers }
+
+Cada worker de granian de cada servidor tiene sus propios vuelos únicos, así
+que, por sí solos, una clave popular que caduca se descarga una vez por worker
+y servidor: 6 veces con dos servidores de tres workers. Con Redis, el worker
+que lidera localmente toma primero una concesión (lease),
+`tme:v2:lease:<key>`, en un solo viaje de ida y vuelta que además lee el valor
+en caché (un script Lua: `SET NX PX` más `GET`):
+
+- el valor en caché ya está fresco (otro proceso acaba de escribirlo): se usa
+  y se guarda una copia en la caché dentro del proceso, sin descarga;
+- se obtiene la concesión: descarga, escribe la caché, libera la concesión;
+- otro proceso tiene la concesión: sondea con espera progresiva con jitter (de
+  25 ms creciendo hasta 250 ms), reintentando la concesión en cada ronda, hasta
+  que el resultado del titular está en la caché. Un titular que falló con un
+  error de dominio (no encontrado, análisis, origen) deja ese error en la
+  concesión durante 2 s, de modo que quienes esperan (y las solicitudes que
+  llegan mientras tanto) fallan igual en lugar de reintentar todos contra t.me.
+
+La concesión vive 3 s y su titular la prolonga cada segundo mientras dura la
+descarga, así que un titular que se cayó o perdió Redis se sustituye en 3 s,
+tarde lo que tarde t.me para uno vivo. Nadie espera más de
+`2 × TELEGRAM_TIMEOUT + 3` segundos en total, y nadie espera a Redis más de
+`REDIS_TIMEOUT` por comando: cuando Redis va lento, está caído o su circuit
+breaker está abierto, un worker simplemente descarga por su cuenta. El vuelo
+único local sigue aplicándose entonces, así que una caída cuesta una descarga
+por worker (el comportamiento anterior a la concesión), nunca una estampida.
+`SHARED_COALESCING=false` desactiva la concesión. Sin Redis no hay nada a
+través de lo que coordinarse, y cada worker agrupa por su cuenta.
+
+El actualizador del feed pasa por el mismo camino: una actualización que ya
+está ejecutando una solicitud de usuario en otro servidor se une a ella, y una
+página que algún proceso descargó en la última media del intervalo de
+actualización no se vuelve a descargar.
+
+### Renovación anticipada { #early-renewal }
+
+Cada entrada recibe un punto de renovación en el último
+`EARLY_REFRESH_WINDOW` (10 %) de su actualidad, derivado del momento en que se
+guardó, para que todos los lectores de todos los procesos coincidan en él y
+las entradas guardadas a la vez (un ciclo del actualizador) se renueven de
+forma escalonada. La primera solicitud que lee una página, un cuerpo
+renderizado, una publicación renderizada o una entrada de `/v1/more` pasado
+ese punto se sigue respondiendo desde la caché y lanza una actualización en
+segundo plano; las lecturas posteriores de la misma entrada en ese proceso no
+vuelven a pedirla, y la actualización se agrupa como cualquier descarga. Así,
+una clave popular se descarga más o menos una vez por TTL y nunca caduca bajo
+carga: sin avalancha de fallos de caché y sin que nadie espere a t.me. Se probó
+y descartó un esquema probabilístico como XFetch: con cientos de lecturas por
+segundo renueva unas `ln(reads per window)` ventanas antes de la caducidad,
+duplicando el tráfico hacia el origen justo de las claves más populares. Los
+TTL largos (vistas previas, la ventana stale del feed) también se acortan en
+una parte aleatoria de la ventana, para que las entradas escritas a la vez no
+caduquen a la vez.
 
 ## Protección del origen { #upstream-protection }
 
-- Un semáforo por proceso limita las solicitudes simultáneas a t.me
-  (`TELEGRAM_MAX_CONCURRENCY`, 32).
+- **Límite de concurrencia justo.** Cada worker envía como mucho
+  `TELEGRAM_MAX_CONCURRENCY` (32) solicitudes a t.me a la vez. Los huecos
+  libres se reparten por turnos entre *flujos* (un canal, o una solicitud de
+  feed o de vistas previas en su conjunto) en lugar de por orden de llegada,
+  así que un feed de 100 canales no hace esperar detrás de él a una solicitud
+  de un solo canal. Un flujo ocupa como mucho tres cuartas partes de los
+  huecos. Las actualizaciones en segundo plano ocupan como mucho la mitad y
+  solo obtienen un hueco mientras no espera ninguna solicitud de usuario; un
+  usuario que se une a una actualización que aún espera hueco la eleva a
+  prioridad de usuario.
+- **Colas acotadas, descarte de carga.** Como mucho `UPSTREAM_QUEUE_LIMIT`
+  solicitudes (por defecto, 16 por hueco) esperan un hueco, y como mucho
+  `MAX_WAITING_REQUESTS` (4096) solicitudes esperan trabajo hacia el origen de
+  cualquier tipo por worker. Por encima, una solicitud se responde con `503` y
+  `Retry-After` (estimado a partir de la longitud de la cola y de cuánto se
+  ocupa un hueco) en lugar de ponerse en cola sin límite; una solicitud de feed
+  o de vistas previas omite los canales descartados. El trabajo en segundo
+  plano que supera los límites se descarta en silencio.
 - Los canales desconocidos se guardan en caché como `null` durante 60 s.
 - La caché en el edge de Cloudflare se activa mediante `Cache-Control`
   (consulta [Proxy inverso](../deployment/reverse-proxy.md#cloudflare)).

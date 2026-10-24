@@ -27,6 +27,7 @@ flowchart TB
     F --> T(("t.me"))
     CS --> P["telegram/parsing<br/>telegram-me-native (Rust)"]
     CS --> V["schemas<br/>pydantic-core (Rust)"]
+    FS --> NF["build_feed<br/>telegram-me-native (Rust)"]
 ```
 
 | Paquete | Responsabilidad |
@@ -56,9 +57,12 @@ Tomando `GET /v1/body/durov` como ejemplo:
    caché. Un acierto se devuelve como bytes: sin análisis ni validación.
 5. En caso de fallo, **SingleFlight** se asegura de que solo una corrutina
    descargue `t.me/s/durov`; las solicitudes concurrentes esperan a la misma
-   tarea.
-6. **`TelegramClient`** toma un hueco del semáforo de concurrencia del proceso
-   y pide la página a **`ReqwestFetcher`**; pyreqwest realiza la solicitud
+   tarea. Con Redis, esa corrutina toma una concesión breve para que, de todos
+   los servidores, solo un proceso la descargue; los demás recogen su
+   resultado de la caché (consulta [Caché](caching.md#request-coalescing)).
+6. **`TelegramClient`** toma un hueco de la puerta hacia el origen del proceso
+   (justa entre canales y solicitudes de feed, `503` cuando su cola está
+   llena) y pide la página a **`ReqwestFetcher`**; pyreqwest realiza la solicitud
    sobre una conexión HTTP/2 del pool en Rust, fuera del GIL, y devuelve el
    cuerpo decodificado. Una conexión caída se reintenta una vez.
 7. En uno de los dos hilos de análisis, **`parse_channel_page`** entrega el
@@ -102,12 +106,15 @@ la API.
 | Análisis y extracción de HTML | `telegram-me-native` (html5ever, selectors, regex) | Rust |
 | Validación, JSON (respuestas y caché) | pydantic-core | Rust |
 | Protocolo de Redis | hiredis | C |
-| Clasificación del feed, duplicados, temas | `telegram-me-native` (este proyecto) | Rust (PyO3) |
+| Montaje del feed: señales, clasificación, duplicados, temas, respuesta | `telegram-me-native` (este proyecto) | Rust (PyO3) |
 | Caché dentro del proceso | `telegram-me-native` (moka, libzstd) | Rust (PyO3), C |
+| Planificación de solicitudes: vuelos, puerta justa hacia el origen, puntos de renovación | `telegram-me-native` (este proyecto) | Rust (PyO3) |
 
 El código nativo escrito para este proyecto está en el crate de Rust
 [`rust/telegram-me-native`](https://github.com/koval01/telegram-me/tree/main/rust/telegram-me-native),
 compilado con maturin como miembro del workspace de uv. Python sigue siendo la
 capa de orquestación: descarga, caché, enrutamiento y unión de los resultados.
+Lo que aún queda en Python en la ruta crítica, y el orden en que pasa a Rust,
+está en la [Hoja de ruta hacia Rust](rust-roadmap.md).
 
 El efecto medido está en la página de [Rendimiento](performance.md).

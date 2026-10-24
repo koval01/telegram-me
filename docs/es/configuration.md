@@ -51,6 +51,10 @@ La fuente de verdad es
 | [`MEMORY_TRIM_INTERVAL`](#memory_trim_interval) | `10` | Rendimiento |
 | [`TELEGRAM_TIMEOUT`](#telegram_timeout) | `10` | Origen |
 | [`TELEGRAM_MAX_CONCURRENCY`](#telegram_max_concurrency) | `32` | Origen |
+| [`UPSTREAM_QUEUE_LIMIT`](#upstream_queue_limit) | 16 × `TELEGRAM_MAX_CONCURRENCY` | Origen |
+| [`MAX_WAITING_REQUESTS`](#max_waiting_requests) | `4096` | Origen |
+| [`SHARED_COALESCING`](#shared_coalescing) | `true` | Origen |
+| [`EARLY_REFRESH_WINDOW`](#early_refresh_window) | `0.1` | Origen |
 | [`REDIS_URL`](#redis_url) | — | Caché |
 | [`REDIS_TIMEOUT`](#redis_timeout) | `0.5` | Caché |
 | [`PREVIEW_CACHE_TTL`](#preview_cache_ttl) | `3600` | Caché |
@@ -277,7 +281,38 @@ una conexión nueva cuando el error es de red.
 
 Máximo de solicitudes simultáneas a t.me por proceso worker. Evita que
 Telegram limite la frecuencia de solicitudes del servidor durante solicitudes
-grandes de feed o de vistas previas.
+grandes de feed o de vistas previas. Los huecos se reparten de forma justa: por
+turnos entre canales y solicitudes de feed o de vistas previas, y las
+solicitudes de los usuarios antes que las actualizaciones en segundo plano
+(consulta [Caché](internals/caching.md#upstream-protection)).
+
+### `UPSTREAM_QUEUE_LIMIT`
+
+Cuántas solicitudes deja un worker esperando a que quede libre un hueco hacia
+el origen. Las siguientes solicitudes que necesitan t.me se responden con `503`
+y una cabecera `Retry-After` en lugar de ponerse en cola. Por defecto, 16 por
+cada hueco de `TELEGRAM_MAX_CONCURRENCY` (512).
+
+### `MAX_WAITING_REQUESTS`
+
+Cuántas solicitudes deja un worker esperando a la vez un trabajo hacia el
+origen (una descarga o un renderizado que empezó otra solicitud); por encima,
+`503` con `Retry-After`. Acota la memoria que puede retener una avalancha de
+solicitudes.
+
+### `SHARED_COALESCING`
+
+Con `REDIS_URL`, descarga cada página una sola vez entre todos los workers y
+servidores: el proceso que descarga toma una concesión (lease) breve en Redis
+y los demás esperan su resultado en lugar de pedirlo a t.me por su cuenta.
+Desactívalo para agrupar solo dentro de cada worker.
+
+### `EARLY_REFRESH_WINDOW`
+
+Renueva en segundo plano una página en caché que se sigue leyendo dentro de
+esta última fracción de su actualidad (0.1: el último segundo de los 10 s de
+`CACHE_MODE=normal`), para que las páginas populares nunca caduquen bajo
+carga. `0` lo desactiva.
 
 ## Caché { #cache }
 

@@ -58,6 +58,81 @@ solicitud:
   lectura de 95 KB tardó 6.3 ms (p50) con el GIL liberado y 38 µs con él
   retenido.
 
+## Montaje nativo del feed { #native-feed-assembly }
+
+Un feed decodificaba cada página en caché en objetos de Python, construía una
+entrada del clasificador por publicación y serializaba el resultado con
+pydantic, en el event loop y con el GIL retenido: ~41 ms de un feed de 100
+canales. Ahora es una sola llamada a `telegram_me_native.build_feed` con el
+GIL liberado (entran los bytes de las páginas en caché, salen los bytes de la
+respuesta). `scripts/audit.py`, dentro del proceso, en la misma máquina, feeds
+de 100 canales con 2 000 publicaciones:
+
+| | Antes | Después |
+|---|---|---|
+| `POST /v1/feed`, 100 canales | 83.7 ms | 42.7 ms |
+| CPU de ese feed en un núcleo (`RAYON_NUM_THREADS=1`) | 131 ms | 106 ms |
+| Asignaciones de Python de ese feed | 20.8 MiB | 9.8 MiB |
+| `/v1/body` en caché junto a un bucle de feeds, p50 / p99 | 15.2 / 61.6 ms | 2.3 / 10.5 ms |
+| RSS máximo de un worker que sirve 200 feeds así (Linux) | 220 MiB | 218 MiB (ruido) |
+
+Detalles, costes por endpoint y lo que se mueve a continuación:
+[Hoja de ruta hacia Rust](rust-roadmap.md).
+
+## Agrupación de solicitudes { #request-coalescing }
+
+`scripts/coalescing_load.py` arranca 6 procesos worker (piensa en dos
+servidores de tres workers de granian) sobre un mismo Valkey, cada uno con 32
+clientes que llaman directamente a su app. Cada cliente elige al azar entre
+las mismas 37 solicitudes: cada canal grabado a través de `/v1/body` (la más
+reciente y alrededor de una publicación), `/v1/post`, `/v1/more` en ambos
+sentidos, tres vistas previas, un feed de 6 canales y una consulta GraphQL con
+un body y el feed. t.me se sustituye por páginas grabadas que se responden tras
+150 ms; `CACHE_MODE=normal` (10 s), así que las 27 solicitudes distintas al
+origen caducan dos veces en una ejecución de 25 s. Dos ejecuciones de cada
+caso, Apple serie M con 8 núcleos:
+
+| | main (con el feed nativo) | este cambio, `SHARED_COALESCING=false` | este cambio |
+|---|---|---|---|
+| Solicitudes al origen, Valkey local | 417 / 412 | 421 / 428 | **75 / 75** |
+| Solicitudes al origen, Valkey a 90 ms | 434 / 422 | 414 / 413 | **75 / 75** |
+| Por solicitud distinta al origen | 15.3–16.1 | 15.3–15.9 | **2.8** (una vez por periodo de TTL) |
+| Solicitudes servidas en 25 s, local | 117 k / 117 k | 530 k / 537 k | 548 k / 533 k |
+| CPU por solicitud, local | 1.41 / 1.43 ms | 0.30 / 0.29 ms | 0.29 / 0.29 ms |
+| CPU por solicitud, 90 ms | 1.43 / 1.41 ms | 0.27 / 0.27 ms | 0.27 / 0.27 ms |
+| Latencia p99, local | 917 / 902 ms | 206 / 203 ms | 199 / 206 ms |
+| Mayor bloqueo del event loop de un worker, local | 845 / 905 ms | 246 / 200 ms | 224 / 228 ms |
+
+- La concesión es lo que elimina los duplicados entre procesos: 75 solicitudes
+  al origen es el mínimo para esta ejecución (27 distintas, renovadas como
+  mucho dos veces), y se mantiene con Redis a 90 ms. Sin ella, cada proceso
+  descarga cada página por su cuenta, como antes.
+- Compartir el renderizado es lo que recorta la CPU: los feeds idénticos se
+  montan una vez (y, para GraphQL, se decodifican una vez) en lugar de una vez
+  por solicitud, `/v1/post` se guarda en caché ya renderizado y los fallos
+  concurrentes de `/v1/body` se renderizan una vez. La CPU liberada se dedicó a
+  servir 4–5 veces más solicitudes en el mismo tiempo, con bloqueos del event
+  loop más cortos.
+- Un comando de Redis que agota su tiempo de espera abre el circuit breaker
+  del worker; ese worker descarga entonces por su cuenta (una descarga por
+  clave, como antes de la concesión) hasta que se cierra. Se vio en desarrollo
+  cuando el event loop de un worker se bloqueó más de 2 s (antes de que los
+  feeds de GraphQL se decodificaran una sola vez), no en las ejecuciones de
+  arriba.
+
+La ruta crítica en caché no cambia (un worker, mediana de 2 500 aciertos, ASGI
+llamado directamente):
+
+| Acierto | main | este cambio |
+|---|---|---|
+| `/v1/body/durov` | 0.101 ms | 0.101 ms |
+| `/v1/more/durov/before/<id>` | 0.091 ms | 0.091 ms |
+| `/v1/post/durov/<id>` | 0.242 ms | **0.067 ms** (en caché ya renderizado) |
+
+La admisión son unas pocas llamadas nativas solo en un fallo de caché; un
+acierto añade una llamada nativa que compara la antigüedad de la entrada con su
+punto de renovación.
+
 ## Análisis de páginas: Python + lexbor → Rust { #page-parsing-python-lexbor-rust }
 
 Tiempo mediano para analizar una página de canal grabada
@@ -223,6 +298,9 @@ uv run python scripts/memory_profile.py --requests 20000 --channels 200
 
 ```bash
 uv run python scripts/benchmark.py   # in-process, recorded pages, no network
+uv run python scripts/audit.py --stages   # per endpoint (wall, CPU, allocations) and per stage
+docker run -d --name tme-valkey -p 6390:6379 valkey/valkey:8
+uv run python scripts/coalescing_load.py --redis redis://127.0.0.1:6390/0
 ```
 
 Para el rendimiento del servidor, arranca una instancia y apunta un generador
