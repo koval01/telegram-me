@@ -6,6 +6,14 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+## [2.2.0] - 2026-10-25
+
+Every instance now has a landing page at `/`, the API reference at `/api`, and
+its own copy of the documentation at `/docs` in three languages, with
+`robots.txt` and a sitemap. Requests to t.me present a current Chrome 156 and
+keep t.me's cookie like a browser. The `/v1` and GraphQL contracts are
+unchanged.
+
 ### Added
 
 - **A public face for the instance.**
@@ -410,7 +418,8 @@ working; see the upgrade guide for the few behaviour changes.
 
 Last release of the 1.x line.
 
-[Unreleased]: https://github.com/koval01/telegram-me/compare/v2.1.0...HEAD
+[Unreleased]: https://github.com/koval01/telegram-me/compare/v2.2.0...HEAD
+[2.2.0]: https://github.com/koval01/telegram-me/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/koval01/telegram-me/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/koval01/telegram-me/compare/v1.7...v2.0.0
 [1.7]: https://github.com/koval01/telegram-me/releases/tag/v1.7
