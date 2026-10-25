@@ -239,7 +239,8 @@ def _call(
             result = ScenarioResult(scenario, response.status, elapsed, len(raw), preview, problem)
             return result, None
     except error.HTTPError as exc:
-        raw = exc.read()
+        with exc:  # the error holds the response open until closed
+            raw = exc.read()
         elapsed = int((time.time() - started) * 1000)
         preview = raw.decode("utf-8", errors="replace")[:200].replace("\n", " ")
         challenge = pow_challenge(raw) if exc.code in {400, 403, 428} and not extra else None
