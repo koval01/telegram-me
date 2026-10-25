@@ -8,6 +8,9 @@ All notable changes to this project are documented here. The format follows
 
 ### Fixed
 
+- `/healthz` answers with `Cache-Control: no-store`. Behind Cloudflare it got
+  the default edge `Cache-Control` of `CACHE_MODE`, so with a cache rule a
+  health check could read a cached "ok".
 - GraphQL errors are listed in the order their fields appear in the query.
   Before, they came in the order the resolvers finished, so one query could
   return them in a different order each time.

@@ -231,7 +231,7 @@ def test_docs_keep_their_cache_control_at_the_edge(
     response = client.get("/docs/assets/main.e442bf79.min.css", headers={"CF-RAY": "abc"})
     assert response.headers["cache-control"] == "public, max-age=31536000, immutable"
     # Responses without their own still get the edge default.
-    api = client.get("/healthz", headers={"CF-RAY": "abc"})
+    api = client.get("/v1/body/durov", headers={"CF-RAY": "abc"})
     assert api.headers["cache-control"] == "public, max-age=10, stale-while-revalidate=10"
 
 
