@@ -49,6 +49,8 @@ _LANDING_CSP = (
     "frame-ancestors 'none'"
 )
 _NOT_SERVED: dict[str, Any] = {"prefix": DOCS_PATH + "/", "languages": {}, "pages": []}
+# Root-relative URLs in a docs sitemap (the build cannot know the host).
+_ROOT_RELATIVE = re.compile(r'(<loc>|href=")/(?!/)')
 
 
 class CachedStaticFiles(StaticFiles):
@@ -261,11 +263,34 @@ def create_router(settings: Settings) -> APIRouter:
             headers={"Cache-Control": _TEXT_CACHE},
         )
 
-    if docs_files(settings) is not None:
+    if (docs_dir := settings.docs_site_dir) is not None and docs_files(settings) is not None:
 
         @router.api_route(DOCS_PATH, methods=["GET", "HEAD"])
         async def docs_root() -> RedirectResponse:
             return RedirectResponse(DOCS_PATH + "/", status_code=308)
+
+        # Each language's sitemap.xml, which the docs theme reads to navigate,
+        # holds root-relative locations; crawlers need absolute ones.
+        @lru_cache(maxsize=16)
+        def docs_sitemap(root: str, base: str) -> bytes | None:
+            try:
+                text = (docs_dir / root / "sitemap.xml").read_text(encoding="utf-8")
+            except FileNotFoundError:
+                return None
+            return _ROOT_RELATIVE.sub(lambda match: f"{match[1]}{base}/", text).encode()
+
+        def serve_docs_sitemap(root: str) -> None:
+            @router.api_route(f"{DOCS_PATH}/{root}sitemap.xml", methods=["GET", "HEAD"])
+            async def docs_sitemap_route(request: Request) -> Response:
+                body = docs_sitemap(root, base_url(request))
+                if body is None:
+                    return Response(status_code=404)
+                return Response(
+                    body, media_type="application/xml", headers={"Cache-Control": _TEXT_CACHE}
+                )
+
+        for root in sorted(set(manifest["languages"].values())):
+            serve_docs_sitemap(root)
 
     else:
         # Temporary: the instance may serve the docs itself after its next upgrade.

@@ -46,6 +46,11 @@ def docs_site(tmp_path: Path) -> Path:
         "404.html": "<title>Not found</title>",
         "assets/main.e442bf79.min.css": "body{}",
         "assets/images/favicon.png": "png",
+        "sitemap.xml": (
+            '<?xml version="1.0" encoding="UTF-8"?>\n'
+            '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
+            "<url><loc>/docs/</loc></url><url><loc>/docs/api/</loc></url></urlset>"
+        ),
     }
     for name, text in files.items():
         (tmp_path / name).parent.mkdir(parents=True, exist_ok=True)
@@ -355,3 +360,17 @@ def test_build_docs_moves_every_language_under_the_prefix(config: str) -> None:
         project.pop(key, None)
     assert built == project
     assert build_docs.nav_pages(project["nav"])[0] == "index.md"
+
+
+def test_docs_sitemaps_have_absolute_urls(make_client: ClientFactory, docs_site: Path) -> None:
+    client = make_client(docs_site_dir=docs_site, public_url="https://tme.example")
+    response = client.get("/docs/sitemap.xml")
+    assert response.status_code == 200
+    assert response.headers["content-type"] == "application/xml"
+    root = ET.fromstring(response.content)  # noqa: S314 - the app's own output
+    assert [url.findtext(f"{SITEMAP}loc") for url in root] == [
+        "https://tme.example/docs/",
+        "https://tme.example/docs/api/",
+    ]
+    # A language without its own sitemap file answers 404, not the docs' 404 page.
+    assert client.get("/docs/es/sitemap.xml").status_code == 404

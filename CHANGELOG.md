@@ -37,6 +37,13 @@ All notable changes to this project are documented here. The format follows
   rejections) keep it behind Cloudflare; the `CACHE_MODE` edge default only
   fills in the others.
 
+### Fixed
+
+- The docs' own sitemaps (`/docs/sitemap.xml`, `/docs/es/…`, `/docs/ru/…`)
+  carried root-relative locations, which Google Search Console rejects (33
+  errors). The instance now serves them with absolute URLs for its public
+  address; the docs theme navigates with them as before.
+
 ## [2.1.0] - 2026-10-25
 
 Requests to t.me now go out with one browser's TLS, HTTP/2 and headers. Nodes
