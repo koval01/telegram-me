@@ -2,6 +2,7 @@
 flights, and the shared lease in Redis."""
 
 import asyncio
+import time
 from typing import Any
 
 import pytest
@@ -10,7 +11,7 @@ from fakeredis import FakeAsyncRedis, FakeServer
 from telegram_me.cache import KEY_PREFIX, CacheEntry, MemoryCache, RedisCache
 from telegram_me.services import upstream
 from telegram_me.services.coalesce import SingleFlight, flight_table
-from telegram_me.services.lease import LEASE_PREFIX, RedisLease
+from telegram_me.services.lease import ANY_AGE, LEASE_PREFIX, RedisLease
 from telegram_me.services.upstream import FairGate
 from telegram_me.telegram.errors import (
     OverloadedError,
@@ -245,16 +246,12 @@ def _value(entry: CacheEntry) -> bytes:
     return entry.value
 
 
-def _always(_entry: CacheEntry) -> bool:
-    return True
-
-
 async def test_lease_lets_one_process_fetch(shared: FakeServer) -> None:
     leases = [_lease(shared) for _ in range(4)]
     fetches = [Upstream(cache) for _, cache, _ in leases]
     results = await asyncio.gather(
         *(
-            lease.run("k", fetch, _value, _always)
+            lease.run("k", fetch, _value, ANY_AGE)
             for (lease, _, _), fetch in zip(leases, fetches, strict=True)
         )
     )
@@ -272,7 +269,7 @@ async def test_fresh_shared_value_is_used_without_fetching(shared: FakeServer) -
     lease, cache, _ = _lease(shared)
     await cache.set("k", b"cached", 60)
     fetch = Upstream(cache)
-    assert await lease.run("k", fetch, _value, _always) == b"cached"
+    assert await lease.run("k", fetch, _value, ANY_AGE) == b"cached"
     assert fetch.calls == 0
     await lease.drain()
     assert await cache.client.exists(LEASE_PREFIX + "k") == 0
@@ -280,9 +277,10 @@ async def test_fresh_shared_value_is_used_without_fetching(shared: FakeServer) -
 
 async def test_stale_shared_value_is_fetched_again(shared: FakeServer) -> None:
     lease, cache, _ = _lease(shared)
-    await cache.set("k", b"old", 60)
+    old_at = time.time()
+    await cache.set("k", b"old", 60, stored_at=old_at)
     fetch = Upstream(cache, b"new")
-    result = await lease.run("k", fetch, _value, lambda entry: entry.value != b"old")
+    result = await lease.run("k", fetch, _value, old_at)
     assert (result, fetch.calls) == (b"new", 1)
 
 
@@ -292,8 +290,8 @@ async def test_holder_error_is_shared_with_waiters(shared: FakeServer) -> None:
     failing.error = TelegramNotFoundError("Requested Telegram resource was not found")
     waiting = Upstream(other)
     results = await asyncio.gather(
-        holder.run("k", failing, _value, _always),
-        waiter.run("k", waiting, _value, _always),
+        holder.run("k", failing, _value, ANY_AGE),
+        waiter.run("k", waiting, _value, ANY_AGE),
         return_exceptions=True,
     )
     assert all(isinstance(result, TelegramNotFoundError) for result in results)
@@ -301,7 +299,7 @@ async def test_holder_error_is_shared_with_waiters(shared: FakeServer) -> None:
     # Late arrivals get the same answer for a moment, without fetching.
     await holder.drain()
     with pytest.raises(TelegramNotFoundError):
-        await waiter.run("k", waiting, _value, _always)
+        await waiter.run("k", waiting, _value, ANY_AGE)
     assert waiting.calls == 0
 
 
@@ -311,8 +309,8 @@ async def test_waiter_takes_over_when_holder_fails_unexpectedly(shared: FakeServ
     failing.error = RuntimeError("bug")
     waiting = Upstream(other, b"second")
     results = await asyncio.gather(
-        holder.run("k", failing, _value, _always),
-        waiter.run("k", waiting, _value, _always),
+        holder.run("k", failing, _value, ANY_AGE),
+        waiter.run("k", waiting, _value, ANY_AGE),
         return_exceptions=True,
     )
     assert isinstance(results[0], RuntimeError)
@@ -326,8 +324,8 @@ async def test_local_overload_is_not_shared(shared: FakeServer) -> None:
     shed.error = OverloadedError()
     waiting = Upstream(other)
     results = await asyncio.gather(
-        holder.run("k", shed, _value, _always),
-        waiter.run("k", waiting, _value, _always),
+        holder.run("k", shed, _value, ANY_AGE),
+        waiter.run("k", waiting, _value, ANY_AGE),
         return_exceptions=True,
     )
     assert isinstance(results[0], OverloadedError)
@@ -340,7 +338,7 @@ async def test_waiter_stops_waiting_when_the_lease_runs_out(shared: FakeServer) 
     await cache.client.set(LEASE_PREFIX + "k", "someone", px=10_000)
     fetch = Upstream(cache)
     started = asyncio.get_running_loop().time()
-    assert await lease.run("k", fetch, _value, _always) == b"page"
+    assert await lease.run("k", fetch, _value, ANY_AGE) == b"page"
     assert asyncio.get_running_loop().time() - started < 1.0
     assert (fetch.calls, lease.stats["fallback"]) == (1, 1)
 
@@ -351,8 +349,8 @@ async def test_holder_extends_its_lease_while_fetching(shared: FakeServer) -> No
     slow = Upstream(cache, delay=1.0)  # three lease TTLs
     waiting = Upstream(other)
     results = await asyncio.gather(
-        holder.run("k", slow, _value, _always),
-        waiter.run("k", waiting, _value, _always),
+        holder.run("k", slow, _value, ANY_AGE),
+        waiter.run("k", waiting, _value, ANY_AGE),
     )
     assert list(results) == [b"page", b"page"]
     assert (slow.calls, waiting.calls) == (1, 0)
@@ -366,7 +364,7 @@ async def test_lease_of_a_vanished_holder_is_taken_over_quickly(shared: FakeServ
     await cache.client.set(LEASE_PREFIX + "k", "someone", px=300)
     fetch = Upstream(cache)
     started = asyncio.get_running_loop().time()
-    assert await lease.run("k", fetch, _value, _always) == b"page"
+    assert await lease.run("k", fetch, _value, ANY_AGE) == b"page"
     assert asyncio.get_running_loop().time() - started < 1.0
     assert (fetch.calls, lease.stats["fallback"]) == (1, 0)
 
@@ -379,9 +377,9 @@ async def test_redis_failure_falls_back_to_fetching(caplog: pytest.LogCaptureFix
     cache = RedisCache(Broken(), failures_to_trip=1)  # type: ignore[arg-type]
     lease = RedisLease(cache, ttl=1.0, max_wait=1.0)
     fetch = Upstream(RedisCache(FakeAsyncRedis(decode_responses=True)))
-    assert await lease.run("k", fetch, _value, _always) == b"page"
+    assert await lease.run("k", fetch, _value, ANY_AGE) == b"page"
     assert not cache.available  # the breaker opened...
-    assert await lease.run("k", fetch, _value, _always) == b"page"
+    assert await lease.run("k", fetch, _value, ANY_AGE) == b"page"
     assert fetch.calls == 2  # ...and the next call does not even try Redis
     assert lease.stats["fallback"] == 2
 
@@ -390,5 +388,5 @@ async def test_shared_upstream_error_keeps_its_type(shared: FakeServer) -> None:
     lease, cache, _ = _lease(shared)
     await cache.client.set(LEASE_PREFIX + "k", "!up t.me returned 502", px=2000)
     with pytest.raises(TelegramUpstreamError, match="502"):
-        await lease.run("k", Upstream(cache), _value, _always)
+        await lease.run("k", Upstream(cache), _value, ANY_AGE)
     assert KEY_PREFIX in LEASE_PREFIX

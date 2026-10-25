@@ -214,6 +214,7 @@ layers = [
     "api",
     "container",
     "services | heartbeat",
+    "peers",
     "cache",
     "telegram",
     "schemas",
@@ -226,6 +227,7 @@ ignore_imports = [
     # TODO: move them below telegram/.
     "telegram_me.telegram.client -> telegram_me.services.upstream",
     "telegram_me.cache -> telegram_me.services.coalesce",
+    "telegram_me.peers -> telegram_me.services.upstream",
 ]
 
 [[tool.importlinter.contracts]]
@@ -235,6 +237,7 @@ source_modules = [
     "telegram_me.cache",
     "telegram_me.container",
     "telegram_me.heartbeat",
+    "telegram_me.peers",
     "telegram_me.log",
     "telegram_me.memory",
     "telegram_me.schemas",

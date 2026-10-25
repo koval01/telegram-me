@@ -1,4 +1,4 @@
-"""Native (Rust) core of TelegramMe: parsing, feeds, cache, protection, scheduling, HTTP."""
+"""Native (Rust) core of TelegramMe: parsing, feeds, cache, protection, scheduling, HTTP, peers."""
 
 from telegram_me_native._native import (
     BrowserClient,
@@ -10,6 +10,7 @@ from telegram_me_native._native import (
     Gate,
     LocalCache,
     Overloaded,
+    PeerNode,
     ProofOfWork,
     RankOptions,
     RateLimiter,
@@ -33,6 +34,7 @@ __all__ = [
     "Gate",
     "LocalCache",
     "Overloaded",
+    "PeerNode",
     "ProofOfWork",
     "RankOptions",
     "RateLimiter",

@@ -39,6 +39,7 @@ nav = [
     "deployment/docker.md",
     "deployment/compose.md",
     "deployment/production.md",
+    "deployment/peers.md",
     "deployment/reverse-proxy.md",
     "deployment/upgrading.md",
   ] },

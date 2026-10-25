@@ -1,8 +1,9 @@
 """Application settings loaded from environment variables and `.env` files."""
 
+import ipaddress
 import os
 from functools import cached_property
-from typing import Literal
+from typing import Annotated, Literal
 
 from pydantic import (
     Field,
@@ -13,7 +14,7 @@ from pydantic import (
     field_validator,
     model_validator,
 )
-from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic_settings import BaseSettings, NoDecode, SettingsConfigDict
 from telegram_me_native import browser_profiles
 
 type CacheMode = Literal["off", "normal", "aggressive"]
@@ -40,6 +41,19 @@ def _newest_chrome(profiles: list[str]) -> str:
 
 def _default_workers() -> int:
     return max(1, min(os.process_cpu_count() or 1, 4))
+
+
+# Private and loopback networks: every peer address a private network uses.
+_PRIVATE_NETWORKS = [
+    "10.0.0.0/8",
+    "172.16.0.0/12",
+    "192.168.0.0/16",
+    "127.0.0.0/8",
+    "fc00::/7",
+    "::1/128",
+]
+
+type CommaList = Annotated[list[str], NoDecode]
 
 
 class Settings(BaseSettings):
@@ -148,6 +162,23 @@ class Settings(BaseSettings):
     memory_cache_max_ttl: PositiveFloat = 10.0
     """With Redis: seconds an in-process copy of a Redis entry is kept at most."""
 
+    # Peers: nodes on a private network share their work directly (off by default)
+    enable_peers: bool = False
+    peers: CommaList = []
+    """Where to find other nodes: comma-separated `host` or `host:port` (DNS names too)."""
+    peer_port: int = Field(default=7946, ge=0, le=65535)
+    """First peer port (UDP and TCP); each worker takes the next free one (0: any, for tests)."""
+    peer_advertise_addr: str | None = None
+    """IP other nodes reach this one at (default: the address of the default route)."""
+    peer_allow_cidr: CommaList = _PRIVATE_NETWORKS
+    """Networks peers may connect from; others are refused before any message is read."""
+    peer_secret: SecretStr | None = None
+    """Authenticates every peer message; the same on every node, at least 32 characters."""
+    peer_encryption: bool = False
+    """Also encrypt peer traffic (XChaCha20-Poly1305), for networks you do not trust."""
+    peer_timeout: PositiveFloat = 0.05
+    """Seconds a peer has to connect and answer before this node does the work itself."""
+
     # Feed: stale-while-revalidate page cache and popularity-driven refresher
     feed_fresh_ttl: PositiveInt = 60
     feed_stale_ttl: PositiveInt = 900
@@ -177,6 +208,34 @@ class Settings(BaseSettings):
             raise ValueError(msg)
         return value
 
+    @field_validator("peers", "peer_allow_cidr", mode="before")
+    @classmethod
+    def _split_commas(cls, value: object) -> object:
+        if isinstance(value, str):
+            return [item.strip() for item in value.split(",") if item.strip()]
+        return value
+
+    @field_validator("peer_allow_cidr")
+    @classmethod
+    def _check_networks(cls, value: list[str]) -> list[str]:
+        for network in value:
+            ipaddress.ip_network(network, strict=False)
+        return value
+
+    @field_validator("peer_advertise_addr")
+    @classmethod
+    def _check_address(cls, value: str | None) -> str | None:
+        return None if not value else str(ipaddress.ip_address(value))
+
+    @model_validator(mode="after")
+    def _require_peer_secret(self) -> "Settings":
+        if self.enable_peers:
+            secret = self.peer_secret.get_secret_value() if self.peer_secret else ""
+            if len(secret) < 32:
+                msg = "ENABLE_PEERS needs PEER_SECRET of at least 32 characters"
+                raise ValueError(msg)
+        return self
+
     @model_validator(mode="after")
     def _require_pow_secret(self) -> "Settings":
         if self.enable_pow:
@@ -190,6 +249,21 @@ class Settings(BaseSettings):
     def page_cache_ttl(self) -> int:
         """Seconds a parsed channel page is cached (0 disables page caching)."""
         return _PAGE_CACHE_TTL[self.cache_mode]
+
+    @cached_property
+    def peer_ports(self) -> list[int]:
+        """Ports this server's processes take for the peer layer, in order.
+
+        One per worker, plus one so that a respawned worker finds a free port
+        while the one it replaces is still shutting down.
+        """
+        if self.peer_port == 0:
+            return [0]
+        return [
+            port
+            for port in range(self.peer_port, self.peer_port + self.web_concurrency + 1)
+            if port <= 65535
+        ]
 
     @cached_property
     def edge_cache_control(self) -> str | None:

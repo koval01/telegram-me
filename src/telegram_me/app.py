@@ -39,10 +39,17 @@ def create_app(settings: Settings | None = None, *, fetcher: Fetcher | None = No
             container = await stack.enter_async_context(build_container(settings, fetcher))
             app.state.container = container
             shared = shared_cache(container.cache)
-            if guard.limiter is not None and settings.rate_limit_shared and shared is not None:
-                await stack.enter_async_context(
-                    protection.sharing_rate_limits(guard.limiter, shared, guard.per_minute)
-                )
+            if guard.limiter is not None and settings.rate_limit_shared:
+                if shared is not None:
+                    await stack.enter_async_context(
+                        protection.sharing_rate_limits(guard.limiter, shared, guard.per_minute)
+                    )
+                elif container.peers is not None:
+                    await stack.enter_async_context(
+                        protection.sharing_rate_limits_with_peers(
+                            guard.limiter, container.peers, guard.per_minute
+                        )
+                    )
             if settings.enable_feed and settings.feed_refresh_mode == "embedded":
                 await stack.enter_async_context(running_refresher(container))
             yield

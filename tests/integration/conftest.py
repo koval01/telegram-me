@@ -29,6 +29,8 @@ import pytest
 IMAGE = os.environ.get("TME_TEST_IMAGE", "")
 # Shared by the guarded servers, new for every run.
 POW_SECRET = secrets.token_hex(32)
+# Shared by the peer servers, new for every run.
+PEER_SECRET = secrets.token_hex(32)
 # The release before, for the rolling-upgrade test (test_rolling_upgrade.py).
 PREVIOUS_IMAGE = os.environ.get("TME_PREVIOUS_IMAGE", "")
 COMPOSE_FILE = Path(__file__).with_name("compose.yaml")
@@ -39,6 +41,8 @@ SERVERS = {
     "guarded-a": "http://127.0.0.1:18003",
     "guarded-b": "http://127.0.0.1:18004",
     "previous": "http://127.0.0.1:18005",
+    "peer-a": "http://127.0.0.1:18006",
+    "peer-b": "http://127.0.0.1:18007",
 }
 
 
@@ -50,6 +54,7 @@ def compose(*args: str, check: bool = True) -> subprocess.CompletedProcess[str]:
             **os.environ,
             "APP_IMAGE": IMAGE,
             "POW_SECRET": POW_SECRET,
+            "PEER_SECRET": PEER_SECRET,
             "PREVIOUS_IMAGE": PREVIOUS_IMAGE or IMAGE,
             "COMPOSE_PROFILES": "previous" if PREVIOUS_IMAGE else "",
         },

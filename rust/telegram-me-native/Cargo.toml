@@ -7,7 +7,7 @@ edition = "2024"
 # need a newer compiler, security fixes included: ctutils 0.4.4
 # (RUSTSEC-2026-0385) needs 1.87.
 rust-version = "1.99"
-description = "Native core of TelegramMe: t.me page parsing, feed ranking and the in-process cache"
+description = "Native core of TelegramMe: t.me page parsing, feed ranking, the in-process cache and the peer layer"
 license = "Apache-2.0"
 publish = false
 
@@ -33,9 +33,13 @@ base64 = "0.23.1"
 getrandom = "0.4.3"
 wreq = { version = "0.16.1", default-features = false, features = ["tokio-rt", "webpki-roots", "gzip", "brotli", "zstd", "deflate"] }
 wreq-util = { version = "0.2.0", default-features = false, features = ["emulation", "emulation-compression", "emulation-serde", "tokio-rt"] }
-tokio = { version = "1", default-features = false, features = ["rt-multi-thread", "time"] }
 pyo3-async-runtimes = { version = "0.30.0", features = ["tokio-runtime"], optional = true }
 wreq-proto = { version = "0.2.6", default-features = false }
+# Peer layer: SWIM membership (sans-IO), its wire format, the network runtime.
+foca = { version = "2.0.0", default-features = false, features = ["std", "postcard-codec"] }
+rand = { version = "0.10.3", default-features = false }
+tokio = { version = "1.54.1", default-features = false, features = ["rt", "rt-multi-thread", "net", "time", "sync", "io-util", "macros"] }
+chacha20poly1305 = { version = "0.11.0", default-features = false }
 
 # Line coverage `cargo llvm-cov` must reach in CI; raise it with the tests
 # that earn it, never lower it (scripts/coverage_floor.py).

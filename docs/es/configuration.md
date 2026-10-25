@@ -66,6 +66,14 @@ La fuente de verdad es
 | [`PREVIEW_CACHE_TTL`](#preview_cache_ttl) | `3600` | Caché |
 | [`MEMORY_CACHE_MAX_MB`](#memory_cache_max_mb) | `64` | Caché |
 | [`MEMORY_CACHE_MAX_TTL`](#memory_cache_max_ttl) | `10` | Caché |
+| [`ENABLE_PEERS`](#enable_peers) | `false` | Pares |
+| [`PEERS`](#peers) | — | Pares |
+| [`PEER_PORT`](#peer_port) | `7946` | Pares |
+| [`PEER_ADVERTISE_ADDR`](#peer_advertise_addr) | dirección de la ruta por defecto | Pares |
+| [`PEER_ALLOW_CIDR`](#peer_allow_cidr) | redes privadas | Pares |
+| [`PEER_SECRET`](#peer_secret) | — | Pares |
+| [`PEER_ENCRYPTION`](#peer_encryption) | `false` | Pares |
+| [`PEER_TIMEOUT`](#peer_timeout) | `0.05` | Pares |
 | [`FEED_FRESH_TTL`](#feed_fresh_ttl) | `60` | Feed |
 | [`FEED_STALE_TTL`](#feed_stale_ttl) | `900` | Feed |
 | [`FEED_REFRESH_MODE`](#feed_refresh_mode) | `embedded` | Feed |
@@ -435,6 +443,69 @@ frecuencia, para las claves que se están leyendo. Las copias nunca sobreviven a
 la entrada de Redis. Sin Redis, y mientras Redis no está disponible, las
 entradas conservan su TTL completo. Consulta
 [Funcionamiento interno → Caché](internals/caching.md#how-the-levels-work-together).
+
+## Pares { #peers }
+
+Los nodos de una misma red privada pueden compartir su trabajo directamente:
+cada clave la descarga de t.me un solo nodo, su propietario, y los demás se la
+piden. Funciona sin Redis. Consulta
+[Despliegue → Capa de pares](deployment/peers.md).
+
+### `ENABLE_PEERS`
+
+Activa la capa de pares. Cada proceso worker pasa a ser un nodo. Requiere
+[`PEER_SECRET`](#peer_secret).
+
+### `PEERS`
+
+Dónde encontrar otros nodos: entradas `host` o `host:port` separadas por
+comas, como `PEERS=10.0.0.108,10.0.0.165`. Un nombre DNS puede resolverse a
+varias direcciones, y los nombres se resuelven de nuevo cada 30 segundos. Una
+entrada sin puerto se prueba en todos los puertos del rango de
+[`PEER_PORT`](#peer_port). Basta con un nodo alcanzable: los demás se conocen a
+través de él. Con Redis, los nodos también se encuentran mediante sus
+marcadores de latido, así que `PEERS` puede quedar vacío.
+
+### `PEER_PORT`
+
+Primer puerto de la capa de pares, tanto para UDP (pertenencia) como para TCP
+(solicitudes). Cada worker toma el primer puerto libre entre `PEER_PORT` y
+`PEER_PORT + WEB_CONCURRENCY` (uno de reserva para un worker que se está
+reemplazando). `0` deja que el sistema operativo elija un puerto; solo es útil
+en pruebas.
+
+### `PEER_ADVERTISE_ADDR`
+
+La dirección IP con la que los demás nodos llegan a este. Por defecto, la
+dirección de origen de la ruta por defecto. Dentro de un contenedor esa es la
+dirección del propio contenedor, así que ahí configúrala con la dirección
+privada del host (el despliegue de producción lo hace).
+
+### `PEER_ALLOW_CIDR`
+
+Redes, separadas por comas, desde las que otros nodos pueden conectarse. Las
+conexiones y datagramas de cualquier otro lugar se descartan antes de leer
+nada. Por defecto, todos los rangos privados y de loopback: `10.0.0.0/8`,
+`172.16.0.0/12`, `192.168.0.0/16`, `127.0.0.0/8`, `fc00::/7` y `::1/128`.
+
+### `PEER_SECRET`
+
+Secreto compartido por los nodos, de al menos 32 caracteres, por ejemplo de
+`openssl rand -hex 32`. Cada mensaje lleva una etiqueta HMAC-SHA256 hecha con
+él, una marca de tiempo y un nonce; los mensajes falsificados, repetidos o con
+más de 30 s de antigüedad se rechazan.
+
+### `PEER_ENCRYPTION`
+
+Cifra además cada mensaje (XChaCha20-Poly1305 con una clave derivada de
+`PEER_SECRET`), para redes en las que no confías. Todos los nodos deben
+coincidir.
+
+### `PEER_TIMEOUT`
+
+Segundos que tiene un par para conectarse y responder a una lectura de caché,
+o para aceptar una carga, antes de que este nodo haga el trabajo por su
+cuenta. Un par que no lo cumple se evita durante 3 segundos.
 
 ## Feed { #feed }
 

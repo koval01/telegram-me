@@ -5,6 +5,7 @@ Add a name here only with the reason it is used.
 """
 
 from telegram_me.api.protection import PowChallenge
+from telegram_me.cache import PeerCache
 from telegram_me.server import asgi
 from telegram_me.settings import Settings
 
@@ -16,6 +17,9 @@ PowChallenge.input
 
 # Granian imports the app factory by name ("telegram_me.server:asgi").
 asgi
+
+# The `Cache` protocol's backend name, for diagnostics like the other backends'.
+PeerCache.backend
 
 # Read by pydantic-settings.
 Settings.model_config

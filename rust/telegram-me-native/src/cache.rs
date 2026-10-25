@@ -40,6 +40,7 @@ pub struct Entry {
     compressed: bool,
     stored_at: f64,
     ttl: Duration,
+    created: Instant,
 }
 
 impl Entry {
@@ -54,7 +55,57 @@ impl Entry {
             compressed,
             stored_at,
             ttl,
+            created: Instant::now(),
         }
+    }
+
+    /// An entry from its stored form, as another node's cache held it.
+    ///
+    /// Returns the entry and its original value, or `None` when `blob` does
+    /// not decompress to exactly `len` bytes (it is checked once here, so
+    /// reading the entry later cannot fail).
+    #[must_use]
+    pub fn from_stored(
+        blob: Vec<u8>,
+        len: usize,
+        compressed: bool,
+        ttl: Duration,
+        stored_at: f64,
+    ) -> Option<(Self, Vec<u8>)> {
+        let value = if compressed {
+            let mut value = vec![0; len];
+            let written = zstd::bulk::decompress_to_buffer(&blob, &mut value).ok()?;
+            (written == len).then_some(value)?
+        } else {
+            (blob.len() == len).then(|| blob.clone())?
+        };
+        let entry = Self {
+            blob: blob.into_boxed_slice(),
+            len,
+            compressed,
+            stored_at,
+            ttl,
+            created: Instant::now(),
+        };
+        Some((entry, value))
+    }
+
+    /// The value as stored: zstd-compressed when [`Self::is_compressed`].
+    #[must_use]
+    pub fn stored(&self) -> &[u8] {
+        &self.blob
+    }
+
+    /// Whether the stored value is compressed.
+    #[must_use]
+    pub fn is_compressed(&self) -> bool {
+        self.compressed
+    }
+
+    /// Time the entry has left to live.
+    #[must_use]
+    pub fn remaining(&self) -> Duration {
+        self.ttl.saturating_sub(self.created.elapsed())
     }
 
     /// Length of the original value in bytes.
@@ -144,6 +195,9 @@ fn weight(key: &str, entry: &Entry) -> u64 {
 }
 
 /// Concurrent in-process cache of byte values.
+///
+/// Clones share the same entries (the peer layer serves them to other nodes).
+#[derive(Clone)]
 pub struct LocalCache {
     inner: Cache<String, Arc<Entry>>,
     max_bytes: u64,
@@ -191,6 +245,20 @@ impl LocalCache {
         let Some(entry) = self.entry(key, value, ttl, stored_at) else {
             return false;
         };
+        self.fill_entry(key, entry)
+    }
+
+    /// [`Self::fill`] with an entry made already (see [`Entry::from_stored`]).
+    #[must_use]
+    pub fn fill_stored(&self, key: &str, entry: Entry) -> bool {
+        if entry.ttl.is_zero() || weight(key, &entry) > self.max_bytes {
+            return false;
+        }
+        self.fill_entry(key, Arc::new(entry))
+    }
+
+    fn fill_entry(&self, key: &str, entry: Arc<Entry>) -> bool {
+        let stored_at = entry.stored_at;
         let result = self
             .inner
             .entry_by_ref(key)

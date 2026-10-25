@@ -25,6 +25,9 @@ It serves REST `/v1` and GraphQL `/graphql`. Demo: https://tme.koval-dev.org
   - the in-process L1 cache (`cache.rs`, moka plus zstd);
   - the rate limiter (`ratelimit.rs`, GCRA) and proof of work (`pow.rs`);
   - the request-scheduling core (`sched.rs`).
+  - the optional peer layer (`peer/`: SWIM membership on `foca`,
+    authenticated frames, rendezvous hashing, the tokio network thread);
+    its Python bridge is `src/telegram_me/peers.py`.
 - `docs/internals/rust-roadmap.md` plans what moves next.
 - **The GIL.** Release it (`py.detach`) only around work long enough to be
   worth it. Short calls made from the event loop keep it: see the comments in

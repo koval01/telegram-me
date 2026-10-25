@@ -3,18 +3,25 @@
 Popularity is the number of feed requests that included a channel, with
 exponential decay: a request counts half as much after one half-life. With
 Redis the ranking and the leader lock are shared by every instance; without
-it each process keeps its own.
+it each process keeps its own, unless the peer layer shares them: every node
+then counts every node's requests, and the live node with the lowest address
+leads.
 """
 
+import asyncio
 import logging
+import math
 import secrets
 import time
-from collections.abc import Iterable
-from typing import Protocol, cast
+from collections import Counter
+from collections.abc import AsyncIterator, Iterable
+from contextlib import asynccontextmanager, suppress
+from typing import Protocol, cast, override
 
 from redis.exceptions import MaxConnectionsError, RedisError
 
 from telegram_me.cache import KEY_PREFIX, RedisCache
+from telegram_me.peers import Peers
 
 logger = logging.getLogger(__name__)
 
@@ -22,6 +29,11 @@ POPULARITY_KEY = f"{KEY_PREFIX}feed:popularity"
 LEADER_KEY = f"{KEY_PREFIX}feed:refresher-leader"
 # Channels whose decayed score falls below this are forgotten.
 _FORGET_BELOW = 0.05
+# Peer popularity: hits are sent this often, at most this many channels each.
+_HITS_TOPIC = "hits"
+_HITS_INTERVAL = 1.0
+_HITS_MAX_CHANNELS = 5000
+_DECAY_INTERVAL = 60.0
 
 # Renew the lock only if we still own it.
 _RENEW_SCRIPT = """
@@ -179,3 +191,96 @@ class RedisLeaderLock:
         except (RedisError, OSError) as exc:
             self._cache.trip(exc)
         self._leader_since = None
+
+
+class PeerLeaderLock:
+    """Leadership by the peer layer: the live node with the lowest address leads.
+
+    Every node decides alone from its view of the members. Views that differ
+    for a moment (a node joining or leaving) at worst make two nodes refresh
+    the same pages, which costs a few duplicate fetches and nothing else.
+    """
+
+    def __init__(self, peers: Peers) -> None:
+        self._peers = peers
+        self._leading = False
+
+    async def acquire(self) -> bool:  # noqa: D102
+        leading = self._peers.is_leader()
+        if leading != self._leading:
+            logger.info(
+                "Became feed refresher leader" if leading else "Lost feed refresher leadership"
+            )
+        self._leading = leading
+        return leading
+
+    async def release(self) -> None:  # noqa: D102
+        self._leading = False
+
+
+class PeerPopularity(MemoryPopularity):
+    """Popularity every node counts for all: hits are sent to the other nodes.
+
+    Each node adds the hits it sees and the ones the others send (once a
+    second, see `sharing`), so whichever node leads knows every node's
+    requests. Each node also decays its own copy on the same schedule, and
+    `decay()` (the leader's call) does nothing: copies that decay together
+    stay alike, and one that just became leader is not a stale one.
+    """
+
+    def __init__(self, peers: Peers, half_life: float) -> None:
+        super().__init__()
+        self._peers = peers
+        self._half_life = half_life
+        self._pending: Counter[str] = Counter()
+        peers.on_cast(_HITS_TOPIC, self._received)
+
+    @override
+    async def hit(self, channels: Iterable[str]) -> None:
+        channels = [channel.lower() for channel in channels]
+        await super().hit(channels)
+        self._pending.update(channels)
+
+    @override
+    async def decay(self, factor: float) -> None:
+        # Each node decays its copy on its own clock (`sharing`).
+        return None
+
+    def _received(self, data: bytes) -> None:
+        for line in data.decode("utf-8", "replace").splitlines():
+            channel, _, count = line.partition("\t")
+            try:
+                hits = float(count)
+            except ValueError:
+                continue
+            if channel and math.isfinite(hits) and hits > 0:
+                self._scores[channel] = self._scores.get(channel, 0.0) + hits
+
+    def flush(self) -> None:
+        """Send the hits counted since the last call to the other nodes."""
+        if not self._pending:
+            return
+        hits = self._pending.most_common(_HITS_MAX_CHANNELS)
+        self._pending.clear()
+        self._peers.cast(_HITS_TOPIC, "\n".join(f"{c}\t{n}" for c, n in hits).encode())
+
+    @asynccontextmanager
+    async def sharing(self) -> AsyncIterator[None]:
+        """Send hits and decay the scores while the block runs."""
+
+        async def loop() -> None:
+            decayed_at = time.monotonic()
+            while True:
+                await asyncio.sleep(_HITS_INTERVAL)
+                self.flush()
+                if (elapsed := time.monotonic() - decayed_at) >= _DECAY_INTERVAL:
+                    await MemoryPopularity.decay(self, math.pow(0.5, elapsed / self._half_life))
+                    decayed_at = time.monotonic()
+
+        task = asyncio.create_task(loop(), name="peer-popularity")
+        try:
+            yield
+        finally:
+            task.cancel()
+            with suppress(asyncio.CancelledError):
+                await task

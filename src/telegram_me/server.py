@@ -71,14 +71,14 @@ def serve(settings: Settings, *, reload: bool = False) -> None:
 async def run_worker(settings: Settings) -> None:
     """Run the feed refresher without an HTTP server.
 
-    Needs REDIS_URL: pages it refreshes must land in the cache the API
-    instances read from.
+    Needs REDIS_URL or the peer layer: pages it refreshes must reach the API
+    instances (in Redis, or loaded by their owners among the peers).
     """
     from telegram_me.container import build_container  # noqa: PLC0415
 
     configure_logging(settings.log_level, settings.log_format)
-    if not settings.redis_url:
-        msg = "The feed worker needs REDIS_URL to share its cache with the API"
+    if not settings.redis_url and not settings.enable_peers:
+        msg = "The feed worker needs REDIS_URL or ENABLE_PEERS to share its work with the API"
         raise SystemExit(msg)
 
     stop = asyncio.Event()
@@ -86,5 +86,5 @@ async def run_worker(settings: Settings) -> None:
     for sig in (signal.SIGINT, signal.SIGTERM):
         loop.add_signal_handler(sig, stop.set)
 
-    async with build_container(settings) as container:
+    async with build_container(settings, refresher=True) as container:
         await container.refresher().run(stop)

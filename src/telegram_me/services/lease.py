@@ -22,11 +22,17 @@ longer than REDIS_TIMEOUT per command, and no waiter waits longer than
 holder is stuck, a worker fetches on its own. At most one worker per process
 gets there (the local single flight still applies), so a Redis outage costs
 what coalescing per process costs, never a herd.
+
+With the peer layer (`PeerLease`), the owner of a key among the live nodes
+fetches it and the others ask the owner: no Redis round trips. The Redis
+lease (or none) is the fallback, while a node is alone or an owner does not
+answer.
 """
 
 import asyncio
 import inspect
 import logging
+import math
 import random
 import secrets
 from collections.abc import Awaitable, Callable
@@ -36,6 +42,7 @@ from redis.client import NEVER_DECODE
 from redis.exceptions import RedisError
 
 from telegram_me.cache import KEY_PREFIX, CacheEntry, MemoryCache, RedisCache, decode_entry
+from telegram_me.peers import Peers, serving_peer
 from telegram_me.telegram.errors import (
     OverloadedError,
     TelegramError,
@@ -48,6 +55,18 @@ from telegram_me.telegram.errors import (
 logger = logging.getLogger(__name__)
 
 LEASE_PREFIX = KEY_PREFIX + "lease:"
+# `newer_than` for a caller that takes a cached value of any age.
+ANY_AGE = -math.inf
+# Redis keeps store times to the millisecond: a copy read back from it is
+# the same value, not a newer one, within this.
+_STORE_TIME_RESOLUTION = 0.001
+
+
+def is_newer(entry: CacheEntry, newer_than: float) -> bool:
+    """Whether `entry` was stored after `newer_than`, beyond rounding."""
+    return entry.stored_at > newer_than + _STORE_TIME_RESOLUTION
+
+
 # How long a failed holder's error answers waiters (and new arrivals).
 ERROR_TTL = 2.0
 _FIRST_POLL = 0.025
@@ -99,13 +118,12 @@ class Lease(Protocol):
     """Runs a fetch at most once at a time per key across processes."""
 
     async def run[T](
-        self,
-        key: str,
-        fetch: Callable[[], Awaitable[T]],
-        adopt: Adopt[T],
-        fresh: Callable[[CacheEntry], bool],
+        self, key: str, fetch: Callable[[], Awaitable[T]], adopt: Adopt[T], newer_than: float
     ) -> T:
-        """`fetch()`, or `adopt()` the value cached under `key` once it is `fresh`."""
+        """`fetch()`, or `adopt()` the value cached under `key` once there is one.
+
+        Only a value stored after `newer_than` (a Unix time) is adopted.
+        """
         ...
 
 
@@ -117,7 +135,7 @@ class LocalLease:
         key: str,  # noqa: ARG002 - the Lease protocol
         fetch: Callable[[], Awaitable[T]],
         adopt: Adopt[T],  # noqa: ARG002
-        fresh: Callable[[CacheEntry], bool],  # noqa: ARG002
+        newer_than: float,  # noqa: ARG002
     ) -> T:
         return await fetch()
 
@@ -143,11 +161,7 @@ class RedisLease:
         self.stats = {"fetched": 0, "adopted": 0, "waited": 0, "fallback": 0}
 
     async def run[T](  # noqa: D102
-        self,
-        key: str,
-        fetch: Callable[[], Awaitable[T]],
-        adopt: Adopt[T],
-        fresh: Callable[[CacheEntry], bool],
+        self, key: str, fetch: Callable[[], Awaitable[T]], adopt: Adopt[T], newer_than: float
     ) -> T:
         if not self._shared.available:
             return await self._fallback(fetch)
@@ -162,7 +176,7 @@ class RedisLease:
             except (RedisError, OSError) as exc:
                 self._shared.trip(exc)
                 return await self._fallback(fetch)
-            if entry is not None and fresh(entry):
+            if entry is not None and is_newer(entry, newer_than):
                 if acquired:
                     self._release(key, token, "")
                 self._keep_local(key, entry, pttl)
@@ -277,6 +291,51 @@ class RedisLease:
         """Wait for pending lease releases and heartbeats (for tests and shutdown)."""
         while self._releases:
             await asyncio.gather(*self._releases, return_exceptions=True)
+
+
+class PeerLease:
+    """`Lease` among peers: the owner of a key loads it, the others ask it.
+
+    The owner (see `telegram_me.peers`) fetches without asking anyone: no
+    other live node fetches the key. Another node asks the owner, which
+    answers with the value (fresh in its cache, or loaded for the purpose,
+    joining its own identical work) or with the error its load ended with.
+    While this node is alone, or when the owner gives no usable answer within
+    `wait`, `fallback` (the Redis lease, or none) runs as without peers.
+    """
+
+    def __init__(self, peers: Peers, fallback: Lease, wait: float) -> None:
+        self._peers = peers
+        self._fallback = fallback
+        self._wait = wait
+        self.stats = {"owned": 0, "asked": 0, "fallback": 0}
+
+    async def run[T](  # noqa: D102
+        self, key: str, fetch: Callable[[], Awaitable[T]], adopt: Adopt[T], newer_than: float
+    ) -> T:
+        if serving_peer.get():
+            # Another node asked this one as the owner: never pass it on.
+            return await fetch()
+        owner = self._peers.owner(key)
+        if owner is None:
+            if not self._peers.active:
+                return await self._fallback.run(key, fetch, adopt, newer_than)
+            self.stats["owned"] += 1
+            return await fetch()
+        loaded = await self._peers.load(owner, key, newer_than, self._wait)
+        if loaded.entry is not None:
+            self.stats["asked"] += 1
+            value = adopt(loaded.entry)
+            return await value if inspect.isawaitable(value) else value
+        if loaded.error is not None:
+            raise loaded.error
+        self.stats["fallback"] += 1
+        return await self._fallback.run(key, fetch, adopt, newer_than)
+
+    async def drain(self) -> None:
+        """Wait for the fallback's pending work (for tests and shutdown)."""
+        if isinstance(self._fallback, RedisLease):
+            await self._fallback.drain()
 
 
 def _marker(exc: TelegramError) -> str:
