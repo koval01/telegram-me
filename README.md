@@ -3,6 +3,7 @@
 [![CI](https://github.com/koval01/telegram-me/actions/workflows/ci.yml/badge.svg)](https://github.com/koval01/telegram-me/actions/workflows/ci.yml)
 [![Docs](https://img.shields.io/badge/docs-tme.koval--dev.org-blue)](https://tme.koval-dev.org/docs/)
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue)](LICENSE)
+[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/15912/badge)](https://www.bestpractices.dev/projects/15912)
 
 REST API for public Telegram channels. It turns `t.me/s/<channel>` into typed
 JSON — channel profiles, posts with text entities, media, polls, reactions,
