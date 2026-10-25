@@ -20,7 +20,7 @@ import json
 import sys
 import time
 from collections.abc import Callable
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from typing import Any
 from urllib import error, request
 
@@ -41,6 +41,8 @@ class Scenario:
     check: Check | None = None
     # For pages that are not JSON: text a 200 response must contain.
     contains: str | None = None
+    # A 403 counts only as Cloudflare's firewall block (error 1020).
+    edge_block: bool = False
 
 
 @dataclass
@@ -174,6 +176,8 @@ def graphql_ok(body: Any) -> str | None:
     return None
 
 
+# Cloudflare's error code when a firewall rule (or schema validation) blocks a request.
+CLOUDFLARE_BLOCK = 1020
 # Sent with every request (--header), e.g. the key of a Cloudflare WAF skip rule.
 EXTRA_HEADERS: dict[str, str] = {}
 
@@ -239,7 +243,11 @@ def _call(
         elapsed = int((time.time() - started) * 1000)
         preview = raw.decode("utf-8", errors="replace")[:200].replace("\n", " ")
         challenge = pow_challenge(raw) if exc.code in {400, 403, 428} and not extra else None
-        return ScenarioResult(scenario, exc.code, elapsed, len(raw), preview), challenge
+        problem = None
+        if scenario.edge_block and exc.code == 403 and not _cloudflare_block(raw):
+            problem = "403 is not a Cloudflare firewall block"
+        result = ScenarioResult(scenario, exc.code, elapsed, len(raw), preview, problem)
+        return result, challenge
     except Exception as exc:  # noqa: BLE001 - every failure is a row of the report
         elapsed = int((time.time() - started) * 1000)
         result = ScenarioResult(
@@ -250,6 +258,19 @@ def _call(
             body_preview=f"{type(exc).__name__}: {exc}",
         )
         return result, None
+
+
+def _cloudflare_block(raw: bytes) -> bool:
+    """Whether a body is Cloudflare's firewall block: JSON for JSON clients, else text."""
+    try:
+        body = json.loads(raw)
+    except ValueError:
+        return f"error code: {CLOUDFLARE_BLOCK}".encode() in raw
+    return (
+        isinstance(body, dict)
+        and body.get("cloudflare_error") is True
+        and body.get("error_code") == CLOUDFLARE_BLOCK
+    )
 
 
 def _content_problem(scenario: Scenario, status: int, raw: bytes) -> str | None:
@@ -282,6 +303,14 @@ def parse_args() -> argparse.Namespace:
         "--exploratory-channels",
         default="nebudetafk,nebudetgg,dovolllnaya,zalupaonline,stranaua,telegram,durov",
         help="Comma-separated channels for broad extra checks",
+    )
+    parser.add_argument(
+        "--edge-blocks-invalid",
+        action="store_true",
+        help=(
+            "Invalid requests (expect 422) may also get Cloudflare's firewall block "
+            "(403, error 1020): schema validation at the edge rejects them before the API"
+        ),
     )
     parser.add_argument(
         "--header",
@@ -361,6 +390,16 @@ def graphql_scenarios(enabled: bool) -> list[Scenario]:
             payload=[{"query": "{ __typename }"}] * 11,
         ),
         Scenario("graphql_no_query", "POST", "/graphql", {400 if enabled else 404}, payload={}),
+    ]
+
+
+def edge_blocks_invalid(scenarios: list[Scenario]) -> list[Scenario]:
+    """Let the input-validation scenarios (422) pass on a Cloudflare firewall block too."""
+    return [
+        replace(scenario, expected_statuses={422, 403}, edge_block=True)
+        if scenario.expected_statuses == {422}
+        else scenario
+        for scenario in scenarios
     ]
 
 
@@ -584,6 +623,8 @@ def main() -> int:
         exploratory_channels,
     )
     scenarios.extend(graphql_scenarios(detect_graphql(base_url, args.timeout)))
+    if args.edge_blocks_invalid:
+        scenarios = edge_blocks_invalid(scenarios)
     results = [call(base_url, scenario, args.timeout) for scenario in scenarios]
     print_results(results)
 
