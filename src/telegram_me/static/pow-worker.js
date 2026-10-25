@@ -3,7 +3,8 @@
 // SHA-256 is implemented here, synchronously: crypto.subtle costs a promise
 // per hash, which makes it several times slower for millions of tiny inputs.
 // Message in: {challenge, difficulty, method, target, start, step}.
-// Message out: {nonce}, the first nonce start, start + step, ... that works.
+// Message out: {nonce}, the first nonce start, start + step, ... that works,
+// or {error} when the task is not well-formed.
 
 const K = new Uint32Array([
   0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
@@ -56,7 +57,42 @@ function firstWord(bytes, length) {
   return h0 >>> 0;
 }
 
-self.onmessage = ({ data }) => {
+// Only the first 32 bits of each hash are compared: a higher difficulty
+// could never be met, and the search would never end.
+const MAX_DIFFICULTY = 32;
+
+function isTask(data) {
+  return (
+    data !== null &&
+    typeof data === "object" &&
+    typeof data.challenge === "string" &&
+    data.challenge.length > 0 &&
+    data.challenge.length <= 256 &&
+    !data.challenge.includes("\n") &&
+    Number.isInteger(data.difficulty) &&
+    data.difficulty >= 1 &&
+    data.difficulty <= MAX_DIFFICULTY &&
+    (data.method === "GET" || data.method === "POST") &&
+    typeof data.target === "string" &&
+    data.target.startsWith("/") &&
+    data.target.length <= 2048 &&
+    Number.isSafeInteger(data.start) &&
+    data.start >= 0 &&
+    Number.isSafeInteger(data.step) &&
+    data.step >= 1 &&
+    data.step <= 64
+  );
+}
+
+self.addEventListener("message", (event) => {
+  // A dedicated worker hears only the page that started it, and its messages
+  // carry no origin. Anything with another origin is not ours.
+  if (event.origin !== "" && event.origin !== self.location.origin) return;
+  const data = event.data;
+  if (!isTask(data)) {
+    self.postMessage({ error: "malformed proof-of-work task" });
+    return;
+  }
   const { challenge, difficulty, method, target, start, step } = data;
   const encoder = new TextEncoder();
   const head = encoder.encode(`${challenge}\n`);
@@ -75,4 +111,4 @@ self.onmessage = ({ data }) => {
       return;
     }
   }
-};
+});

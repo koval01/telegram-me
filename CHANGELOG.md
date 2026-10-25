@@ -37,6 +37,12 @@ All notable changes to this project are documented here. The format follows
   rejections) keep it behind Cloudflare; the `CACHE_MODE` edge default only
   fills in the others.
 
+### Fixed
+
+- The landing page's proof-of-work worker checks its task: a difficulty above
+  32 used to search forever, and malformed input now fails at once. It also
+  ignores messages from another origin (CodeQL: missing origin verification).
+
 ## [2.1.0] - 2026-10-25
 
 Requests to t.me now go out with one browser's TLS, HTTP/2 and headers. Nodes
