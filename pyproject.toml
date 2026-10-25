@@ -1,6 +1,6 @@
 [project]
 name = "telegram-me"
-version = "2.0.0"
+version = "2.1.0"
 description = "REST API for public Telegram channels, built on top of t.me web previews"
 readme = "README.md"
 license = "Apache-2.0"
