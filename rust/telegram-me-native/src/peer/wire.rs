@@ -146,10 +146,14 @@ impl Sealer {
     fn seal_at(&self, payload: &[u8], now_ms: u64) -> Vec<u8> {
         let body_len = payload.len() + self.overhead() - HEADER_LEN;
         assert!(body_len <= MAX_BODY, "payload too large for a frame");
-        let mut nonce = [0; NONCE_LEN];
-        nonce[..16].copy_from_slice(&self.prefix);
-        let count = self.counter.fetch_add(1, Ordering::Relaxed);
-        nonce[16..].copy_from_slice(&count.to_be_bytes());
+        let count = self.counter.fetch_add(1, Ordering::Relaxed).to_be_bytes();
+        let nonce: Nonce = std::array::from_fn(|i| {
+            if i < self.prefix.len() {
+                self.prefix[i]
+            } else {
+                count[i - self.prefix.len()]
+            }
+        });
 
         let mut frame = Vec::with_capacity(HEADER_LEN + body_len);
         frame.extend_from_slice(&MAGIC);
@@ -189,7 +193,7 @@ impl Sealer {
         if (header[3] & ENCRYPTED != 0) != self.cipher.is_some() || header[3] & !ENCRYPTED != 0 {
             return Err(Reject::WrongMode);
         }
-        let len = u32::from_be_bytes(field(header, 36)) as usize;
+        let len = u32::from_be_bytes(field(header, 36)?) as usize;
         if len > MAX_BODY {
             return Err(Reject::TooLarge);
         }
@@ -214,7 +218,7 @@ impl Sealer {
             return Err(Reject::Malformed);
         }
         let (header, body) = frame.split_at(HEADER_LEN);
-        let nonce: Nonce = field(header, 12);
+        let nonce: Nonce = field(header, 12)?;
         let payload = if let Some(cipher) = &self.cipher {
             let (ciphertext, tag) = body.split_at(body.len() - AEAD_TAG_LEN);
             let mut payload = ciphertext.to_vec();
@@ -236,7 +240,7 @@ impl Sealer {
             payload.to_vec()
         };
         // Only authentic frames reach the clock and the nonce memory.
-        let sent_ms = u64::from_be_bytes(field(header, 4));
+        let sent_ms = u64::from_be_bytes(field(header, 4)?);
         if sent_ms.abs_diff(now_ms) > WINDOW {
             return Err(Reject::Stale);
         }
@@ -252,11 +256,12 @@ impl Sealer {
     }
 }
 
-/// The `N` header bytes at `at` (the caller checked the header's length).
-fn field<const N: usize>(header: &[u8], at: usize) -> [u8; N] {
-    let mut bytes = [0; N];
-    bytes.copy_from_slice(&header[at..at + N]);
-    bytes
+/// The `N` header bytes at `at`.
+fn field<const N: usize>(header: &[u8], at: usize) -> Result<[u8; N], Reject> {
+    header
+        .get(at..at + N)
+        .and_then(|bytes| bytes.try_into().ok())
+        .ok_or(Reject::Malformed)
 }
 
 /// HKDF-SHA256 expand (RFC 5869) of one 32-byte key for `info`.
