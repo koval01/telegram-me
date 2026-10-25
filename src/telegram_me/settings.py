@@ -6,6 +6,7 @@ from functools import cached_property
 from typing import Annotated, Literal
 
 from pydantic import (
+    DirectoryPath,
     Field,
     NonNegativeFloat,
     PositiveFloat,
@@ -86,6 +87,12 @@ class Settings(BaseSettings):
     # API surface
     disable_docs: bool = False
     cors_allow_origins: list[str] = ["*"]
+    public_url: str | None = Field(default=None, pattern=r"^https?://[^/?#]+$")
+    """Public address of the instance, e.g. `https://tme.example.com`: the base of
+    the absolute URLs in /robots.txt and /sitemap.xml (default: each request's own)."""
+    docs_site_dir: DirectoryPath | None = None
+    """Documentation built for /docs (`scripts/build_docs.py`; the image sets it).
+    Without it /docs redirects to the published documentation."""
 
     # Features
     enable_feed: bool = False

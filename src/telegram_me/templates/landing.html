@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TelegramMe: public Telegram channels as JSON</title>
+  <meta name="description" content="A REST and GraphQL API for public Telegram channels, built on the t.me web previews: channel profiles, posts with media and reactions, pagination and feeds.">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#f6f7fb" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0b0e17" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="TelegramMe">
+  <meta property="og:description" content="Public Telegram channels as JSON: REST and GraphQL.">
+  <link rel="canonical" href="/">
+  <link rel="icon" href="/static/favicon.svg?v={{ assets }}" type="image/svg+xml">
+  <link rel="stylesheet" href="/static/landing.css?v={{ assets }}">
+  <link rel="modulepreload" href="/static/pow.js?v={{ assets }}">
+  <script type="module" src="/static/landing.js?v={{ assets }}"></script>
+</head>
+<body data-features="{{ features }}" data-assets="{{ assets }}">
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="top">
+    <div class="wrap top-inner">
+      <a class="brand" href="/" aria-label="TelegramMe home">
+        <svg class="logo" viewBox="0 0 24 24" aria-hidden="true"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/><path d="m21.854 2.147-10.94 10.939"/></svg>
+        <span>TelegramMe</span>
+      </a>
+      <nav aria-label="Main">
+        <ul class="nav">
+          <li><a href="{{ docs_en }}">Docs</a></li>
+          <li><a href="{{ api_reference }}">API reference</a></li>
+          <li{{ graphql_hidden }}><a href="/graphql">GraphQL</a></li>
+          <li><a href="{{ repository }}" rel="noopener">GitHub</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero wrap" aria-labelledby="title">
+      <p class="eyebrow">
+        <a class="pill" href="{{ release }}" rel="noopener">v{{ version }}</a>
+        <span class="status" id="health" role="status" data-state="pending"><span class="dot" aria-hidden="true"></span><span class="status-text">Checking status…</span></span>
+      </p>
+      <h1 id="title">Public Telegram channels,<br><span class="accent">as JSON.</span></h1>
+      <p class="lead">
+        TelegramMe reads the public web previews of Telegram channels
+        (<code>t.me/s/…</code>) and serves them as a REST and GraphQL API:
+        channel profiles, posts with media, polls and reactions, pagination
+        and ranked feeds across channels. No Telegram account or API key.
+      </p>
+      <div class="actions">
+        <a class="button primary" href="{{ docs_en }}">Read the docs</a>
+        <a class="button" href="{{ api_reference }}">Open the API reference</a>
+      </div>
+    </section>
+
+    <section class="wrap try" aria-labelledby="try-title">
+      <div class="card try-card">
+        <div class="try-head">
+          <h2 id="try-title">Try it</h2>
+          <p class="hint">Fetches <code>GET /v1/body/{channel}</code> from this instance.<span class="pow-note" hidden> This server asks for proof of work: your browser solves it first.</span></p>
+        </div>
+        <form id="try-form" class="try-form" novalidate>
+          <label for="channel">Channel username</label>
+          <div class="field">
+            <span class="prefix" aria-hidden="true">t.me/</span>
+            <input id="channel" name="channel" type="text" value="durov" required
+                   autocomplete="off" autocapitalize="off" spellcheck="false"
+                   pattern="[a-zA-Z][a-zA-Z0-9_]{3,31}" maxlength="64"
+                   aria-describedby="channel-help">
+            <button class="button primary" type="submit">Fetch</button>
+          </div>
+          <p id="channel-help" class="help">5–32 letters, digits or underscores, starting with a letter. A link or <code>@name</code> works too.</p>
+        </form>
+        <div class="request">
+          <code id="request-line">GET /v1/body/durov</code>
+          <button class="button small" type="button" id="copy-curl">Copy as curl</button>
+        </div>
+        <div id="result" class="result" aria-live="polite" hidden>
+          <div class="result-meta" id="result-meta"></div>
+          <div class="summary" id="summary" hidden>
+            <img id="summary-avatar" alt="" width="56" height="56" referrerpolicy="no-referrer">
+            <div>
+              <p class="summary-title" id="summary-title"></p>
+              <p class="summary-sub" id="summary-sub"></p>
+              <p class="summary-post" id="summary-post"></p>
+            </div>
+          </div>
+          <details class="json" id="json-details" open>
+            <summary>Response body</summary>
+            <pre tabindex="0"><code id="json"></code></pre>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap" aria-labelledby="explore-title">
+      <h2 id="explore-title" class="section-title">Explore</h2>
+      <div class="grid">
+        <article class="card link-card">
+          <h3>Documentation</h3>
+          <p>Quickstart, every endpoint and model, configuration, deployment and internals.</p>
+          <ul class="langs">
+            <li><a href="{{ docs_en }}" hreflang="en">English</a></li>
+            <li><a href="{{ docs_es }}" hreflang="es" lang="es">Español</a></li>
+            <li><a href="{{ docs_ru }}" hreflang="ru" lang="ru">Русский</a></li>
+          </ul>
+        </article>
+        <article class="card link-card">
+          <h3><a href="{{ api_reference }}">API reference</a></h3>
+          <p>Interactive Swagger UI for the REST API: try every endpoint from the browser. The schema is at <a href="/openapi.json"><code>/openapi.json</code></a>.</p>
+        </article>
+        <article class="card link-card"{{ graphql_hidden }}>
+          <h3><a href="/graphql">GraphQL</a></h3>
+          <p>One query for a channel, its posts and previews of others, in the GraphiQL IDE at <code>/graphql</code>.</p>
+        </article>
+        <article class="card link-card">
+          <h3><a href="{{ repository }}" rel="noopener">Source code</a></h3>
+          <p>Apache-2.0, on GitHub. This instance runs <a href="{{ release }}" rel="noopener">v{{ version }}</a>; see the <a href="{{ changelog }}" rel="noopener">changelog</a>.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="wrap" aria-labelledby="endpoints-title">
+      <h2 id="endpoints-title" class="section-title">Endpoints</h2>
+      <div class="card table-card">
+        <div class="table-scroll" tabindex="0" role="region" aria-labelledby="endpoints-title">
+          <table>
+            <thead><tr><th scope="col">Method</th><th scope="col">Path</th><th scope="col">Returns</th></tr></thead>
+            <tbody>
+              <tr><td><span class="method get">GET</span></td><td><code>/v1/body/{channel}</code></td><td>Profile, latest posts and pagination</td></tr>
+              <tr><td><span class="method get">GET</span></td><td><code>/v1/more/{channel}/{before|after}/{position}</code></td><td>Older or newer posts</td></tr>
+              <tr><td><span class="method get">GET</span></td><td><code>/v1/post/{channel}/{id}</code></td><td>One post</td></tr>
+              <tr><td><span class="method get">GET</span></td><td><code>/v1/preview/{channel}</code></td><td>Short channel summary</td></tr>
+              <tr><td><span class="method post">POST</span></td><td><code>/v1/previews</code></td><td>Up to 100 previews at once</td></tr>
+              <tr><td><span class="method post">POST</span></td><td><code>/v1/feed</code></td><td>Ranked posts across channels</td></tr>
+              <tr{{ graphql_hidden }}><td><span class="method post">POST</span></td><td><code>/graphql</code></td><td>All of the above in one query</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap" aria-labelledby="instance-title">
+      <h2 id="instance-title" class="section-title">This instance</h2>
+      <div class="card instance">
+        <ul class="features" aria-label="Features">
+          <li data-state="{{ previews_state }}">Previews</li>
+          <li data-state="{{ feed_state }}">Feed</li>
+          <li data-state="{{ graphql_state }}">GraphQL</li>
+          <li data-state="{{ rate_limit_state }}">Rate limit</li>
+          <li data-state="{{ pow_state }}">Proof of work</li>
+        </ul>
+        <dl class="health">
+          <div><dt>Status</dt><dd id="health-status">…</dd></div>
+          <div><dt>Response time</dt><dd id="health-time">…</dd></div>
+          <div><dt>Node</dt><dd id="health-node">…</dd></div>
+          <div><dt>Version</dt><dd>{{ version }}</dd></div>
+        </dl>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="wrap foot-inner">
+      <p>TelegramMe is open source under the Apache-2.0 license. It is not affiliated with Telegram.</p>
+      <p><a href="{{ docs_en }}">Docs</a> · <a href="{{ api_reference }}">API</a> · <a href="{{ repository }}" rel="noopener">GitHub</a></p>
+    </div>
+  </footer>
+</body>
+</html>

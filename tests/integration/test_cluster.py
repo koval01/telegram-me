@@ -129,3 +129,25 @@ def test_proof_of_work_from_one_server_is_accepted_by_the_other(stack: Stack) ->
     challenge = stack.get("guarded-b", "/v1/pow/challenge", ip=ip)
     assert challenge.status_code == 200
     assert json.loads(challenge.content)["difficulty"] == 8
+
+
+def test_the_image_serves_its_pages_and_documentation(stack: Stack) -> None:
+    """The docs built into the image, under /docs/, with the PoW exemptions."""
+    landing = stack.get("guarded-a", "/", ip=client_ip())
+    assert landing.status_code == 200
+    assert 'href="/docs/"' in landing.text
+    assert stack.get("guarded-a", "/api", ip=client_ip()).status_code == 200
+
+    for path in ("/docs/", "/docs/es/api/feed/", "/docs/ru/configuration/"):
+        page = stack.get("guarded-a", path, ip=client_ip())
+        assert page.status_code == 200, path
+        assert f'<link rel="canonical" href="{path}">' in page.text
+    asset = stack.get("guarded-a", "/docs/search.json", ip=client_ip())
+    assert asset.status_code == 200
+
+    sitemap = stack.get("guarded-a", "/sitemap.xml", ip=client_ip()).text
+    for path in ("/docs/api/feed/", "/docs/es/api/feed/", "/docs/ru/api/feed/"):
+        assert f"{path}</loc>" in sitemap
+    assert 'hreflang="ru"' in sitemap
+    robots = stack.get("guarded-a", "/robots.txt", ip=client_ip()).text
+    assert "Disallow: /v1/" in robots

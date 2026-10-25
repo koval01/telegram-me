@@ -28,6 +28,8 @@ The source of truth is
 | [`METRICS_PORT`](#metrics_port) | — | Server |
 | [`DISABLE_DOCS`](#disable_docs) | `false` | API |
 | [`CORS_ALLOW_ORIGINS`](#cors_allow_origins) | `["*"]` | API |
+| [`PUBLIC_URL`](#public_url) | — | API |
+| [`DOCS_SITE_DIR`](#docs_site_dir) | — (image: `/app/docs`) | API |
 | [`ENABLE_PREVIEWS`](#enable_previews) | `true` | Features |
 | [`ENABLE_FEED`](#enable_feed) | `false` | Features |
 | [`ENABLE_RATE_LIMIT`](#enable_rate_limit) | `false` | Protection |
@@ -140,14 +142,34 @@ Expose Prometheus metrics of the server on this port at `/metrics`. See
 
 ### `DISABLE_DOCS`
 
-Hide the Swagger UI (`/`) and `/openapi.json`, and on `/graphql` the GraphiQL
-IDE, `GET` queries and schema introspection.
+Hide the landing page (`/`), the API reference (`/api`), `/openapi.json`,
+the documentation (`/docs/`) and `/sitemap.xml`, and on `/graphql` the
+GraphiQL IDE, `GET` queries and schema introspection. `/robots.txt` then
+disallows everything. See [Service endpoints](api/service.md).
 
 ### `CORS_ALLOW_ORIGINS`
 
 JSON list of allowed browser origins, e.g.
 `CORS_ALLOW_ORIGINS='["https://example.com"]'`. The default `["*"]` allows
 any origin.
+
+### `PUBLIC_URL`
+
+Public address of the instance, scheme and host without a path or trailing
+slash, e.g. `https://tme.example.com`. The absolute URLs in `/robots.txt` and
+`/sitemap.xml` start with it. Unset, they use the address each request came
+in on, which behind a proxy is right only when it passes the original `Host`.
+The [deploy workflow](deployment/production.md) sets it from `PUBLIC_URL` or
+`PUBLIC_HOST`.
+
+### `DOCS_SITE_DIR`
+
+Directory of the documentation built for `/docs/`
+([`scripts/build_docs.py`](https://github.com/koval01/telegram-me/blob/main/scripts/build_docs.py)),
+served there by the app. The Docker image ships the build and sets
+`/app/docs`. Unset (an install from source), `/docs/…` redirects to the same
+page of the published documentation. See
+[Service endpoints](api/service.md#get-docs).
 
 ## Features
 

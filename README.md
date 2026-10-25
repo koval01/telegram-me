@@ -9,9 +9,10 @@ JSON — channel profiles, posts with text entities, media, polls, reactions,
 replies, forwards and buttons, pagination, previews and a ranked multi-channel
 feed. No Telegram account or bot token needed.
 
-**Demo:** <https://tme.koval-dev.org> ·
-**Docs:** <https://koval01.github.io/telegram-me/>
-(also in [Español](https://koval01.github.io/telegram-me/es/) and
+**Demo:** <https://tme.koval-dev.org> ([API reference](https://tme.koval-dev.org/api)) ·
+**Docs:** <https://koval01.github.io/telegram-me/>, also on every instance at
+[`/docs`](https://tme.koval-dev.org/docs/)
+(and in [Español](https://koval01.github.io/telegram-me/es/) and
 [Русский](https://koval01.github.io/telegram-me/ru/))
 
 ```bash

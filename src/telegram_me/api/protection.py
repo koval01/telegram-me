@@ -48,9 +48,24 @@ logger = logging.getLogger(__name__)
 
 POW_HEADER = "X-PoW"
 POW_CHALLENGE_PATH = "/v1/pow/challenge"
-# Paths served without proof of work: docs, health checks, static files and
-# the challenge itself. GraphiQL is exempt only as a page (GET without query).
-_POW_EXEMPT = frozenset({"/", "/openapi.json", "/healthz", "/favicon.ico", POW_CHALLENGE_PATH})
+# Paths served without proof of work: pages a browser loads before it can
+# solve one (the landing page, the API reference, the docs and their static
+# files), what crawlers read, health checks and the challenge itself.
+# GraphiQL is exempt only as a page (GET without query). The rate limit has
+# no exemptions.
+_POW_EXEMPT = frozenset(
+    {
+        "/",
+        "/api",
+        "/docs",
+        "/openapi.json",
+        "/robots.txt",
+        "/sitemap.xml",
+        "/healthz",
+        "/favicon.ico",
+        POW_CHALLENGE_PATH,
+    }
+)
 _POW_EXEMPT_PREFIXES = ("/static/", "/docs/")
 _POW_REJECTIONS: dict[str, tuple[int, str]] = {
     "missing": (428, "Proof of work required"),

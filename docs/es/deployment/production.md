@@ -145,7 +145,7 @@ escribe en cada despliegue:
 | `DEPLOY_IMAGE` | `docker.io/koval01/telegram-me` | Repositorio desde el que se despliega |
 | `SSH_USER` | `ubuntu` | |
 | `PUBLIC_HEALTHCHECK_URL` | — | Se comprueba tras el despliegue, p. ej. `https://api.example.com/healthz` |
-| `PUBLIC_URL` | `https://PUBLIC_HOST` | URL base de la prueba de humo pública tras el despliegue; sin ella ni `PUBLIC_HOST` la prueba se omite |
+| `PUBLIC_URL` | `https://PUBLIC_HOST` | URL base de la prueba de humo pública tras el despliegue (sin ella ni `PUBLIC_HOST` la prueba se omite) y [`PUBLIC_URL`](../configuration.md#public_url) de la aplicación para `/robots.txt` y `/sitemap.xml` |
 | `CANARY_SOAK` | `60` | Segundos que el servidor 1 sirve una versión nueva antes de verificarse de nuevo y de que le sigan los demás servidores; `0` omite la comprobación canary |
 
 Usa el entorno `production` en la configuración del repositorio para añadir

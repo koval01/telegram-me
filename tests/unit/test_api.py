@@ -20,7 +20,8 @@ def test_static_files_are_served(client: TestClient) -> None:
 
 
 def test_docs_and_openapi(client: TestClient) -> None:
-    assert "Swagger" in client.get("/").text
+    assert "TelegramMe" in client.get("/").text
+    assert "SwaggerUIBundle" in client.get("/api").text
     spec = client.get("/openapi.json").json()
     assert set(spec["paths"]) >= {
         "/healthz",
@@ -41,6 +42,7 @@ def test_docs_and_openapi(client: TestClient) -> None:
 def test_docs_can_be_disabled(make_client: ClientFactory) -> None:
     client = make_client(disable_docs=True)
     assert client.get("/").status_code == 404
+    assert client.get("/api").status_code == 404
     assert client.get("/openapi.json").status_code == 404
 
 

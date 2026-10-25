@@ -50,7 +50,32 @@ RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --locked --no-dev --no-editable
 
 # ---------------------------------------------------------------------------
-# Runtime: only the virtualenv, an unprivileged user and no build tooling.
+# Docs: the documentation site, built for the /docs/ prefix the app serves it
+# under (scripts/build_docs.py). Its own stage: no Rust, and a docs change
+# rebuilds only this.
+# ---------------------------------------------------------------------------
+FROM python:3.14-slim-trixie@sha256:35caba83af2fe6da9a5d922f9b0156f21d1246a48278c58a08bd253303ba42e8 AS docs
+COPY --from=uv /uv /usr/local/bin/uv
+ENV UV_LINK_MODE=copy \
+    UV_PYTHON_DOWNLOADS=never \
+    UV_PROJECT_ENVIRONMENT=/docs-venv \
+    PATH="/docs-venv/bin:${PATH}"
+WORKDIR /src
+RUN --mount=type=cache,target=/root/.cache/uv \
+    --mount=type=bind,source=uv.lock,target=uv.lock \
+    --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
+    --mount=type=bind,source=rust/telegram-me-native/pyproject.toml,target=rust/telegram-me-native/pyproject.toml \
+    uv sync --locked --only-group docs --no-install-workspace
+COPY zensical.toml zensical.es.toml zensical.ru.toml CHANGELOG.md ./
+COPY overrides ./overrides
+COPY docs ./docs
+COPY tests/snapshots/graphql/schema.graphql ./tests/snapshots/graphql/
+COPY scripts/build_docs.py ./scripts/
+RUN python scripts/build_docs.py --out site-instance
+
+# ---------------------------------------------------------------------------
+# Runtime: only the virtualenv, the docs, an unprivileged user and no build
+# tooling.
 # ---------------------------------------------------------------------------
 FROM python:3.14-slim-trixie@sha256:35caba83af2fe6da9a5d922f9b0156f21d1246a48278c58a08bd253303ba42e8 AS runtime
 
@@ -71,11 +96,13 @@ RUN groupadd --system --gid 10001 app \
     && rm -rf /usr/local/lib/python*/ensurepip
 
 COPY --from=build --chown=root:root /app/.venv /app/.venv
+COPY --from=docs --chown=root:root /src/site-instance /app/docs
 
 ENV PATH="/app/.venv/bin:${PATH}" \
     PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
-    PORT=3000
+    PORT=3000 \
+    DOCS_SITE_DIR=/app/docs
 
 WORKDIR /app
 # Numeric, so the runtime can tell it is not root without /etc/passwd

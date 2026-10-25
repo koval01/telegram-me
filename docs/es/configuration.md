@@ -29,6 +29,8 @@ La fuente de verdad es
 | [`METRICS_PORT`](#metrics_port) | — | Servidor |
 | [`DISABLE_DOCS`](#disable_docs) | `false` | API |
 | [`CORS_ALLOW_ORIGINS`](#cors_allow_origins) | `["*"]` | API |
+| [`PUBLIC_URL`](#public_url) | — | API |
+| [`DOCS_SITE_DIR`](#docs_site_dir) | — (imagen: `/app/docs`) | API |
 | [`ENABLE_PREVIEWS`](#enable_previews) | `true` | Funciones |
 | [`ENABLE_FEED`](#enable_feed) | `false` | Funciones |
 | [`ENABLE_RATE_LIMIT`](#enable_rate_limit) | `false` | Protección |
@@ -143,14 +145,35 @@ Consulta [Endpoints de servicio](api/service.md#metrics).
 
 ### `DISABLE_DOCS`
 
-Oculta Swagger UI (`/`) y `/openapi.json` y, en `/graphql`, el IDE GraphiQL,
-las consultas `GET` y la introspección del esquema.
+Oculta la página de inicio (`/`), la referencia de la API (`/api`),
+`/openapi.json`, la documentación (`/docs/`) y `/sitemap.xml` y, en
+`/graphql`, el IDE GraphiQL, las consultas `GET` y la introspección del
+esquema. `/robots.txt` pasa entonces a prohibirlo todo. Consulta
+[Endpoints de servicio](api/service.md).
 
 ### `CORS_ALLOW_ORIGINS`
 
 Lista JSON de orígenes de navegador permitidos, p. ej.
 `CORS_ALLOW_ORIGINS='["https://example.com"]'`. El valor por defecto `["*"]`
 permite cualquier origen.
+
+### `PUBLIC_URL`
+
+Dirección pública de la instancia, esquema y host sin ruta ni barra final,
+p. ej. `https://tme.example.com`. Las URL absolutas de `/robots.txt` y
+`/sitemap.xml` empiezan por ella. Si no se define, usan la dirección por la que
+llegó cada solicitud, que detrás de un proxy solo es correcta si este reenvía
+el `Host` original. El [workflow de despliegue](deployment/production.md) la
+fija a partir de `PUBLIC_URL` o `PUBLIC_HOST`.
+
+### `DOCS_SITE_DIR`
+
+Directorio de la documentación compilada para `/docs/`
+([`scripts/build_docs.py`](https://github.com/koval01/telegram-me/blob/main/scripts/build_docs.py)),
+que la aplicación sirve ahí. La imagen de Docker incluye la compilación y fija
+`/app/docs`. Sin definir (una instalación desde el código fuente), `/docs/…`
+redirige a la misma página de la documentación publicada. Consulta
+[Endpoints de servicio](api/service.md#get-docs).
 
 ## Funciones { #features }
 

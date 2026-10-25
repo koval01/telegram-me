@@ -2,8 +2,8 @@
 
 La API se versiona en la ruta (`/v1/...`), habla JSON sobre HTTP y no requiere
 autenticación. En `/openapi.json` se sirve un documento OpenAPI 3.1, que se
-muestra como Swagger UI en `/` (ambos se pueden desactivar con
-[`DISABLE_DOCS`](../configuration.md#disable_docs)).
+muestra como Swagger UI en [`/api`](service.md#get-api) (ambos se pueden
+desactivar con [`DISABLE_DOCS`](../configuration.md#disable_docs)).
 
 Los mismos datos están disponibles también mediante una
 [API GraphQL](graphql.md) en `/graphql`, donde los clientes seleccionan solo

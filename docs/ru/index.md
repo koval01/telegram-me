@@ -54,8 +54,10 @@ TelegramMe превращает публичное веб-превью любо�
 
 ## Попробуйте { #try-it }
 
-Публичное демо работает по адресу **<https://tme.koval-dev.org>**
-(интерактивный Swagger UI в корне):
+Публичное демо работает по адресу **<https://tme.koval-dev.org>**:
+попробуйте канал на стартовой странице, изучите API в
+[Swagger UI](https://tme.koval-dev.org/api) или читайте эту документацию на
+[/docs](https://tme.koval-dev.org/docs/ru/).
 
 ```bash
 curl https://tme.koval-dev.org/v1/body/durov

@@ -1,8 +1,9 @@
 # Quickstart
 
 Three ways to get an instance running, from quickest to most complete. All of
-them expose the API on **<http://localhost:8000>**, with the interactive
-Swagger UI at the root.
+them expose the API on **<http://localhost:8000>**: a landing page with a
+**Try it** box at the root, the interactive Swagger UI at `/api` and this
+documentation at `/docs/`.
 
 ## 1. A single container
 

@@ -197,10 +197,12 @@ límite de peticiones están expuestas a los navegadores mediante CORS.
 
 ### Sin prueba { #no-proof-needed }
 
-Algunas peticiones se sirven sin prueba: la documentación (`/`,
-`/openapi.json`, `/static/…`), `/healthz`, el propio `/v1/pow/challenge`, la
-página de GraphiQL (`GET /graphql` sin consulta) y los preflight de CORS
-(`OPTIONS`). Las consultas GraphQL (`POST /graphql`) necesitan prueba como
+Algunas peticiones se sirven sin prueba: las páginas que un navegador carga
+antes de poder resolverla (la página de inicio `/`, `/api`, `/openapi.json`,
+`/docs/…` y `/static/…`), `/robots.txt`, `/sitemap.xml`, `/healthz`, el
+propio `/v1/pow/challenge`, la página de GraphiQL (`GET /graphql` sin
+consulta) y los preflight de CORS (`OPTIONS`). El límite de tasa no tiene
+excepciones: esas páginas cuentan como cualquier otra petición. Las consultas GraphQL (`POST /graphql`) necesitan prueba como
 cualquier otra petición, con método y target `POST /graphql`.
 
 ### Notas de seguridad { #security-notes }

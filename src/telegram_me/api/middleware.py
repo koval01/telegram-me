@@ -8,7 +8,7 @@ from starlette.types import ASGIApp, Message, Receive, Scope, Send
 
 
 class ResponseHeadersMiddleware:
-    """Add `X-App-Node`, `X-Process-Time` and, for Cloudflare, `Cache-Control`."""
+    """Add `X-App-Node`, `X-Process-Time` and, for Cloudflare, a default `Cache-Control`."""
 
     def __init__(self, app: ASGIApp, edge_cache_control: str | None) -> None:
         self.app = app
@@ -31,7 +31,8 @@ class ResponseHeadersMiddleware:
                 headers["X-App-Node"] = self._node
                 elapsed_ms = int((time.perf_counter() - started) * 1000)
                 headers["X-Process-Time"] = f"{elapsed_ms} ms"
-                if from_edge and self._edge_cache_control:
+                # A response that chose its own (docs, rejections) keeps it.
+                if from_edge and self._edge_cache_control and "cache-control" not in headers:
                     headers["Cache-Control"] = self._edge_cache_control
             await send(message)
 

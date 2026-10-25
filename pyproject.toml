@@ -187,6 +187,7 @@ paths = ["src", "tests/vulture_whitelist.py"]
 min_confidence = 60
 # Called by the frameworks: routes, pydantic validators, overridden hooks.
 ignore_decorators = [
+    "@*.api_route",
     "@*.get",
     "@*.post",
     "@field_validator",

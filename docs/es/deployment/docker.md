@@ -35,6 +35,9 @@ pensada para funcionar con todas ellas.
 
 - Python 3.14 sobre Debian (slim), las dependencias fijadas en `/app/.venv` y
   nada más: ni compiladores, ni curl, ni pip.
+- Esta documentación en `/app/docs`, compilada para `/docs/` y servida por la
+  aplicación ([`DOCS_SITE_DIR`](../configuration.md#docs_site_dir)), unos
+  8 MB.
 - Se ejecuta como el usuario sin privilegios `app`, indicado por número
   (`USER 10001:10001`), para que el runtime pueda comprobar que no es root.
 - `ENTRYPOINT ["telegram-me"]`, `CMD ["serve"]`: el servidor es el PID 1 y

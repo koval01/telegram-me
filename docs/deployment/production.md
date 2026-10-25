@@ -139,7 +139,7 @@ deployment:
 | `DEPLOY_IMAGE` | `docker.io/koval01/telegram-me` | Repository to deploy from |
 | `SSH_USER` | `ubuntu` | |
 | `PUBLIC_HEALTHCHECK_URL` | — | Checked after the rollout, e.g. `https://api.example.com/healthz` |
-| `PUBLIC_URL` | `https://PUBLIC_HOST` | Base URL of the public smoke test after the rollout; without it and `PUBLIC_HOST` the test is skipped |
+| `PUBLIC_URL` | `https://PUBLIC_HOST` | Base URL of the public smoke test after the rollout (without it and `PUBLIC_HOST` the test is skipped), and the app's [`PUBLIC_URL`](../configuration.md#public_url) for `/robots.txt` and `/sitemap.xml` |
 | `CANARY_SOAK` | `60` | Seconds server 1 serves a new release before it is verified again and the other servers follow; `0` skips the canary check |
 
 Use the `production` environment in the repository settings to add required
