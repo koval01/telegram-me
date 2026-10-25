@@ -68,6 +68,10 @@ All notable changes to this project are documented here. The format follows
   packet, no longer takes the shared cache, the shared rate limit and the
   cross-server lease offline for 30 seconds. Failures below the threshold are
   logged at `INFO`.
+- Release images build each platform on a runner of its own architecture
+  (`ubuntu-24.04-arm` for `linux/arm64`) instead of arm64 under QEMU, and
+  merge the per-platform digests into one manifest list with the same tags,
+  provenance and SBOM. Each platform has its own build cache.
 
 ### Fixed
 
