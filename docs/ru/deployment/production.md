@@ -143,7 +143,7 @@ sequenceDiagram
 | `DEPLOY_IMAGE` | `docker.io/koval01/telegram-me` | Репозиторий, из которого идёт развёртывание |
 | `SSH_USER` | `ubuntu` | |
 | `PUBLIC_HEALTHCHECK_URL` | — | Проверяется после развёртывания, например `https://api.example.com/healthz` |
-| `PUBLIC_URL` | `https://PUBLIC_HOST` | Базовый URL публичного smoke-теста после развёртывания; без него и без `PUBLIC_HOST` тест пропускается |
+| `PUBLIC_URL` | `https://PUBLIC_HOST` | Базовый URL публичного smoke-теста после развёртывания (без него и без `PUBLIC_HOST` тест пропускается) и [`PUBLIC_URL`](../configuration.md#public_url) приложения для `/robots.txt` и `/sitemap.xml` |
 | `CANARY_SOAK` | `60` | Сколько секунд сервер 1 обслуживает новый релиз, прежде чем его проверят снова и за ним последуют остальные серверы; `0` отключает проверку canary |
 
 Используйте окружение `production` в настройках репозитория, чтобы добавить

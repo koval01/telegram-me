@@ -1,8 +1,9 @@
 # Inicio rápido
 
 Tres formas de poner en marcha una instancia, de la más rápida a la más
-completa. Todas exponen la API en **<http://localhost:8000>**, con Swagger UI
-interactivo en la raíz.
+completa. Todas exponen la API en **<http://localhost:8000>**: una página de
+inicio con un recuadro **Pruébalo** en la raíz, Swagger UI interactivo en
+`/api` y esta documentación en `/docs/`.
 
 ## 1. Un solo contenedor { #1-a-single-container }
 

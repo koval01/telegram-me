@@ -2,8 +2,8 @@
 
 Версия API указывается в пути (`/v1/...`), API работает с JSON поверх HTTP и
 не требует аутентификации. Документ OpenAPI 3.1 отдаётся по адресу
-`/openapi.json` и отображается как Swagger UI на `/` (оба можно отключить
-через [`DISABLE_DOCS`](../configuration.md#disable_docs)).
+`/openapi.json` и отображается как Swagger UI на [`/api`](service.md#get-api)
+(оба можно отключить через [`DISABLE_DOCS`](../configuration.md#disable_docs)).
 
 Те же данные доступны и через [GraphQL API](graphql.md) на `/graphql`, где
 клиенты выбирают только нужные поля и могут объединять несколько запросов в

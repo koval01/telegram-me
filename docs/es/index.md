@@ -55,8 +55,10 @@ navegador.
 
 ## Pruébalo { #try-it }
 
-Hay una demo pública en **<https://tme.koval-dev.org>** (con Swagger UI
-interactivo en la raíz):
+Hay una demo pública en **<https://tme.koval-dev.org>**: prueba un canal en
+su página de inicio, explora la API en
+[Swagger UI](https://tme.koval-dev.org/api) o lee esta documentación en
+[/docs](https://tme.koval-dev.org/docs/es/).
 
 ```bash
 curl https://tme.koval-dev.org/v1/body/durov

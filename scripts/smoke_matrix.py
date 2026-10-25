@@ -39,6 +39,8 @@ class Scenario:
     payload: dict[str, Any] | list[Any] | None = None
     strict: bool = True
     check: Check | None = None
+    # For pages that are not JSON: text a 200 response must contain.
+    contains: str | None = None
 
 
 @dataclass
@@ -251,7 +253,12 @@ def _call(
 
 
 def _content_problem(scenario: Scenario, status: int, raw: bytes) -> str | None:
-    if scenario.check is None or status != 200:
+    if status != 200:
+        return None
+    if scenario.contains is not None:
+        text = raw.decode("utf-8", errors="replace")
+        return None if scenario.contains in text else f"no {scenario.contains!r} in the page"
+    if scenario.check is None:
         return None
     try:
         body = json.loads(raw)
@@ -365,8 +372,13 @@ def build_scenarios(
 
     scenarios: list[Scenario] = [
         Scenario("health_ok", "GET", "/healthz", {200}),
-        Scenario("docs_root_ok", "GET", "/", {200}),
+        Scenario("landing_ok", "GET", "/", {200}, contains='id="try-form"'),
+        Scenario("api_reference_ok", "GET", "/api", {200}, contains="SwaggerUIBundle"),
         Scenario("openapi_ok", "GET", "/openapi.json", {200}),
+        Scenario("robots_ok", "GET", "/robots.txt", {200}, contains="Disallow: /v1/"),
+        Scenario("sitemap_ok", "GET", "/sitemap.xml", {200}, contains="<urlset"),
+        # Served from the image; redirects to GitHub Pages where it has no docs.
+        Scenario("docs_ok", "GET", "/docs/", {200}, contains="TelegramMe"),
         Scenario("body_invalid_short", "GET", "/v1/body/ab", {422}),
         Scenario("body_invalid_chars", "GET", "/v1/body/durov-chan", {422}),
         Scenario("body_not_found_like", "GET", "/v1/body/zzzzzznotexistingchannelzzzz", {404}),

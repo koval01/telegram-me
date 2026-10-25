@@ -35,6 +35,8 @@ with all of them.
 
 - Python 3.14 on Debian (slim), the locked dependencies in `/app/.venv`,
   nothing else — no compilers, no curl, no pip.
+- This documentation in `/app/docs`, built for `/docs/` and served by the
+  app ([`DOCS_SITE_DIR`](../configuration.md#docs_site_dir)), about 8 MB.
 - Runs as the unprivileged user `app`, set by number (`USER 10001:10001`), so
   a runtime can verify it is not root.
 - `ENTRYPOINT ["telegram-me"]`, `CMD ["serve"]`: the server is PID 1 and gets

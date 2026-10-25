@@ -1,7 +1,7 @@
 .DEFAULT_GOAL := help
 .PHONY: help install tools dev test snapshots contract lint format typecheck check rust native \
         audit image-scan fixtures smoke integration deploy-test docker up down logs docs docs-serve \
-        docs-preview
+        docs-preview docs-instance
 
 help: ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-12s\033[0m %s\n", $$1, $$2}'
@@ -108,6 +108,9 @@ docs: ## Build the documentation into site/ (English), site/es/ and site/ru/
 docs-serve: ## Live preview of one language on :8001 (DOCS_LANG=en|es|ru)
 	uv run --group docs zensical serve --dev-addr 127.0.0.1:8001 \
 		$(if $(filter-out en,$(DOCS_LANG)),-f zensical.$(DOCS_LANG).toml)
+
+docs-instance: ## Build the docs as the image serves them at /docs into site-instance/ (DOCS_SITE_DIR)
+	uv run --group docs python scripts/build_docs.py
 
 docs-preview: docs ## Serve the built site with all languages on :8001
 	uv run --no-project python -m http.server 8001 --bind 127.0.0.1 --directory site

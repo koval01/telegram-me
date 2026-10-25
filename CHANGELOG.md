@@ -6,6 +6,37 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Added
+
+- **A public face for the instance.**
+  - `/` is a landing page now: what the service is, a **Try it** box for
+    `GET /v1/body/{channel}` with the response, the instance's health, version
+    and features, and links to the docs, the API reference, GraphQL and GitHub.
+    Static HTML, CSS and a little JS from the package, light and dark,
+    without a framework or anything loaded from elsewhere (CSP `'self'`).
+  - The documentation is served at `/docs/` (`/docs/es/`, `/docs/ru/`). The
+    image ships it, built for that prefix by `scripts/build_docs.py`
+    (`DOCS_SITE_DIR=/app/docs`, about 8 MB more image), so it needs no proxy and
+    always matches the running version. Without a build `/docs/…` redirects to
+    GitHub Pages.
+  - `/robots.txt` and `/sitemap.xml`: every docs page in all three languages
+    with `hreflang` alternates, generated from the zensical navs at build
+    time, on the new `PUBLIC_URL` setting (the deploy sets it from
+    `PUBLIC_URL` or `PUBLIC_HOST`).
+  - With `ENABLE_POW` the browser solves the proof of work, for the landing
+    page and for Swagger's **Try it out**, on Web Workers with a synchronous
+    SHA-256 (difficulty 16 in about half a second).
+
+### Changed
+
+- **Swagger UI moved from `/` to `/api`**; `/openapi.json` stays. Old deep
+  links (`/#/Channel/...`) are forwarded to `/api` by the landing page.
+  `DISABLE_DOCS` hides the new pages as well, and `/robots.txt` then disallows
+  everything. The smoke matrix checks the new pages.
+- Responses that set their own `Cache-Control` (docs, static files,
+  rejections) keep it behind Cloudflare; the `CACHE_MODE` edge default only
+  fills in the others.
+
 ## [2.1.0] - 2026-10-25
 
 Requests to t.me now go out with one browser's TLS, HTTP/2 and headers. Nodes
