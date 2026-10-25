@@ -108,6 +108,13 @@ def _coded(error: GraphQLError) -> GraphQLError:
     return _with_code(error, code)
 
 
+def _document_order(error: GraphQLError) -> tuple[int, int]:
+    # Resolvers finish in any order; sort errors as their fields appear in the query.
+    if not error.locations:
+        return (0, 0)
+    return (error.locations[0].line, error.locations[0].column)
+
+
 def _tag(errors: list[GraphQLError] | None, code: ErrorCode) -> None:
     # Pre-execution errors are returned as the same objects, so tag in place.
     for error in errors or ():
@@ -133,4 +140,4 @@ class ErrorCodes(SchemaExtension):
         yield
         result: Any = self.execution_context.result
         if result is not None and result.errors:
-            result.errors = [_coded(error) for error in result.errors]
+            result.errors = sorted((_coded(error) for error in result.errors), key=_document_order)

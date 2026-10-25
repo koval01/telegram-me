@@ -6,6 +6,12 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Fixed
+
+- GraphQL errors are listed in the order their fields appear in the query.
+  Before, they came in the order the resolvers finished, so one query could
+  return them in a different order each time.
+
 ## [2.2.0] - 2026-10-25
 
 Every instance now has a landing page at `/`, the API reference at `/api`, and
