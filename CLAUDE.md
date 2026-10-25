@@ -2,7 +2,7 @@
 
 Guidance for Claude Code and other AI coding agents working in this repository.
 Humans: see [CONTRIBUTING.md](CONTRIBUTING.md) and the
-[documentation](https://koval01.github.io/telegram-me/).
+[documentation](https://tme.koval-dev.org/docs/).
 
 ## What this is
 

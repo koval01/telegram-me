@@ -1,7 +1,7 @@
 # TelegramMe
 
 [![CI](https://github.com/koval01/telegram-me/actions/workflows/ci.yml/badge.svg)](https://github.com/koval01/telegram-me/actions/workflows/ci.yml)
-[![Docs](https://img.shields.io/badge/docs-koval01.github.io-blue)](https://koval01.github.io/telegram-me/)
+[![Docs](https://img.shields.io/badge/docs-tme.koval--dev.org-blue)](https://tme.koval-dev.org/docs/)
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue)](LICENSE)
 
 REST API for public Telegram channels. It turns `t.me/s/<channel>` into typed
@@ -9,11 +9,14 @@ JSON — channel profiles, posts with text entities, media, polls, reactions,
 replies, forwards and buttons, pagination, previews and a ranked multi-channel
 feed. No Telegram account or bot token needed.
 
-**Demo:** <https://tme.koval-dev.org> ([API reference](https://tme.koval-dev.org/api)) ·
-**Docs:** <https://koval01.github.io/telegram-me/>, also on every instance at
-[`/docs`](https://tme.koval-dev.org/docs/)
-(and in [Español](https://koval01.github.io/telegram-me/es/) and
-[Русский](https://koval01.github.io/telegram-me/ru/))
+**Demo:** <https://tme.koval-dev.org> ·
+**API reference:** [REST](https://tme.koval-dev.org/api), [GraphQL](https://tme.koval-dev.org/graphql) ·
+**Docs:** [English](https://tme.koval-dev.org/docs/),
+[Español](https://tme.koval-dev.org/docs/es/),
+[Русский](https://tme.koval-dev.org/docs/ru/)
+
+Every instance serves its own copy of the docs at `/docs`; they are also
+published on [GitHub Pages](https://koval01.github.io/telegram-me/).
 
 ```bash
 curl https://tme.koval-dev.org/v1/body/durov
@@ -34,7 +37,7 @@ docker compose up -d --wait            # API on :8000 + Valkey
 ```
 
 Configuration, multi-server deployment and reverse proxy setup:
-[deployment guide](https://koval01.github.io/telegram-me/deployment/production/).
+[deployment guide](https://tme.koval-dev.org/docs/deployment/production/).
 
 ## Run locally for development
 
@@ -46,7 +49,7 @@ make check                             # lint, types, tests
 ```
 
 Requires [uv](https://docs.astral.sh/uv/). See the
-[development guide](https://koval01.github.io/telegram-me/getting-started/local-development/).
+[development guide](https://tme.koval-dev.org/docs/getting-started/local-development/).
 
 ## License
 
