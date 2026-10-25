@@ -86,10 +86,14 @@ jobs:
       - name: Seed corpus from the recorded pages
         run: python3 ../../../scripts/fuzz_corpus.py corpus/pages
       # Without sanitizer (`-s none`): the crate forbids unsafe code, and
-      # several times more inputs per second find more.
+      # several times more inputs per second find more. The prebuilt
+      # cargo-fuzz is a musl binary and defaults to the musl target, which
+      # the nightly toolchain does not have: build for the host instead.
       - name: Fuzz
         run: >-
-          cargo +nightly fuzz run -s none pages corpus/pages --
+          cargo +nightly fuzz run -s none
+          --target "$(rustc +nightly -vV | sed -n 's/^host: //p')"
+          pages corpus/pages --
           -max_total_time=600 -max_len=65536 -timeout=10 -rss_limit_mb=2048
       - name: Crashing inputs
         if: failure()

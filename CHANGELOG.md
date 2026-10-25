@@ -130,6 +130,8 @@ All notable changes to this project are documented here. The format follows
   each worker opens its first connection at startup.
 - Deeply nested markup (tens of thousands of levels) no longer overflows the
   stack while a post is serialized, which aborted the worker process.
+- The nightly fuzzing job builds for the host target. The prebuilt
+  cargo-fuzz defaulted to musl, which the nightly toolchain lacks (issue #217).
 
 ### Security
 
@@ -142,7 +144,9 @@ All notable changes to this project are documented here. The format follows
 - The deploy workflow passes only the secrets it needs to the reusable
   deployment, reads repository variables from the environment instead of
   expanding them into the script, and keeps no git credentials after checkout.
-
+- The Dockerfile's base images (uv, Rust, Python) are pinned by digest as well
+  as by tag; Dependabot updates both. OpenSSF Scorecard flagged the tag-only
+  `FROM` lines (Pinned-Dependencies).
 ## [2.0.0] - 2026-10-24
 
 A rewrite of the internals with the same `/v1` API. Existing clients keep
