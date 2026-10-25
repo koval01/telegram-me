@@ -42,6 +42,10 @@ All notable changes to this project are documented here. The format follows
 - The landing page's proof-of-work worker checks its task: a difficulty above
   32 used to search forever, and malformed input now fails at once. It also
   ignores messages from another origin (CodeQL: missing origin verification).
+- The docs' own sitemaps (`/docs/sitemap.xml`, `/docs/es/…`, `/docs/ru/…`)
+  carried root-relative locations, which Google Search Console rejects (33
+  errors). The instance now serves them with absolute URLs for its public
+  address; the docs theme navigates with them as before.
 
 ## [2.1.0] - 2026-10-25
 
