@@ -53,8 +53,9 @@ La fuente de verdad es
 | [`TELEGRAM_TIMEOUT`](#telegram_timeout) | `10` | Origen |
 | [`TELEGRAM_MAX_CONCURRENCY`](#telegram_max_concurrency) | `32` | Origen |
 | [`TELEGRAM_CLIENT`](#telegram_client) | `browser` | Origen |
-| [`TELEGRAM_BROWSER_PROFILE`](#telegram_browser_profile) | `chrome_149` | Origen |
+| [`TELEGRAM_BROWSER_PROFILE`](#telegram_browser_profile) | `chrome_156` | Origen |
 | [`TELEGRAM_BROWSER_PLATFORM`](#telegram_browser_platform) | `android` | Origen |
+| [`TELEGRAM_SESSION_LIFETIME`](#telegram_session_lifetime) | `14400` | Origen |
 | [`UPSTREAM_QUEUE_LIMIT`](#upstream_queue_limit) | 16 × `TELEGRAM_MAX_CONCURRENCY` | Origen |
 | [`MAX_WAITING_REQUESTS`](#max_waiting_requests) | `4096` | Origen |
 | [`SHARED_COALESCING`](#shared_coalescing) | `true` | Origen |
@@ -316,24 +317,38 @@ Cliente HTTP de las solicitudes a t.me:
   el mismo navegador.
 - `reqwest`: pyreqwest (rustls y hyper). Envía las cabeceras del mismo perfil,
   pero sus huellas TLS y HTTP/2 son las de rustls y hyper, que ningún
-  navegador tiene. Se mantiene como alternativa.
+  navegador tiene, y no guarda cookies. No se usa en producción.
 
 Las mediciones están en [Cliente HTTP](internals/http-client.md).
 
 ### `TELEGRAM_BROWSER_PROFILE`
 
-El navegador que dicen ser las solicitudes: un nombre de perfil Chromium de
-[wreq-util](https://crates.io/crates/wreq-util), como `chrome_149`,
-`edge_148` u `opera_131`. Un nombre desconocido detiene el servidor al
-arrancar, con el perfil de Chrome más reciente en el mensaje. El valor por
-defecto es el Chrome más reciente que trae el crate; cambia cuando Dependabot
-actualiza `wreq-util`.
+El navegador que dicen ser las solicitudes. El valor por defecto,
+`chrome_156`, es el perfil propio del proyecto del Chrome estable actual, en
+`rust/telegram-me-native/src/http/chrome.rs`. También se pueden elegir los
+perfiles Chromium de [wreq-util](https://crates.io/crates/wreq-util), como
+`chrome_149`, `edge_148` u `opera_131`. Un nombre desconocido detiene el
+servidor al arrancar, con el perfil de Chrome más reciente en el mensaje.
 
 ### `TELEGRAM_BROWSER_PLATFORM`
 
 La plataforma de ese navegador: `android` (por defecto), `ios`, `windows`,
 `macos` o `linux`. Define el `User-Agent`, `sec-ch-ua-platform` y
 `sec-ch-ua-mobile`; el handshake es el mismo en todas las plataformas.
+`chrome_156` no tiene variante `ios`, porque Chrome en iOS usa la pila TLS de
+Apple, no BoringSSL; el servidor no arranca con esa combinación.
+
+### `TELEGRAM_SESSION_LIFETIME`
+
+Segundos que vive una identidad de navegador del cliente `browser`, ±25 % al
+azar. Una identidad es el tarro de cookies (t.me establece `stel_ssid`), las
+conexiones y sus tickets de sesión TLS. Cuando termina, el cliente empieza con
+el tarro vacío y conexiones nuevas, como un perfil de navegador nuevo. El
+valor por defecto es `14400` (4 horas, es decir, de 3 a 5); `0` mantiene una
+identidad hasta que caducan sus cookies (las de t.me duran 24 horas) o t.me
+responde con un 4xx distinto de 404. Ambas cosas también terminan una
+identidad antes de tiempo. Cada proceso worker tiene su propia identidad
+(véase [Cliente HTTP](internals/http-client.md#cookies)).
 
 ### `UPSTREAM_QUEUE_LIMIT`
 

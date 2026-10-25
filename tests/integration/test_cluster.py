@@ -46,6 +46,20 @@ def test_second_server_reads_the_first_servers_cache(
     assert upstream.fetches(page.format(c=channel)) == 1
 
 
+def test_workers_keep_the_session_cookie(stack: Stack, upstream: Upstream) -> None:
+    """Each worker is one browser: it sends back the `stel_ssid` it was given."""
+    upstream.reset()
+    for _ in range(6):
+        body_json(stack.get("server-a", f"/v1/body/{unique()}"))
+    cookies = upstream.counts()["cookies"]
+    issued, returned = cookies.get("issued", 0), cookies.get("returned", 0)
+    assert issued + returned == 6
+    # Earlier tests may have given both workers their cookie already; at most
+    # each of the two gets its first one here, and sends it back afterwards.
+    assert issued <= 2
+    assert returned >= 4
+
+
 async def test_concurrent_misses_on_both_servers_fetch_once(
     stack: Stack, upstream: Upstream
 ) -> None:

@@ -1,11 +1,12 @@
 //! HTTP client for t.me that looks like one browser on the wire.
 //!
-//! A single [`wreq_util`] emulation profile sets the TLS `ClientHello`
-//! (`BoringSSL`: cipher and extension order, GREASE, ALPS, certificate
-//! compression), the HTTP/2 `SETTINGS`, `WINDOW_UPDATE` and pseudo-header order,
-//! and the default request headers, `User-Agent` and `sec-ch-ua*` included.
-//! None of them is written by hand, so headers can not claim a browser the
-//! handshake contradicts.
+//! One emulation profile sets the TLS `ClientHello` (`BoringSSL`: cipher and
+//! extension order, GREASE, ALPS, certificate compression), the HTTP/2
+//! `SETTINGS`, `WINDOW_UPDATE`, priority and pseudo-header order, and the
+//! default request headers, `User-Agent` and `sec-ch-ua*` included. None of
+//! them is written per request, so headers can not claim a browser the
+//! handshake contradicts. The profile is our own current Chrome
+//! ([`chrome::NAME`], see [`chrome`]) or one of `wreq_util`'s Chromium ones.
 //!
 //! Two kinds of request are sent, the two a browser sends to t.me:
 //!
@@ -14,13 +15,25 @@
 //! - the "load more" call (`POST` with `x-requested-with`): the page's
 //!   jQuery XHR, with the fetch metadata, `accept`, `origin`, `referer` and
 //!   header order Chromium uses for it (captured from Chrome 152).
+//!
+//! Like a browser, the client keeps the cookies t.me sets (`stel_ssid`) and
+//! sends them back. A [`Session`] — cookie jar, connections, TLS session
+//! tickets — is one browser identity; it is replaced by a fresh one after
+//! [`Options::session_lifetime`] (with jitter), once its cookies expire, or
+//! when t.me answers a 4xx other than 404. Cookies stay inside the session:
+//! they are never part of a [`Response`], an error or `Debug` output.
+
+mod chrome;
 
 use std::fmt;
-use std::time::Duration;
+use std::sync::atomic::{AtomicBool, Ordering};
+use std::sync::{Arc, PoisonError, RwLock};
+use std::time::{Duration, Instant};
 
+use wreq::cookie::Jar;
 use wreq::header::{
-    ACCEPT, ACCEPT_ENCODING, ACCEPT_LANGUAGE, CONTENT_LENGTH, HeaderMap, HeaderName, HeaderValue,
-    ORIGIN, OrigHeaderMap, REFERER, USER_AGENT,
+    ACCEPT, ACCEPT_ENCODING, ACCEPT_LANGUAGE, CONTENT_LENGTH, COOKIE, HeaderMap, HeaderName,
+    HeaderValue, ORIGIN, OrigHeaderMap, REFERER, USER_AGENT,
 };
 use wreq::{IntoEmulation, Method};
 use wreq_util::{Emulation, Platform, Profile};
@@ -34,11 +47,15 @@ const POOL_IDLE: Duration = Duration::from_secs(90);
 /// The longest a TCP + TLS handshake may take, at most the whole timeout.
 const MAX_CONNECT: Duration = Duration::from_secs(5);
 
+/// A session lives its lifetime times a random factor in this range, so the
+/// workers of a fleet do not all start new sessions at once.
+const LIFETIME_JITTER: (f64, f64) = (0.75, 1.25);
+
 /// `accept` that jQuery sends for `dataType: "json"`, as t.me's page does.
 const XHR_ACCEPT: &str = "application/json, text/javascript, */*; q=0.01";
 
 /// Header order of a Chromium XHR `POST` (`content-length` comes from the body).
-const XHR_ORDER: [&str; 15] = [
+const XHR_ORDER: [&str; 16] = [
     "content-length",
     "sec-ch-ua-platform",
     "x-requested-with",
@@ -53,6 +70,7 @@ const XHR_ORDER: [&str; 15] = [
     "referer",
     "accept-encoding",
     "accept-language",
+    "cookie",
     "priority",
 ];
 
@@ -70,7 +88,8 @@ const XHR_INHERITED: [&str; 5] = [
 pub struct Options {
     /// Scheme and host requests go to, such as `https://t.me`.
     pub base_url: String,
-    /// A Chromium profile name of `wreq-util`, such as `chrome_149`.
+    /// [`chrome::NAME`] or a Chromium profile name of `wreq-util`, such as
+    /// `chrome_149`.
     pub profile: String,
     /// `windows`, `macos`, `linux`, `android` or `ios`.
     pub platform: String,
@@ -78,6 +97,9 @@ pub struct Options {
     pub accept_language: String,
     /// The whole request, from connecting to the last body byte.
     pub timeout: Duration,
+    /// How long one browser identity lives, before jitter; `None` keeps it
+    /// until its cookies expire or t.me rejects it.
+    pub session_lifetime: Option<Duration>,
 }
 
 /// Why a request failed.
@@ -115,10 +137,89 @@ pub struct Response {
     pub text: String,
 }
 
-/// A pooled HTTP/2 client with one browser identity.
+/// Builds the sessions of one client: everything but the identity.
+struct Factory {
+    emulation: wreq::Emulation,
+    timeout: Duration,
+    lifetime: Option<Duration>,
+}
+
+impl Factory {
+    fn session(&self, id: u64) -> Result<Session, Error> {
+        let jar = Arc::new(Jar::default());
+        let inner = wreq::Client::builder()
+            .emulation(self.emulation.clone())
+            .cookie_provider(Arc::clone(&jar))
+            .gzip(true)
+            .brotli(true)
+            .zstd(true)
+            .deflate(true)
+            .redirect(wreq::redirect::Policy::none())
+            .timeout(self.timeout)
+            .connect_timeout(self.timeout.min(MAX_CONNECT))
+            .pool_idle_timeout(POOL_IDLE)
+            .build()
+            .map_err(|err| Error::Config(chain(&err)))?;
+        Ok(Session {
+            id,
+            inner,
+            jar,
+            ends: self
+                .lifetime
+                .map(|lifetime| Instant::now() + jittered(lifetime)),
+            had_cookies: AtomicBool::new(false),
+            retired: AtomicBool::new(false),
+        })
+    }
+}
+
+/// `lifetime` times a random factor in [`LIFETIME_JITTER`].
+fn jittered(lifetime: Duration) -> Duration {
+    let random = getrandom::u32().expect("the OS random number generator works");
+    let (low, high) = LIFETIME_JITTER;
+    lifetime.mul_f64(low + (high - low) * f64::from(random) / f64::from(u32::MAX))
+}
+
+/// One browser identity: a cookie jar and the connections (with their TLS
+/// session tickets) that carried it. Requests in flight finish on the
+/// session they started on; its connections close when the last one ends.
+struct Session {
+    id: u64,
+    inner: wreq::Client,
+    jar: Arc<Jar>,
+    ends: Option<Instant>,
+    /// t.me has set a cookie in this session.
+    had_cookies: AtomicBool,
+    /// t.me rejected a request of this session.
+    retired: AtomicBool,
+}
+
+impl Session {
+    fn is_over(&self, now: Instant) -> bool {
+        self.retired.load(Ordering::Relaxed)
+            || self.ends.is_some_and(|ends| now >= ends)
+            // Its cookies expired (or t.me deleted them): a browser would
+            // start over with a new one, so the session does.
+            || (self.had_cookies.load(Ordering::Relaxed) && self.jar.is_empty())
+    }
+
+    /// Note what the answer says about the session.
+    fn observe(&self, status: u16) {
+        if (400..500).contains(&status) && status != 404 {
+            // 403, 429 and the like: t.me may have flagged this identity.
+            // 404 is a channel that does not exist.
+            self.retired.store(true, Ordering::Relaxed);
+        } else if !self.had_cookies.load(Ordering::Relaxed) && !self.jar.is_empty() {
+            self.had_cookies.store(true, Ordering::Relaxed);
+        }
+    }
+}
+
+/// A pooled HTTP/2 client with one browser identity at a time.
 #[derive(Clone)]
 pub struct Client {
-    inner: wreq::Client,
+    factory: Arc<Factory>,
+    session: Arc<RwLock<Arc<Session>>>,
     base: String,
     origin: HeaderValue,
     navigation: HeaderMap,
@@ -132,36 +233,32 @@ impl Client {
     /// # Errors
     ///
     /// [`Error::Config`] for an unknown or non-Chromium profile, an unknown
-    /// platform, a base URL that is not `http(s)://host[:port]`, or a header
-    /// value that is not valid.
+    /// platform (or iOS for [`chrome::NAME`]), a base URL that is not
+    /// `http(s)://host[:port]`, or a header value that is not valid.
     pub fn new(options: &Options) -> Result<Self, Error> {
         let base = options.base_url.trim_end_matches('/').to_owned();
         let origin = origin_of(&base)?;
-        let emulation = emulation(
+        let mut emulation = emulation(
             &options.profile,
             &options.platform,
             &options.accept_language,
         )?;
         let navigation = emulation.headers.clone();
+        emulation.orig_headers = navigation_order(&navigation);
         let xhr = xhr_headers(&navigation);
-        let inner = wreq::Client::builder()
-            .emulation(emulation)
-            .gzip(true)
-            .brotli(true)
-            .zstd(true)
-            .deflate(true)
-            .redirect(wreq::redirect::Policy::none())
-            .timeout(options.timeout)
-            .connect_timeout(options.timeout.min(MAX_CONNECT))
-            .pool_idle_timeout(POOL_IDLE)
-            .build()
-            .map_err(|err| Error::Config(chain(&err)))?;
+        let factory = Factory {
+            emulation,
+            timeout: options.timeout,
+            lifetime: options.session_lifetime,
+        };
+        let session = factory.session(1)?;
         let mut xhr_order = OrigHeaderMap::with_capacity(XHR_ORDER.len());
         for name in XHR_ORDER {
             xhr_order.insert(HeaderName::from_static(name));
         }
         Ok(Self {
-            inner,
+            factory: Arc::new(factory),
+            session: Arc::new(RwLock::new(Arc::new(session))),
             base,
             origin,
             navigation,
@@ -183,6 +280,35 @@ impl Client {
             .get(USER_AGENT)
             .and_then(|value| value.to_str().ok())
             .unwrap_or_default()
+    }
+
+    /// Number of the current session: 1 for the first, one more for each
+    /// that replaced it (counted when a request needs a new one).
+    #[must_use]
+    pub fn session_id(&self) -> u64 {
+        self.session
+            .read()
+            .unwrap_or_else(PoisonError::into_inner)
+            .id
+    }
+
+    /// The session for a request starting now, after replacing one that is
+    /// over.
+    fn current_session(&self) -> Result<Arc<Session>, Error> {
+        let now = Instant::now();
+        let current = Arc::clone(&self.session.read().unwrap_or_else(PoisonError::into_inner));
+        if !current.is_over(now) {
+            return Ok(current);
+        }
+        let mut slot = self.session.write().unwrap_or_else(PoisonError::into_inner);
+        // Another request may have replaced it while this one waited.
+        if slot.is_over(now) {
+            let next = self.factory.session(slot.id + 1)?;
+            *slot = Arc::new(next);
+        }
+        let session = Arc::clone(&slot);
+        drop(slot);
+        Ok(session)
     }
 
     /// Send one request to `path` on the base URL.
@@ -211,9 +337,16 @@ impl Client {
         }
         let url = format!("{}{}{}", self.base, path, query_string(query)?);
         let extra = header_map(extra)?;
+        if extra.contains_key(COOKIE) {
+            // The session's jar is the only source of cookies.
+            return Err(Error::Other("cookies come from the session".into()));
+        }
         let is_xhr = method == Method::POST && extra.contains_key("x-requested-with");
+        let session = self
+            .current_session()
+            .map_err(|err| Error::Other(err.to_string()))?;
 
-        let mut request = self.inner.request(method.clone(), url);
+        let mut request = session.inner.request(method.clone(), url);
         if is_xhr {
             let mut headers = self.xhr.clone();
             headers.insert(ORIGIN, self.origin.clone());
@@ -236,6 +369,7 @@ impl Client {
 
         let response = request.send().await.map_err(|err| classify(&err))?;
         let status = response.status().as_u16();
+        session.observe(status);
         let text = response.text().await.map_err(|err| classify(&err))?;
         Ok(Response { status, text })
     }
@@ -243,9 +377,11 @@ impl Client {
 
 impl fmt::Debug for Client {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        // Never the jar: cookies are the session's secret.
         f.debug_struct("Client")
             .field("base", &self.base)
             .field("user_agent", &self.user_agent())
+            .field("session", &self.session_id())
             .finish_non_exhaustive()
     }
 }
@@ -269,11 +405,16 @@ fn emulation(
     platform: &str,
     accept_language: &str,
 ) -> Result<wreq::Emulation, Error> {
-    let mut emulation = Emulation::builder()
-        .profile(parse_profile(profile)?)
-        .platform(parse_platform(platform)?)
-        .build()
-        .into_emulation();
+    let platform = parse_platform(platform)?;
+    let mut emulation = if profile == chrome::NAME {
+        chrome::emulation(platform).map_err(Error::Config)?
+    } else {
+        Emulation::builder()
+            .profile(parse_profile(profile)?)
+            .platform(platform)
+            .build()
+            .into_emulation()
+    };
     let language = HeaderValue::from_str(accept_language)
         .map_err(|_| Error::Config("accept_language is not a valid header value".into()))?;
     // Replacing a value keeps its place in the profile's header order.
@@ -281,13 +422,31 @@ fn emulation(
     Ok(emulation)
 }
 
-/// Names of the profiles [`Options::profile`] accepts.
+/// The order of a navigation's headers: the profile's, with `cookie` where
+/// Chromium puts it, between `accept-language` and `priority`.
+fn navigation_order(headers: &HeaderMap) -> OrigHeaderMap {
+    let mut order = OrigHeaderMap::with_capacity(headers.keys_len() + 1);
+    for name in headers.keys() {
+        if name == "priority" {
+            order.insert(COOKIE);
+        }
+        order.insert(name.clone());
+    }
+    if !headers.contains_key("priority") {
+        order.insert(COOKIE);
+    }
+    order
+}
+
+/// Names of the profiles [`Options::profile`] accepts, oldest first: those
+/// of `wreq-util`, then ours ([`chrome::NAME`]).
 #[must_use]
 pub fn profiles() -> Vec<String> {
     Profile::VARIANTS
         .iter()
         .filter_map(|profile| Some(serde_json::to_value(profile).ok()?.as_str()?.to_owned()))
         .filter(|name| is_chromium(name))
+        .chain([chrome::NAME.to_owned()])
         .collect()
 }
 
@@ -301,7 +460,7 @@ fn parse_profile(name: &str) -> Result<Profile, Error> {
     let unknown = || {
         Error::Config(format!(
             "unknown browser profile {name:?}; Chromium profiles such as {:?} are supported",
-            profiles().last().map_or("chrome_149", String::as_str)
+            chrome::NAME
         ))
     };
     if !is_chromium(name) {
@@ -448,6 +607,7 @@ mod tests {
             platform: platform.into(),
             accept_language: "ru".into(),
             timeout: Duration::from_secs(5),
+            session_lifetime: None,
         }
     }
 
@@ -456,13 +616,23 @@ mod tests {
     }
 
     #[test]
-    fn profiles_are_chromium_and_parse() {
+    fn profiles_are_chromium_and_build() {
         let all = profiles();
         assert!(all.iter().any(|name| name == "chrome_149"));
+        assert_eq!(all.last().map(String::as_str), Some(chrome::NAME));
         assert!(all.iter().all(|name| is_chromium(name)));
         for name in &all {
-            assert!(parse_profile(name).is_ok(), "{name}");
+            assert!(emulation(name, "android", "ru").is_ok(), "{name}");
         }
+    }
+
+    #[test]
+    fn our_profile_rejects_ios_and_the_rest_allow_it() {
+        assert!(matches!(
+            emulation(chrome::NAME, "ios", "ru"),
+            Err(Error::Config(_))
+        ));
+        assert!(emulation("chrome_149", "ios", "ru").is_ok());
     }
 
     #[test]
@@ -479,7 +649,7 @@ mod tests {
 
     #[tokio::test]
     async fn navigation_headers_follow_the_profile() {
-        let client = Client::new(&options("chrome_149", "android")).unwrap();
+        let client = Client::new(&options(chrome::NAME, "android")).unwrap();
         let headers = client.navigation_headers();
         assert_eq!(
             names(headers),
@@ -502,9 +672,41 @@ mod tests {
         assert_eq!(headers["accept-language"], "ru");
         assert_eq!(headers["sec-ch-ua-mobile"], "?1");
         assert_eq!(headers["sec-ch-ua-platform"], "\"Android\"");
+        assert!(headers["accept"].to_str().unwrap().contains("image/jxl"));
         let ua = client.user_agent();
-        assert!(ua.contains("Chrome/149.") && ua.contains("Mobile"), "{ua}");
-        assert!(headers["sec-ch-ua"].to_str().unwrap().contains("v=\"149\""));
+        assert!(ua.contains("Chrome/156.") && ua.contains("Mobile"), "{ua}");
+        assert!(headers["sec-ch-ua"].to_str().unwrap().contains("v=\"156\""));
+    }
+
+    #[test]
+    fn cookie_goes_before_priority() {
+        let names = |order: &OrigHeaderMap| -> Vec<String> {
+            order
+                .into_iter()
+                .map(|(name, _)| name.as_str().to_owned())
+                .collect()
+        };
+        let mut headers = HeaderMap::new();
+        headers.insert(ACCEPT_LANGUAGE, HeaderValue::from_static("ru"));
+        headers.insert("priority", HeaderValue::from_static("u=0, i"));
+        assert_eq!(
+            names(&navigation_order(&headers)),
+            ["accept-language", "cookie", "priority"]
+        );
+        headers.remove("priority");
+        assert_eq!(
+            names(&navigation_order(&headers)),
+            ["accept-language", "cookie"]
+        );
+    }
+
+    #[test]
+    fn lifetime_jitter_stays_in_range() {
+        let lifetime = Duration::from_hours(4);
+        for _ in 0..1000 {
+            let jittered = jittered(lifetime);
+            assert!(jittered >= lifetime.mul_f64(0.75) && jittered <= lifetime.mul_f64(1.25));
+        }
     }
 
     #[tokio::test]
@@ -550,6 +752,7 @@ mod tests {
             debug.contains("https://t.me") && debug.contains("Chrome/149."),
             "{debug}"
         );
+        assert!(debug.contains("session: 1"), "{debug}");
     }
 
     #[test]

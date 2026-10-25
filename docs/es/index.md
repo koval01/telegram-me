@@ -95,7 +95,8 @@ curl https://tme.koval-dev.org/v1/body/durov
 - **wreq** (Rust: tokio, BoringSSL) para todo el tráfico hacia t.me: un único
   cliente HTTP/2 con pool de conexiones fuera del GIL, cuyos TLS, HTTP/2 y
   cabeceras coinciden con un navegador
-  ([Cliente HTTP](internals/http-client.md)); pyreqwest como alternativa.
+  ([Cliente HTTP](internals/http-client.md)); pyreqwest se mantiene, pero no
+  se usa en producción.
 - **telegram-me-native** (Rust, de este proyecto) para el análisis de HTML
   (html5ever) y la clasificación del feed.
 - **granian** (Rust) como servidor HTTP, con **uvloop** (C) como bucle de

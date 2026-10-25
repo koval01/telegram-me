@@ -103,7 +103,7 @@ la API.
 |---|---|---|
 | Servidor HTTP, supervisión de workers | granian | Rust |
 | Bucle de eventos | uvloop | C (libuv) |
-| HTTP/2 saliente, TLS, pool de conexiones, descompresión | wreq (`telegram-me-native`); pyreqwest como alternativa | Rust (tokio, BoringSSL) |
+| HTTP/2 saliente, TLS, pool de conexiones, descompresión | wreq (`telegram-me-native`); pyreqwest, sin uso en producción | Rust (tokio, BoringSSL) |
 | Análisis y extracción de HTML | `telegram-me-native` (html5ever, selectors, regex) | Rust |
 | Validación, JSON (respuestas y caché) | pydantic-core | Rust |
 | Protocolo de Redis | hiredis | C |

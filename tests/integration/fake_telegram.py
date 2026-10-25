@@ -6,21 +6,28 @@ Runs inside the application image (standard library only), started by
 `<channel>_m<N>` with the pages of `<channel>`, so every test can use
 channels no other test has cached, and it counts what it serves:
 
-    GET    /__requests        {"total": 3, "paths": {"GET /s/durov_m1": 1, ...}}
+    GET    /__requests        {"total": 3, "paths": {"GET /s/durov_m1": 1, ...},
+                               "cookies": {"issued": 1, "returned": 2}}
     DELETE /__requests        reset the counts
     PUT    /__delay?seconds=1 answer every page request that much later
     GET    /__health          200 once listening
 
 Unrecorded requests are answered 404 and counted under `unmatched`.
+
+Like t.me, every page sets a `stel_ssid` session cookie on a request that does
+not carry a valid one (without `secure`: this is plain HTTP), so the tests can
+see the client keep it and send it back.
 """
 
 import gzip
 import json
 import os
+import secrets
 import sys
 import threading
 import time
 from collections import Counter
+from http.cookies import SimpleCookie
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from typing import Any, override
@@ -62,6 +69,8 @@ class State:
         }
         self.lock = threading.Lock()
         self.counts: Counter[str] = Counter()
+        self.sessions: set[str] = set()
+        self.cookies: Counter[str] = Counter()
         self.delay = 0.0
 
 
@@ -77,8 +86,12 @@ class Handler(BaseHTTPRequestHandler):
     def log_message(self, format: str, *args: Any) -> None:
         """Quiet: the tests read the counters instead."""
 
-    def _send(self, status: int, body: bytes, content_type: str = "application/json") -> None:
+    def _send(
+        self, status: int, body: bytes, content_type: str = "application/json", cookie: str = ""
+    ) -> None:
         self.send_response(status)
+        if cookie:
+            self.send_header("set-cookie", f"stel_ssid={cookie}; path=/; samesite=None; HttpOnly")
         self.send_header("content-type", content_type)
         self.send_header("content-length", str(len(body)))
         if status == 302:
@@ -92,11 +105,14 @@ class Handler(BaseHTTPRequestHandler):
         elif path == "/__requests" and method == "GET":
             with STATE.lock:
                 counts = dict(STATE.counts)
+                cookies = dict(STATE.cookies)
             total = sum(n for name, n in counts.items() if name != "unmatched")
-            self._send(200, json.dumps({"total": total, "paths": counts}).encode())
+            body = {"total": total, "paths": counts, "cookies": cookies}
+            self._send(200, json.dumps(body).encode())
         elif path == "/__requests" and method == "DELETE":
             with STATE.lock:
                 STATE.counts.clear()
+                STATE.cookies.clear()
             self._send(204, b"")
         elif path == "/__delay" and method == "PUT":
             STATE.delay = float(params.get("seconds", "0"))
@@ -122,7 +138,19 @@ class Handler(BaseHTTPRequestHandler):
             self._send(404, b"", "text/html")
             return
         status, content_type, body = response
-        self._send(status, body, content_type)
+        self._send(status, body, content_type, self._session())
+
+    def _session(self) -> str:
+        """A new session cookie, or "" when the request sent back a known one."""
+        sent = SimpleCookie(self.headers.get("cookie", "")).get("stel_ssid")
+        with STATE.lock:
+            if sent is not None and sent.value in STATE.sessions:
+                STATE.cookies["returned"] += 1
+                return ""
+            cookie = secrets.token_hex(16)
+            STATE.sessions.add(cookie)
+            STATE.cookies["issued"] += 1
+        return cookie
 
     def do_GET(self) -> None:
         """Serve a GET."""
