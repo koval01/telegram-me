@@ -9,6 +9,8 @@
 # 2. Every other server: deploy the same way.
 # 3. With $PUBLIC_URL: the smoke test through the public entry point
 #    (Cloudflare, Caddy), with the x-bypass-key header when $BYPASS_KEY is set.
+#    Invalid requests may get Cloudflare's firewall block instead of the API's
+#    422: schema validation rejects them at the edge.
 #
 # When any step fails after a server took the release, every server that
 # took it is rolled back (remote-deploy.sh --rollback), so the fleet never
@@ -96,7 +98,7 @@ if [[ -n "${PUBLIC_URL:-}" && "$smoke" == 1 ]]; then
   passed=false
   for attempt in 1 2; do
     if python3 scripts/smoke_matrix.py --base-url "$PUBLIC_URL" --preset auto --timeout 30 \
-      --exploratory-channels "" "${headers[@]}" > public-smoke.log 2>&1; then
+      --exploratory-channels "" --edge-blocks-invalid "${headers[@]}" > public-smoke.log 2>&1; then
       passed=true
       break
     fi
