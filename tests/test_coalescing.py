@@ -95,7 +95,8 @@ async def call(app: FastAPI, method: str, path: str, body: Any = None) -> Reply:
             (b"content-type", b"application/json"),
             (b"content-length", str(len(payload)).encode()),
         ],
-        "client": ("127.0.0.1", 50000),
+        # Not loopback: local requests skip the rate limit.
+        "client": ("192.0.2.10", 50000),
         "server": ("test", 80),
     }
     reply = Reply(0, {}, b"")

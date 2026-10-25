@@ -198,8 +198,10 @@ Some requests are served without a proof: the pages a browser loads before
 it can solve one (the landing page `/`, `/api`, `/openapi.json`, `/docs/…`
 and `/static/…`), `/robots.txt`, `/sitemap.xml`, `/healthz`,
 `/v1/pow/challenge` itself, the GraphiQL page (`GET /graphql` without a
-query) and CORS preflights (`OPTIONS`). The rate limit has no exemptions:
-those pages count like any other request. GraphQL
+query) and CORS preflights (`OPTIONS`). The rate limit counts those pages
+like any other request; it skips only requests from the server itself, made
+over loopback and not forwarded by a proxy (health checks, the deploy's smoke
+test). A forwarded `X-Forwarded-For: 127.0.0.1` is not local. GraphQL
 queries (`POST /graphql`) need a proof like any other request, with
 `POST /graphql` as method and target.
 

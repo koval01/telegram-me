@@ -6,6 +6,13 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Changed
+
+- The rate limit no longer counts requests from the server itself: over
+  loopback and not forwarded by a proxy, such as health checks and the deploy's
+  smoke test. A smaller `RATE_LIMIT_BURST` no longer fails the smoke test of a
+  deploy. A forwarded `X-Forwarded-For: 127.0.0.1` still counts.
+
 ### Fixed
 
 - GraphQL errors are listed in the order their fields appear in the query.

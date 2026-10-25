@@ -196,6 +196,8 @@ JSON-список разрешённых origin для браузеров, на�
 [`RATE_LIMIT_RPM`](#rate_limit_rpm) в минуту. При превышении API отвечает `429`
 с `Retry-After`. За прокси укажите
 [`FORWARDED_ALLOW_IPS`](#forwarded_allow_ips), чтобы учитывался настоящий IP клиента.
+Запросы самого сервера (через loopback и не проксированные), например
+health check и smoke-тест деплоя, не ограничиваются.
 
 ### `RATE_LIMIT_RPM`
 

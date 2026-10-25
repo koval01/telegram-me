@@ -6,6 +6,10 @@ Both are off by default and switched on by the server owner
 run in one pure ASGI middleware before routing, so a rejected request never
 reaches validation, the cache or t.me.
 
+Requests made on the server itself are not rate limited: health checks and
+the deploy's smoke test connect over loopback, and a forwarded request never
+counts as local (see `keep_socket_peer`).
+
 Order: the rate limit first (one map lookup), then proof of work. Rejected
 proofs count against the rate limit, which bounds how fast anyone can probe.
 
@@ -24,6 +28,7 @@ it until it expires, and solve it once per request.
 """
 
 import asyncio
+import ipaddress
 import json
 import logging
 import math
@@ -51,8 +56,8 @@ POW_CHALLENGE_PATH = "/v1/pow/challenge"
 # Paths served without proof of work: pages a browser loads before it can
 # solve one (the landing page, the API reference, the docs and their static
 # files), what crawlers read, health checks and the challenge itself.
-# GraphiQL is exempt only as a page (GET without query). The rate limit has
-# no exemptions.
+# GraphiQL is exempt only as a page (GET without query). The rate limit
+# exempts only local requests (`_local`).
 _POW_EXEMPT = frozenset(
     {
         "/",
@@ -85,6 +90,8 @@ EXPOSED_HEADERS = [
     "X-PoW-Difficulty",
     "X-PoW-Expires",
 ]
+# Where `keep_socket_peer` puts the connection's own address.
+SOCKET_PEER = "telegram_me.socket_peer"
 # Shared rate limit: how often counts are pushed and the most clients per push.
 _SYNC_INTERVAL = 1.0
 _SYNC_MAX_CLIENTS = 2000
@@ -137,7 +144,7 @@ class ProtectionMiddleware:
         extra: list[tuple[bytes, bytes]] = []
 
         limiter = self._protection.limiter
-        if limiter is not None:
+        if limiter is not None and not _local(scope):
             allowed, remaining, retry_after = limiter.check(ip or "unknown")
             limit = str(self._protection.per_minute).encode()
             if not allowed:
@@ -188,6 +195,33 @@ class ProtectionMiddleware:
             await send(message)
 
         await self.app(scope, receive, send_with_headers)
+
+
+def keep_socket_peer(app: ASGIApp) -> ASGIApp:
+    """Record the TCP peer before the proxy-headers wrapper rewrites `client`.
+
+    Wrap the proxy-headers wrapper with this, so `_local` can tell a
+    connection from loopback apart from a forwarded `X-Forwarded-For:
+    127.0.0.1`.
+    """
+
+    async def wrapped(scope: Scope, receive: Receive, send: Send) -> None:
+        if scope["type"] == "http":
+            scope[SOCKET_PEER] = scope.get("client")
+        await app(scope, receive, send)
+
+    return wrapped
+
+
+def _local(scope: Scope) -> bool:
+    """A request from this machine itself: over loopback and not forwarded."""
+    client = scope.get("client")
+    if not client or scope.get(SOCKET_PEER, client) != client:
+        return False
+    try:
+        return ipaddress.ip_address(client[0]).is_loopback
+    except ValueError:
+        return False
 
 
 def _pow_exempt(scope: Scope) -> bool:
