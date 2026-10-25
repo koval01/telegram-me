@@ -1,16 +1,14 @@
 # syntax=docker/dockerfile:1.10
-ARG PYTHON_VERSION=3.14
-ARG UV_VERSION=0.13.5
-ARG RUST_VERSION=1.99
-
-FROM ghcr.io/astral-sh/uv:${UV_VERSION} AS uv
-FROM rust:${RUST_VERSION}-slim-trixie AS rust
+# Base images are pinned by digest as well as tag: a tag can be moved, a
+# digest cannot. Dependabot (docker) updates both together.
+FROM ghcr.io/astral-sh/uv:0.13.5@sha256:32a7bb39b496babbd997b0a39a4d66c126bdaf5661b302bf6f06abda8deca6ff AS uv
+FROM rust:1.99-slim-trixie@sha256:1a939748a7cbab172de91a014e3804a97af1394a8c844faa67fce9401c4e40fb AS rust
 
 # ---------------------------------------------------------------------------
 # Build: locked Python dependencies, then the native Rust extension, then the
 # project. Each step is its own layer: Python-only changes do not recompile Rust.
 # ---------------------------------------------------------------------------
-FROM python:${PYTHON_VERSION}-slim-trixie AS build
+FROM python:3.14-slim-trixie@sha256:35caba83af2fe6da9a5d922f9b0156f21d1246a48278c58a08bd253303ba42e8 AS build
 COPY --from=uv /uv /usr/local/bin/uv
 COPY --from=rust /usr/local/cargo /usr/local/cargo
 COPY --from=rust /usr/local/rustup /usr/local/rustup
@@ -54,7 +52,7 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 # ---------------------------------------------------------------------------
 # Runtime: only the virtualenv, an unprivileged user and no build tooling.
 # ---------------------------------------------------------------------------
-FROM python:${PYTHON_VERSION}-slim-trixie AS runtime
+FROM python:3.14-slim-trixie@sha256:35caba83af2fe6da9a5d922f9b0156f21d1246a48278c58a08bd253303ba42e8 AS runtime
 
 ARG VERSION=dev
 ARG REVISION=unknown

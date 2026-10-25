@@ -6,6 +6,17 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Security
+
+- The Dockerfile's base images (uv, Rust, Python) are pinned by digest as well
+  as by tag; Dependabot updates both. OpenSSF Scorecard flagged the tag-only
+  `FROM` lines (Pinned-Dependencies).
+
+### Fixed
+
+- The nightly fuzzing job builds for the host target. The prebuilt
+  cargo-fuzz defaulted to musl, which the nightly toolchain lacks (issue #217).
+
 ### Added
 
 - **Browser-consistent HTTP client for t.me** (`TELEGRAM_CLIENT=browser`, the
