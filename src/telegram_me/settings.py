@@ -142,10 +142,15 @@ class Settings(BaseSettings):
     """HTTP client for t.me. `browser`: TLS handshake, HTTP/2 settings and headers
     all come from TELEGRAM_BROWSER_PROFILE (wreq, BoringSSL). `reqwest`: the
     profile's headers over rustls and hyper, whose fingerprints differ."""
-    telegram_browser_profile: str = "chrome_149"
-    """Browser the requests to t.me claim to be (a Chromium profile of wreq-util)."""
+    telegram_browser_profile: str = "chrome_156"
+    """Browser the requests to t.me claim to be: our current Chrome (`chrome_156`)
+    or a Chromium profile of wreq-util."""
     telegram_browser_platform: BrowserPlatform = "android"
     """Platform of that browser: its User-Agent and sec-ch-ua-platform/-mobile."""
+    telegram_session_lifetime: NonNegativeFloat = 14400.0
+    """Seconds one browser identity (t.me's cookies, connections) lives, +-25 %
+    jitter, before `browser` starts a fresh one; 0 keeps it until its cookies
+    expire or t.me answers a 4xx other than 404."""
     upstream_queue_limit: PositiveInt | None = None
     """Requests a worker lets wait for a free upstream slot; beyond it, 503 with
     Retry-After (default: 16 per TELEGRAM_MAX_CONCURRENCY slot)."""

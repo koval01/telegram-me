@@ -95,7 +95,8 @@ curl https://tme.koval-dev.org/v1/body/durov
 - **FastAPI + Pydantic v2** — HTTP-слой и строгие модели ответов.
 - **wreq** (Rust: tokio, BoringSSL) — весь трафик к t.me: один HTTP/2-клиент
   с пулом соединений вне GIL, у которого TLS, HTTP/2 и заголовки совпадают с
-  одним браузером ([HTTP-клиент](internals/http-client.md)); pyreqwest — запасной.
+  одним браузером ([HTTP-клиент](internals/http-client.md)); pyreqwest
+  остался, но в продакшене не используется.
 - **telegram-me-native** (Rust, часть этого проекта) — разбор HTML (html5ever)
   и ранжирование ленты.
 - **granian** (Rust) — HTTP-сервер, **uvloop** (C) — цикл событий.

@@ -535,7 +535,7 @@ impl PyBrowserClient {
 #[pymethods]
 impl PyBrowserClient {
     #[new]
-    #[pyo3(signature = (*, base_url, profile, platform, accept_language, timeout))]
+    #[pyo3(signature = (*, base_url, profile, platform, accept_language, timeout, session_lifetime))]
     fn new(
         py: Python<'_>,
         base_url: String,
@@ -543,17 +543,22 @@ impl PyBrowserClient {
         platform: String,
         accept_language: String,
         timeout: f64,
+        session_lifetime: f64,
     ) -> PyResult<Self> {
         let timeout = Duration::try_from_secs_f64(timeout)
             .ok()
             .filter(|t| !t.is_zero())
             .ok_or_else(|| PyValueError::new_err("timeout must be positive"))?;
+        // 0 keeps a session until its cookies expire or t.me rejects it.
+        let session_lifetime = Duration::try_from_secs_f64(session_lifetime)
+            .map_err(|_| PyValueError::new_err("session_lifetime must be 0 or more"))?;
         let options = http::Options {
             base_url,
             profile,
             platform,
             accept_language,
             timeout,
+            session_lifetime: (!session_lifetime.is_zero()).then_some(session_lifetime),
         };
         // Building the TLS context takes a few milliseconds; once per process.
         let client = py
@@ -609,6 +614,12 @@ impl PyBrowserClient {
     #[getter]
     fn headers(&self) -> Vec<(String, String)> {
         self.headers.clone()
+    }
+
+    /// Number of the current browser identity (1, then one more per new one).
+    #[getter]
+    fn session(&self) -> PyResult<u64> {
+        Ok(self.client()?.session_id())
     }
 }
 

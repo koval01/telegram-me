@@ -48,7 +48,7 @@ canary and fleet rollback. The `/v1` and GraphQL contracts are unchanged.
 
 - **Browser-consistent HTTP client for t.me** (`TELEGRAM_CLIENT=browser`, the
   new default). It is native: wreq on BoringSSL, in `telegram-me-native`. One
-  profile (`TELEGRAM_BROWSER_PROFILE=chrome_149` on
+  profile (`TELEGRAM_BROWSER_PROFILE=chrome_156` on
   `TELEGRAM_BROWSER_PLATFORM=android`) sets the TLS handshake, the HTTP/2
   settings and the headers, so they all describe the same browser.
   - JA4 and the Akamai HTTP/2 fingerprint change from rustls/hyper
@@ -57,8 +57,24 @@ canary and fleet rollback. The `/v1` and GraphQL contracts are unchanged.
     `docs/internals/http-client.md`.
   - The "load more" call goes out as the page's XHR (`sec-fetch-mode: cors`,
     `origin`, `referer`, Chromium's header order), not as a navigation.
-  - `TELEGRAM_CLIENT=reqwest` keeps pyreqwest as a fallback.
+  - `TELEGRAM_CLIENT=reqwest` keeps pyreqwest; it is not used in production.
   - `scripts/fingerprint.py` measures both clients against a TLS echo service.
+  - **Our own profile of the current stable Chrome**, `chrome_156`, is the
+    default; the wreq-util profiles (newest `chrome_149`) stay selectable. It
+    claims Chrome 156 in the `User-Agent` and `sec-ch-ua` (whose GREASE brand
+    is derived from the version as Chromium does), sends `image/jxl` in
+    `accept` as Chrome 155+ does, and the HTTP/2 `HEADERS` priority weight
+    256 that Chrome sends (wreq-util sends 220). The TLS handshake is
+    unchanged: the BoringSSL that wreq builds can not offer the ML-DSA
+    signature algorithms (it rejects them), a GREASE signature algorithm or
+    the `trust_anchors` extension that Chrome 155 sends; see
+    `docs/internals/http-client.md`.
+  - **Cookies like a browser**: the client keeps the cookie t.me sets
+    (`stel_ssid`) and sends it back, `cookie` placed where Chromium puts it.
+    Each worker has one browser identity (jar, connections, TLS tickets),
+    renewed after `TELEGRAM_SESSION_LIFETIME` (new, default 4 hours ±25 %),
+    when its cookies expire, or after a 4xx other than 404. Cookies stay in
+    the native client: never in a response, a log or the cache.
 - **Peer layer** (`ENABLE_PEERS`, off by default): nodes on a private network
   share their work directly, groupcache-style, with or without Redis. See
   [Deployment → Peer layer](https://koval01.github.io/telegram-me/deployment/peers/).

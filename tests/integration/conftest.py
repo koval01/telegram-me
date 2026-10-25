@@ -97,7 +97,7 @@ class Upstream:
         self.http.put(f"{UPSTREAM}/__delay", params={"seconds": delay}).raise_for_status()
 
     def counts(self) -> dict[str, Any]:
-        """`{"total": n, "paths": {"GET /s/x": n, ...}}` since the last reset."""
+        """`{"total": n, "paths": {"GET /s/x": n, ...}, "cookies": {...}}` since the last reset."""
         response = self.http.get(f"{UPSTREAM}/__requests")
         response.raise_for_status()
         counts: dict[str, Any] = response.json()

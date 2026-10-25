@@ -6,7 +6,9 @@ Networking is delegated to a `Fetcher`; `TELEGRAM_CLIENT` picks one:
   browser profile, but its TLS and HTTP/2 fingerprints are those of rustls and
   hyper, not of the browser the headers claim;
 - `BrowserFetcher` (native, wreq on BoringSSL) takes the TLS handshake, the
-  HTTP/2 settings and the headers from one profile, so they agree.
+  HTTP/2 settings and the headers from one profile, so they agree, and keeps
+  t.me's cookies like a browser, one identity per worker that it renews
+  every `TELEGRAM_SESSION_LIFETIME`.
 
 Both run the request in Rust outside the GIL; Python only awaits the result and
 hands the HTML to the native parser.
@@ -45,8 +47,9 @@ type Direction = Literal["before", "after"]
 
 TELEGRAM_BASE_URL = "https://t.me"
 TELEGRAM_ACCEPT_LANGUAGE = "ru"
-DEFAULT_BROWSER_PROFILE = "chrome_149"
+DEFAULT_BROWSER_PROFILE = "chrome_156"
 DEFAULT_BROWSER_PLATFORM = "android"
+DEFAULT_SESSION_LIFETIME = 4 * 3600.0
 
 
 class FetchResult(NamedTuple):
@@ -142,6 +145,12 @@ class BrowserFetcher:
     profile; connections are pooled HTTP/2, bodies gzip/br/zstd. A POST with
     `x-requested-with` goes out as the channel page's XHR, the way a browser
     sends the "load more" call.
+
+    The cookies t.me sets (`stel_ssid`) are kept in a jar inside the native
+    client and sent back; they never reach Python, so not a response, a log
+    line or the cache either. The jar, with the connections, is replaced by a
+    fresh one after `session_lifetime` seconds (+-25 %), when its cookies
+    expire, or after a 4xx other than 404.
     """
 
     def __init__(
@@ -151,6 +160,7 @@ class BrowserFetcher:
         *,
         profile: str = DEFAULT_BROWSER_PROFILE,
         platform: str = DEFAULT_BROWSER_PLATFORM,
+        session_lifetime: float = DEFAULT_SESSION_LIFETIME,
     ) -> None:
         self._client = BrowserClient(
             base_url=base_url,
@@ -158,6 +168,7 @@ class BrowserFetcher:
             platform=platform,
             accept_language=TELEGRAM_ACCEPT_LANGUAGE,
             timeout=timeout,
+            session_lifetime=session_lifetime,
         )
 
     async def fetch(  # noqa: D102
@@ -187,8 +198,15 @@ class BrowserFetcher:
 
 def create_fetcher(settings: Settings) -> Fetcher:
     """The fetcher `TELEGRAM_CLIENT` selects."""
-    fetcher = BrowserFetcher if settings.telegram_client == "browser" else ReqwestFetcher
-    return fetcher(
+    if settings.telegram_client == "browser":
+        return BrowserFetcher(
+            settings.telegram_timeout,
+            settings.telegram_base_url,
+            profile=settings.telegram_browser_profile,
+            platform=settings.telegram_browser_platform,
+            session_lifetime=settings.telegram_session_lifetime,
+        )
+    return ReqwestFetcher(
         settings.telegram_timeout,
         settings.telegram_base_url,
         profile=settings.telegram_browser_profile,

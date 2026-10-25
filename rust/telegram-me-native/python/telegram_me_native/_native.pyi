@@ -160,6 +160,10 @@ class FetchNetworkError(FetchError):
 class BrowserClient:
     """HTTP client whose TLS, HTTP/2 and headers come from one browser profile.
 
+    It keeps t.me's cookies: one browser identity (cookies, connections) that
+    lives `session_lifetime` seconds with +-25 % jitter, or with 0 until its
+    cookies expire or t.me answers a 4xx other than 404.
+
     Raises `ValueError` for an unknown profile or platform or a bad base URL.
     """
 
@@ -171,6 +175,7 @@ class BrowserClient:
         platform: str,
         accept_language: str,
         timeout: float,
+        session_lifetime: float,
     ) -> Self: ...
     def fetch(
         self,
@@ -188,6 +193,9 @@ class BrowserClient:
     @property
     def headers(self) -> list[tuple[str, str]]:
         """Navigation headers in the order they are sent."""
+    @property
+    def session(self) -> int:
+        """Number of the current browser identity (1, then one more per new one)."""
 
 def browser_profiles() -> list[str]:
     """Profile names `BrowserClient` accepts (Chromium family)."""

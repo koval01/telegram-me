@@ -100,7 +100,7 @@ flowchart TB
 |---|---|---|
 | HTTP-сервер, надзор за воркерами | granian | Rust |
 | Цикл событий | uvloop | C (libuv) |
-| Исходящий HTTP/2, TLS, пул соединений, распаковка | wreq (`telegram-me-native`); pyreqwest — запасной | Rust (tokio, BoringSSL) |
+| Исходящий HTTP/2, TLS, пул соединений, распаковка | wreq (`telegram-me-native`); pyreqwest, в продакшене не используется | Rust (tokio, BoringSSL) |
 | Разбор HTML и извлечение данных | `telegram-me-native` (html5ever, selectors, regex) | Rust |
 | Валидация, JSON (ответы и кэш) | pydantic-core | Rust |
 | Протокол Redis | hiredis | C |

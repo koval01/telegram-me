@@ -1,5 +1,6 @@
 """Both fetchers against a real local HTTP server (no internet required)."""
 
+import asyncio
 import gzip
 import json
 import re
@@ -45,9 +46,16 @@ class _Handler(BaseHTTPRequestHandler):
                 "body": self.rfile.read(length).decode(),
             }
         ).encode()
-        status = 404 if self.path.startswith("/missing") else 200
+        status = 200
+        if self.path.startswith("/missing"):
+            status = 404
+        elif self.path.startswith("/forbidden"):
+            status = 403
         body = gzip.compress(payload)
         self.send_response(status)
+        if self.path.startswith("/cookie"):
+            # As t.me does on every page, minus `secure` (this is plain HTTP).
+            self.send_header("set-cookie", "stel_ssid=session; path=/; samesite=None; HttpOnly")
         self.send_header("content-type", "application/json")
         self.send_header("content-encoding", "gzip")
         self.send_header("content-length", str(len(body)))
@@ -116,9 +124,9 @@ async def test_get_decodes_gzip_and_sends_profile_headers(
     )
     headers = _headers(echo)
     assert echo["path"] == "/s/durov?before=10"
-    assert "Chrome/149." in headers["user-agent"]
+    assert "Chrome/156." in headers["user-agent"]
     assert "Mobile" in headers["user-agent"]
-    assert 'v="149"' in headers["sec-ch-ua"]
+    assert 'v="156"' in headers["sec-ch-ua"]
     assert headers["sec-ch-ua-mobile"] == "?1"
     assert headers["sec-ch-ua-platform"] == '"Android"'
     assert headers["accept-language"] == "ru"
@@ -206,6 +214,44 @@ async def test_browser_xhr_looks_like_the_page_script(server_url: str) -> None:
     assert headers["accept"].startswith("application/json")
     assert "sec-fetch-user" not in headers
     assert "upgrade-insecure-requests" not in headers
+
+
+async def test_browser_keeps_cookies_and_renews_the_session(server_url: str) -> None:
+    fetcher = BrowserFetcher(5, base_url=server_url)
+    try:
+        await fetcher.fetch("GET", "/cookie")
+        page = json.loads((await fetcher.fetch("GET", "/s/durov")).text)
+        assert _headers(page)["cookie"] == "stel_ssid=session"
+        more = await fetcher.fetch(
+            "POST", "/s/durov", query={"before": 9}, headers={"x-requested-with": "XMLHttpRequest"}
+        )
+        assert _headers(json.loads(more.text))["cookie"] == "stel_ssid=session"
+        assert fetcher._client.session == 1
+        # A 4xx other than 404 ends the identity: no cookie on the next request.
+        assert (await fetcher.fetch("GET", "/forbidden")).status == 403
+        page = json.loads((await fetcher.fetch("GET", "/s/durov")).text)
+        assert "cookie" not in _headers(page)
+        assert fetcher._client.session == 2
+    finally:
+        await fetcher.close()
+
+
+async def test_session_lifetime_reaches_the_browser_fetcher(server_url: str) -> None:
+    settings = make_settings(telegram_base_url=server_url, telegram_session_lifetime=0.05)
+    fetcher = create_fetcher(settings)
+    try:
+        await fetcher.fetch("GET", "/cookie")
+        await asyncio.sleep(0.1)  # longer than 1.25 x the lifetime
+        page = json.loads((await fetcher.fetch("GET", "/s/durov")).text)
+        assert "cookie" not in _headers(page)
+    finally:
+        await fetcher.close()
+
+
+def test_session_lifetime_is_not_negative() -> None:
+    assert make_settings(telegram_session_lifetime=0).telegram_session_lifetime == 0
+    with pytest.raises(ValidationError, match="telegram_session_lifetime"):
+        make_settings(telegram_session_lifetime=-1)
 
 
 async def test_closed_browser_fetcher_raises_upstream_error() -> None:

@@ -94,7 +94,8 @@ curl https://tme.koval-dev.org/v1/body/durov
 - **FastAPI + Pydantic v2** for the HTTP layer and strict response models.
 - **wreq** (Rust: tokio, BoringSSL) for all traffic to t.me — one pooled
   HTTP/2 client outside the GIL whose TLS, HTTP/2 and headers match one
-  browser ([HTTP client](internals/http-client.md)); pyreqwest as a fallback.
+  browser ([HTTP client](internals/http-client.md)); pyreqwest is kept but
+  not used in production.
 - **telegram-me-native** (Rust, this project) for HTML parsing (html5ever) and feed ranking.
 - **granian** (Rust) as the HTTP server, with **uvloop** (C) as event loop.
 - An in-process cache in Rust (**moka**, zstd) per worker, in front of

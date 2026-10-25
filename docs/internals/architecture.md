@@ -98,7 +98,7 @@ background work off the API processes.
 |---|---|---|
 | HTTP server, worker supervision | granian | Rust |
 | Event loop | uvloop | C (libuv) |
-| Outgoing HTTP/2, TLS, pooling, decompression | wreq (`telegram-me-native`); pyreqwest as a fallback | Rust (tokio, BoringSSL) |
+| Outgoing HTTP/2, TLS, pooling, decompression | wreq (`telegram-me-native`); pyreqwest, not used in production | Rust (tokio, BoringSSL) |
 | HTML parsing and extraction | `telegram-me-native` (html5ever, selectors, regex) | Rust |
 | Validation, JSON (responses and cache) | pydantic-core | Rust |
 | Redis protocol | hiredis | C |
