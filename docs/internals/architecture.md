@@ -22,7 +22,7 @@ flowchart TB
     CS --> C["cache.py<br/>in-process (Rust) + Redis"]
     CS --> SF["services/coalesce.py<br/>SingleFlight"]
     SF --> TC["telegram/client.py<br/>TelegramClient"]
-    TC --> F["ReqwestFetcher<br/>pyreqwest (Rust: tokio · hyper · rustls)"]
+    TC --> F["BrowserFetcher<br/>wreq (Rust: tokio · BoringSSL)"]
     F --> T(("t.me"))
     CS --> P["telegram/parsing<br/>telegram-me-native (Rust)"]
     CS --> V["schemas<br/>pydantic-core (Rust)"]
@@ -59,9 +59,10 @@ Taking `GET /v1/body/durov` as an example:
    [Caching](caching.md#request-coalescing)).
 6. **`TelegramClient`** takes a slot of the per-process upstream gate (fair
    across channels and feed requests, `503` when its queue is full) and asks
-   **`ReqwestFetcher`** for the page; pyreqwest performs the request on
-   a pooled HTTP/2 connection in Rust, outside the GIL, and returns the decoded
-   body. A dropped connection is retried once.
+   **`BrowserFetcher`** for the page; wreq performs the request on a pooled
+   HTTP/2 connection in Rust, outside the GIL, with the TLS handshake and
+   headers of one browser ([HTTP client](http-client.md)), and returns the
+   decoded body. A dropped connection is retried once.
 7. On one of two parsing threads, **`parse_channel_page`** hands the HTML to
    the Rust parser (GIL released), which builds the tree once with html5ever
    and extracts the channel profile, pagination and every post; a post that
@@ -97,7 +98,7 @@ background work off the API processes.
 |---|---|---|
 | HTTP server, worker supervision | granian | Rust |
 | Event loop | uvloop | C (libuv) |
-| Outgoing HTTP/2, TLS, pooling, decompression | pyreqwest | Rust (tokio, hyper, rustls) |
+| Outgoing HTTP/2, TLS, pooling, decompression | wreq (`telegram-me-native`); pyreqwest as a fallback | Rust (tokio, BoringSSL) |
 | HTML parsing and extraction | `telegram-me-native` (html5ever, selectors, regex) | Rust |
 | Validation, JSON (responses and cache) | pydantic-core | Rust |
 | Redis protocol | hiredis | C |

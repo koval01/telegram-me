@@ -87,7 +87,7 @@ rare post type, add its ID to `EXTRA_POSTS` in `scripts/record_fixtures.py`.
 | File | Covers |
 |---|---|
 | `test_client.py` | URL building, status mapping, validation, the single network retry |
-| `test_fetcher.py` | `ReqwestFetcher` against a real local HTTP server: gzip, headers, empty POST bodies |
+| `test_fetcher.py` | `ReqwestFetcher` and `BrowserFetcher` against a real local HTTP server: gzip, profile headers, the XHR, empty POST bodies, timeouts, network errors |
 | `test_cache.py` | In-process cache (limit, compression, expiry), Redis backend, circuit breaker, two-level reads, fills, outage |
 | `test_memory_trim.py` | Periodic `malloc_trim` (glibc only), disabling it |
 | `test_coalesce.py` | Single-flight sharing, error propagation, cancellation safety |

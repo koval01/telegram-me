@@ -8,13 +8,25 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- **Browser-consistent HTTP client for t.me** (`TELEGRAM_CLIENT=browser`, the
+  new default). It is native: wreq on BoringSSL, in `telegram-me-native`. One
+  profile (`TELEGRAM_BROWSER_PROFILE=chrome_149` on
+  `TELEGRAM_BROWSER_PLATFORM=android`) sets the TLS handshake, the HTTP/2
+  settings and the headers, so they all describe the same browser.
+  - JA4 and the Akamai HTTP/2 fingerprint change from rustls/hyper
+    (`t13d1011h2_61a7ad8aa9b6_…`, `m,s,a,p`) to Chrome's
+    (`t13d1516h2_8daaf6152771_…`, `52d84b11…`); see
+    `docs/internals/http-client.md`.
+  - The "load more" call goes out as the page's XHR (`sec-fetch-mode: cors`,
+    `origin`, `referer`, Chromium's header order), not as a navigation.
+  - `TELEGRAM_CLIENT=reqwest` keeps pyreqwest as a fallback.
+  - `scripts/fingerprint.py` measures both clients against a TLS echo service.
 - Stricter checks on every commit and pull request (`make lint`, `make
   audit`, `make image-scan`, all in `make check`): clippy restriction lints
   and no panicking slices in the parser; cargo-deny and cargo-machete; more
   mypy error codes and ruff rule families; import-linter layer contracts;
   vulture; `uv audit`; gitleaks; zizmor; hadolint; typos; trivy on the built
   image; dependency review on pull requests; OpenSSF Scorecard.
-
 - `REDIS_CONNECT_TIMEOUT` (default 2 s): seconds to open a Redis connection,
   TLS handshake included.
 - **Deployment gates.** Every server runs the smoke test (status codes and
@@ -59,6 +71,14 @@ All notable changes to this project are documented here. The format follows
 
 ### Changed
 
+- **Request headers to t.me come from the browser profile** for both clients,
+  not from a hand-written Chrome 141 set: Chrome 149 values, Chrome's header
+  order and a quoted `sec-ch-ua-platform`. `cache-control` and `dnt`, which
+  Chrome does not send on a first visit, are gone.
+- **The Docker build stage needs cmake, clang and git** for BoringSSL. A cold
+  build takes about 75 s longer on native arm64, and about 11 min longer for
+  arm64 under QEMU, as the release workflow builds it. The runtime image grows
+  by 3–7 MB.
 - The image runs as `USER 10001:10001` (the same `app` user, by number).
 - The image's health check probes every 2 s during the first 30 s, so a new
   container is healthy (and a deployment done) within seconds instead of 30 s.

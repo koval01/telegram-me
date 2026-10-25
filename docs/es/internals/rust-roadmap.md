@@ -100,7 +100,7 @@ en que tocaba enviar cada petición, junto a un cliente que construye feeds de
 | Construcción del feed | ver arriba: 41 ms de Python con el GIL retenido por cada 100 canales | CPU (Python) | **etapa 1** |
 | Popularidad, bloqueo de líder | un pipeline de Redis por feed (`ZINCRBY` × canales), un `EVAL` por ciclo | E/S | redis-py construye el pipeline en Python |
 | Bucle de actualización | solo planificación; las páginas pasan por el canal de la página | E/S + canal de la página | ≤ 16 actualizaciones a la vez |
-| Cliente HTTP (`client.py`) | un semáforo y un await; `/v1/more` además hace `json.loads` de la respuesta (~0.2 ms) | E/S (Rust, pyreqwest) | |
+| Cliente HTTP (`client.py`) | un semáforo y un await; `/v1/more` además hace `json.loads` de la respuesta (~0.2 ms) | E/S (Rust, wreq) | |
 | GraphQL (strawberry) | ~0.85 ms por consulta además de los servicios | CPU (Python) | análisis y validación de la consulta, un resolver por campo |
 | Modelo de workers | un proceso por worker, cada uno con su intérprete, su caché L1 y su pool HTTP | memoria | ver abajo |
 

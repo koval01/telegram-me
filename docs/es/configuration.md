@@ -52,6 +52,9 @@ La fuente de verdad es
 | [`TELEGRAM_BASE_URL`](#telegram_base_url) | `https://t.me` | Origen |
 | [`TELEGRAM_TIMEOUT`](#telegram_timeout) | `10` | Origen |
 | [`TELEGRAM_MAX_CONCURRENCY`](#telegram_max_concurrency) | `32` | Origen |
+| [`TELEGRAM_CLIENT`](#telegram_client) | `browser` | Origen |
+| [`TELEGRAM_BROWSER_PROFILE`](#telegram_browser_profile) | `chrome_149` | Origen |
+| [`TELEGRAM_BROWSER_PLATFORM`](#telegram_browser_platform) | `android` | Origen |
 | [`UPSTREAM_QUEUE_LIMIT`](#upstream_queue_limit) | 16 × `TELEGRAM_MAX_CONCURRENCY` | Origen |
 | [`MAX_WAITING_REQUESTS`](#max_waiting_requests) | `4096` | Origen |
 | [`SHARED_COALESCING`](#shared_coalescing) | `true` | Origen |
@@ -294,6 +297,35 @@ grandes de feed o de vistas previas. Los huecos se reparten de forma justa: por
 turnos entre canales y solicitudes de feed o de vistas previas, y las
 solicitudes de los usuarios antes que las actualizaciones en segundo plano
 (consulta [Caché](internals/caching.md#upstream-protection)).
+
+### `TELEGRAM_CLIENT`
+
+Cliente HTTP de las solicitudes a t.me:
+
+- `browser` (por defecto): nativo (wreq sobre BoringSSL). El handshake TLS, la
+  configuración de HTTP/2 y las cabeceras salen todos de
+  [`TELEGRAM_BROWSER_PROFILE`](#telegram_browser_profile), así que describen
+  el mismo navegador.
+- `reqwest`: pyreqwest (rustls y hyper). Envía las cabeceras del mismo perfil,
+  pero sus huellas TLS y HTTP/2 son las de rustls y hyper, que ningún
+  navegador tiene. Se mantiene como alternativa.
+
+Las mediciones están en [Cliente HTTP](internals/http-client.md).
+
+### `TELEGRAM_BROWSER_PROFILE`
+
+El navegador que dicen ser las solicitudes: un nombre de perfil Chromium de
+[wreq-util](https://crates.io/crates/wreq-util), como `chrome_149`,
+`edge_148` u `opera_131`. Un nombre desconocido detiene el servidor al
+arrancar, con el perfil de Chrome más reciente en el mensaje. El valor por
+defecto es el Chrome más reciente que trae el crate; cambia cuando Dependabot
+actualiza `wreq-util`.
+
+### `TELEGRAM_BROWSER_PLATFORM`
+
+La plataforma de ese navegador: `android` (por defecto), `ios`, `windows`,
+`macos` o `linux`. Define el `User-Agent`, `sec-ch-ua-platform` y
+`sec-ch-ua-mobile`; el handshake es el mismo en todas las plataformas.
 
 ### `UPSTREAM_QUEUE_LIMIT`
 

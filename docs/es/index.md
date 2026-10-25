@@ -92,8 +92,10 @@ curl https://tme.koval-dev.org/v1/body/durov
 ## Qué hay dentro { #what-is-inside }
 
 - **FastAPI + Pydantic v2** para la capa HTTP y modelos de respuesta estrictos.
-- **pyreqwest** (Rust: tokio, hyper, rustls) para todo el tráfico hacia t.me:
-  un único cliente HTTP/2 con pool de conexiones que se ejecuta fuera del GIL.
+- **wreq** (Rust: tokio, BoringSSL) para todo el tráfico hacia t.me: un único
+  cliente HTTP/2 con pool de conexiones fuera del GIL, cuyos TLS, HTTP/2 y
+  cabeceras coinciden con un navegador
+  ([Cliente HTTP](internals/http-client.md)); pyreqwest como alternativa.
 - **telegram-me-native** (Rust, de este proyecto) para el análisis de HTML
   (html5ever) y la clasificación del feed.
 - **granian** (Rust) como servidor HTTP, con **uvloop** (C) como bucle de

@@ -1,11 +1,13 @@
 //! Native core of `TelegramMe`: everything CPU-heavy lives here, the
-//! in-process cache and the request protection (rate limit, proof of work).
+//! in-process cache, the request protection (rate limit, proof of work) and the
+//! browser-consistent HTTP client for t.me.
 //!
 //! The algorithms live in plain Rust modules (tested with `cargo test`); the
 //! optional `python` feature adds the `PyO3` bindings built by maturin.
 
 pub mod cache;
 pub mod feed;
+pub mod http;
 pub mod parse;
 pub mod pow;
 pub mod rank;
