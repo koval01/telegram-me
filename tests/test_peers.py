@@ -39,7 +39,7 @@ from telegram_me.telegram.errors import (
 )
 from tests.conftest import FixtureFetcher, Work, make_settings
 from tests.test_coalescing import ENDPOINTS, SlowFetcher, call, container, fire, settle
-from tests.workload import CHANNELS
+from tests.workload import CHANNELS, AliasFetcher, alias
 
 MISSING = "zzzzzznotexistingchannelzzzz"
 
@@ -114,16 +114,16 @@ async def nodes(
         yield apps
 
 
-def owned_by(apps: list[FastAPI], index: int) -> str:
-    """A channel of the fixtures whose keys node `index` owns."""
-    addr = peers_of(apps[index]).addr
-    for channel in CHANNELS:
-        owners = {
-            peers_of(app).owner(f"page:full:{channel}:0") or peers_of(app).addr for app in apps
-        }
-        if owners == {addr}:
-            return channel
-    pytest.fail("no fixture channel is owned by this node")
+def owner_and_other(apps: list[FastAPI], channel: str) -> tuple[FastAPI, FastAPI]:
+    """The node that owns `channel`'s keys, and another one (of two nodes).
+
+    Ports, and so owners, change from run to run: tests ask, never assume.
+    """
+    owners = {peers_of(app).owner(f"page:full:{channel}:0") or peers_of(app).addr for app in apps}
+    assert len(owners) == 1, "the nodes disagree on the owner"
+    owner = next(app for app in apps if peers_of(app).addr in owners)
+    other = next(app for app in apps if app is not owner)
+    return owner, other
 
 
 # Every key once across nodes ---------------------------------------------------------
@@ -163,17 +163,18 @@ async def test_feed_across_nodes_fetches_every_channel_once(
 async def test_owner_answers_fill_the_askers_cache(monkeypatch: pytest.MonkeyPatch) -> None:
     fetcher = SlowFetcher()
     async with nodes(2, fetcher, monkeypatch) as apps:
-        channel = owned_by(apps, 0)
+        channel = CHANNELS[0]
+        _owner, other = owner_and_other(apps, channel)
         path = ("GET", f"/v1/body/{channel}", None)
-        first = await call(apps[1], *path)
-        asked = peers_of(apps[1]).node.stats()["asked"]
-        again = await call(apps[1], *path)
-        cache = container(apps[1]).cache
+        first = await call(other, *path)
+        asked = peers_of(other).node.stats()["asked"]
+        again = await call(other, *path)
+        cache = container(other).cache
         assert isinstance(cache, PeerCache)
         copy = await cache.local.get(f"json:body:page:full:{channel}:0")
     assert (first.status, again.status, first.body) == (200, 200, again.body)
     # The second request was an in-process hit: nothing more was asked.
-    assert peers_of(apps[1]).node.stats()["asked"] == asked
+    assert peers_of(other).node.stats()["asked"] == asked
     assert copy is not None
     assert len(fetcher.requests) == 1
 
@@ -183,11 +184,12 @@ async def test_a_miss_is_answered_from_the_owners_cache(
 ) -> None:
     fetcher = SlowFetcher()
     async with nodes(2, fetcher, monkeypatch) as apps:
-        channel = owned_by(apps, 0)
+        channel = CHANNELS[0]
+        owner, other = owner_and_other(apps, channel)
         path = ("GET", f"/v1/body/{channel}", None)
-        on_owner = await call(apps[0], *path)
-        on_other = await call(apps[1], *path)
-        served = peers_of(apps[0]).node.stats()
+        on_owner = await call(owner, *path)
+        on_other = await call(other, *path)
+        served = peers_of(owner).node.stats()
     assert (on_owner.status, on_other.body) == (200, on_owner.body)
     # One read of the owner's cache, no load, no second fetch or render.
     assert (served["served_gets"], served["served_loads"]) == (1, 0)
@@ -247,14 +249,23 @@ async def bare_node(key: str, seed: str) -> AsyncIterator[tuple[asyncio.subproce
         await process.wait()
 
 
+def owned_by(peers: Peers, addr: str) -> str:
+    """A made-up channel (served with durov's pages) whose keys `addr` owns."""
+    return next(
+        name
+        for name in (alias("durov", i) for i in range(200))
+        if peers.owner(f"page:full:{name}:0") == addr
+    )
+
+
 async def test_a_crashed_owner_is_not_waited_for(monkeypatch: pytest.MonkeyPatch) -> None:
     key = secret()
-    fetcher = SlowFetcher()
+    fetcher = AliasFetcher()
     async with nodes(1, fetcher, monkeypatch, key=key) as apps:
         peers = peers_of(apps[0])
         async with bare_node(key, peers.addr) as (process, addr):
             await eventually(lambda: peers.members == [addr])
-            channel = next(c for c in CHANNELS if peers.owner(f"page:full:{c}:0") == addr)
+            channel = owned_by(peers, addr)
             process.send_signal(signal.SIGKILL)
             await process.wait()
             started = time.monotonic()
@@ -262,7 +273,7 @@ async def test_a_crashed_owner_is_not_waited_for(monkeypatch: pytest.MonkeyPatch
             elapsed = time.monotonic() - started
     assert reply.status == 200
     assert elapsed < 1.0
-    assert fetcher.requests == [("GET", f"/s/{channel}")]
+    assert (fetcher.count, fetcher.requests) == (1, [("GET", "/s/durov")])
 
 
 async def test_a_stuck_owner_costs_one_wait_then_the_asker_fetches(
@@ -270,19 +281,19 @@ async def test_a_stuck_owner_costs_one_wait_then_the_asker_fetches(
 ) -> None:
     key = secret()
     monkeypatch.setattr(container_module, "_LEASE_TTL", 0.2)
-    fetcher = SlowFetcher()
+    fetcher = AliasFetcher()
     async with nodes(1, fetcher, monkeypatch, key=key, telegram_timeout=0.1) as apps:
         peers = peers_of(apps[0])
         async with bare_node(key, peers.addr) as (_process, addr):
             await eventually(lambda: peers.members == [addr])
-            channel = next(c for c in CHANNELS if peers.owner(f"page:full:{c}:0") == addr)
+            channel = owned_by(peers, addr)
             started = time.monotonic()
             reply = await call(apps[0], "GET", f"/v1/body/{channel}")
             elapsed = time.monotonic() - started
     assert reply.status == 200
     # It accepted the load and never answered: the asker waited its wait out.
     assert 0.3 < elapsed < 2.0
-    assert fetcher.requests == [("GET", f"/s/{channel}")]
+    assert (fetcher.count, fetcher.requests) == (1, [("GET", "/s/durov")])
 
 
 async def test_nodes_with_another_secret_are_refused(monkeypatch: pytest.MonkeyPatch) -> None:

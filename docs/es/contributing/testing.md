@@ -93,7 +93,7 @@ su ID a `EXTRA_POSTS` en `scripts/record_fixtures.py`.
 | Archivo | Cubre |
 |---|---|
 | `test_client.py` | Construcción de URL, correspondencia de códigos de estado, validación, el único reintento de red |
-| `test_fetcher.py` | `ReqwestFetcher` contra un servidor HTTP local real: gzip, cabeceras, cuerpos POST vacíos |
+| `test_fetcher.py` | `ReqwestFetcher` y `BrowserFetcher` contra un servidor HTTP local real: gzip, cabeceras del perfil, el XHR, cuerpos POST vacíos, tiempos de espera, errores de red |
 | `test_cache.py` | Caché dentro del proceso (límite, compresión, caducidad), backend de Redis, circuit breaker, lecturas de dos niveles, rellenos, caídas |
 | `test_memory_trim.py` | `malloc_trim` periódico (solo glibc), su desactivación |
 | `test_coalesce.py` | Compartición single-flight, propagación de errores, seguridad ante cancelaciones |

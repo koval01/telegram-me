@@ -14,11 +14,14 @@ FROM python:${PYTHON_VERSION}-slim-trixie AS build
 COPY --from=uv /uv /usr/local/bin/uv
 COPY --from=rust /usr/local/cargo /usr/local/cargo
 COPY --from=rust /usr/local/rustup /usr/local/rustup
+# BoringSSL (btls-sys, under wreq) is C/C++ built with cmake; bindgen needs
+# libclang, and the crate applies its patches with git. Build stage only.
 # Not pinned (DL3008): Debian replaces versions with every security update,
-# so a pin breaks the build. Build stage only; the runtime image has none.
+# so a pin breaks the build.
 # hadolint ignore=DL3008
 RUN apt-get update \
-    && apt-get install --yes --no-install-recommends gcc libc6-dev \
+    && apt-get install --yes --no-install-recommends \
+        gcc g++ libc6-dev make cmake clang libclang-dev git \
     && rm -rf /var/lib/apt/lists/*
 
 ENV PATH="/usr/local/cargo/bin:${PATH}" \

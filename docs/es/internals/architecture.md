@@ -23,7 +23,7 @@ flowchart TB
     CS --> C["cache.py<br/>en el proceso (Rust) + Redis"]
     CS --> SF["services/coalesce.py<br/>SingleFlight"]
     SF --> TC["telegram/client.py<br/>TelegramClient"]
-    TC --> F["ReqwestFetcher<br/>pyreqwest (Rust: tokio · hyper · rustls)"]
+    TC --> F["BrowserFetcher<br/>wreq (Rust: tokio · BoringSSL)"]
     F --> T(("t.me"))
     CS --> P["telegram/parsing<br/>telegram-me-native (Rust)"]
     CS --> V["schemas<br/>pydantic-core (Rust)"]
@@ -62,9 +62,10 @@ Tomando `GET /v1/body/durov` como ejemplo:
    resultado de la caché (consulta [Caché](caching.md#request-coalescing)).
 6. **`TelegramClient`** toma un hueco de la puerta hacia el origen del proceso
    (justa entre canales y solicitudes de feed, `503` cuando su cola está
-   llena) y pide la página a **`ReqwestFetcher`**; pyreqwest realiza la solicitud
-   sobre una conexión HTTP/2 del pool en Rust, fuera del GIL, y devuelve el
-   cuerpo decodificado. Una conexión caída se reintenta una vez.
+   llena) y pide la página a **`BrowserFetcher`**; wreq realiza la solicitud
+   sobre una conexión HTTP/2 del pool en Rust, fuera del GIL, con el handshake
+   TLS y las cabeceras de un navegador ([Cliente HTTP](http-client.md)), y
+   devuelve el cuerpo decodificado. Una conexión caída se reintenta una vez.
 7. En uno de los dos hilos de análisis, **`parse_channel_page`** entrega el
    HTML al parser de Rust (con el GIL liberado), que construye el árbol una
    sola vez con html5ever y extrae el perfil del canal, la paginación y cada
@@ -102,7 +103,7 @@ la API.
 |---|---|---|
 | Servidor HTTP, supervisión de workers | granian | Rust |
 | Bucle de eventos | uvloop | C (libuv) |
-| HTTP/2 saliente, TLS, pool de conexiones, descompresión | pyreqwest | Rust (tokio, hyper, rustls) |
+| HTTP/2 saliente, TLS, pool de conexiones, descompresión | wreq (`telegram-me-native`); pyreqwest como alternativa | Rust (tokio, BoringSSL) |
 | Análisis y extracción de HTML | `telegram-me-native` (html5ever, selectors, regex) | Rust |
 | Validación, JSON (respuestas y caché) | pydantic-core | Rust |
 | Protocolo de Redis | hiredis | C |

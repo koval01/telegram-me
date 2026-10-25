@@ -228,18 +228,11 @@ fn a_slow_owner_runs_out_the_askers_wait() {
 #[test]
 fn an_unreachable_peer_answers_unavailable_fast_and_is_avoided() {
     let ((a, _), (b, _)) = pair(false);
-    let key = [
-        "durov",
-        "telegram",
-        "tginfo",
-        "nebudetgg",
-        "stranaua",
-        "a",
-        "b",
-    ]
-    .into_iter()
-    .find(|key| b.owner(key) == Some(a.addr()))
-    .unwrap();
+    // Ports, and so owners, change from run to run: search for a key A owns.
+    let key = (0..200)
+        .map(|i| format!("channel{i}"))
+        .find(|key| b.owner(key) == Some(a.addr()))
+        .expect("A owns about half of all keys");
     let a_addr = a.addr();
     drop(a);
     let started = Instant::now();
@@ -253,7 +246,7 @@ fn an_unreachable_peer_answers_unavailable_fast_and_is_avoided() {
     assert_eq!(got(&b, token), None);
     assert!(started.elapsed() < Duration::from_secs(1));
     // Left out of ownership (a leaving node is also gone from the members).
-    assert_eq!(b.owner(key), None);
+    assert_eq!(b.owner(&key), None);
 }
 
 #[test]

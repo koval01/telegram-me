@@ -48,6 +48,7 @@ nav = [
     "internals/architecture.md",
     "internals/caching.md",
     "internals/feed.md",
+    "internals/http-client.md",
     "internals/parsing.md",
     "internals/performance.md",
     "internals/rust-roadmap.md",

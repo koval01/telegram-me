@@ -22,7 +22,7 @@ flowchart TB
     CS --> C["cache.py<br/>в процессе (Rust) + Redis"]
     CS --> SF["services/coalesce.py<br/>SingleFlight"]
     SF --> TC["telegram/client.py<br/>TelegramClient"]
-    TC --> F["ReqwestFetcher<br/>pyreqwest (Rust: tokio · hyper · rustls)"]
+    TC --> F["BrowserFetcher<br/>wreq (Rust: tokio · BoringSSL)"]
     F --> T(("t.me"))
     CS --> P["telegram/parsing<br/>telegram-me-native (Rust)"]
     CS --> V["schemas<br/>pydantic-core (Rust)"]
@@ -60,9 +60,10 @@ flowchart TB
    [Кэширование](caching.md#request-coalescing)).
 6. **`TelegramClient`** занимает слот шлюза к источнику в своём процессе
    (честного между каналами и запросами ленты, `503` при полной очереди) и
-   запрашивает страницу у **`ReqwestFetcher`**; pyreqwest выполняет запрос по
-   HTTP/2-соединению из пула в Rust, вне GIL, и возвращает декодированное
-   тело. Оборвавшееся соединение повторяется один раз.
+   запрашивает страницу у **`BrowserFetcher`**; wreq выполняет запрос по
+   HTTP/2-соединению из пула в Rust, вне GIL, с TLS-рукопожатием и заголовками
+   одного браузера ([HTTP-клиент](http-client.md)), и возвращает
+   декодированное тело. Оборвавшееся соединение повторяется один раз.
 7. В одном из двух потоков разбора **`parse_channel_page`** передаёт HTML
    парсеру на Rust (с отпущенным GIL), который один раз строит дерево с
    html5ever и извлекает профиль канала, пагинацию и каждый пост; пост,
@@ -99,7 +100,7 @@ flowchart TB
 |---|---|---|
 | HTTP-сервер, надзор за воркерами | granian | Rust |
 | Цикл событий | uvloop | C (libuv) |
-| Исходящий HTTP/2, TLS, пул соединений, распаковка | pyreqwest | Rust (tokio, hyper, rustls) |
+| Исходящий HTTP/2, TLS, пул соединений, распаковка | wreq (`telegram-me-native`); pyreqwest — запасной | Rust (tokio, BoringSSL) |
 | Разбор HTML и извлечение данных | `telegram-me-native` (html5ever, selectors, regex) | Rust |
 | Валидация, JSON (ответы и кэш) | pydantic-core | Rust |
 | Протокол Redis | hiredis | C |

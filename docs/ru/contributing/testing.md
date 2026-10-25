@@ -88,7 +88,7 @@ make fixtures CHANNELS="nebudetgg"     # add or refresh specific channels
 | Файл | Что проверяет |
 |---|---|
 | `test_client.py` | Построение URL, сопоставление статусов, валидацию, единственный сетевой повтор |
-| `test_fetcher.py` | `ReqwestFetcher` против настоящего локального HTTP-сервера: gzip, заголовки, пустые тела POST |
+| `test_fetcher.py` | `ReqwestFetcher` и `BrowserFetcher` против настоящего локального HTTP-сервера: gzip, заголовки профиля, XHR, пустые тела POST, тайм-ауты, сетевые ошибки |
 | `test_cache.py` | Кэш внутри процесса (лимит, сжатие, истечение срока), бэкенд Redis, circuit breaker, двухуровневые чтения, заполнение, сбой |
 | `test_memory_trim.py` | Периодический `malloc_trim` (только glibc), его отключение |
 | `test_coalesce.py` | Общий результат single-flight, распространение ошибок, безопасность при отмене |

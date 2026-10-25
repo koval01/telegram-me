@@ -51,6 +51,9 @@ The source of truth is
 | [`TELEGRAM_BASE_URL`](#telegram_base_url) | `https://t.me` | Upstream |
 | [`TELEGRAM_TIMEOUT`](#telegram_timeout) | `10` | Upstream |
 | [`TELEGRAM_MAX_CONCURRENCY`](#telegram_max_concurrency) | `32` | Upstream |
+| [`TELEGRAM_CLIENT`](#telegram_client) | `browser` | Upstream |
+| [`TELEGRAM_BROWSER_PROFILE`](#telegram_browser_profile) | `chrome_149` | Upstream |
+| [`TELEGRAM_BROWSER_PLATFORM`](#telegram_browser_platform) | `android` | Upstream |
 | [`UPSTREAM_QUEUE_LIMIT`](#upstream_queue_limit) | 16 × `TELEGRAM_MAX_CONCURRENCY` | Upstream |
 | [`MAX_WAITING_REQUESTS`](#max_waiting_requests) | `4096` | Upstream |
 | [`SHARED_COALESCING`](#shared_coalescing) | `true` | Upstream |
@@ -295,6 +298,34 @@ from being rate-limited by Telegram during large feed or previews requests.
 The slots are shared fairly: round-robin over channels and feed or previews
 requests, user requests before background refreshes (see
 [Caching](internals/caching.md#upstream-protection)).
+
+### `TELEGRAM_CLIENT`
+
+HTTP client for requests to t.me:
+
+- `browser` (default): native (wreq on BoringSSL). The TLS handshake, the
+  HTTP/2 settings and the request headers all come from
+  [`TELEGRAM_BROWSER_PROFILE`](#telegram_browser_profile), so they describe
+  the same browser.
+- `reqwest`: pyreqwest (rustls and hyper). It sends the same profile's headers,
+  but its TLS and HTTP/2 fingerprints are those of rustls and hyper, which no
+  browser has. Kept as a fallback.
+
+The measurements are in [HTTP client](internals/http-client.md).
+
+### `TELEGRAM_BROWSER_PROFILE`
+
+The browser the requests claim to be: a Chromium profile name of
+[wreq-util](https://crates.io/crates/wreq-util), such as `chrome_149`,
+`edge_148` or `opera_131`. An unknown name stops the server at startup with
+the newest Chrome profile in the message. The default is the newest Chrome the
+crate ships; it moves when Dependabot updates `wreq-util`.
+
+### `TELEGRAM_BROWSER_PLATFORM`
+
+The platform of that browser: `android` (default), `ios`, `windows`, `macos`
+or `linux`. It sets the `User-Agent`, `sec-ch-ua-platform` and
+`sec-ch-ua-mobile`; the handshake is the same on every platform.
 
 ### `UPSTREAM_QUEUE_LIMIT`
 

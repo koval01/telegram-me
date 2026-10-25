@@ -1,5 +1,6 @@
 """Type stubs for the Rust extension module."""
 
+from collections.abc import Awaitable
 from typing import Self
 
 __version__: str
@@ -146,6 +147,53 @@ class EarlyRefresh:
         """True once per entry (key, stored_at) past its renewal point and still fresh."""
     def jitter(self, ttl: float) -> float:
         """`ttl` shortened by a random part of the renewal window."""
+
+class FetchError(Exception):
+    """A request to t.me failed."""
+
+class FetchTimeoutError(FetchError):
+    """No answer from t.me in time."""
+
+class FetchNetworkError(FetchError):
+    """The connection failed or broke before the answer was read."""
+
+class BrowserClient:
+    """HTTP client whose TLS, HTTP/2 and headers come from one browser profile.
+
+    Raises `ValueError` for an unknown profile or platform or a bad base URL.
+    """
+
+    def __new__(
+        cls,
+        *,
+        base_url: str,
+        profile: str,
+        platform: str,
+        accept_language: str,
+        timeout: float,
+    ) -> Self: ...
+    def fetch(
+        self,
+        method: str,
+        path: str,
+        query: list[tuple[str, int]] = ...,
+        headers: list[tuple[str, str]] = ...,
+    ) -> Awaitable[tuple[int, str]]:
+        """(status, text); a POST with `x-requested-with` is sent as the page's XHR."""
+    def close(self) -> None:
+        """Stop taking requests; pooled connections close once idle."""
+    @property
+    def user_agent(self) -> str:
+        """The `User-Agent` the profile claims."""
+    @property
+    def headers(self) -> list[tuple[str, str]]:
+        """Navigation headers in the order they are sent."""
+
+def browser_profiles() -> list[str]:
+    """Profile names `BrowserClient` accepts (Chromium family)."""
+
+def browser_headers(profile: str, platform: str, accept_language: str) -> list[tuple[str, str]]:
+    """Navigation headers of a profile, in the order they are sent."""
 
 type PeerEvent = tuple[str, int, object, object]
 

@@ -34,7 +34,7 @@ from telegram_me.services.popularity import (
 )
 from telegram_me.services.upstream import FairGate
 from telegram_me.settings import Settings
-from telegram_me.telegram.client import Fetcher, ReqwestFetcher, TelegramClient
+from telegram_me.telegram.client import Fetcher, TelegramClient, create_fetcher
 
 logger = logging.getLogger(__name__)
 
@@ -100,9 +100,7 @@ async def build_container(
             # Leaves the cluster before the cache and Redis close.
             await stack.enter_async_context(peers.running(shared))
 
-        fetcher = fetcher or ReqwestFetcher(
-            timeout=settings.telegram_timeout, base_url=settings.telegram_base_url
-        )
+        fetcher = fetcher or create_fetcher(settings)
         gate = FairGate(settings.telegram_max_concurrency, settings.upstream_queue_limit)
         client = TelegramClient(fetcher, settings.telegram_max_concurrency, gate)
         stack.push_async_callback(client.close)

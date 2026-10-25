@@ -35,6 +35,9 @@ exceptions = [
     { allow = ["MPL-2.0"], crate = "cssparser-macros" },
     { allow = ["MPL-2.0"], crate = "dtoa-short" },
     { allow = ["MPL-2.0"], crate = "selectors" },
+    # Mozilla's root certificates as data, bundled by wreq so the TLS trust
+    # store does not depend on the image. A permissive data license.
+    { allow = ["CDLA-Permissive-2.0"], crate = "webpki-root-certs" },
     { allow = ["MPL-2.0"], crate = "foca" },
 ]
 
@@ -45,6 +48,16 @@ skip = [
     # The ecosystem is mid-move to syn 3 (serde, pyo3); phf_macros and
     # derive_more (via html5ever) are still on 2. Build time only.
     { crate = "syn@2", reason = "phf_macros and derive_more-impl are still on syn 2" },
+    # wreq-util 0.2 decompresses TLS certificates (Chrome's compress_certificate)
+    # with brotli 8 and zstd 0.13; wreq's body decoding (tower-http) and our
+    # cache use brotli 9 and zstd 0.14.
+    { crate = "brotli@8", reason = "wreq-util 0.2 certificate decompression" },
+    { crate = "brotli-decompressor@5", reason = "brotli 8, via wreq-util 0.2" },
+    { crate = "alloc-no-stdlib@2", reason = "brotli 8, via wreq-util 0.2" },
+    { crate = "alloc-stdlib@0.2", reason = "brotli 8, via wreq-util 0.2" },
+    { crate = "zstd@0.13", reason = "wreq-util 0.2 certificate decompression" },
+    { crate = "zstd-safe@7", reason = "zstd 0.13, via wreq-util 0.2" },
+    { crate = "shlex@1", reason = "bindgen (BoringSSL bindings, build time only)" },
 ]
 
 [sources]
