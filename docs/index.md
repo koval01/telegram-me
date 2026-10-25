@@ -54,8 +54,9 @@ channels are reachable, exactly as a browser sees them.
 
 ## Try it
 
-A public demo runs at **<https://tme.koval-dev.org>** (interactive
-Swagger UI at the root):
+A public demo runs at **<https://tme.koval-dev.org>**: try a channel on its
+landing page, explore the API in the [Swagger UI](https://tme.koval-dev.org/api)
+or read these docs at [/docs](https://tme.koval-dev.org/docs/).
 
 ```bash
 curl https://tme.koval-dev.org/v1/body/durov

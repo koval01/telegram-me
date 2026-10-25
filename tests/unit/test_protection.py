@@ -205,10 +205,37 @@ def test_forged_challenge_from_another_secret(make_client: ClientFactory) -> Non
     assert response.json()["pow"]["code"] == "forged"
 
 
-@pytest.mark.parametrize("path", ["/", "/openapi.json", "/healthz", "/graphql"])
-def test_docs_and_health_need_no_proof(make_client: ClientFactory, path: str) -> None:
-    response = pow_client(make_client).get(path)
-    assert response.status_code == 200
+@pytest.mark.parametrize(
+    ("path", "status"),
+    [
+        ("/", 200),
+        ("/api", 200),
+        ("/openapi.json", 200),
+        ("/robots.txt", 200),
+        ("/sitemap.xml", 200),
+        ("/static/landing.js", 200),
+        ("/static/pow-worker.js", 200),
+        ("/healthz", 200),
+        ("/graphql", 200),
+        # Redirects to the published docs here; served by the image.
+        ("/docs", 302),
+        ("/docs/es/api/", 302),
+    ],
+)
+def test_pages_and_health_need_no_proof(make_client: ClientFactory, path: str, status: int) -> None:
+    response = pow_client(make_client).get(path, follow_redirects=False)
+    assert response.status_code == status
+
+
+def test_landing_page_tells_the_browser_to_solve(make_client: ClientFactory) -> None:
+    page = pow_client(make_client).get("/").text
+    assert "&quot;pow&quot;:true" in page
+
+
+def test_pages_are_rate_limited_like_the_api(make_client: ClientFactory) -> None:
+    client = make_client(enable_rate_limit=True, rate_limit_rpm=1)
+    assert client.get("/").status_code == 200
+    assert client.get("/static/landing.css").status_code == 429
 
 
 def test_rate_limit_runs_before_proof_of_work(make_client: ClientFactory) -> None:

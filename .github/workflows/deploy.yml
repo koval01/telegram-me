@@ -125,6 +125,8 @@ jobs:
           VAR_PEER_PORT: ${{ vars.PEER_PORT || '7946' }}
           VAR_PEER_ALLOW_CIDR: ${{ vars.PEER_ALLOW_CIDR }}
           VAR_PEER_ENCRYPTION: ${{ vars.PEER_ENCRYPTION || 'false' }}
+          # Base of the absolute URLs in /robots.txt and /sitemap.xml.
+          VAR_PUBLIC_URL: ${{ vars.PUBLIC_URL || (vars.PUBLIC_HOST && format('https://{0}', vars.PUBLIC_HOST)) || '' }}
           PEER_SECRET: ${{ secrets.PEER_SECRET }}
         run: |
           umask 077
@@ -137,6 +139,8 @@ jobs:
             exit 1
           fi
           [[ "$PUBLIC_HOST" =~ ^[A-Za-z0-9.-]*$ ]] || { echo "::error::invalid PUBLIC_HOST"; exit 1; }
+          public_url="${VAR_PUBLIC_URL%/}"
+          [[ "$public_url" =~ ^(https?://[A-Za-z0-9.:-]+)?$ ]] || { echo "::error::invalid PUBLIC_URL"; exit 1; }
           mkdir -p deploy/certs
           caddy_tls=internal
           if [ -n "$PUBLIC_HOST" ] && [ -n "$TLS_CERT" ] && [ -n "$TLS_KEY" ]; then
@@ -185,6 +189,7 @@ jobs:
           if [ -n "$VAR_RATE_LIMIT_BURST" ]; then
             echo "RATE_LIMIT_BURST=${VAR_RATE_LIMIT_BURST}" >> deploy/.env
           fi
+          if [ -n "$public_url" ]; then echo "PUBLIC_URL=${public_url}" >> deploy/.env; fi
           if [ -n "$POW_SECRET" ]; then echo "POW_SECRET=${POW_SECRET}" >> deploy/.env; fi
           if [ -n "$PEER_SECRET" ]; then echo "PEER_SECRET=${PEER_SECRET}" >> deploy/.env; fi
           # Private addresses of the servers, e.g. "10.0.0.108,10.0.0.165".

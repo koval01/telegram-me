@@ -194,9 +194,12 @@ headers are exposed to browsers through CORS.
 
 ### No proof needed
 
-Some requests are served without a proof: the docs (`/`, `/openapi.json`,
-`/static/…`), `/healthz`, `/v1/pow/challenge` itself, the GraphiQL page
-(`GET /graphql` without a query) and CORS preflights (`OPTIONS`). GraphQL
+Some requests are served without a proof: the pages a browser loads before
+it can solve one (the landing page `/`, `/api`, `/openapi.json`, `/docs/…`
+and `/static/…`), `/robots.txt`, `/sitemap.xml`, `/healthz`,
+`/v1/pow/challenge` itself, the GraphiQL page (`GET /graphql` without a
+query) and CORS preflights (`OPTIONS`). The rate limit has no exemptions:
+those pages count like any other request. GraphQL
 queries (`POST /graphql`) need a proof like any other request, with
 `POST /graphql` as method and target.
 

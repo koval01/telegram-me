@@ -29,6 +29,8 @@
 | [`METRICS_PORT`](#metrics_port) | — | Сервер |
 | [`DISABLE_DOCS`](#disable_docs) | `false` | API |
 | [`CORS_ALLOW_ORIGINS`](#cors_allow_origins) | `["*"]` | API |
+| [`PUBLIC_URL`](#public_url) | — | API |
+| [`DOCS_SITE_DIR`](#docs_site_dir) | — (в образе: `/app/docs`) | API |
 | [`ENABLE_PREVIEWS`](#enable_previews) | `true` | Функции |
 | [`ENABLE_FEED`](#enable_feed) | `false` | Функции |
 | [`ENABLE_RATE_LIMIT`](#enable_rate_limit) | `false` | Защита |
@@ -141,14 +143,34 @@
 
 ### `DISABLE_DOCS`
 
-Скрыть Swagger UI (`/`) и `/openapi.json`, а на `/graphql` — IDE GraphiQL,
-`GET`-запросы и интроспекцию схемы.
+Скрыть стартовую страницу (`/`), справочник API (`/api`), `/openapi.json`,
+документацию (`/docs/`) и `/sitemap.xml`, а на `/graphql` — IDE GraphiQL,
+`GET`-запросы и интроспекцию схемы. `/robots.txt` тогда запрещает всё. См.
+[Служебные эндпоинты](api/service.md).
 
 ### `CORS_ALLOW_ORIGINS`
 
 JSON-список разрешённых origin для браузеров, например
 `CORS_ALLOW_ORIGINS='["https://example.com"]'`. Значение по умолчанию `["*"]`
 разрешает любой origin.
+
+### `PUBLIC_URL`
+
+Публичный адрес экземпляра: схема и хост без пути и завершающей косой черты,
+например `https://tme.example.com`. С него начинаются абсолютные URL в
+`/robots.txt` и `/sitemap.xml`. Если не задан, берётся адрес, на который
+пришёл каждый запрос; за прокси он верен, только если прокси передаёт
+исходный `Host`. [Workflow развёртывания](deployment/production.md) задаёт его
+из `PUBLIC_URL` или `PUBLIC_HOST`.
+
+### `DOCS_SITE_DIR`
+
+Каталог документации, собранной для `/docs/`
+([`scripts/build_docs.py`](https://github.com/koval01/telegram-me/blob/main/scripts/build_docs.py)),
+которую приложение там отдаёт. Docker-образ содержит сборку и задаёт
+`/app/docs`. Если не задан (установка из исходников), `/docs/…`
+перенаправляет на ту же страницу опубликованной документации. См.
+[Служебные эндпоинты](api/service.md#get-docs).
 
 ## Функции { #features }
 

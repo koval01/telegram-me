@@ -195,9 +195,12 @@ Content-Type: application/json
 
 ### Без доказательства { #no-proof-needed }
 
-Некоторые запросы обслуживаются без доказательства: документация (`/`,
-`/openapi.json`, `/static/…`), `/healthz`, сам `/v1/pow/challenge`, страница
-GraphiQL (`GET /graphql` без запроса) и CORS-preflight (`OPTIONS`). Запросам
+Некоторые запросы обслуживаются без доказательства: страницы, которые браузер
+загружает до того, как сможет его решить (стартовая страница `/`, `/api`,
+`/openapi.json`, `/docs/…` и `/static/…`), `/robots.txt`, `/sitemap.xml`,
+`/healthz`, сам `/v1/pow/challenge`, страница GraphiQL (`GET /graphql` без
+запроса) и CORS-preflight (`OPTIONS`). Для лимита запросов исключений нет:
+эти страницы считаются, как любые другие запросы. Запросам
 GraphQL (`POST /graphql`) доказательство нужно, как и любым другим, с методом и
 target `POST /graphql`.
 

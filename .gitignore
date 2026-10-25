@@ -18,3 +18,5 @@ target/
 deploy/certs/
 .hypothesis/
 .venv-integration/
+site-instance/
+.zensical-instance.*.toml
