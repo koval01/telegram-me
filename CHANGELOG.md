@@ -6,6 +6,13 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+## [2.1.0] - 2026-10-25
+
+Requests to t.me now go out with one browser's TLS, HTTP/2 and headers. Nodes
+on a private network can share their work without Redis (optional). Redis
+connections hold up at a distance. Every release is gated by smoke tests, a
+canary and fleet rollback. The `/v1` and GraphQL contracts are unchanged.
+
 ### Added
 
 - **Browser-consistent HTTP client for t.me** (`TELEGRAM_CLIENT=browser`, the
@@ -346,6 +353,7 @@ working; see the upgrade guide for the few behaviour changes.
 
 Last release of the 1.x line.
 
-[Unreleased]: https://github.com/koval01/telegram-me/compare/v2.0.0...HEAD
+[Unreleased]: https://github.com/koval01/telegram-me/compare/v2.1.0...HEAD
+[2.1.0]: https://github.com/koval01/telegram-me/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/koval01/telegram-me/compare/v1.7...v2.0.0
 [1.7]: https://github.com/koval01/telegram-me/releases/tag/v1.7
