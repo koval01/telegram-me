@@ -1,7 +1,7 @@
 # Contributing
 
 Thank you for helping to improve TelegramMe! The full guide lives in the
-documentation: <https://koval01.github.io/telegram-me/contributing/development/>.
+documentation: <https://tme.koval-dev.org/docs/contributing/development/>.
 Working with an AI coding agent? [CLAUDE.md](CLAUDE.md) sums up the commands
 and the rules that are easy to break.
 

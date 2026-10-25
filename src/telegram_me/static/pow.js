@@ -31,7 +31,8 @@ function search(pow, method, target) {
     workers.forEach((worker, index) => {
       worker.onmessage = ({ data }) => {
         stop();
-        resolve(data.nonce);
+        if (typeof data?.nonce === "string") resolve(data.nonce);
+        else reject(new Error(data?.error || "proof-of-work worker failed"));
       };
       worker.onerror = (event) => {
         stop();
