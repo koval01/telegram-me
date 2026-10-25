@@ -11,6 +11,11 @@ All notable changes to this project are documented here. The format follows
 - `/healthz` answers with `Cache-Control: no-store`. Behind Cloudflare it got
   the default edge `Cache-Control` of `CACHE_MODE`, so with a cache rule a
   health check could read a cached "ok".
+- The deploy's smoke test through the public address accepts Cloudflare's
+  firewall block (`403`, error 1020) for its invalid requests as well as the
+  API's `422` (`smoke_matrix.py --edge-blocks-invalid`). Cloudflare schema
+  validation rejected them at the edge, and that rolled back a healthy
+  release. Any other `403` still fails the test.
 - GraphQL errors are listed in the order their fields appear in the query.
   Before, they came in the order the resolvers finished, so one query could
   return them in a different order each time.
