@@ -32,7 +32,7 @@ env:
 jobs:
   live-tme:
     name: Production image against live t.me
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     env:
       APP_IMAGE: ${{ vars.DEPLOY_IMAGE || 'docker.io/koval01/telegram-me' }}:latest
     steps:
@@ -49,7 +49,7 @@ jobs:
 
   production:
     name: Production through the public URL
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     if: vars.PUBLIC_URL != '' || vars.PUBLIC_HOST != ''
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -66,7 +66,7 @@ jobs:
 
   fuzz:
     name: Parser fuzzing (10 min)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     defaults:
       run:
         working-directory: rust/telegram-me-native/fuzz
@@ -78,8 +78,14 @@ jobs:
         run: rustup toolchain install nightly --profile minimal
       - name: BoringSSL build tools (wreq's btls-sys runs cmake and bindgen)
         run: |
-          sudo apt-get update -q
-          sudo apt-get install --yes --no-install-recommends cmake libclang-dev
+          # The runner image ships both; apt only when it does not (its mirrors are sometimes slow).
+          if command -v cmake >/dev/null && compgen -G "/usr/lib/llvm-*/lib/libclang.so*" >/dev/null; then
+            cmake --version | head -1
+            exit 0
+          fi
+          apt=(-o Acquire::Retries=3 -o Acquire::http::Timeout=30)
+          sudo apt-get "${apt[@]}" update -q
+          sudo apt-get "${apt[@]}" install --yes --no-install-recommends cmake libclang-dev
       - uses: taiki-e/install-action@1e29709c0ec63babbe8f266397a465f29a825f91 # v2.87.31
         with:
           tool: cargo-fuzz
@@ -104,7 +110,7 @@ jobs:
 
   deep:
     name: Long property and hostile-HTML runs
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -117,8 +123,14 @@ jobs:
         run: rustup toolchain install "$RUST_VERSION" --profile minimal && rustup default "$RUST_VERSION"
       - name: BoringSSL build tools (wreq's btls-sys runs cmake and bindgen)
         run: |
-          sudo apt-get update -q
-          sudo apt-get install --yes --no-install-recommends cmake libclang-dev
+          # The runner image ships both; apt only when it does not (its mirrors are sometimes slow).
+          if command -v cmake >/dev/null && compgen -G "/usr/lib/llvm-*/lib/libclang.so*" >/dev/null; then
+            cmake --version | head -1
+            exit 0
+          fi
+          apt=(-o Acquire::Retries=3 -o Acquire::http::Timeout=30)
+          sudo apt-get "${apt[@]}" update -q
+          sudo apt-get "${apt[@]}" install --yes --no-install-recommends cmake libclang-dev
       - name: Hostile HTML, 300 mutations per page, random seed
         working-directory: rust/telegram-me-native
         run: |
@@ -133,7 +145,7 @@ jobs:
 
   report:
     name: Report failures
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: [live-tme, production, fuzz, deep]
     if: failure()
     permissions:

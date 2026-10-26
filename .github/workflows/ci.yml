@@ -30,7 +30,7 @@ env:
 jobs:
   rust:
     name: Rust (fmt, clippy, tests)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     defaults:
       run:
         working-directory: rust/telegram-me-native
@@ -55,8 +55,14 @@ jobs:
           echo "PYO3_PYTHON=$(uv python find 3.14)" >> "$GITHUB_ENV"
       - name: BoringSSL build tools (wreq's btls-sys runs cmake and bindgen)
         run: |
-          sudo apt-get update -q
-          sudo apt-get install --yes --no-install-recommends cmake libclang-dev
+          # The runner image ships both; apt only when it does not (its mirrors are sometimes slow).
+          if command -v cmake >/dev/null && compgen -G "/usr/lib/llvm-*/lib/libclang.so*" >/dev/null; then
+            cmake --version | head -1
+            exit 0
+          fi
+          apt=(-o Acquire::Retries=3 -o Acquire::http::Timeout=30)
+          sudo apt-get "${apt[@]}" update -q
+          sudo apt-get "${apt[@]}" install --yes --no-install-recommends cmake libclang-dev
       - run: cargo fmt --check
       - name: Dependencies (RustSec advisories, licenses, duplicates, sources; deny.toml)
         run: cargo deny --locked check
@@ -78,7 +84,7 @@ jobs:
 
   lint:
     name: Lint & types
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -93,8 +99,14 @@ jobs:
         run: rustup toolchain install "$RUST_VERSION" --profile minimal && rustup default "$RUST_VERSION"
       - name: BoringSSL build tools (wreq's btls-sys runs cmake and bindgen)
         run: |
-          sudo apt-get update -q
-          sudo apt-get install --yes --no-install-recommends cmake libclang-dev
+          # The runner image ships both; apt only when it does not (its mirrors are sometimes slow).
+          if command -v cmake >/dev/null && compgen -G "/usr/lib/llvm-*/lib/libclang.so*" >/dev/null; then
+            cmake --version | head -1
+            exit 0
+          fi
+          apt=(-o Acquire::Retries=3 -o Acquire::http::Timeout=30)
+          sudo apt-get "${apt[@]}" update -q
+          sudo apt-get "${apt[@]}" install --yes --no-install-recommends cmake libclang-dev
       - run: uv sync --locked
       - run: uv run ruff check --output-format=github .
       - run: uv run ruff format --check .
@@ -133,7 +145,7 @@ jobs:
 
   test:
     name: Tests (Python ${{ matrix.python }})
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     # The suite takes ~5 min with setup; a hang fails here instead of after 6 h.
     timeout-minutes: 20
     strategy:
@@ -153,8 +165,14 @@ jobs:
         run: rustup toolchain install "$RUST_VERSION" --profile minimal && rustup default "$RUST_VERSION"
       - name: BoringSSL build tools (wreq's btls-sys runs cmake and bindgen)
         run: |
-          sudo apt-get update -q
-          sudo apt-get install --yes --no-install-recommends cmake libclang-dev
+          # The runner image ships both; apt only when it does not (its mirrors are sometimes slow).
+          if command -v cmake >/dev/null && compgen -G "/usr/lib/llvm-*/lib/libclang.so*" >/dev/null; then
+            cmake --version | head -1
+            exit 0
+          fi
+          apt=(-o Acquire::Retries=3 -o Acquire::http::Timeout=30)
+          sudo apt-get "${apt[@]}" update -q
+          sudo apt-get "${apt[@]}" install --yes --no-install-recommends cmake libclang-dev
       - run: uv sync --locked
       - name: Offline tests and contract snapshots (coverage floor in pyproject.toml)
         run: uv run pytest --cov --cov-report=term --cov-report=xml
@@ -164,7 +182,7 @@ jobs:
 
   docker:
     name: Docker image smoke test
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: [rust, lint, test]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -215,7 +233,7 @@ jobs:
 
   image-scan:
     name: Image vulnerabilities (trivy)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: [docker]
     steps:
       - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
@@ -243,7 +261,7 @@ jobs:
 
   integration:
     name: Integration (2 servers × 2 workers, Valkey)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: [docker]
     env:
       TME_TEST_IMAGE: telegram-me:ci
@@ -278,7 +296,7 @@ jobs:
 
   deploy-scripts:
     name: Deploy scripts (upgrade, rollback, proxy)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: [docker]
     env:
       TME_TEST_IMAGE: telegram-me:ci
