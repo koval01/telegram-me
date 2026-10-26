@@ -134,6 +134,8 @@ jobs:
   test:
     name: Tests (Python ${{ matrix.python }})
     runs-on: ubuntu-latest
+    # The suite takes ~5 min with setup; a hang fails here instead of after 6 h.
+    timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
