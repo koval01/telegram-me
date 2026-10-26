@@ -199,6 +199,8 @@ ráfaga de [`RATE_LIMIT_BURST`](#rate_limit_burst) peticiones y después
 [`RATE_LIMIT_RPM`](#rate_limit_rpm) por minuto. Por encima del límite la API
 responde `429` con `Retry-After`. Detrás de un proxy, configura
 [`FORWARDED_ALLOW_IPS`](#forwarded_allow_ips) para usar la IP real del cliente.
+Las peticiones del propio servidor (por loopback y sin reenviar), como los
+health checks y el smoke test del despliegue, no se limitan.
 
 ### `RATE_LIMIT_RPM`
 

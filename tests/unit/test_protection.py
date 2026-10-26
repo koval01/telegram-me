@@ -6,12 +6,14 @@ from collections.abc import AsyncIterator
 import pytest
 from fakeredis import FakeAsyncRedis
 from fastapi.testclient import TestClient
+from granian.utils.proxies import wrap_asgi_with_proxy_headers
 from pydantic import ValidationError
 from telegram_me_native import RateLimiter, solve_pow
 
-from telegram_me.api.protection import sync_rate_limits
+from telegram_me.api.protection import keep_socket_peer, sync_rate_limits
+from telegram_me.app import create_app
 from telegram_me.cache import KEY_PREFIX, RedisCache
-from tests.conftest import ClientFactory, make_settings
+from tests.conftest import ClientFactory, FixtureFetcher, make_settings
 
 # Random per run: tests never embed a key.
 SECRET = secrets.token_hex(32)
@@ -70,6 +72,59 @@ def test_rate_limit_skips_preflight_and_keeps_cors(make_client: ClientFactory) -
     assert blocked.status_code == 429
     assert blocked.headers["access-control-allow-origin"] == "https://example.com"
     assert "Retry-After" in blocked.headers["access-control-expose-headers"]
+
+
+def served(fetcher: FixtureFetcher, peer: str, trusted: str = "127.0.0.1") -> TestClient:
+    """The app wrapped as `telegram_me.server.asgi` wraps it, with one connection address."""
+    app = create_app(make_settings(enable_rate_limit=True, rate_limit_rpm=1), fetcher=fetcher)
+    client = TestClient(
+        keep_socket_peer(wrap_asgi_with_proxy_headers(app, trusted_hosts=trusted)),
+        client=(peer, 40000),
+    )
+    client.__enter__()
+    return client
+
+
+@pytest.mark.parametrize("peer", ["127.0.0.1", "127.0.0.2", "::1"])
+def test_local_requests_are_not_rate_limited(fetcher: FixtureFetcher, peer: str) -> None:
+    client = served(fetcher, peer)
+    try:
+        for _ in range(3):
+            response = client.get("/healthz")
+            assert response.status_code == 200
+            assert "x-ratelimit-limit" not in response.headers
+    finally:
+        client.__exit__(None, None, None)
+
+
+@pytest.mark.parametrize(
+    ("peer", "trusted", "forwarded"),
+    [
+        # A local proxy: the request is forwarded, so it counts for the client.
+        ("127.0.0.1", "127.0.0.1", "203.0.113.7"),
+        # A spoofed loopback address from a trusted proxy is not local either.
+        ("172.29.53.2", "172.29.53.0/24", "127.0.0.1"),
+    ],
+)
+def test_forwarded_requests_are_rate_limited(
+    fetcher: FixtureFetcher, peer: str, trusted: str, forwarded: str
+) -> None:
+    client = served(fetcher, peer, trusted)
+    try:
+        headers = {"X-Forwarded-For": forwarded}
+        assert client.get("/healthz", headers=headers).status_code == 200
+        assert client.get("/healthz", headers=headers).status_code == 429
+    finally:
+        client.__exit__(None, None, None)
+
+
+def test_other_addresses_are_rate_limited(fetcher: FixtureFetcher) -> None:
+    client = served(fetcher, "198.51.100.4")
+    try:
+        assert client.get("/healthz").status_code == 200
+        assert client.get("/healthz").status_code == 429
+    finally:
+        client.__exit__(None, None, None)
 
 
 def test_protection_is_off_by_default(client: TestClient) -> None:

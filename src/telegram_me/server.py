@@ -26,12 +26,16 @@ def asgi() -> Any:
     """ASGI application factory used by granian workers.
 
     Trusts `X-Forwarded-For` / `X-Forwarded-Proto` only from FORWARDED_ALLOW_IPS.
+    The connection's own address is kept for the rate limit's local exemption.
     """
+    from telegram_me.api.protection import keep_socket_peer  # noqa: PLC0415
     from telegram_me.app import create_app  # noqa: PLC0415
 
     settings = Settings()
-    return wrap_asgi_with_proxy_headers(
-        create_app(settings), trusted_hosts=settings.forwarded_allow_ips
+    return keep_socket_peer(
+        wrap_asgi_with_proxy_headers(
+            create_app(settings), trusted_hosts=settings.forwarded_allow_ips
+        )
     )
 
 
