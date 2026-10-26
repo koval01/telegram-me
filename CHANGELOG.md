@@ -12,6 +12,15 @@ All notable changes to this project are documented here. The format follows
   Cloudflare's block of its invalid requests too (`--edge-blocks-invalid`),
   like the deployment's since 2.2.1 (#231).
 
+### Security
+
+- RUSTSEC-2026-0391, -0398 and -0403 (`zstd` 0.13, `zstd-safe` 7) are listed
+  as not applicable in `deny.toml`. Only `wreq-util` 0.2 pulls those versions,
+  for TLS certificate decompression in its Firefox profiles, and the client
+  accepts Chromium profiles only. Responses are decoded with `zstd` 0.14.3,
+  which is not affected. The ignores go once `wreq-util` moves to
+  `zstd` >= 0.14.3.
+
 ## [2.2.1] - 2026-10-26
 
 Fixes for running behind Cloudflare: a health check that is never cached,

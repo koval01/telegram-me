@@ -12,7 +12,12 @@ all-features = true
 # tree and yanked versions.
 unmaintained = "all"
 yanked = "deny"
-ignore = []
+# Each ignore names why the advisory cannot apply here and when to drop it.
+ignore = [
+    { id = "RUSTSEC-2026-0391", reason = "zstd 0.13 / zstd-safe 7 come only from wreq-util 0.2, which uses them to decompress TLS certificates for Firefox profiles; http.rs accepts Chromium profiles only (parse_profile), so that code is never registered. Remove once wreq-util uses zstd >= 0.14.3" },
+    { id = "RUSTSEC-2026-0398", reason = "zstd 0.13 / zstd-safe 7 come only from wreq-util 0.2, which uses them to decompress TLS certificates for Firefox profiles; http.rs accepts Chromium profiles only (parse_profile), so that code is never registered. Remove once wreq-util uses zstd >= 0.14.3" },
+    { id = "RUSTSEC-2026-0403", reason = "zstd 0.13 / zstd-safe 7 come only from wreq-util 0.2, which uses them to decompress TLS certificates for Firefox profiles; http.rs accepts Chromium profiles only (parse_profile), so that code is never registered. Remove once wreq-util uses zstd >= 0.14.3" },
+]
 
 [licenses]
 # Permissive licenses compatible with shipping under Apache-2.0.
