@@ -194,6 +194,8 @@ Per-client-IP rate limit for every endpoint (GCRA): a burst of
 [`RATE_LIMIT_RPM`](#rate_limit_rpm) per minute. Over the limit the API answers
 `429` with `Retry-After`. Behind a proxy, set
 [`FORWARDED_ALLOW_IPS`](#forwarded_allow_ips) so the real client IP is used.
+Requests from the server itself (over loopback and not forwarded), such as
+health checks and the deploy's smoke test, are not limited.
 
 ### `RATE_LIMIT_RPM`
 
