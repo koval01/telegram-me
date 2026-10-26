@@ -50,8 +50,10 @@ feed = APIRouter(prefix="/v1", tags=["Feed"])
 
 
 @service.get("/healthz", summary="Health status")
-async def healthz() -> HealthzResponse:
+async def healthz(response: Response) -> HealthzResponse:
     """Liveness probe."""
+    # Never from a cache: a cached "ok" would hide a server that just went down.
+    response.headers["Cache-Control"] = "no-store"
     return HealthzResponse(status="ok")
 
 

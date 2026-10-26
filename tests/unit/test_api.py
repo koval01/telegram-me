@@ -108,7 +108,7 @@ def test_invalid_input_is_rejected(
 
 
 def test_response_headers(client: TestClient) -> None:
-    response = client.get("/healthz")
+    response = client.get("/v1/body/durov")
     assert response.headers["x-app-node"]
     assert response.headers["x-process-time"].endswith(" ms")
     assert "cache-control" not in response.headers
@@ -126,8 +126,13 @@ def test_cloudflare_cache_control(
     make_client: ClientFactory, cache_mode: str, expected: str | None
 ) -> None:
     client = make_client(cache_mode=cache_mode)
-    response = client.get("/healthz", headers={"CF-RAY": "abc"})
+    response = client.get("/v1/body/durov", headers={"CF-RAY": "abc"})
     assert response.headers.get("cache-control") == expected
+
+
+@pytest.mark.parametrize("headers", [{}, {"CF-RAY": "abc"}])
+def test_health_is_never_cached(client: TestClient, headers: dict[str, str]) -> None:
+    assert client.get("/healthz", headers=headers).headers["cache-control"] == "no-store"
 
 
 def test_cors_allows_any_origin_by_default(client: TestClient) -> None:

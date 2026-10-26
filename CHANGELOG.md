@@ -15,6 +15,9 @@ All notable changes to this project are documented here. The format follows
 
 ### Fixed
 
+- `/healthz` answers with `Cache-Control: no-store`. Behind Cloudflare it got
+  the default edge `Cache-Control` of `CACHE_MODE`, so with a cache rule a
+  health check could read a cached "ok".
 - The deploy's smoke test through the public address accepts Cloudflare's
   firewall block (`403`, error 1020) for its invalid requests as well as the
   API's `422` (`smoke_matrix.py --edge-blocks-invalid`). Cloudflare schema
