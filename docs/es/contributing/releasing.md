@@ -9,9 +9,12 @@ define en `pyproject.toml` y se expone en el documento OpenAPI y mediante
 1. Mueve las entradas de **Unreleased** de `CHANGELOG.md` a un nuevo
    encabezado `## [X.Y.Z] - YYYY-MM-DD`.
 2. Incrementa `version` en `pyproject.toml` y ejecuta `uv lock`.
-3. Haz commit en `main` (`Release X.Y.Z`) y haz push: esto ya despliega el
-   commit en producción como `sha-…`.
-4. Crea la etiqueta y súbela:
+3. Haz commit (`Release X.Y.Z`) en una rama y abre un pull request: `main`
+   está protegida y solo acepta cambios mediante pull requests con las
+   comprobaciones superadas. Fusionarlo ya despliega el commit en producción
+   como `sha-…`.
+4. Cuando la ejecución de release de esa fusión en `main` haya pasado, etiqueta
+   el commit de fusión y sube la etiqueta:
 
     ```bash
     git tag -a vX.Y.Z -m "X.Y.Z"
