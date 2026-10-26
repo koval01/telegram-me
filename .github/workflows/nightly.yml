@@ -62,7 +62,9 @@ jobs:
         run: |
           headers=()
           if [ -n "$BYPASS_KEY" ]; then headers=(--header "x-bypass-key:$BYPASS_KEY"); fi
-          python3 scripts/smoke_matrix.py --base-url "$URL" --preset auto --timeout 30 "${headers[@]}"
+          # Cloudflare schema validation may block the invalid requests (403, error 1020).
+          python3 scripts/smoke_matrix.py --base-url "$URL" --preset auto --timeout 30 \
+            --edge-blocks-invalid "${headers[@]}"
 
   fuzz:
     name: Parser fuzzing (10 min)

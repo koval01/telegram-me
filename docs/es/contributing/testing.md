@@ -244,6 +244,13 @@ servidor y a través de la URL pública (véase
 [Producción](../deployment/production.md#how-a-deployment-works)), y el
 workflow **Nightly** la ejecuta contra t.me real y contra producción.
 
+Detrás de la validación de esquema de Cloudflare, las peticiones inválidas que
+la matriz envía a propósito se bloquean en el edge (`403`, error 1020) antes de
+llegar a la API. Ahí añade `--edge-blocks-invalid`: esas peticiones pasan
+también con ese bloqueo, además de con el `422` de la API, y cualquier otro
+`403` sigue fallando. Lo usan las ejecuciones a través de la URL pública del
+despliegue y de Nightly.
+
 ## Comprobaciones estáticas { #static-checks }
 
 Además de las pruebas, cada commit pasa por comprobaciones que leen el código

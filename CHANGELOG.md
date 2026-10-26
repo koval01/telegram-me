@@ -6,6 +6,12 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Fixed
+
+- The Nightly smoke test of production through the public URL accepts
+  Cloudflare's block of its invalid requests too (`--edge-blocks-invalid`),
+  like the deployment's since 2.2.1 (#231).
+
 ## [2.2.1] - 2026-10-26
 
 Fixes for running behind Cloudflare: a health check that is never cached,
