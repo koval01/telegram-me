@@ -201,8 +201,11 @@ Algunas peticiones se sirven sin prueba: las páginas que un navegador carga
 antes de poder resolverla (la página de inicio `/`, `/api`, `/openapi.json`,
 `/docs/…` y `/static/…`), `/robots.txt`, `/sitemap.xml`, `/healthz`, el
 propio `/v1/pow/challenge`, la página de GraphiQL (`GET /graphql` sin
-consulta) y los preflight de CORS (`OPTIONS`). El límite de tasa no tiene
-excepciones: esas páginas cuentan como cualquier otra petición. Las consultas GraphQL (`POST /graphql`) necesitan prueba como
+consulta) y los preflight de CORS (`OPTIONS`). El límite de tasa cuenta esas
+páginas como cualquier otra petición; solo omite las peticiones del propio
+servidor, hechas por loopback y no reenviadas por un proxy (health checks, el
+smoke test del despliegue). Un `X-Forwarded-For: 127.0.0.1` reenviado no es
+local. Las consultas GraphQL (`POST /graphql`) necesitan prueba como
 cualquier otra petición, con método y target `POST /graphql`.
 
 ### Notas de seguridad { #security-notes }

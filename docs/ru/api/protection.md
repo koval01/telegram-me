@@ -199,8 +199,10 @@ Content-Type: application/json
 загружает до того, как сможет его решить (стартовая страница `/`, `/api`,
 `/openapi.json`, `/docs/…` и `/static/…`), `/robots.txt`, `/sitemap.xml`,
 `/healthz`, сам `/v1/pow/challenge`, страница GraphiQL (`GET /graphql` без
-запроса) и CORS-preflight (`OPTIONS`). Для лимита запросов исключений нет:
-эти страницы считаются, как любые другие запросы. Запросам
+запроса) и CORS-preflight (`OPTIONS`). Лимит запросов считает эти страницы,
+как любые другие запросы; он пропускает только запросы самого сервера, через
+loopback и не проксированные (health check, smoke-тест деплоя).
+Проксированный `X-Forwarded-For: 127.0.0.1` локальным не считается. Запросам
 GraphQL (`POST /graphql`) доказательство нужно, как и любым другим, с методом и
 target `POST /graphql`.
 
