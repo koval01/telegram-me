@@ -228,6 +228,12 @@ image on every pull request, every deployment runs it on every server and
 through the public URL (see [Production](../deployment/production.md#how-a-deployment-works)),
 and the **Nightly** workflow runs it against live t.me and production.
 
+Behind Cloudflare schema validation, the invalid requests the matrix sends on
+purpose are blocked at the edge (`403`, error 1020) before they reach the API.
+Add `--edge-blocks-invalid` there: those requests then pass on that block as
+well as on the API's `422`, and any other `403` still fails. The deployment's
+and Nightly's runs through the public URL use it.
+
 ## Static checks
 
 Besides the tests, every commit goes through checks that read the code

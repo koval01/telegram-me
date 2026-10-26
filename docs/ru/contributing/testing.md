@@ -235,6 +235,12 @@ uv run --no-project python scripts/smoke_matrix.py --base-url https://api.exampl
 [Продакшен](../deployment/production.md#how-a-deployment-works)), а workflow
 **Nightly** — на живом t.me и на продакшене.
 
+За schema validation в Cloudflare невалидные запросы, которые матрица шлёт
+намеренно, блокируются на edge (`403`, ошибка 1020) и не доходят до API.
+Там добавьте `--edge-blocks-invalid`: такие запросы проходят и на этом блоке,
+и на `422` от API, а любой другой `403` по-прежнему считается ошибкой. Его
+используют прогоны через публичный URL при развёртывании и в Nightly.
+
 ## Статические проверки { #static-checks }
 
 Помимо тестов, каждый коммит проходит проверки, которые читают код, не
