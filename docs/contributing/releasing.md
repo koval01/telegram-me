@@ -9,9 +9,11 @@ in `pyproject.toml` and is exposed in the OpenAPI document and by
 1. Move the **Unreleased** entries in `CHANGELOG.md` under a new heading
    `## [X.Y.Z] - YYYY-MM-DD`.
 2. Bump `version` in `pyproject.toml` and run `uv lock`.
-3. Commit on `main` (`Release X.Y.Z`) and push — this already deploys the
-   commit to production as `sha-…`.
-4. Tag and push the tag:
+3. Commit (`Release X.Y.Z`) on a branch and open a pull request: `main` is
+   protected and takes changes only through pull requests with passing checks.
+   Merging it already deploys the commit to production as `sha-…`.
+4. When the release run of that merge on `main` has passed, tag the merge
+   commit and push the tag:
 
     ```bash
     git tag -a vX.Y.Z -m "X.Y.Z"
