@@ -255,6 +255,8 @@ addopts = ["--strict-markers", "--strict-config", "-ra"]
 asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"
 filterwarnings = ["error"]
+# A test stuck this long dumps every thread's stack, so a hang in CI says where.
+faulthandler_timeout = 300
 markers = [
     "memory: memory regression guards (part of the default run and CI)",
     "integration: the built image with real Valkey (needs Docker and TME_TEST_IMAGE)",
