@@ -1,0 +1,68 @@
+# Vulnerabilities osv-scanner (and OpenSSF Scorecard, which reads this file) must not report,
+# with why each cannot apply. Keep in step with [advisories] ignore in deny.toml, and remove
+# these once wreq-util moves to zstd >= 0.14.3 (cargo tree -i zstd@0.13.3 comes back empty).
+
+[[IgnoredVulns]]
+id = "RUSTSEC-2026-0391"  # Data from an abandoned stream leaks into the next stream (zstd 0.13.3)
+ignoreUntil = 2027-01-26T00:00:00Z
+reason = "Only in zstd 0.13.3 / zstd-safe 7.3.0, which wreq-util 0.2 uses solely for TLS certificate decompression in its Firefox profiles; http.rs accepts Chromium profiles only (parse_profile), so that code never runs. Responses use zstd 0.14.3 / zstd-safe 8.2.0, which are fixed."
+
+[[IgnoredVulns]]
+id = "RUSTSEC-2026-0395"  # Use-after-free with CParameter::StableInBuffer
+ignoreUntil = 2027-01-26T00:00:00Z
+reason = "Only in zstd 0.13.3 / zstd-safe 7.3.0, which wreq-util 0.2 uses solely for TLS certificate decompression in its Firefox profiles; http.rs accepts Chromium profiles only (parse_profile), so that code never runs. Responses use zstd 0.14.3 / zstd-safe 8.2.0, which are fixed."
+
+[[IgnoredVulns]]
+id = "RUSTSEC-2026-0396"  # Seekable reads a NULL or out-of-bounds seek table
+ignoreUntil = 2027-01-26T00:00:00Z
+reason = "Only in zstd 0.13.3 / zstd-safe 7.3.0, which wreq-util 0.2 uses solely for TLS certificate decompression in its Firefox profiles; http.rs accepts Chromium profiles only (parse_profile), so that code never runs. Responses use zstd 0.14.3 / zstd-safe 8.2.0, which are fixed."
+
+[[IgnoredVulns]]
+id = "RUSTSEC-2026-0397"  # OutBuffer::around_pos exposes uninitialized memory
+ignoreUntil = 2027-01-26T00:00:00Z
+reason = "Only in zstd 0.13.3 / zstd-safe 7.3.0, which wreq-util 0.2 uses solely for TLS certificate decompression in its Firefox profiles; http.rs accepts Chromium profiles only (parse_profile), so that code never runs. Responses use zstd 0.14.3 / zstd-safe 8.2.0, which are fixed."
+
+[[IgnoredVulns]]
+id = "RUSTSEC-2026-0398"  # Seekable::decompress sets a Vec length beyond its capacity
+ignoreUntil = 2027-01-26T00:00:00Z
+reason = "Only in zstd 0.13.3 / zstd-safe 7.3.0, which wreq-util 0.2 uses solely for TLS certificate decompression in its Firefox profiles; http.rs accepts Chromium profiles only (parse_profile), so that code never runs. Responses use zstd 0.14.3 / zstd-safe 8.2.0, which are fixed."
+
+[[IgnoredVulns]]
+id = "RUSTSEC-2026-0399"  # Use-after-free through init_using_cdict and init_using_ddict
+ignoreUntil = 2027-01-26T00:00:00Z
+reason = "Only in zstd 0.13.3 / zstd-safe 7.3.0, which wreq-util 0.2 uses solely for TLS certificate decompression in its Firefox profiles; http.rs accepts Chromium profiles only (parse_profile), so that code never runs. Responses use zstd 0.14.3 / zstd-safe 8.2.0, which are fixed."
+
+[[IgnoredVulns]]
+id = "RUSTSEC-2026-0400"  # Use-after-free of a dictionary after a one-shot call
+ignoreUntil = 2027-01-26T00:00:00Z
+reason = "Only in zstd 0.13.3 / zstd-safe 7.3.0, which wreq-util 0.2 uses solely for TLS certificate decompression in its Firefox profiles; http.rs accepts Chromium profiles only (parse_profile), so that code never runs. Responses use zstd 0.14.3 / zstd-safe 8.2.0, which are fixed."
+
+[[IgnoredVulns]]
+id = "RUSTSEC-2026-0401"  # Out-of-bounds read in train_from_buffer
+ignoreUntil = 2027-01-26T00:00:00Z
+reason = "Only in zstd 0.13.3 / zstd-safe 7.3.0, which wreq-util 0.2 uses solely for TLS certificate decompression in its Firefox profiles; http.rs accepts Chromium profiles only (parse_profile), so that code never runs. Responses use zstd 0.14.3 / zstd-safe 8.2.0, which are fixed."
+
+[[IgnoredVulns]]
+id = "RUSTSEC-2026-0402"  # Heap buffer overflow in CCtx::try_clone
+ignoreUntil = 2027-01-26T00:00:00Z
+reason = "Only in zstd 0.13.3 / zstd-safe 7.3.0, which wreq-util 0.2 uses solely for TLS certificate decompression in its Firefox profiles; http.rs accepts Chromium profiles only (parse_profile), so that code never runs. Responses use zstd 0.14.3 / zstd-safe 8.2.0, which are fixed."
+
+[[IgnoredVulns]]
+id = "RUSTSEC-2026-0403"  # Uninitialized memory on a failed legacy-frame decompression
+ignoreUntil = 2027-01-26T00:00:00Z
+reason = "Only in zstd 0.13.3 / zstd-safe 7.3.0, which wreq-util 0.2 uses solely for TLS certificate decompression in its Firefox profiles; http.rs accepts Chromium profiles only (parse_profile), so that code never runs. Responses use zstd 0.14.3 / zstd-safe 8.2.0, which are fixed."
+
+[[IgnoredVulns]]
+id = "RUSTSEC-2026-0404"  # Double free in DCtx::try_clone
+ignoreUntil = 2027-01-26T00:00:00Z
+reason = "Only in zstd 0.13.3 / zstd-safe 7.3.0, which wreq-util 0.2 uses solely for TLS certificate decompression in its Firefox profiles; http.rs accepts Chromium profiles only (parse_profile), so that code never runs. Responses use zstd 0.14.3 / zstd-safe 8.2.0, which are fixed."
+
+[[IgnoredVulns]]
+id = "RUSTSEC-2026-0405"  # Out-of-bounds read with an out-of-range InBuffer::pos
+ignoreUntil = 2027-01-26T00:00:00Z
+reason = "Only in zstd 0.13.3 / zstd-safe 7.3.0, which wreq-util 0.2 uses solely for TLS certificate decompression in its Firefox profiles; http.rs accepts Chromium profiles only (parse_profile), so that code never runs. Responses use zstd 0.14.3 / zstd-safe 8.2.0, which are fixed."
+
+[[IgnoredVulns]]
+id = "RUSTSEC-2026-0406"  # Use-after-free on a multithreaded context with an unfinished frame
+ignoreUntil = 2027-01-26T00:00:00Z
+reason = "Only in zstd 0.13.3 / zstd-safe 7.3.0, which wreq-util 0.2 uses solely for TLS certificate decompression in its Firefox profiles; http.rs accepts Chromium profiles only (parse_profile), so that code never runs. Responses use zstd 0.14.3 / zstd-safe 8.2.0, which are fixed."

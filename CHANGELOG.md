@@ -20,6 +20,11 @@ All notable changes to this project are documented here. The format follows
   accepts Chromium profiles only. Responses are decoded with `zstd` 0.14.3,
   which is not affected. The ignores go once `wreq-util` moves to
   `zstd` >= 0.14.3.
+- The same crates carry ten more advisories marked unsound
+  (RUSTSEC-2026-0395 to -0406), which OpenSSF Scorecard reports through OSV.
+  `osv-scanner.toml` next to each `Cargo.lock` lists all thirteen with that
+  reason and `ignoreUntil` 2027-01-26, and a test keeps it in step with
+  `deny.toml`.
 
 ## [2.2.1] - 2026-10-26
 
