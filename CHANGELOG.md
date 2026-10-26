@@ -6,6 +6,14 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+## [2.2.1] - 2026-10-26
+
+Fixes for running behind Cloudflare: a health check that is never cached,
+a deploy smoke test that understands Cloudflare schema validation, and a rate
+limit that leaves the server's own requests alone, so its burst can be small.
+GraphQL errors now come in a stable order. The `/v1` and GraphQL contracts are
+unchanged.
+
 ### Changed
 
 - The rate limit no longer counts requests from the server itself: over
@@ -439,7 +447,8 @@ working; see the upgrade guide for the few behaviour changes.
 
 Last release of the 1.x line.
 
-[Unreleased]: https://github.com/koval01/telegram-me/compare/v2.2.0...HEAD
+[Unreleased]: https://github.com/koval01/telegram-me/compare/v2.2.1...HEAD
+[2.2.1]: https://github.com/koval01/telegram-me/compare/v2.2.0...v2.2.1
 [2.2.0]: https://github.com/koval01/telegram-me/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/koval01/telegram-me/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/koval01/telegram-me/compare/v1.7...v2.0.0
