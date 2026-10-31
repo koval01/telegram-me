@@ -14,10 +14,10 @@ classifiers = [
     "Typing :: Typed",
 ]
 dependencies = [
-    "fastapi>=0.161.1",
+    "fastapi>=0.162.0",
     "pydantic>=2.14.1",
     "pydantic-settings>=2.16.1",
-    "pyreqwest>=0.15.0",
+    "pyreqwest>=0.15.1",
     "redis[hiredis]>=8.1.0",
     "telegram-me-native",
     "granian[pname,uvloop]>=2.8.5",
@@ -50,7 +50,7 @@ dev = [
     "zizmor>=1.31.1",
 ]
 docs = [
-    "zensical>=0.0.71",
+    "zensical>=0.0.72",
 ]
 # Black-box tests of the built image (tests/integration, tests/deploy): they
 # only talk HTTP and Docker, so they run without building the project.
