@@ -34,7 +34,7 @@ Changelog = "https://github.com/koval01/telegram-me/blob/main/CHANGELOG.md"
 [dependency-groups]
 dev = [
     "fakeredis[lua]>=2.40.0",
-    "granian[reload]>=2.8.5",
+    "granian[reload]>=2.8.7",
     "httpx2>=2.16.0",
     "hypothesis>=6.170.9",
     "import-linter>=2.15",
