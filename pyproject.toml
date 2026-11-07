@@ -20,7 +20,7 @@ dependencies = [
     "pyreqwest>=0.15.0",
     "redis[hiredis]>=8.1.0",
     "telegram-me-native",
-    "granian[pname,uvloop]>=2.8.5",
+    "granian[pname,uvloop]>=2.8.7",
     "strawberry-graphql>=0.336.2",
 ]
 
