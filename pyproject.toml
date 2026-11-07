@@ -14,14 +14,14 @@ classifiers = [
     "Typing :: Typed",
 ]
 dependencies = [
-    "fastapi>=0.161.1",
-    "pydantic>=2.14.1",
-    "pydantic-settings>=2.16.1",
-    "pyreqwest>=0.15.0",
+    "fastapi>=0.162.0",
+    "pydantic>=2.14.2",
+    "pydantic-settings>=2.16.2",
+    "pyreqwest>=0.15.1",
     "redis[hiredis]>=8.1.0",
     "telegram-me-native",
     "granian[pname,uvloop]>=2.8.5",
-    "strawberry-graphql>=0.336.2",
+    "strawberry-graphql>=0.339.0",
 ]
 
 [project.scripts]
@@ -36,28 +36,28 @@ dev = [
     "fakeredis[lua]>=2.40.0",
     "granian[reload]>=2.8.5",
     "httpx2>=2.16.0",
-    "hypothesis>=6.170.9",
+    "hypothesis>=6.170.14",
     "import-linter>=2.15",
-    "mypy>=2.4.0",
+    "mypy>=2.4.1",
     "pre-commit>=4.7.0",
-    "pytest>=9.1.1",
-    "pytest-asyncio>=1.4.0",
+    "pytest>=9.2.0",
+    "pytest-asyncio>=1.4.1",
     "pytest-cov>=7.1.0",
-    "ruff>=0.17.2",
-    "time-machine>=3.5.1",
+    "ruff>=0.17.3",
+    "time-machine>=3.6.0",
     "typos>=1.51.1",
     "vulture>=2.16",
     "zizmor>=1.31.1",
 ]
 docs = [
-    "zensical>=0.0.71",
+    "zensical>=0.0.74",
 ]
 # Black-box tests of the built image (tests/integration, tests/deploy): they
 # only talk HTTP and Docker, so they run without building the project.
 integration = [
     "httpx2>=2.16.0",
-    "pytest>=9.1.1",
-    "pytest-asyncio>=1.4.0",
+    "pytest>=9.2.0",
+    "pytest-asyncio>=1.4.1",
 ]
 
 [build-system]
