@@ -18,6 +18,7 @@ exclude_docs = """
 
 nav = [
   { "Home" = "index.md" },
+  { "No public instance" = "no-public-instance.md" },
   { "Getting started" = [
     "getting-started/quickstart.md",
     "getting-started/local-development.md",
@@ -39,7 +40,6 @@ nav = [
   { "Deployment" = [
     "deployment/docker.md",
     "deployment/compose.md",
-    "deployment/production.md",
     "deployment/peers.md",
     "deployment/reverse-proxy.md",
     "deployment/upgrading.md",

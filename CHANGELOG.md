@@ -6,11 +6,23 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
-### Fixed
+### Removed
 
-- The Nightly smoke test of production through the public URL accepts
-  Cloudflare's block of its invalid requests too (`--edge-blocks-invalid`),
-  like the deployment's since 2.2.1 (#231).
+- The public demo at `tme.koval-dev.org` is switched off for good, and there
+  is no public instance any more: applications used it as a free backend
+  instead of running their own instance, and a shared instance that sends
+  anyone's traffic to t.me can end up serving abuse. Run TelegramMe on your
+  own server or locally; the image and the API are unchanged, so moving off
+  the demo means changing the base URL. The new docs page
+  *No public instance* explains why and what to do instead.
+- The deployment pipeline of the demo: the Deploy workflow and the deploy
+  job of Release, `deploy/rollout.sh`, `deploy/remote-deploy.sh`,
+  `deploy/bootstrap-server.sh`, `deploy/compose.prod.yaml` and the Caddyfile,
+  their tests (`tests/deploy`, `make deploy-test`, the CI job *Deploy
+  scripts*) and the Nightly smoke test of production. The *Production* docs
+  page goes with them. Merging to `main` now only publishes the `latest` and
+  `sha-…` images. The docs are on GitHub Pages and in every instance at
+  `/docs/`.
 
 ### Security
 

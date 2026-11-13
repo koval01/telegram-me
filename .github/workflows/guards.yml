@@ -1,7 +1,7 @@
 name: Guards
 
-# Checks of a change against what production runs now (the base commit:
-# every merge to main is deployed), separate from CI so that adding or
+# Checks of a change against the base commit (what the next release builds
+# on and the published `latest` image serves), separate from CI so that adding or
 # removing a label re-runs only this:
 #
 # - breaking changes of the REST (OpenAPI) and GraphQL contract

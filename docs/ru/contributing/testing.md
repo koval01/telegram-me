@@ -7,7 +7,7 @@ make integration   # the built image as two servers with Valkey (Docker)
 ```
 
 Набор тестов по умолчанию никогда не обращается к t.me. Каждый merge в `main`
-разворачивается в продакшен, поэтому именно эти тесты и
+публикуется как образ `latest`, поэтому именно эти тесты и
 [проверки CI](#ci-jobs) отделяют сломанный коммит от пользователей.
 
 ## Снапшоты контракта { #contract-snapshots }
@@ -54,7 +54,7 @@ git diff tests/snapshots        # review every change
 
 Снапшот лишь показывает, что контракт изменился. `scripts/api_contract.py`
 решает, ломает ли изменение клиентов: сравнивает `openapi.json` и
-`schema.graphql` с базой pull request, то есть с тем, что отдаёт продакшен:
+`schema.graphql` с базой pull request, то есть с тем, что отдаёт образ `latest`:
 
 ```bash
 make contract                  # against origin/main
@@ -189,24 +189,6 @@ TME_TEST_IMAGE=telegram-me:dev TME_PREVIOUS_IMAGE=docker.io/koval01/telegram-me:
 проекта (`uv run --only-group integration`) и пропускаются без
 `TME_TEST_IMAGE`.
 
-## Скрипты развёртывания { #deploy-scripts }
-
-`tests/deploy/test_remote_deploy.py` запускает `deploy/remote-deploy.sh` на
-локальном Docker так же, как на продакшен-сервере (`deploy/compose.prod.yaml`,
-Valkey и поддельный t.me доступны через шлюз сети стека): обновление с
-предыдущего релиза, релиз, который так и не становится healthy, релиз,
-который healthy, но падает на каждом запросе страницы (это замечает только
-smoke-тест), проверку canary (`--verify`), `--rollback` и профиль `proxy` с
-Caddy. `tests/deploy/test_rollout.py` запускает `deploy/rollout.sh` — логику
-флота из workflow развёртывания — с заглушками `ssh` и `scp`: сначала canary,
-а при сбое следующего сервера, canary или публичного smoke-теста — откат
-каждого сервера, получившего релиз. Нужен bash 4.4 или новее; тест входит в
-`make test`.
-
-```bash
-TME_TEST_IMAGE=telegram-me:dev make deploy-test
-```
-
 ## Пороги покрытия { #coverage-floors }
 
 CI падает, когда покрытие строк опускается ниже порога: `fail_under` в
@@ -230,16 +212,13 @@ uv run --no-project python scripts/smoke_matrix.py --base-url https://api.exampl
 
 Он использует только стандартную библиотеку и только страницы, которые тоже
 записаны, поэтому проходит и на поддельном t.me. CI запускает его на только
-что собранном образе в каждом pull request, каждое развёртывание — на каждом
-сервере и через публичный URL (см.
-[Продакшен](../deployment/production.md#how-a-deployment-works)), а workflow
-**Nightly** — на живом t.me и на продакшене.
+что собранном образе в каждом pull request, а workflow **Nightly** запускает
+образ `latest` на живом t.me.
 
 За schema validation в Cloudflare невалидные запросы, которые матрица шлёт
 намеренно, блокируются на edge (`403`, ошибка 1020) и не доходят до API.
 Там добавьте `--edge-blocks-invalid`: такие запросы проходят и на этом блоке,
-и на `422` от API, а любой другой `403` по-прежнему считается ошибкой. Его
-используют прогоны через публичный URL при развёртывании и в Nightly.
+и на `422` от API, а любой другой `403` по-прежнему считается ошибкой.
 
 ## Статические проверки { #static-checks }
 
@@ -262,7 +241,7 @@ uv run --no-project python scripts/smoke_matrix.py --base-url https://api.exampl
 | zizmor | риски GitHub Actions: инъекции в шаблонах, сохранённые учётные данные, унаследованные секреты, Dependabot без выдержки | `.github/zizmor.yml` |
 | hadolint | ошибки Dockerfile, вплоть до стиля | `.hadolint.yaml` |
 | typos | опечатки в коде и документации (английские и русские страницы; испанские пропускаются) | `.typos.toml` |
-| shellcheck, actionlint | скрипты развёртывания и workflows | |
+| actionlint (с shellcheck) | workflows и их шаги `run:` | |
 | trivy | высокие и критические уязвимости с исправлением в собранном образе | `make image-scan` |
 | проверка зависимостей | уязвимые или под лицензией GPL зависимости, которые добавляет pull request | `.github/workflows/dependency-review.yml` |
 | OpenSSF Scorecard | практики цепочки поставок репозитория, в виде оповещений code scanning | `.github/workflows/scorecard.yml` |
@@ -278,16 +257,15 @@ uv run --no-project python scripts/smoke_matrix.py --base-url https://api.exampl
 | Workflow, задача | Когда | Длится | Ловит |
 |---|---|---|---|
 | CI: Rust | каждый push | ~3 мин | fmt, clippy, cargo-deny и cargo-machete (+15 с), тесты Rust (враждебный HTML), порог покрытия Rust |
-| CI: Lint & types | каждый push | ~4 мин | ruff, mypy, import-linter, vulture, `uv audit`, typos, shellcheck, actionlint, zizmor, hadolint, gitleaks по всей истории (вместе +30 с) |
+| CI: Lint & types | каждый push | ~4 мин | ruff, mypy, import-linter, vulture, `uv audit`, typos, actionlint, zizmor, hadolint, gitleaks по всей истории (вместе +30 с) |
 | CI: Tests | каждый push | ~2 мин | набор выше на Python 3.13 и 3.14, порог покрытия Python |
 | CI: Docker image smoke test | после трёх выше | ~2 мин | образ стартует в защищённом режиме, smoke-матрица на живом t.me, корректная остановка |
 | CI: Image vulnerabilities | после образа | ~1 мин | trivy: высокие и критические уязвимости с исправлением |
 | CI: Integration | после образа | ~2 мин | [интеграционные тесты](#integration-tests) |
-| CI: Deploy scripts | после образа | ~2 мин | [тесты скриптов развёртывания](#deploy-scripts) |
 | Guards | каждый pull request, изменение меток | ~10 с | [несовместимые изменения API](#breaking-changes), пониженные пороги покрытия |
 | Dependency review | каждый pull request | ~15 с | добавленные зависимости с известными уязвимостями или лицензией GPL |
 | Scorecard | push в `main`, по понедельникам | ~1 мин | OpenSSF Scorecard (читает только ветку по умолчанию) |
-| Nightly | ежедневно в 03:23 UTC | ~15 мин | smoke-тесты на живом t.me и продакшене, 10 мин фаззинга, долгие прогоны свойств; открывает issue с меткой `nightly` |
+| Nightly | ежедневно в 03:23 UTC | ~15 мин | smoke-тест образа `latest` на живом t.me, 10 мин фаззинга, долгие прогоны свойств; открывает issue с меткой `nightly` |
 
-Release (push в `main`) запускает CI и Guards до сборки и развёртывания
+Release (push в `main`) запускает CI и Guards до сборки и публикации
 образа.

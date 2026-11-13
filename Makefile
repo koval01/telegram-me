@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := help
 .PHONY: help install tools dev test snapshots contract lint format typecheck check rust native \
-        audit image-scan fixtures smoke integration deploy-test docker up down logs docs docs-serve \
+        audit image-scan fixtures smoke integration docker up down logs docs docs-serve \
         docs-preview docs-instance
 
 help: ## Show this help
@@ -41,7 +41,6 @@ lint: ## Lint: ruff, layering, dead code, spelling, workflows, Dockerfile, shell
 	uv run typos
 	uv run zizmor --offline .github
 	hadolint Dockerfile
-	shellcheck deploy/*.sh
 	actionlint
 
 format: ## Format and autofix
@@ -84,9 +83,6 @@ IT_ENV = UV_PROJECT_ENVIRONMENT=.venv-integration TME_TEST_IMAGE=$${TME_TEST_IMA
 
 integration: ## The image as two servers with Valkey (TME_PREVIOUS_IMAGE: rolling upgrade too)
 	$(IT_ENV) uv run --only-group integration pytest --confcutdir tests/integration tests/integration
-
-deploy-test: ## deploy/ scripts with real Docker Compose against the image
-	$(IT_ENV) uv run --only-group integration pytest --confcutdir tests/deploy tests/deploy
 
 docker: ## Build the Docker image as telegram-me:dev
 	docker build -t telegram-me:dev .

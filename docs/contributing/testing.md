@@ -6,8 +6,8 @@ make rust          # Rust: fmt, clippy, tests (parsers on hostile HTML included)
 make integration   # the built image as two servers with Valkey (Docker)
 ```
 
-The default suite never talks to t.me. Every merge to `main` is deployed to
-production, so these tests and the [CI gates](#ci-jobs) are what stands
+The default suite never talks to t.me. Every merge to `main` is published as the
+`latest` image, so these tests and the [CI gates](#ci-jobs) are what stands
 between a broken commit and users.
 
 ## Contract snapshots
@@ -53,8 +53,8 @@ git diff tests/snapshots        # review every change
 
 A snapshot only shows that the contract changed. `scripts/api_contract.py`
 decides whether the change breaks clients, by comparing `openapi.json` and
-`schema.graphql` with the base of the pull request, which is what production
-serves:
+`schema.graphql` with the base of the pull request, which is what the `latest`
+image serves:
 
 ```bash
 make contract                  # against origin/main
@@ -184,23 +184,6 @@ TME_TEST_IMAGE=telegram-me:dev TME_PREVIOUS_IMAGE=docker.io/koval01/telegram-me:
 They only talk HTTP and Docker, so they run without the project installed
 (`uv run --only-group integration`) and skip without `TME_TEST_IMAGE`.
 
-## Deploy scripts
-
-`tests/deploy/test_remote_deploy.py` runs `deploy/remote-deploy.sh` on the
-local Docker as on a production server (`deploy/compose.prod.yaml`, Valkey
-and the fake t.me reached through the stack's gateway): the upgrade from the
-previous release, a release that never becomes healthy, a release that is
-healthy but fails every page request (only the smoke test notices), the
-canary check (`--verify`), `--rollback`, and the `proxy` profile with Caddy.
-`tests/deploy/test_rollout.py` runs `deploy/rollout.sh`, the fleet logic of
-the deploy workflow, with stub `ssh` and `scp`: canary first, every server
-that took a release rolled back when a later one, the canary or the public
-smoke test fails. It needs bash 4.4 or later and is part of `make test`.
-
-```bash
-TME_TEST_IMAGE=telegram-me:dev make deploy-test
-```
-
 ## Coverage floors
 
 CI fails when line coverage drops below a floor: `fail_under` in
@@ -224,15 +207,13 @@ uv run --no-project python scripts/smoke_matrix.py --base-url https://api.exampl
 
 It uses only the standard library and only pages that are recorded too, so
 it also passes against the fake t.me. CI runs it against the freshly built
-image on every pull request, every deployment runs it on every server and
-through the public URL (see [Production](../deployment/production.md#how-a-deployment-works)),
-and the **Nightly** workflow runs it against live t.me and production.
+image on every pull request, and the **Nightly** workflow runs the `latest`
+image against live t.me.
 
 Behind Cloudflare schema validation, the invalid requests the matrix sends on
 purpose are blocked at the edge (`403`, error 1020) before they reach the API.
 Add `--edge-blocks-invalid` there: those requests then pass on that block as
-well as on the API's `422`, and any other `403` still fails. The deployment's
-and Nightly's runs through the public URL use it.
+well as on the API's `422`, and any other `403` still fails.
 
 ## Static checks
 
@@ -255,7 +236,7 @@ not bring.
 | zizmor | GitHub Actions risks: template injection, persisted credentials, inherited secrets, Dependabot without cooldown | `.github/zizmor.yml` |
 | hadolint | Dockerfile mistakes, down to style | `.hadolint.yaml` |
 | typos | misspelled words in code and docs (English and Russian pages; Spanish ones are skipped) | `.typos.toml` |
-| shellcheck, actionlint | the deploy scripts and the workflows | |
+| actionlint (with shellcheck) | the workflows and their `run:` steps | |
 | trivy | high and critical vulnerabilities with a fix in the built image | `make image-scan` |
 | dependency review | vulnerable or GPL-licensed dependencies a pull request adds | `.github/workflows/dependency-review.yml` |
 | OpenSSF Scorecard | supply-chain practices of the repository, as code-scanning alerts | `.github/workflows/scorecard.yml` |
@@ -270,16 +251,15 @@ settings. Nothing is switched off for a whole file to make a check pass.
 | Workflow, job | When | Takes | Catches |
 |---|---|---|---|
 | CI: Rust | every push | ~3 min | fmt, clippy, cargo-deny and cargo-machete (+15 s), Rust tests (hostile HTML), Rust coverage floor |
-| CI: Lint & types | every push | ~4 min | ruff, mypy, import-linter, vulture, `uv audit`, typos, shellcheck, actionlint, zizmor, hadolint, gitleaks over the history (together +30 s) |
+| CI: Lint & types | every push | ~4 min | ruff, mypy, import-linter, vulture, `uv audit`, typos, actionlint, zizmor, hadolint, gitleaks over the history (together +30 s) |
 | CI: Tests | every push | ~2 min | the suite above on Python 3.13 and 3.14, Python coverage floor |
 | CI: Docker image smoke test | after the three above | ~2 min | the image starts hardened, smoke matrix against live t.me, graceful stop |
 | CI: Image vulnerabilities | after the image | ~1 min | trivy: high and critical vulnerabilities with a fix |
 | CI: Integration | after the image | ~2 min | [integration tests](#integration-tests) |
-| CI: Deploy scripts | after the image | ~2 min | [deploy script tests](#deploy-scripts) |
 | Guards | every pull request, label changes | ~10 s | [breaking API changes](#breaking-changes), lowered coverage floors |
 | Dependency review | every pull request | ~15 s | added dependencies with known vulnerabilities or a GPL license |
 | Scorecard | pushes to `main`, Mondays | ~1 min | OpenSSF Scorecard (it reads only the default branch) |
-| Nightly | 03:23 UTC daily | ~15 min | live t.me and production smoke tests, 10 min of fuzzing, long property runs; opens an issue labelled `nightly` |
+| Nightly | 03:23 UTC daily | ~15 min | smoke test of the `latest` image against live t.me, 10 min of fuzzing, long property runs; opens an issue labelled `nightly` |
 
 Release (pushes to `main`) runs CI and Guards before the image is built and
-deployed.
+published.

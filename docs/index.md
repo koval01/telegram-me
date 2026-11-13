@@ -32,14 +32,14 @@ channels are reachable, exactly as a browser sees them.
 
     [:octicons-arrow-right-24: API reference](api/index.md)
 
--   :lucide-server: **Production deployment**
+-   :lucide-server: **Deployment**
 
     ---
 
-    Hardened containers, multi-server rollouts with automatic rollback,
+    Hardened containers, Docker Compose with a shared cache, several servers,
     reverse proxy and caching setup.
 
-    [:octicons-arrow-right-24: Deployment](deployment/production.md)
+    [:octicons-arrow-right-24: Deployment](deployment/compose.md)
 
 -   :lucide-cpu: **How it works**
 
@@ -54,12 +54,14 @@ channels are reachable, exactly as a browser sees them.
 
 ## Try it
 
-A public demo runs at **<https://tme.koval-dev.org>**: try a channel on its
-landing page, explore the API in the [Swagger UI](https://tme.koval-dev.org/api)
-or read these docs at [/docs](https://tme.koval-dev.org/docs/).
+There is no public instance: run your own (see
+[No public instance](no-public-instance.md) for why). One container is enough,
+and it serves a landing page to try a channel on, the Swagger UI at `/api` and
+these docs at `/docs/`:
 
 ```bash
-curl https://tme.koval-dev.org/v1/body/durov
+docker run -d --name telegram-me -p 8000:3000 ghcr.io/koval01/telegram-me:latest
+curl http://localhost:8000/v1/body/durov
 ```
 
 ```json

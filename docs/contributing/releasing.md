@@ -11,7 +11,7 @@ in `pyproject.toml` and is exposed in the OpenAPI document and by
 2. Bump `version` in `pyproject.toml` and run `uv lock`.
 3. Commit (`Release X.Y.Z`) on a branch and open a pull request: `main` is
    protected and takes changes only through pull requests with passing checks.
-   Merging it already deploys the commit to production as `sha-…`.
+   Merging it already publishes the commit as the `latest` and `sha-…` images.
 4. When the release run of that merge on `main` has passed, tag the merge
    commit and push the tag:
 
@@ -30,5 +30,6 @@ describe the change under **Changed** in `CHANGELOG.md`.
 
 ## Hotfix rollback
 
-If a release misbehaves, run **Actions → Deploy** with the previous `sha-…`
-tag; see [Production → Rolling back](../deployment/production.md#rolling-back).
+There is no hosted instance to roll back. If a release misbehaves, fix it in a
+patch release; until then, instances can pin the previous image by its
+version (`X.Y.Z`) or by its `sha-…` tag: every build is kept in the registry.

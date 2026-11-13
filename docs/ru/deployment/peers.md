@@ -38,7 +38,7 @@ t.me и рендерит его; остальные узлы спрашиваю�
 ENABLE_PEERS=true
 PEER_SECRET=<the same 64 hex characters everywhere>   # openssl rand -hex 32
 PEERS=10.0.0.108,10.0.0.165
-# In a container, the host's private address (the production deploy sets it):
+# In a container, the host's private address:
 PEER_ADVERTISE_ADDR=10.0.0.108
 ```
 
@@ -87,21 +87,13 @@ Multicast не используется: облачные сети, наприм
 
 ## Файрвол и Docker { #firewall-and-docker }
 
-`deploy/bootstrap-server.sh` открывает порты от `PEER_PORT` до
-`PEER_PORT + 15`, UDP и TCP, в файрволе хоста только для частной сети
-(`PEER_CIDR`, по умолчанию `10.0.0.0/16`). Образы Oracle Cloud отклоняют любой
-другой порт с "No route to host"; список безопасности облака тоже должен
-разрешать эти порты между серверами.
+Каждый узел использует по порту на воркер плюс один, начиная с `PEER_PORT`,
+по UDP и TCP. Откройте их в файрволе хоста и в списке безопасности (или группе
+безопасности) облака только для частной сети между серверами.
 
-`deploy/compose.prod.yaml` публикует порты узлов контейнера API на
-`PEER_BIND`. С `ENABLE_PEERS=true` скрипт `deploy/remote-deploy.sh`
-устанавливает его, а также `PEER_ADVERTISE_ADDR`, в частный адрес сервера
-(адрес источника его маршрута по умолчанию) и публикует по порту на воркер
-плюс один.
-
-Workflow развёртывания включает слой переменной `ENABLE_PEERS` и секретом
-`PEER_SECRET`; `PEERS`, `PEER_PORT`, `PEER_ALLOW_CIDR` и `PEER_ENCRYPTION` —
-необязательные переменные.
+В контейнере опубликуйте эти порты на частном адресе хоста, например
+`10.0.0.108:7946-7951:7946-7951/udp` и так же для TCP, и задайте этот адрес в
+`PEER_ADVERTISE_ADDR`.
 
 ## Когда что-то ломается { #when-something-fails }
 
