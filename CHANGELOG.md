@@ -26,6 +26,13 @@ All notable changes to this project are documented here. The format follows
 
 ### Security
 
+- The image installs Debian's security updates at build time, so fixes
+  that land before the base image is rebuilt are not missed: zlib
+  CVE-2026-76844 and CVE-2026-85091 (fixed in `1:1.3.dfsg+really1.3.1-1+deb13u1`)
+  made trivy fail every build.
+
+### Security
+
 - RUSTSEC-2026-0391, -0398 and -0403 (`zstd` 0.13, `zstd-safe` 7) are listed
   as not applicable in `deny.toml`. Only `wreq-util` 0.2 pulls those versions,
   for TLS certificate decompression in its Firefox profiles, and the client
