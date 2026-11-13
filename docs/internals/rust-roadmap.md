@@ -8,7 +8,7 @@ scripts, nothing on the hot path.
 
 Two things do not change on the way: the REST `/v1` responses and the
 GraphQL schema (both pinned by `tests/snapshots/`, REST byte for byte), and
-the deployment (Docker, compose, `deploy/remote-deploy.sh`, 1 GB VMs).
+the deployment (one Docker image, compose, 1 GB VMs).
 
 ## Audit
 

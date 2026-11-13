@@ -2,13 +2,18 @@
 
 Guidance for Claude Code and other AI coding agents working in this repository.
 Humans: see [CONTRIBUTING.md](CONTRIBUTING.md) and the
-[documentation](https://tme.koval-dev.org/docs/).
+[documentation](https://koval01.github.io/telegram-me/).
 
 ## What this is
 
 TelegramMe turns public Telegram channel pages (`t.me/s/<channel>`) into JSON.
-It serves REST `/v1` and GraphQL `/graphql`. Demo: https://tme.koval-dev.org
-(behind Cloudflare bot protection; it is not a free public instance).
+It serves REST `/v1` and GraphQL `/graphql`.
+
+- **There is no public instance and no production.** The demo at
+  `tme.koval-dev.org` was switched off for good (apps used it as a free
+  backend), together with its servers and deployment pipeline. Users run
+  their own instance; `docs/no-public-instance.md` (×3) explains why. Do not
+  add a hosted instance, a deploy workflow or links to that domain back.
 
 - Python 3.13+ (the image runs 3.14), FastAPI on granian, Strawberry GraphQL,
   Redis (Valkey in tests) as the shared cache, and a Rust extension that does
@@ -98,17 +103,13 @@ It serves REST `/v1` and GraphQL `/graphql`. Demo: https://tme.koval-dev.org
     - `/` and `/api`: 300 s;
     - `robots.txt` and the sitemaps: 3600 s;
     - rejections and `/healthz`: `no-store`.
-- **Client IP in production:** Cloudflare → Caddy → app.
-  - Caddy trusts only Cloudflare's IP ranges for `CF-Connecting-IP` and
-    passes the client address on as `X-Forwarded-For`.
-  - The app trusts that header only from the compose network
-    `172.29.53.0/24`, which `deploy.yml` sets as `FORWARDED_ALLOW_IPS` when
-    `PUBLIC_HOST` is set.
+- **Client IP behind a proxy:** granian trusts `X-Forwarded-For` only from
+  `FORWARDED_ALLOW_IPS` (default `127.0.0.1`).
 - **Rate limit:** GCRA per client IP in each process. With Redis, the
   processes add up a per-minute count, so the limit holds across all workers
   and servers.
   - Requests from the server itself are exempt: loopback *and* not forwarded
-    (the image's `HEALTHCHECK`, the per-server smoke test).
+    (the image's `HEALTHCHECK`, a smoke test run inside the container).
   - A forwarded `X-Forwarded-For: 127.0.0.1` still counts.
   - Tests that need the limit must not use a loopback client:
     `tests/test_coalescing.py::call` uses `192.0.2.10` for that reason.
@@ -135,15 +136,15 @@ It serves REST `/v1` and GraphQL `/graphql`. Demo: https://tme.koval-dev.org
 | `src/telegram_me/settings.py` | Every setting; env var = upper-case field name |
 | `src/telegram_me/static/`, `templates/` | Landing page (`landing.html`, `.css`, `.js`), the Swagger UI glue (`api.js`), proof of work in the browser (`pow.js`, `pow-worker.js`) |
 | `rust/telegram-me-native/` | The native crate and its Python package (`python/telegram_me_native`, stubs in `_native.pyi`) |
-| `tests/` | Contract snapshots, coalescing, memory guards, peers, unit and property tests; `integration/` (the image as two servers with Valkey) and `deploy/` (deploy scripts), both need Docker and `TME_TEST_IMAGE` |
+| `tests/` | Contract snapshots, coalescing, memory guards, peers, unit and property tests; `integration/` (the image as two servers with Valkey) needs Docker and `TME_TEST_IMAGE` |
 | `tests/snapshots/` | `openapi.json`, `graphql/schema.graphql`, REST/GraphQL responses, `raw_digests.json` |
 | `tests/fixtures/telegram/` | Recorded t.me pages (`make fixtures` re-records them) |
 | `docs/`, `docs/es/`, `docs/ru/` | Documentation site in English, Spanish and Russian (Zensical; `zensical*.toml`) |
-| `deploy/` | Production compose, Caddyfile, `remote-deploy.sh` (one server), `rollout.sh` (the fleet), `bootstrap-server.sh`, `presets/` |
+| `deploy/presets/` | The compose presets (`minimal`, `standard`, `full`) |
 | `scripts/` | Smoke matrix, API contract and coverage-floor checks, benchmarks, audits, fixture recording, docs build |
 
 Local-only files, never committed:
-- `.env.local` (gitignored; it holds `CF_BYPASS_KEY`);
+- `.env.local` (gitignored; it may still hold the old demo's `CF_BYPASS_KEY`);
 - `site/` (the docs build output);
 - `bestpractices-answers.md` (listed in `.git/info/exclude`).
 
@@ -165,7 +166,7 @@ make snapshots      # rewrite contract snapshots; review the diff!
 make docs           # build en/es/ru (CI adds --strict)
 make up && make smoke   # compose stack with Valkey + live smoke test
 make contract       # breaking REST/GraphQL changes and lowered coverage floors vs origin/main
-make docker && make integration deploy-test   # the image with real Valkey and deploy scripts
+make docker && make integration   # the image as two servers with real Valkey
 ```
 
 Before you open a PR, everything below must pass:
@@ -203,9 +204,6 @@ uv run --isolated --no-project --python 3.14 --with pytest python -X dev -m pyte
     `tests/snapshots/graphql/schema.graphql` against the base unless the PR
     is labelled `breaking-change`, which means a major version. Do not add
     the label yourself.
-  - A change to the OpenAPI schema also means the maintainer must re-upload
-    the schema to Cloudflare Schema Validation (see *Cloudflare* below).
-    Mention it in the PR.
 - **Coverage floors only go up:** `fail_under` in `pyproject.toml` (92.5),
   `fail-under-lines` in the crate's `Cargo.toml` (96). Never lower them.
 - **The docs are in three languages.** `tests/unit/test_docs_config.py`
@@ -217,11 +215,10 @@ uv run --isolated --no-project --python 3.14 --with pytest python -X dev -m pyte
 - **Settings:** add the field in `settings.py`, then:
   - the docs (all three `configuration.md` files);
   - `.env.example`;
-  - `deploy.yml` if production must set it (a repository variable
-    `vars.X` passed as `VAR_X`, with a default);
+  - `deploy/presets/*.env` if a preset should set it;
   - CHANGELOG.
 - **CHANGELOG:** Keep a Changelog format. New entries go under
-  `## [Unreleased]` (`### Added` / `Changed` / `Fixed` / `Security`). Two open
+  `## [Unreleased]` (`### Added` / `Changed` / `Removed` / `Fixed` / `Security`). Two open
   PRs both editing Unreleased conflict once one merges: resolve by keeping
   both entries.
 - **Tests:**
@@ -264,8 +261,9 @@ uv run --isolated --no-project --python 3.14 --with pytest python -X dev -m pyte
     comment). No new per-file ignores just to pass. ruff flags an unused
     `noqa` (RUF100), so don't add one "just in case".
   - gitleaks runs on staged changes (pre-commit) and the whole history
-    (CI). `.env.local` holds the production bypass key: never copy values
-    from it into a tracked file, a test or a command in the docs.
+    (CI). Never copy values from `.env.local` into a tracked file, a test
+    or a command in the docs; `.gitleaks.toml` still has a rule for the old
+    bypass key.
 - **Workflows:**
   - Actions are pinned by commit SHA with a version comment, and zizmor and
     actionlint lint every workflow.
@@ -280,20 +278,18 @@ uv run --isolated --no-project --python 3.14 --with pytest python -X dev -m pyte
 - **Workflows:**
   - `ci.yml`: on PRs and pushes, and called by `release.yml`. Jobs: Rust;
     Lint & types; Tests on Python 3.13 and 3.14 (20 min timeout); then the
-    Docker image smoke test, trivy, the integration tests (2 servers × 2
-    workers with Valkey) and the deploy-scripts tests.
+    Docker image smoke test, trivy and the integration tests (2 servers × 2
+    workers with Valkey).
   - `guards.yml`: the API contract and coverage floors.
   - `release.yml`: on every push. Runs CI and Guards, builds amd64 and arm64
     natively, then pushes the multi-arch image to Docker Hub
-    (`docker.io/koval01/telegram-me`) and GHCR. On `main` it calls
-    `deploy.yml`; on a `v*` tag it creates the GitHub release.
-  - `deploy.yml`: called by `release.yml`, or run by hand (Actions →
-    Deploy, input `image_tag`, e.g. `sha-0123456789ab` for a rollback).
+    (`docker.io/koval01/telegram-me`) and GHCR: `latest` and `sha-<12 hex>`
+    on `main`; on a `v*` tag also `X.Y.Z`, `X.Y`, `X` and the GitHub
+    release. Nothing is deployed anywhere.
   - `docs.yml`: builds the docs and publishes them to GitHub Pages
     (`koval01.github.io/telegram-me`).
   - `nightly.yml` (03:23 UTC):
-    - the image against live t.me;
-    - production through the public URL;
+    - the `latest` image against live t.me;
     - 10 min of parser fuzzing;
     - long property and hostile-HTML runs.
 
@@ -303,9 +299,9 @@ uv run --isolated --no-project --python 3.14 --with pytest python -X dev -m pyte
   - `dependency-review.yml`.
 - **`main` ruleset** (id 25823045):
   - Changes reach `main` only through a PR; no force-push, no deletion.
-  - 10 required checks (Rust, Lint & types, Tests 3.13 and 3.14, Docker image
-    smoke test, Integration, Deploy scripts, trivy, API contract and coverage
-    floors, Dependency review), plus CodeQL with high-or-higher alerts.
+  - 9 required checks (Rust, Lint & types, Tests 3.13 and 3.14, Docker image
+    smoke test, Integration, trivy, API contract and coverage floors,
+    Dependency review), plus CodeQL with high-or-higher alerts.
   - Branches must be up to date: `gh pr update-branch <n>` (or merge
     `origin/main` into the branch) before merging. That reruns CI; the Rust
     job alone takes about 14 minutes.
@@ -329,82 +325,12 @@ uv run --isolated --no-project --python 3.14 --with pytest python -X dev -m pyte
   arrays or separate commands. `$name:t` and `$name:r` are zsh modifiers, so
   write `${name}` when a colon follows.
 
-## Deployment: merging to `main` deploys production
+## Merging
 
 - **Do not merge PRs into `main` unless the maintainer asks you to.** Open the
   PR and stop. An approval covers the PRs it names, not later ones.
-- **The pipeline:** `release.yml` (CI + Guards → image `sha-<12 hex>`) →
-  `deploy.yml` → `deploy/rollout.sh`, over SSH, one server at a time.
-  1. Server 1 is the canary. `deploy/remote-deploy.sh` deploys it: health
-     check, then the smoke matrix *inside* the container. It soaks under real
-     traffic for `CANARY_SOAK` (60 s), then is verified again.
-  2. The other servers follow the same way.
-  3. With `PUBLIC_URL`/`PUBLIC_HOST`, the smoke matrix runs through
-     Cloudflare with the bypass key and `--edge-blocks-invalid`.
-  4. Any failure after a server took the release rolls back every server
-     that took it (`remote-deploy.sh --rollback`, using `.previous-image`).
-- **Production:**
-  - two small VMs (Ubuntu 26.04 minimal), app dir `~/telegram-me`;
-  - compose project `telegram-me`: `api` plus the `proxy` profile (Caddy with
-    a Cloudflare Origin CA certificate), and optionally the `worker` profile;
-  - a shared Redis (`REDIS_URL`);
-  - containers are read-only, run as UID 10001 and drop all capabilities.
-- **Repository variables** (production config, all read in `deploy.yml`):
-  - `PUBLIC_HOST=tme.koval-dev.org`;
-  - `PUBLIC_HEALTHCHECK_URL`;
-  - `ENABLE_RATE_LIMIT=true`;
-  - `RATE_LIMIT_BURST=30`;
-  - optional, with defaults when unset: `ENABLE_FEED` (true),
-    `ENABLE_PREVIEWS` (true), `RATE_LIMIT_RPM` (120), `ENABLE_POW`,
-    `ENABLE_PEERS`, `CANARY_SOAK`, `DEPLOY_IMAGE`, `FORWARDED_ALLOW_IPS` and
-    others.
-  - A changed variable takes effect with the next deploy, so set it before
-    the merge that should carry it.
-- **Secrets** (names only): `SSH_KEY`, `SSH_KNOWN_HOSTS`, `SERVERS_IPS`
-  (masked in logs), `REDIS_URL`, `TLS_CERT`, `TLS_KEY`, `CF_BYPASS_KEY`,
-  `DOCKER_USERNAME`, `DOCKER_PASSWORD`, `DOCKERHUB_TOKEN`; `POW_SECRET` and
-  `PEER_SECRET` once those features are on.
-- **Checking production:**
-  - Every request needs `x-bypass-key` (from `.env.local`, `CF_BYPASS_KEY`).
-    Without it Cloudflare answers `403`, which says nothing about the app.
-  - Version: `info.version` in `/openapi.json`.
-  - Rate limit: `x-ratelimit-limit` / `x-ratelimit-remaining`; with burst 30
-    the first request shows 29.
-  - Node: `x-app-node`.
-  - Full check:
-    `python3 scripts/smoke_matrix.py --base-url https://tme.koval-dev.org --preset auto --edge-blocks-invalid --header "x-bypass-key:$CF_BYPASS_KEY"`.
-
-## Cloudflare in front of production
-
-The maintainer manages Cloudflare; you have no access to it. Things that
-explain otherwise puzzling results:
-
-- **Bot protection** blocks anything without the `x-bypass-key` skip-rule
-  header (`curl` included). That is intended.
-- **Schema Validation (Block)** uses an OpenAPI **3.0.3** conversion of
-  `/openapi.json`.
-  - Cloudflare rejects FastAPI's 3.1: numeric `exclusiveMinimum` must become
-    `minimum` plus `exclusiveMinimum: true`, `anyOf: [..., {type: null}]`
-    must become `nullable: true`, and the file needs
-    `servers: [{url: https://tme.koval-dev.org}]`.
-  - Requests that don't match the schema get `403`, error **1020**, at the
-    edge, *even with the bypass key*. A JSON client gets a problem document
-    (`cloudflare_error: true`, `error_code: 1020`); others get the text
-    `error code: 1020`.
-  - That is why every smoke run through the public URL uses
-    `--edge-blocks-invalid`: invalid requests pass on `422` or that block,
-    and any other `403` fails. `tests/unit/test_smoke_matrix.py` checks that
-    `rollout.sh` and `nightly.yml` pass the flag.
-- **Caching:**
-  - Cloudflare keys its cache on the full query string, so `?x=1` misses the
-    edge. The app's own cache ignores unknown parameters, so t.me never
-    sees that traffic.
-  - The only query parameters the API reads are `position` (REST) and
-    `query`, `variables`, `operationName` (`GET /graphql`).
-  - Recommended cache rule: Edge TTL "use cache-control header if present,
-    bypass cache if not".
-- **Speed Brain** answers prefetches it cannot serve from its cache with
-  `503` (`Cf-Speculation-Refused`). That comes from Cloudflare, not the app.
+- Merging to `main` publishes the `latest` image that self-hosted instances
+  pull, so a broken `main` reaches users even without a deployment.
 
 ## Releasing
 
@@ -419,13 +345,12 @@ explain otherwise puzzling results:
      - the compare links at the bottom of `CHANGELOG.md`:
        `[Unreleased]` points at `vX.Y.Z...HEAD`, and a new `[X.Y.Z]` points
        at the previous tag.
-  2. Merge it. That deploys `sha-…` to production.
-  3. Verify that production reports the version.
-  4. Only when the release run of the merge commit **on `main` succeeded**,
+  2. Merge it. That publishes `latest` and `sha-…`.
+  3. Only when the release run of the merge commit **on `main` succeeded**,
      tag it: `git tag -a vX.Y.Z -m "Release X.Y.Z"` and
      `git push origin vX.Y.Z`. (Once, 2.2.0 was tagged while its main run
      had failed; don't let a script do that.)
-  5. The tag run publishes the GitHub release from the CHANGELOG section and
+  4. The tag run publishes the GitHub release from the CHANGELOG section and
      the image tags `X.Y.Z`, `X.Y` and `X` (amd64 and arm64). Check it with
      `gh release view vX.Y.Z` and `docker buildx imagetools inspect`.
 - **Never delete releases or tags** without the maintainer's explicit

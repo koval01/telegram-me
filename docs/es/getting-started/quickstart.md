@@ -69,5 +69,5 @@ completo.
 
 - Explora la [referencia de la API](../api/index.md).
 - Colócalo detrás de un [proxy inverso](../deployment/reverse-proxy.md).
-- Ejecuta varios servidores con
-  [despliegues escalonados](../deployment/production.md).
+- Ejecuta varios servidores con un Redis compartido
+  ([Compose](../deployment/compose.md), [pares](../deployment/peers.md)).

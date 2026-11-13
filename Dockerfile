@@ -88,9 +88,14 @@ LABEL org.opencontainers.image.title="telegram-me" \
       org.opencontainers.image.version="${VERSION}" \
       org.opencontainers.image.revision="${REVISION}"
 
+# Debian security fixes land before the base image is rebuilt (zlib
+# CVE-2026-76844 and CVE-2026-85091 did), so take them at build time.
 # The base image's pip (with the copies of urllib3, msgpack and setuptools
 # it vendors) is never used here: the app runs from its own virtualenv.
-RUN groupadd --system --gid 10001 app \
+RUN apt-get update \
+    && apt-get upgrade --yes --no-install-recommends \
+    && rm -rf /var/lib/apt/lists/* \
+    && groupadd --system --gid 10001 app \
     && useradd --system --uid 10001 --gid app --no-create-home --shell /usr/sbin/nologin app \
     && python -m pip uninstall --yes --no-cache-dir pip \
     && rm -rf /usr/local/lib/python*/ensurepip

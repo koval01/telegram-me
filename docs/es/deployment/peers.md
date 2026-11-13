@@ -42,7 +42,7 @@ En cada nodo:
 ENABLE_PEERS=true
 PEER_SECRET=<the same 64 hex characters everywhere>   # openssl rand -hex 32
 PEERS=10.0.0.108,10.0.0.165
-# In a container, the host's private address (the production deploy sets it):
+# In a container, the host's private address:
 PEER_ADVERTISE_ADDR=10.0.0.108
 ```
 
@@ -90,21 +90,13 @@ adelante; TLS mutuo con certificados por nodo no está implementado.
 
 ## Cortafuegos y Docker { #firewall-and-docker }
 
-`deploy/bootstrap-server.sh` abre de `PEER_PORT` a `PEER_PORT + 15`, UDP y
-TCP, en el cortafuegos del host solo para la red privada (`PEER_CIDR`, por
-defecto `10.0.0.0/16`). Las imágenes de Oracle Cloud rechazan cualquier otro
-puerto con "No route to host"; la lista de seguridad de la nube también debe
-permitir los puertos entre los servidores.
+Cada nodo usa un puerto por worker más uno, desde `PEER_PORT` en adelante, por
+UDP y TCP. Ábrelos en el cortafuegos del host y en la lista de seguridad (o el
+grupo de seguridad) de la nube solo para la red privada entre los servidores.
 
-`deploy/compose.prod.yaml` publica los puertos de pares del contenedor de la
-API en `PEER_BIND`. Con `ENABLE_PEERS=true`, `deploy/remote-deploy.sh` lo
-configura, junto con `PEER_ADVERTISE_ADDR`, con la dirección privada del
-servidor (la dirección de origen de su ruta por defecto), y publica un puerto
-por worker más uno.
-
-El workflow de despliegue activa la capa con la variable `ENABLE_PEERS` y el
-secreto `PEER_SECRET`; `PEERS`, `PEER_PORT`, `PEER_ALLOW_CIDR` y
-`PEER_ENCRYPTION` son variables opcionales.
+En un contenedor, publica esos puertos en la dirección privada del host, por
+ejemplo `10.0.0.108:7946-7951:7946-7951/udp` y lo mismo para TCP, y configura
+`PEER_ADVERTISE_ADDR` con esa dirección.
 
 ## Cuando algo falla { #when-something-fails }
 

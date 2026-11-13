@@ -81,8 +81,3 @@ Cloudflare («Eligible for cache» на `/v1/*`) кэширует ответы �
 (`normal`) или 120 с (`aggressive`). Cloudflare подключается со своих
 диапазонов IP: либо перечислите их в `FORWARDED_ALLOW_IPS`, либо настройте
 модуль nginx `real_ip`, чтобы восстанавливать `CF-Connecting-IP`.
-
-Без собственного балансировщика workflow развёртывания может запускать Caddy
-на каждом сервере, чтобы Cloudflare подключался к нему. Он берёт на себя TLS и
-`CF-Connecting-IP`: см.
-[Cloudflare без балансировщика](production.md#cloudflare-without-a-load-balancer).

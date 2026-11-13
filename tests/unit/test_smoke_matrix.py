@@ -97,16 +97,3 @@ def test_a_403_passes_only_as_a_cloudflare_block(edge: str, path: str, ok: bool)
 def test_without_the_flag_the_edge_block_fails(edge: str) -> None:
     scenario = smoke.Scenario("invalid", "GET", "/cloudflare", {422})
     assert not smoke.call(edge, scenario, 5).ok
-
-
-@pytest.mark.parametrize("path", ["deploy/rollout.sh", ".github/workflows/nightly.yml"])
-def test_runs_through_the_public_url_let_the_edge_block_invalid_requests(path: str) -> None:
-    text = (ROOT / path).read_text("utf-8")
-    # Every run with a non-local base URL goes through Cloudflare.
-    runs = [
-        block
-        for block in text.split("smoke_matrix.py --base-url")[1:]
-        if not block.lstrip().startswith("http://127.0.0.1")
-    ]
-    assert runs
-    assert all("--edge-blocks-invalid" in run.split("\n\n")[0] for run in runs)

@@ -68,4 +68,5 @@ See [Local development](local-development.md) for the full workflow.
 
 - Explore the [API reference](../api/index.md).
 - Put it behind a [reverse proxy](../deployment/reverse-proxy.md).
-- Run several servers with [rolling deployments](../deployment/production.md).
+- Run several servers with one shared Redis ([Compose](../deployment/compose.md),
+  [peers](../deployment/peers.md)).

@@ -167,25 +167,6 @@ jobs:
           digest=$(docker buildx imagetools inspect "$GHCR_IMAGE:$SHA_TAG" --format '{{json .Manifest}}' | jq -r .digest)
           echo "digest=$digest" >> "$GITHUB_OUTPUT"
 
-  deploy:
-    name: Deploy
-    needs: [image]
-    if: github.ref == 'refs/heads/main'
-    uses: ./.github/workflows/deploy.yml
-    with:
-      image_tag: ${{ needs.image.outputs.sha_tag }}
-    # Only what the deployment uses, not every secret of the repository.
-    secrets:
-      SSH_KEY: ${{ secrets.SSH_KEY }}
-      SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
-      SERVERS_IPS: ${{ secrets.SERVERS_IPS }}
-      REDIS_URL: ${{ secrets.REDIS_URL }}
-      TLS_CERT: ${{ secrets.TLS_CERT }}
-      TLS_KEY: ${{ secrets.TLS_KEY }}
-      POW_SECRET: ${{ secrets.POW_SECRET }}
-      PEER_SECRET: ${{ secrets.PEER_SECRET }}
-      CF_BYPASS_KEY: ${{ secrets.CF_BYPASS_KEY }}
-
   github-release:
     name: GitHub release
     needs: [image]

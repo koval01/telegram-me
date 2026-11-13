@@ -3,6 +3,11 @@
 **Does it need a Telegram account or bot token?**
 No. It reads the same public web pages a browser shows at `t.me/s/<channel>`.
 
+**Is there a public instance I can use?**
+No, and there will not be one: run your own, on a server or locally. The
+former demo was switched off because apps used it as a free backend; see
+[No public instance](no-public-instance.md).
+
 **Which channels work?**
 Public channels with web preview enabled. Private channels, groups, users and
 bots are reported as `404`.

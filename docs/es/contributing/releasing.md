@@ -11,8 +11,8 @@ define en `pyproject.toml` y se expone en el documento OpenAPI y mediante
 2. Incrementa `version` en `pyproject.toml` y ejecuta `uv lock`.
 3. Haz commit (`Release X.Y.Z`) en una rama y abre un pull request: `main`
    está protegida y solo acepta cambios mediante pull requests con las
-   comprobaciones superadas. Fusionarlo ya despliega el commit en producción
-   como `sha-…`.
+   comprobaciones superadas. Fusionarlo ya publica el commit como las imágenes
+   `latest` y `sha-…`.
 4. Cuando la ejecución de release de esa fusión en `main` haya pasado, etiqueta
    el commit de fusión y sube la etiqueta:
 
@@ -33,6 +33,7 @@ cambio en **Changed** de `CHANGELOG.md`.
 
 ## Reversión urgente { #hotfix-rollback }
 
-Si una versión se comporta mal, ejecuta **Actions → Deploy** con la etiqueta
-`sha-…` anterior; consulta
-[Producción → Revertir](../deployment/production.md#rolling-back).
+No hay ninguna instancia alojada que revertir. Si una versión se comporta mal,
+corrígela en una versión de parche; mientras tanto, las instancias pueden fijar
+la imagen anterior por su versión (`X.Y.Z`) o por su etiqueta `sha-…`: el
+registro conserva cada build.

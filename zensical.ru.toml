@@ -17,6 +17,7 @@ copyright = "Copyright &copy; 2024–2026 Koval Yaroslav · Лицензия Apa
 
 nav = [
   { "Главная" = "index.md" },
+  { "Публичного экземпляра нет" = "no-public-instance.md" },
   { "Начало работы" = [
     "getting-started/quickstart.md",
     "getting-started/local-development.md",
@@ -38,7 +39,6 @@ nav = [
   { "Развёртывание" = [
     "deployment/docker.md",
     "deployment/compose.md",
-    "deployment/production.md",
     "deployment/peers.md",
     "deployment/reverse-proxy.md",
     "deployment/upgrading.md",
