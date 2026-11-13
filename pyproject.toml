@@ -52,7 +52,7 @@ dev = [
 docs = [
     "zensical>=0.0.71",
 ]
-# Black-box tests of the built image (tests/integration, tests/deploy): they
+# Black-box tests of the built image (tests/integration): they
 # only talk HTTP and Docker, so they run without building the project.
 integration = [
     "httpx2>=2.16.0",
@@ -260,7 +260,6 @@ faulthandler_timeout = 300
 markers = [
     "memory: memory regression guards (part of the default run and CI)",
     "integration: the built image with real Valkey (needs Docker and TME_TEST_IMAGE)",
-    "deploy: deploy/ scripts with real Docker Compose (needs Docker and TME_TEST_IMAGE)",
 ]
 
 [tool.coverage.run]

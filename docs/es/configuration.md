@@ -163,8 +163,7 @@ Dirección pública de la instancia, esquema y host sin ruta ni barra final,
 p. ej. `https://tme.example.com`. Las URL absolutas de `/robots.txt` y
 `/sitemap.xml` empiezan por ella. Si no se define, usan la dirección por la que
 llegó cada solicitud, que detrás de un proxy solo es correcta si este reenvía
-el `Host` original. El [workflow de despliegue](deployment/production.md) la
-fija a partir de `PUBLIC_URL` o `PUBLIC_HOST`.
+el `Host` original.
 
 ### `DOCS_SITE_DIR`
 
@@ -519,7 +518,7 @@ en pruebas.
 La dirección IP con la que los demás nodos llegan a este. Por defecto, la
 dirección de origen de la ruta por defecto. Dentro de un contenedor esa es la
 dirección del propio contenedor, así que ahí configúrala con la dirección
-privada del host (el despliegue de producción lo hace).
+privada del host.
 
 ### `PEER_ALLOW_CIDR`
 

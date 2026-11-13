@@ -37,9 +37,6 @@ Todas las variables de 1.x conservan su significado: `PORT`, `DISABLE_DOCS`,
   Heroku.
 - `docker-compose.yml` y `docker-compose.ghcr.yml` se sustituyeron por un único
   [`compose.yaml`](compose.md) con presets.
-- Los servidores desplegados con el workflow antiguo se migran automáticamente
-  en el primer despliegue de 2.0 (consulta
-  [Producción](production.md#how-a-deployment-works)).
 
 ## Claves de Redis { #redis-keys }
 

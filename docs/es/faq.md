@@ -4,6 +4,11 @@
 No. Lee las mismas páginas web públicas que muestra un navegador en
 `t.me/s/<channel>`.
 
+**¿Hay una instancia pública que pueda usar?**
+No, y no la habrá: ejecuta la tuya, en un servidor o en local. La antigua demo
+se apagó porque las aplicaciones la usaban como backend gratuito; consulta
+[Sin instancia pública](no-public-instance.md).
+
 **¿Qué canales funcionan?**
 Los canales públicos con la vista previa web activada. Los canales privados,
 los grupos, los usuarios y los bots se devuelven como `404`.

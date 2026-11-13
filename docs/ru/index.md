@@ -32,14 +32,14 @@ TelegramMe превращает публичное веб-превью любо�
 
     [:octicons-arrow-right-24: Справочник API](api/index.md)
 
--   :lucide-server: **Развёртывание в продакшене**
+-   :lucide-server: **Развёртывание**
 
     ---
 
-    Защищённые контейнеры, развёртывание на нескольких серверах с
-    автоматическим откатом, обратный прокси и настройка кэширования.
+    Защищённые контейнеры, Docker Compose с общим кэшем, несколько серверов,
+    обратный прокси и настройка кэширования.
 
-    [:octicons-arrow-right-24: Развёртывание](deployment/production.md)
+    [:octicons-arrow-right-24: Развёртывание](deployment/compose.md)
 
 -   :lucide-cpu: **Как это работает**
 
@@ -54,13 +54,14 @@ TelegramMe превращает публичное веб-превью любо�
 
 ## Попробуйте { #try-it }
 
-Публичное демо работает по адресу **<https://tme.koval-dev.org>**:
-попробуйте канал на стартовой странице, изучите API в
-[Swagger UI](https://tme.koval-dev.org/api) или читайте эту документацию на
-[/docs](https://tme.koval-dev.org/docs/ru/).
+Публичного экземпляра нет: запустите свой (почему — в разделе
+[Публичного экземпляра нет](no-public-instance.md)). Достаточно одного
+контейнера, он отдаёт стартовую страницу, где можно попробовать канал,
+Swagger UI на `/api` и эту документацию на `/docs/`:
 
 ```bash
-curl https://tme.koval-dev.org/v1/body/durov
+docker run -d --name telegram-me -p 8000:3000 ghcr.io/koval01/telegram-me:latest
+curl http://localhost:8000/v1/body/durov
 ```
 
 ```json

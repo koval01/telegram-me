@@ -36,8 +36,6 @@ All 1.x variables keep their meaning: `PORT`, `DISABLE_DOCS`, `REDIS_URL`,
 - Fly.io, Google App Engine and Heroku configuration files were removed.
 - `docker-compose.yml` and `docker-compose.ghcr.yml` were replaced by a single
   [`compose.yaml`](compose.md) with presets.
-- Servers deployed by the old workflow are migrated automatically on the first
-  2.0 deployment (see [Production](production.md#how-a-deployment-works)).
 
 ## Redis keys
 

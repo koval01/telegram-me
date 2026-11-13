@@ -36,8 +36,6 @@ API `/v1` обратно совместим: пути, параметры и с�
 - Конфигурационные файлы для Fly.io, Google App Engine и Heroku удалены.
 - `docker-compose.yml` и `docker-compose.ghcr.yml` заменены одним
   [`compose.yaml`](compose.md) с пресетами.
-- Серверы, развёрнутые старым workflow, мигрируют автоматически при первом
-  развёртывании 2.0 (см. [Продакшен](production.md#how-a-deployment-works)).
 
 ## Ключи Redis { #redis-keys }
 

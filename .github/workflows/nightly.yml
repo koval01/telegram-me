@@ -2,10 +2,9 @@ name: Nightly
 
 # What changes without a commit, checked every night:
 #
-# - live t.me: the image production runs, with Valkey, through the smoke
+# - live t.me: the latest published image, with Valkey, through the smoke
 #   matrix (status codes and content), so a change of the t.me markup shows
 #   up here before users report it;
-# - production: the same matrix through the public URL (Cloudflare, Caddy);
 # - deeper searches than CI has time for: the parser fuzzer, the hostile-HTML
 #   harness with more cases and the property tests with random seeds.
 #
@@ -31,10 +30,10 @@ env:
 
 jobs:
   live-tme:
-    name: Production image against live t.me
+    name: Latest image against live t.me
     runs-on: ubuntu-24.04
     env:
-      APP_IMAGE: ${{ vars.DEPLOY_IMAGE || 'docker.io/koval01/telegram-me' }}:latest
+      APP_IMAGE: docker.io/koval01/telegram-me:latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -46,25 +45,6 @@ jobs:
       - name: Logs
         if: failure()
         run: docker compose logs --tail 200
-
-  production:
-    name: Production through the public URL
-    runs-on: ubuntu-24.04
-    if: vars.PUBLIC_URL != '' || vars.PUBLIC_HOST != ''
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-      - name: Smoke matrix
-        env:
-          URL: ${{ vars.PUBLIC_URL || format('https://{0}', vars.PUBLIC_HOST) }}
-          BYPASS_KEY: ${{ secrets.CF_BYPASS_KEY }}
-        run: |
-          headers=()
-          if [ -n "$BYPASS_KEY" ]; then headers=(--header "x-bypass-key:$BYPASS_KEY"); fi
-          # Cloudflare schema validation may block the invalid requests (403, error 1020).
-          python3 scripts/smoke_matrix.py --base-url "$URL" --preset auto --timeout 30 \
-            --edge-blocks-invalid "${headers[@]}"
 
   fuzz:
     name: Parser fuzzing (10 min)
@@ -148,7 +128,7 @@ jobs:
   report:
     name: Report failures
     runs-on: ubuntu-24.04
-    needs: [live-tme, production, fuzz, deep]
+    needs: [live-tme, fuzz, deep]
     if: failure()
     permissions:
       issues: write

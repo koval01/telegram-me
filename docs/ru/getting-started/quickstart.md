@@ -68,5 +68,5 @@ uv run telegram-me serve --reload   # http://localhost:3000
 
 - Изучите [справочник API](../api/index.md).
 - Поставьте сервис за [обратный прокси](../deployment/reverse-proxy.md).
-- Запустите несколько серверов с
-  [поэтапным развёртыванием](../deployment/production.md).
+- Запустите несколько серверов с общим Redis
+  ([Compose](../deployment/compose.md), [слой узлов](../deployment/peers.md)).

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Find breaking changes of the public API against another commit.
 
-Every merge to `main` deploys production, so the base of a pull request is
-the contract clients use right now. This compares the contract files at
+Every merge to `main` publishes the `latest` image, so the base of a pull
+request is the contract self-hosted instances run right now. This compares the contract files at
 `--base` with the working tree:
 
 - `tests/snapshots/openapi.json`, the REST API (OpenAPI);

@@ -7,7 +7,7 @@ make integration   # the built image as two servers with Valkey (Docker)
 ```
 
 La batería por defecto nunca se comunica con t.me. Cada merge a `main` se
-despliega en producción, así que estas pruebas y las
+publica como la imagen `latest`, así que estas pruebas y las
 [comprobaciones de CI](#ci-jobs) son lo que separa un commit roto de los
 usuarios.
 
@@ -58,8 +58,8 @@ git diff tests/snapshots        # review every change
 
 Un snapshot solo muestra que el contrato cambió. `scripts/api_contract.py`
 decide si el cambio rompe a los clientes, comparando `openapi.json` y
-`schema.graphql` con la base del pull request, que es lo que sirve
-producción:
+`schema.graphql` con la base del pull request, que es lo que sirve la
+imagen `latest`:
 
 ```bash
 make contract                  # against origin/main
@@ -197,24 +197,6 @@ TME_TEST_IMAGE=telegram-me:dev TME_PREVIOUS_IMAGE=docker.io/koval01/telegram-me:
 Solo hablan HTTP y Docker, así que se ejecutan sin instalar el proyecto
 (`uv run --only-group integration`) y se omiten sin `TME_TEST_IMAGE`.
 
-## Scripts de despliegue { #deploy-scripts }
-
-`tests/deploy/test_remote_deploy.py` ejecuta `deploy/remote-deploy.sh` en el
-Docker local como en un servidor de producción (`deploy/compose.prod.yaml`,
-con Valkey y el t.me falso accesibles a través del gateway de la pila): la
-actualización desde la versión anterior, una versión que nunca llega a estar
-sana, una versión sana que falla en cada solicitud de página (solo la prueba
-de humo lo nota), la comprobación canary (`--verify`), `--rollback` y el
-perfil `proxy` con Caddy. `tests/deploy/test_rollout.py` ejecuta
-`deploy/rollout.sh`, la lógica de flota del workflow de despliegue, con `ssh`
-y `scp` simulados: primero el canary, y vuelta atrás de cada servidor que
-recibió una versión cuando falla uno posterior, el canary o la prueba de humo
-pública. Necesita bash 4.4 o posterior y forma parte de `make test`.
-
-```bash
-TME_TEST_IMAGE=telegram-me:dev make deploy-test
-```
-
 ## Umbrales de cobertura { #coverage-floors }
 
 La CI falla cuando la cobertura de líneas baja de un umbral: `fail_under` en
@@ -239,17 +221,14 @@ uv run --no-project python scripts/smoke_matrix.py --base-url https://api.exampl
 
 Solo usa la biblioteca estándar y solo páginas que también están grabadas,
 así que también pasa contra el t.me falso. La CI la ejecuta contra la imagen
-recién construida en cada pull request, cada despliegue la ejecuta en cada
-servidor y a través de la URL pública (véase
-[Producción](../deployment/production.md#how-a-deployment-works)), y el
-workflow **Nightly** la ejecuta contra t.me real y contra producción.
+recién construida en cada pull request, y el workflow **Nightly** ejecuta la
+imagen `latest` contra t.me real.
 
 Detrás de la validación de esquema de Cloudflare, las peticiones inválidas que
 la matriz envía a propósito se bloquean en el edge (`403`, error 1020) antes de
 llegar a la API. Ahí añade `--edge-blocks-invalid`: esas peticiones pasan
 también con ese bloqueo, además de con el `422` de la API, y cualquier otro
-`403` sigue fallando. Lo usan las ejecuciones a través de la URL pública del
-despliegue y de Nightly.
+`403` sigue fallando.
 
 ## Comprobaciones estáticas { #static-checks }
 
@@ -271,7 +250,7 @@ incluye ambas); `make tools` instala los binarios que `uv sync` no trae.
 | zizmor | riesgos de GitHub Actions: inyección en plantillas, credenciales persistidas, secretos heredados, Dependabot sin espera | `.github/zizmor.yml` |
 | hadolint | errores del Dockerfile, hasta los de estilo | `.hadolint.yaml` |
 | typos | palabras mal escritas en código y documentación (páginas en inglés y ruso; las españolas se omiten) | `.typos.toml` |
-| shellcheck, actionlint | los scripts de despliegue y los workflows | |
+| actionlint (con shellcheck) | los workflows y sus pasos `run:` | |
 | trivy | vulnerabilidades altas y críticas con corrección en la imagen construida | `make image-scan` |
 | revisión de dependencias | dependencias vulnerables o con licencia GPL que añade un pull request | `.github/workflows/dependency-review.yml` |
 | OpenSSF Scorecard | prácticas de cadena de suministro del repositorio, como alertas de code scanning | `.github/workflows/scorecard.yml` |
@@ -287,16 +266,15 @@ archivo entero para que una comprobación pase.
 | Workflow, trabajo | Cuándo | Duración | Detecta |
 |---|---|---|---|
 | CI: Rust | cada push | ~3 min | fmt, clippy, cargo-deny y cargo-machete (+15 s), pruebas de Rust (HTML hostil), umbral de cobertura de Rust |
-| CI: Lint & types | cada push | ~4 min | ruff, mypy, import-linter, vulture, `uv audit`, typos, shellcheck, actionlint, zizmor, hadolint, gitleaks sobre el historial (en total +30 s) |
+| CI: Lint & types | cada push | ~4 min | ruff, mypy, import-linter, vulture, `uv audit`, typos, actionlint, zizmor, hadolint, gitleaks sobre el historial (en total +30 s) |
 | CI: Tests | cada push | ~2 min | la batería anterior en Python 3.13 y 3.14, umbral de cobertura de Python |
 | CI: Docker image smoke test | tras los tres anteriores | ~2 min | la imagen arranca endurecida, matriz de humo contra t.me real, parada ordenada |
 | CI: Image vulnerabilities | tras la imagen | ~1 min | trivy: vulnerabilidades altas y críticas con corrección |
 | CI: Integration | tras la imagen | ~2 min | [pruebas de integración](#integration-tests) |
-| CI: Deploy scripts | tras la imagen | ~2 min | [pruebas de los scripts de despliegue](#deploy-scripts) |
 | Guards | cada pull request, cambios de etiquetas | ~10 s | [cambios incompatibles de la API](#breaking-changes), umbrales de cobertura rebajados |
 | Dependency review | cada pull request | ~15 s | dependencias añadidas con vulnerabilidades conocidas o licencia GPL |
 | Scorecard | pushes a `main`, los lunes | ~1 min | OpenSSF Scorecard (solo lee la rama por defecto) |
-| Nightly | 03:23 UTC a diario | ~15 min | pruebas de humo contra t.me real y producción, 10 min de fuzzing, ejecuciones largas de propiedades; abre una issue con la etiqueta `nightly` |
+| Nightly | 03:23 UTC a diario | ~15 min | prueba de humo de la imagen `latest` contra t.me real, 10 min de fuzzing, ejecuciones largas de propiedades; abre una issue con la etiqueta `nightly` |
 
-Release (pushes a `main`) ejecuta CI y Guards antes de construir y desplegar
+Release (pushes a `main`) ejecuta CI y Guards antes de construir y publicar
 la imagen.

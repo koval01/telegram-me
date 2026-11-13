@@ -159,8 +159,6 @@ Public address of the instance, scheme and host without a path or trailing
 slash, e.g. `https://tme.example.com`. The absolute URLs in `/robots.txt` and
 `/sitemap.xml` start with it. Unset, they use the address each request came
 in on, which behind a proxy is right only when it passes the original `Host`.
-The [deploy workflow](deployment/production.md) sets it from `PUBLIC_URL` or
-`PUBLIC_HOST`.
 
 ### `DOCS_SITE_DIR`
 
@@ -498,7 +496,7 @@ Each worker takes the first free port from `PEER_PORT` to
 
 The IP address other nodes reach this one at. By default, the source address
 of the default route. Inside a container that is the container's own address,
-so set it to the host's private address there (the production deploy does).
+so set it to the host's private address there.
 
 ### `PEER_ALLOW_CIDR`
 

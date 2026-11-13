@@ -33,14 +33,14 @@ navegador.
 
     [:octicons-arrow-right-24: Referencia de la API](api/index.md)
 
--   :lucide-server: **Despliegue en producción**
+-   :lucide-server: **Despliegue**
 
     ---
 
-    Contenedores reforzados, despliegues en varios servidores con reversión
-    automática, proxy inverso y configuración de caché.
+    Contenedores reforzados, Docker Compose con caché compartida, varios
+    servidores, proxy inverso y configuración de caché.
 
-    [:octicons-arrow-right-24: Despliegue](deployment/production.md)
+    [:octicons-arrow-right-24: Despliegue](deployment/compose.md)
 
 -   :lucide-cpu: **Cómo funciona**
 
@@ -55,13 +55,14 @@ navegador.
 
 ## Pruébalo { #try-it }
 
-Hay una demo pública en **<https://tme.koval-dev.org>**: prueba un canal en
-su página de inicio, explora la API en
-[Swagger UI](https://tme.koval-dev.org/api) o lee esta documentación en
-[/docs](https://tme.koval-dev.org/docs/es/).
+No hay ninguna instancia pública: ejecuta la tuya (el porqué está en
+[Sin instancia pública](no-public-instance.md)). Basta con un contenedor, que
+sirve una página de inicio para probar un canal, Swagger UI en `/api` y esta
+documentación en `/docs/`:
 
 ```bash
-curl https://tme.koval-dev.org/v1/body/durov
+docker run -d --name telegram-me -p 8000:3000 ghcr.io/koval01/telegram-me:latest
+curl http://localhost:8000/v1/body/durov
 ```
 
 ```json

@@ -82,8 +82,3 @@ de Cloudflare («Eligible for cache» en `/v1/*`) guarda las respuestas en el
 edge durante 10 s (`normal`) o 120 s (`aggressive`). Cloudflare se conecta
 desde sus propios rangos de IP: enuméralos en `FORWARDED_ALLOW_IPS` o configura
 el módulo `real_ip` de nginx para restaurar `CF-Connecting-IP`.
-
-Sin un balanceador de carga propio, el workflow de despliegue puede ejecutar
-Caddy en cada servidor para que Cloudflare se conecte a él. Se encarga por ti
-de TLS y de `CF-Connecting-IP`: consulta
-[Cloudflare sin balanceador de carga](production.md#cloudflare-without-a-load-balancer).

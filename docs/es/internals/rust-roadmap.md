@@ -9,7 +9,7 @@ ruta crítica.
 
 Dos cosas no cambian por el camino: las respuestas REST `/v1` y el esquema de
 GraphQL (ambos fijados por `tests/snapshots/`, REST byte a byte), y el
-despliegue (Docker, compose, `deploy/remote-deploy.sh`, máquinas virtuales de
+despliegue (una imagen Docker, compose, máquinas virtuales de
 1 GB).
 
 ## Auditoría { #audit }

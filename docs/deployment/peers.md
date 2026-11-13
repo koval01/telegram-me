@@ -37,7 +37,7 @@ On every node:
 ENABLE_PEERS=true
 PEER_SECRET=<the same 64 hex characters everywhere>   # openssl rand -hex 32
 PEERS=10.0.0.108,10.0.0.165
-# In a container, the host's private address (the production deploy sets it):
+# In a container, the host's private address:
 PEER_ADVERTISE_ADDR=10.0.0.108
 ```
 
@@ -84,19 +84,13 @@ mutual TLS with certificates per node is not implemented.
 
 ## Firewall and Docker
 
-`deploy/bootstrap-server.sh` opens `PEER_PORT` to `PEER_PORT + 15`, UDP and
-TCP, in the host firewall for the private network only (`PEER_CIDR`, default
-`10.0.0.0/16`). Oracle Cloud images reject every other port with "No route to
-host"; the cloud security list must allow the ports between the servers too.
+Each node uses one port per worker plus one, from `PEER_PORT` up, over UDP
+and TCP. Open them in the host firewall and in the cloud security list (or
+security group) for the private network between the servers only.
 
-`deploy/compose.prod.yaml` publishes the peer ports of the API container on
-`PEER_BIND`. With `ENABLE_PEERS=true`, `deploy/remote-deploy.sh` sets it, and
-`PEER_ADVERTISE_ADDR`, to the server's private address (the source address of
-its default route), and publishes one port per worker plus one.
-
-The deploy workflow turns the layer on with the `ENABLE_PEERS` variable and
-the `PEER_SECRET` secret; `PEERS`, `PEER_PORT`, `PEER_ALLOW_CIDR` and
-`PEER_ENCRYPTION` are optional variables.
+In a container, publish those ports on the host's private address, for
+example `10.0.0.108:7946-7951:7946-7951/udp` and the same for TCP, and set
+`PEER_ADVERTISE_ADDR` to that address.
 
 ## When something fails
 

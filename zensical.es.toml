@@ -17,6 +17,7 @@ copyright = "Copyright &copy; 2024–2026 Koval Yaroslav · Licencia Apache-2.0"
 
 nav = [
   { "Inicio" = "index.md" },
+  { "Sin instancia pública" = "no-public-instance.md" },
   { "Primeros pasos" = [
     "getting-started/quickstart.md",
     "getting-started/local-development.md",
@@ -38,7 +39,6 @@ nav = [
   { "Despliegue" = [
     "deployment/docker.md",
     "deployment/compose.md",
-    "deployment/production.md",
     "deployment/peers.md",
     "deployment/reverse-proxy.md",
     "deployment/upgrading.md",

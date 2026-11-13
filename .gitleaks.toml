@@ -8,9 +8,9 @@ description = "Signed URLs of public t.me media (cdnN.telesco.pe) in recorded pa
 regexTarget = "line"
 regexes = ['''https://cdn\d*\.telesco\.pe/file/[\w.-]+\?token=''']
 
-# The Cloudflare skip-rule key of production (CF_BYPASS_KEY, header
+# The Cloudflare skip-rule key of the former demo (CF_BYPASS_KEY, header
 # x-bypass-key) is 128 hex digits: the default rules miss it in a curl
-# command or a bare value.
+# command or a bare value. Kept so that a local copy never lands in a commit.
 [[rules]]
 id = "cloudflare-bypass-key"
 description = "Cloudflare WAF skip-rule key (x-bypass-key)"
