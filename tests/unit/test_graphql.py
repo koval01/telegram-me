@@ -592,6 +592,9 @@ def _models() -> set[type[BaseModel]]:
         if isinstance(value, type)
         and issubclass(value, BaseModel)
         and value.__module__ == module.__name__
+        # pydantic >= 2.14.3 gives a parametrized generic such as
+        # RootModel[dict[str, Preview]] the module it is parametrized in.
+        and value.__pydantic_generic_metadata__["origin"] is None
     }
 
 

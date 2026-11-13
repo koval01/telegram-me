@@ -12,19 +12,23 @@ All notable changes to this project are documented here. The format follows
   Cloudflare's block of its invalid requests too (`--edge-blocks-invalid`),
   like the deployment's since 2.2.1 (#231).
 
+### Changed
+
+- Dependencies updated: the Python lock (among them FastAPI 0.162,
+  Starlette 1.10, Strawberry 0.341, pydantic 2.14.3, granian 2.8.8,
+  zensical 0.1.1), both Cargo locks, uv 0.13.8 in CI and the image, the
+  base image digests (`python:3.14-slim-trixie`, `rust:1.99-slim-trixie`)
+  and the pinned GitHub Actions. The API contract is unchanged.
+
 ### Security
 
-- RUSTSEC-2026-0391, -0398 and -0403 (`zstd` 0.13, `zstd-safe` 7) are listed
-  as not applicable in `deny.toml`. Only `wreq-util` 0.2 pulls those versions,
-  for TLS certificate decompression in its Firefox profiles, and the client
-  accepts Chromium profiles only. Responses are decoded with `zstd` 0.14.3,
-  which is not affected. The ignores go once `wreq-util` moves to
-  `zstd` >= 0.14.3.
-- The same crates carry ten more advisories marked unsound
-  (RUSTSEC-2026-0395 to -0406), which OpenSSF Scorecard reports through OSV.
-  `osv-scanner.toml` next to each `Cargo.lock` lists all thirteen with that
-  reason and `ignoreUntil` 2027-01-26, and a test keeps it in step with
-  `deny.toml`.
+- `wreq-util` 0.2.1 decompresses TLS certificates with `zstd` 0.14, so the
+  tree no longer contains `zstd` 0.13 / `zstd-safe` 7 and RUSTSEC-2026-0391,
+  -0398 and -0403 (plus the ten unsound advisories OSV reported for those
+  versions) no longer apply: the ignores in `deny.toml` and both
+  `osv-scanner.toml` files are removed. `zstd-sys` 2.1.3 declares
+  `BSD-3-Clause AND BSD-2-Clause`, so BSD-2-Clause joins the allowed
+  licenses.
 
 ## [2.2.1] - 2026-10-26
 

@@ -12,18 +12,16 @@ all-features = true
 # tree and yanked versions.
 unmaintained = "all"
 yanked = "deny"
-# Each ignore names why the advisory cannot apply here and when to drop it.
-ignore = [
-    { id = "RUSTSEC-2026-0391", reason = "zstd 0.13 / zstd-safe 7 come only from wreq-util 0.2, which uses them to decompress TLS certificates for Firefox profiles; http.rs accepts Chromium profiles only (parse_profile), so that code is never registered. Remove once wreq-util uses zstd >= 0.14.3" },
-    { id = "RUSTSEC-2026-0398", reason = "zstd 0.13 / zstd-safe 7 come only from wreq-util 0.2, which uses them to decompress TLS certificates for Firefox profiles; http.rs accepts Chromium profiles only (parse_profile), so that code is never registered. Remove once wreq-util uses zstd >= 0.14.3" },
-    { id = "RUSTSEC-2026-0403", reason = "zstd 0.13 / zstd-safe 7 come only from wreq-util 0.2, which uses them to decompress TLS certificates for Firefox profiles; http.rs accepts Chromium profiles only (parse_profile), so that code is never registered. Remove once wreq-util uses zstd >= 0.14.3" },
-]
+# Each ignore names why the advisory cannot apply here and when to drop it,
+# and has its twin in osv-scanner.toml next to each lock file.
+ignore = []
 
 [licenses]
 # Permissive licenses compatible with shipping under Apache-2.0.
 allow = [
     "Apache-2.0",
     "Apache-2.0 WITH LLVM-exception",
+    "BSD-2-Clause",
     "BSD-3-Clause",
     "ISC",
     "MIT",
@@ -54,14 +52,12 @@ skip = [
     # derive_more (via html5ever) are still on 2. Build time only.
     { crate = "syn@2", reason = "phf_macros and derive_more-impl are still on syn 2" },
     # wreq-util 0.2 decompresses TLS certificates (Chrome's compress_certificate)
-    # with brotli 8 and zstd 0.13; wreq's body decoding (tower-http) and our
-    # cache use brotli 9 and zstd 0.14.
+    # with brotli 8; wreq's body decoding (tower-http) and our cache use
+    # brotli 9.
     { crate = "brotli@8", reason = "wreq-util 0.2 certificate decompression" },
     { crate = "brotli-decompressor@5", reason = "brotli 8, via wreq-util 0.2" },
     { crate = "alloc-no-stdlib@2", reason = "brotli 8, via wreq-util 0.2" },
     { crate = "alloc-stdlib@0.2", reason = "brotli 8, via wreq-util 0.2" },
-    { crate = "zstd@0.13", reason = "wreq-util 0.2 certificate decompression" },
-    { crate = "zstd-safe@7", reason = "zstd 0.13, via wreq-util 0.2" },
     { crate = "shlex@1", reason = "bindgen (BoringSSL bindings, build time only)" },
 ]
 
