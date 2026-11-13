@@ -1,14 +1,14 @@
 # syntax=docker/dockerfile:1.10
 # Base images are pinned by digest as well as tag: a tag can be moved, a
 # digest cannot. Dependabot (docker) updates both together.
-FROM ghcr.io/astral-sh/uv:0.13.5@sha256:32a7bb39b496babbd997b0a39a4d66c126bdaf5661b302bf6f06abda8deca6ff AS uv
-FROM rust:1.99-slim-trixie@sha256:1a939748a7cbab172de91a014e3804a97af1394a8c844faa67fce9401c4e40fb AS rust
+FROM ghcr.io/astral-sh/uv:0.13.8@sha256:5cc1805e2426484abca4ad46ea783bab281fdb225fd82d8ce6d66a81254bac85 AS uv
+FROM rust:1.99-slim-trixie@sha256:f6c4a35d21dbb3c89d7a8d056c193e94fc09037f2b58dd858b09c39a47dd02d7 AS rust
 
 # ---------------------------------------------------------------------------
 # Build: locked Python dependencies, then the native Rust extension, then the
 # project. Each step is its own layer: Python-only changes do not recompile Rust.
 # ---------------------------------------------------------------------------
-FROM python:3.14-slim-trixie@sha256:35caba83af2fe6da9a5d922f9b0156f21d1246a48278c58a08bd253303ba42e8 AS build
+FROM python:3.14-slim-trixie@sha256:9aaa474097d094040649f2162a627c0049b408f52138d980916788d80f04802f AS build
 COPY --from=uv /uv /usr/local/bin/uv
 COPY --from=rust /usr/local/cargo /usr/local/cargo
 COPY --from=rust /usr/local/rustup /usr/local/rustup
@@ -54,7 +54,7 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 # under (scripts/build_docs.py). Its own stage: no Rust, and a docs change
 # rebuilds only this.
 # ---------------------------------------------------------------------------
-FROM python:3.14-slim-trixie@sha256:35caba83af2fe6da9a5d922f9b0156f21d1246a48278c58a08bd253303ba42e8 AS docs
+FROM python:3.14-slim-trixie@sha256:9aaa474097d094040649f2162a627c0049b408f52138d980916788d80f04802f AS docs
 COPY --from=uv /uv /usr/local/bin/uv
 ENV UV_LINK_MODE=copy \
     UV_PYTHON_DOWNLOADS=never \
@@ -77,7 +77,7 @@ RUN python scripts/build_docs.py --out site-instance
 # Runtime: only the virtualenv, the docs, an unprivileged user and no build
 # tooling.
 # ---------------------------------------------------------------------------
-FROM python:3.14-slim-trixie@sha256:35caba83af2fe6da9a5d922f9b0156f21d1246a48278c58a08bd253303ba42e8 AS runtime
+FROM python:3.14-slim-trixie@sha256:9aaa474097d094040649f2162a627c0049b408f52138d980916788d80f04802f AS runtime
 
 ARG VERSION=dev
 ARG REVISION=unknown
