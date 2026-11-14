@@ -6,6 +6,15 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+## [2.2.2] - 2026-11-14
+
+There is no public instance any more: the demo at `tme.koval-dev.org` is
+switched off for good, together with its servers and deployment pipeline, and
+the docs explain why and how to run TelegramMe yourself. Dependencies, tools
+and base images are updated, the image picks up Debian security fixes at build
+time, and the vulnerable `zstd` 0.13 is gone from the tree. The `/v1` and
+GraphQL contracts and the settings are unchanged.
+
 ### Removed
 
 - The public demo at `tme.koval-dev.org` is switched off for good, and there
@@ -487,7 +496,8 @@ working; see the upgrade guide for the few behaviour changes.
 
 Last release of the 1.x line.
 
-[Unreleased]: https://github.com/koval01/telegram-me/compare/v2.2.1...HEAD
+[Unreleased]: https://github.com/koval01/telegram-me/compare/v2.2.2...HEAD
+[2.2.2]: https://github.com/koval01/telegram-me/compare/v2.2.1...v2.2.2
 [2.2.1]: https://github.com/koval01/telegram-me/compare/v2.2.0...v2.2.1
 [2.2.0]: https://github.com/koval01/telegram-me/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/koval01/telegram-me/compare/v2.0.0...v2.1.0
