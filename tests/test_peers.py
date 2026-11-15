@@ -454,8 +454,14 @@ async def test_rate_limits_add_up_across_nodes(monkeypatch: pytest.MonkeyPatch) 
     limits: dict[str, Any] = {"enable_rate_limit": True, "rate_limit_rpm": 6, "rate_limit_burst": 6}
     async with nodes(2, FixtureFetcher(), monkeypatch, **limits) as apps:
         first = [await call(app, "GET", "/healthz") for app in apps for _ in range(4)]
-        await asyncio.sleep(0.3)
+        # The counts travel over the network: poll with a deadline, not a fixed sleep,
+        # which a loaded runner can outlast.
+        deadline = time.monotonic() + 10.0
         after = [await call(app, "GET", "/healthz") for app in apps]
+        while {reply.status for reply in after} != {429}:
+            assert time.monotonic() < deadline, "the counts never added up"
+            await asyncio.sleep(0.05)
+            after = [await call(app, "GET", "/healthz") for app in apps]
     # 4 + 4 requests of one client: within the limit on each node, not overall.
     assert {reply.status for reply in first} == {200}
     assert [reply.status for reply in after] == [429, 429]
