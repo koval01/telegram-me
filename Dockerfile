@@ -8,7 +8,7 @@ FROM rust:1.99-slim-trixie@sha256:f6c4a35d21dbb3c89d7a8d056c193e94fc09037f2b58dd
 # Build: locked Python dependencies, then the native Rust extension, then the
 # project. Each step is its own layer: Python-only changes do not recompile Rust.
 # ---------------------------------------------------------------------------
-FROM python:3.14-slim-trixie@sha256:9aaa474097d094040649f2162a627c0049b408f52138d980916788d80f04802f AS build
+FROM python:3.15-slim-trixie@sha256:65a65fc7b30b06cb6df4930fd4650697cb23f4c2698ab81fc87e4b031bc36928 AS build
 COPY --from=uv /uv /usr/local/bin/uv
 COPY --from=rust /usr/local/cargo /usr/local/cargo
 COPY --from=rust /usr/local/rustup /usr/local/rustup
@@ -54,7 +54,7 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 # under (scripts/build_docs.py). Its own stage: no Rust, and a docs change
 # rebuilds only this.
 # ---------------------------------------------------------------------------
-FROM python:3.14-slim-trixie@sha256:9aaa474097d094040649f2162a627c0049b408f52138d980916788d80f04802f AS docs
+FROM python:3.15-slim-trixie@sha256:65a65fc7b30b06cb6df4930fd4650697cb23f4c2698ab81fc87e4b031bc36928 AS docs
 COPY --from=uv /uv /usr/local/bin/uv
 ENV UV_LINK_MODE=copy \
     UV_PYTHON_DOWNLOADS=never \
@@ -77,7 +77,7 @@ RUN python scripts/build_docs.py --out site-instance
 # Runtime: only the virtualenv, the docs, an unprivileged user and no build
 # tooling.
 # ---------------------------------------------------------------------------
-FROM python:3.14-slim-trixie@sha256:9aaa474097d094040649f2162a627c0049b408f52138d980916788d80f04802f AS runtime
+FROM python:3.15-slim-trixie@sha256:65a65fc7b30b06cb6df4930fd4650697cb23f4c2698ab81fc87e4b031bc36928 AS runtime
 
 ARG VERSION=dev
 ARG REVISION=unknown
