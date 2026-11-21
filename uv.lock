@@ -1625,7 +1625,7 @@ requires-dist = [
 [package.metadata.requires-dev]
 dev = [
     { name = "fakeredis", extras = ["lua"], specifier = ">=2.40.0" },
-    { name = "granian", extras = ["reload"], specifier = ">=2.8.5" },
+    { name = "granian", extras = ["reload"], specifier = ">=2.8.8" },
     { name = "httpx2", specifier = ">=2.16.0" },
     { name = "hypothesis", specifier = ">=6.170.9" },
     { name = "import-linter", specifier = ">=2.15" },
