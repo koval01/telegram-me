@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1.10
 # Base images are pinned by digest as well as tag: a tag can be moved, a
 # digest cannot. Dependabot (docker) updates both together.
-FROM ghcr.io/astral-sh/uv:0.13.8@sha256:5cc1805e2426484abca4ad46ea783bab281fdb225fd82d8ce6d66a81254bac85 AS uv
+FROM ghcr.io/astral-sh/uv:0.13.9@sha256:d3b601f0c7b118bc1753febf7c41cc80981df678445e0254284eecf84db79a7d AS uv
 FROM rust:1.99-slim-trixie@sha256:f6c4a35d21dbb3c89d7a8d056c193e94fc09037f2b58dd858b09c39a47dd02d7 AS rust
 
 # ---------------------------------------------------------------------------
