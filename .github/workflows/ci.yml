@@ -43,7 +43,7 @@ jobs:
           rustup toolchain install "$RUST_VERSION" --profile minimal \
             --component clippy,rustfmt,llvm-tools-preview
           rustup default "$RUST_VERSION"
-      - uses: taiki-e/install-action@cfdb7ed4ccc7c7dce37759eae89dc5674b469b39 # v2.90.3
+      - uses: taiki-e/install-action@4a76afe23f9e08d2d9550fb56e556444e8611d21 # v2.90.4
         with:
           tool: cargo-llvm-cov,cargo-deny@${{ env.CARGO_DENY_VERSION }},cargo-machete@${{ env.CARGO_MACHETE_VERSION }}
       - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
@@ -238,7 +238,7 @@ jobs:
         with:
           name: image
           path: ${{ runner.temp }}
-      - uses: taiki-e/install-action@cfdb7ed4ccc7c7dce37759eae89dc5674b469b39 # v2.90.3
+      - uses: taiki-e/install-action@4a76afe23f9e08d2d9550fb56e556444e8611d21 # v2.90.4
         with:
           tool: trivy@${{ env.TRIVY_VERSION }}
       # Fails on high and critical vulnerabilities that have a fix; the table
